@@ -6,23 +6,13 @@ import java.lang.reflect.Method;
 
 public interface ExtScanner {
 
-    default void scanAbility(Class<?> extensibleClass) {
+    default void scanExtensible(Class<?> extensibleClass) {
     }
 
-    default void scanExtensionPoint(Class<?> extensibleClass) {
+    default void scanExtensibleMethod(Class<?> extensibleClass, Method method) {
     }
 
-    default void scanAbilityMethod(Class<?> extensibleClass, Method method) {
-    }
-
-    default void scanExtensionPointMethod(Class<?> extensibleClass, Method method) {
-    }
-
-    default void scanAbilityImpl(Class<?> extensibleClass, Method method,
-                                 Class<?> methodDeclaringClass, BizScenario methodBizScenario) {
-    }
-
-    default void scanExtensionPointImpl(Class<?> extensibleClass, Method method,
-                                        Class<?> methodDeclaringClass, BizScenario methodBizScenario) {
+    default void scanExtension(Class<?> extensibleClass, Method method,
+                               Class<?> methodDeclaringClass, BizScenario methodBizScenario) {
     }
 }

@@ -18,16 +18,7 @@ public class BizScenarioParamScanner extends BaseExtScanner {
     private BizScenarioParamRepo bizScenarioParamRepo;
 
     @Override
-    public void scanAbilityMethod(Class<?> extensibleClass, Method method) {
-        scanBizScenarioParamIndex(extensibleClass, method);
-    }
-
-    @Override
-    public void scanExtensionPointMethod(Class<?> extensibleClass, Method method) {
-        scanBizScenarioParamIndex(extensibleClass, method);
-    }
-
-    private void scanBizScenarioParamIndex(Class<?> extensibleClass, Method method) {
+    public void scanExtensibleMethod(Class<?> extensibleClass, Method method) {
         int index = findBizScenarioParamIndex(extensibleClass, method);
         bizScenarioParamRepo.putParamIndex(method, index);
     }

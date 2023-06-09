@@ -26,20 +26,10 @@ public abstract class BaseExtScanner implements ExtScanner {
 
         List<Class<?>> extensibleClasses = ExtUtils.getAllExtensibleClasses(extClass);
         for (Class<?> extensibleClass : extensibleClasses) {
-            boolean isAbility = ExtUtils.isAbility(extensibleClass);
-
-            if (isAbility) {
-                scanAbility(extensibleClass);
-            } else {
-                scanExtensionPoint(extensibleClass);
-            }
+            scanExtensible(extensibleClass);
 
             for (Method method : extensibleClass.getDeclaredMethods()) {
-                if (isAbility) {
-                    scanAbilityMethod(extensibleClass, method);
-                } else {
-                    scanExtensionPointMethod(extensibleClass, method);
-                }
+                scanExtensibleMethod(extensibleClass, method);
 
                 Class<?> methodDeclaringClass = findMethodDeclaringClass(method, extClass);
                 if (methodDeclaringClass == null) {
@@ -50,11 +40,7 @@ public abstract class BaseExtScanner implements ExtScanner {
                     continue;
                 }
 
-                if (isAbility) {
-                    scanAbilityImpl(extensibleClass, method, methodDeclaringClass, methodBizScenario);
-                } else {
-                    scanExtensionPointImpl(extensibleClass, method, methodDeclaringClass, methodBizScenario);
-                }
+                scanExtension(extensibleClass, method, methodDeclaringClass, methodBizScenario);
             }
         }
     }

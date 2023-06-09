@@ -1,6 +1,5 @@
 package io.codeone.framework.ext.util;
 
-import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.BizScenarioParam;
 import io.codeone.framework.ext.Extensible;
 import org.springframework.aop.support.AopUtils;
@@ -22,16 +21,8 @@ public class ExtUtils {
 
     public static List<Class<?>> getAllExtensibleClasses(Class<?> extClass) {
         return Arrays.stream(ClassUtils.getAllInterfacesForClass(extClass))
-                .filter(ExtUtils::isExtensible)
+                .filter(o -> AnnotationUtils.findAnnotation(o, Extensible.class) != null)
                 .collect(Collectors.toList());
-    }
-
-    public static boolean isExtensible(Class<?> clazz) {
-        return AnnotationUtils.findAnnotation(clazz, Extensible.class) != null;
-    }
-
-    public static boolean isAbility(Class<?> clazz) {
-        return clazz.getAnnotation(Ability.class) != null;
     }
 
     public static boolean isBizScenarioParam(Class<?> paramType) {
