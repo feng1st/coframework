@@ -8,8 +8,6 @@ import java.lang.annotation.*;
 @Extensible
 public @interface Ability {
 
-    String code() default "";
-
     String name() default "";
 
     String description() default "";

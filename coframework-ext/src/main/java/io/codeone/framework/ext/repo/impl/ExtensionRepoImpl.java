@@ -1,5 +1,7 @@
 package io.codeone.framework.ext.repo.impl;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.repo.ExtensionRepo;
 import org.springframework.stereotype.Repository;
@@ -8,15 +10,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 public class ExtensionRepoImpl implements ExtensionRepo {
 
     private final Map<Coordinate, Object> map = new HashMap<>();
 
-    // FIXME: OOM if arbitrary input
-    private final Map<Coordinate, Optional<?>> cache = new ConcurrentHashMap<>();
+    private final LoadingCache<Coordinate, Optional<?>> cache = Caffeine.newBuilder()
+            .expireAfterAccess(24, TimeUnit.HOURS)
+            .build(k -> {
+                for (BizScenario bizScenario : k.getBizScenario()) {
+                    Object ext = map.get(k.ofBizScenario(bizScenario));
+                    if (ext != null) {
+                        return Optional.of(ext);
+                    }
+                }
+                return Optional.empty();
+            });
 
     @Override
     public void putExtension(Class<?> extensibleClass, BizScenario bizScenario, Object ext) {
@@ -34,22 +45,8 @@ public class ExtensionRepoImpl implements ExtensionRepo {
         }
 
         Coordinate coordinate = Coordinate.of(extensibleClass, bizScenario);
-
-        Optional<?> cached = loadFromCache(coordinate);
-        return cached.orElseThrow(()
-                -> new IllegalArgumentException("Could not find Extension for '" + coordinate + "'"));
-    }
-
-    private Optional<?> loadFromCache(Coordinate coordinate) {
-        return cache.computeIfAbsent(coordinate, o -> {
-            for (BizScenario bizScenario : o.getBizScenario()) {
-                Object ext = map.get(o.ofBizScenario(bizScenario));
-                if (ext != null) {
-                    return Optional.of(ext);
-                }
-            }
-            return Optional.empty();
-        });
+        return cache.get(coordinate)
+                .orElseThrow(() -> new IllegalArgumentException("Could not find Extension for '" + coordinate + "'"));
     }
 
     private static class Coordinate {
