@@ -4,9 +4,13 @@ import io.codeone.framework.ext.Extensible;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.*;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -15,23 +19,18 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class ExtProxyRegistrar implements BeanDefinitionRegistryPostProcessor {
+public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
 
     public static final String PREFIX = "extProxy$";
 
     private final Set<Class<?>> set = new HashSet<>();
 
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        if (!(registry instanceof DefaultListableBeanFactory)) {
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        if (!(beanFactory instanceof DefaultListableBeanFactory)) {
             return;
         }
-        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) registry;
-        registerAllProxies(beanFactory);
-    }
-
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        registerAllProxies((DefaultListableBeanFactory) beanFactory);
     }
 
     private <A extends Annotation> void registerAllProxies(DefaultListableBeanFactory beanFactory) {
@@ -56,20 +55,19 @@ public class ExtProxyRegistrar implements BeanDefinitionRegistryPostProcessor {
         }
     }
 
-    private <T> void registerProxy(DefaultListableBeanFactory beanFactory, Class<T> extensibleClass) {
+    private <T> void registerProxy(BeanDefinitionRegistry registry, Class<T> extensibleClass) {
         if (!set.add(extensibleClass)) {
             return;
         }
 
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder
-                .genericBeanDefinition(ExtProxyBeanFactory.class)
-                .setFactoryMethod(ExtProxyBeanFactory.FACTORY_METHOD_NAME)
-                .addConstructorArgValue(beanFactory)
+                .genericBeanDefinition(extensibleClass)
+                .setFactoryMethodOnBean(ExtProxyFactory.FACTORY_METHOD_NAME, ExtProxyFactory.FACTORY_BEAN_NAME)
                 .addConstructorArgValue(extensibleClass)
                 .setScope(ConfigurableBeanFactory.SCOPE_SINGLETON)
                 .setPrimary(true)
                 .getBeanDefinition();
-        beanFactory.registerBeanDefinition(PREFIX + extensibleClass.getSimpleName(), beanDefinition);
+        registry.registerBeanDefinition(PREFIX + extensibleClass.getSimpleName(), beanDefinition);
     }
 
     private Class<?> getExtClass(String extClassName) {
