@@ -2,33 +2,36 @@ package io.codeone.framework.ext.proxy;
 
 import io.codeone.framework.ext.Extensible;
 import io.codeone.framework.ext.util.ExtUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
-import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.*;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ExtProxyRegistrar implements ImportBeanDefinitionRegistrar {
+@Component
+public class ExtProxyRegistrar implements BeanDefinitionRegistryPostProcessor {
 
     public static final String PREFIX = "extProxy$";
 
     private final Set<Class<?>> set = new HashSet<>();
 
     @Override
-    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         if (!(registry instanceof DefaultListableBeanFactory)) {
             return;
         }
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) registry;
         registerAllProxies(beanFactory);
+    }
+
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
     }
 
     private <A extends Annotation> void registerAllProxies(DefaultListableBeanFactory beanFactory) {

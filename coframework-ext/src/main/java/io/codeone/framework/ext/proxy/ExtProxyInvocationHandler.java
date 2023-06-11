@@ -4,6 +4,7 @@ import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
 import io.codeone.framework.ext.context.BizScenarioContext;
 import io.codeone.framework.ext.model.BizScenarioExtension;
+import io.codeone.framework.ext.monitor.ExtInvocationMonitor;
 import io.codeone.framework.ext.repo.BizScenarioParamRepo;
 import io.codeone.framework.ext.repo.ExtensionRepo;
 import io.codeone.framework.ext.util.LazyBean;
@@ -15,15 +16,21 @@ import java.lang.reflect.Method;
 
 public class ExtProxyInvocationHandler<T> implements InvocationHandler {
 
+    // TODO: more proper way?
     private final LazyBean<BizScenarioParamRepo> bizScenarioParamRepo;
 
+    // TODO: more proper way?
     private final LazyBean<ExtensionRepo> extensionRepo;
+
+    // TODO: more proper way?
+    private final LazyBean<ExtInvocationMonitor> extInvocationMonitor;
 
     private final Class<T> extensibleClass;
 
     public ExtProxyInvocationHandler(BeanFactory beanFactory, Class<T> extensibleClass) {
-        this.bizScenarioParamRepo = new LazyBean<>(beanFactory, BizScenarioParamRepo.class);
-        this.extensionRepo = new LazyBean<>(beanFactory, ExtensionRepo.class);
+        this.bizScenarioParamRepo = LazyBean.of(beanFactory, BizScenarioParamRepo.class);
+        this.extensionRepo = LazyBean.of(beanFactory, ExtensionRepo.class);
+        this.extInvocationMonitor = LazyBean.of(beanFactory, ExtInvocationMonitor.class);
         this.extensibleClass = extensibleClass;
     }
 
@@ -55,6 +62,12 @@ public class ExtProxyInvocationHandler<T> implements InvocationHandler {
 
     private Object invoke(Method method, Object[] args, BizScenario bizScenario) {
         BizScenarioExtension bizExt = extensionRepo.get().getExtension(extensibleClass, bizScenario);
+
+        try {
+            extInvocationMonitor.ifPresent(o -> o.monitor(extensibleClass, method, bizScenario, bizExt));
+        } catch (Exception ignored) {
+        }
+
         try {
             return method.invoke(bizExt.getExtension(), args);
         } catch (InvocationTargetException e) {
