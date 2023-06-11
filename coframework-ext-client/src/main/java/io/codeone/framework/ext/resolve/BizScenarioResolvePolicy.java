@@ -10,9 +10,9 @@ public enum BizScenarioResolvePolicy {
      */
     LAST_PARAM,
     /**
-     * Uses the parameter that annotated by @RouteBy.
+     * Uses the parameter that annotated by @ResolveBy.
      */
-    ROUTE_BY,
+    SPECIFIED,
     /**
      * Uses BizScenarioResolver to resolve.
      */
