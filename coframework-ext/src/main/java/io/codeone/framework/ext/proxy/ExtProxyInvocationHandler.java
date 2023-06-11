@@ -3,6 +3,7 @@ package io.codeone.framework.ext.proxy;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
 import io.codeone.framework.ext.context.BizScenarioContext;
+import io.codeone.framework.ext.model.BizScenarioExtension;
 import io.codeone.framework.ext.repo.BizScenarioParamRepo;
 import io.codeone.framework.ext.repo.ExtensionRepo;
 import io.codeone.framework.ext.util.LazyBean;
@@ -53,9 +54,9 @@ public class ExtProxyInvocationHandler<T> implements InvocationHandler {
     }
 
     private Object invoke(Method method, Object[] args, BizScenario bizScenario) {
-        Object ext = extensionRepo.get().getExtension(extensibleClass, bizScenario);
+        BizScenarioExtension bizExt = extensionRepo.get().getExtension(extensibleClass, bizScenario);
         try {
-            return method.invoke(ext, args);
+            return method.invoke(bizExt.getExtension(), args);
         } catch (InvocationTargetException e) {
             if (e.getCause() instanceof RuntimeException) {
                 throw (RuntimeException) e.getCause();
