@@ -3,7 +3,6 @@ package io.codeone.framework.ext.context;
 import io.codeone.framework.ext.BizScenario;
 
 import java.util.LinkedList;
-import java.util.function.Supplier;
 
 public class BizScenarioContext {
 
@@ -13,10 +12,10 @@ public class BizScenarioContext {
         return stack.get().peek();
     }
 
-    public static <T> T invoke(BizScenario bizScenario, Supplier<T> method) {
+    public static <T> T invoke(BizScenario bizScenario, WrappedMethod<T> method) throws Throwable {
         stack.get().push(bizScenario);
         try {
-            return method.get();
+            return method.invoke();
         } finally {
             stack.get().pop();
         }

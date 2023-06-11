@@ -56,7 +56,7 @@ public class ExtProxyInvocationHandler<T> implements InvocationHandler {
         return bizScenario;
     }
 
-    private Object invoke(Method method, Object[] args, BizScenario bizScenario) {
+    private Object invoke(Method method, Object[] args, BizScenario bizScenario) throws Throwable {
         BizScenarioExtension bizExt = extensionRepo.getExtension(extensibleClass, bizScenario);
 
         if (extInvocationMonitor != null) {
@@ -69,12 +69,7 @@ public class ExtProxyInvocationHandler<T> implements InvocationHandler {
         try {
             return method.invoke(bizExt.getExtension(), args);
         } catch (InvocationTargetException e) {
-            if (e.getCause() instanceof RuntimeException) {
-                throw (RuntimeException) e.getCause();
-            }
-            throw new IllegalStateException(e.getCause());
-        } catch (IllegalAccessException e) {
-            throw new IllegalStateException(e);
+            throw e.getCause();
         }
     }
 }
