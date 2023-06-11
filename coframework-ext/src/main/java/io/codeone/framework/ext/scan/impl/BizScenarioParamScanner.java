@@ -31,7 +31,7 @@ public class BizScenarioParamScanner extends BaseExtScanner {
         Integer index = null;
         for (int i = 0; i < method.getParameters().length; i++) {
             Parameter param = method.getParameters()[i];
-            if (param.getAnnotation(RouteBy.class) != null) {
+            if (param.isAnnotationPresent(RouteBy.class)) {
                 if (index != null) {
                     throw new IllegalStateException("Found duplicate @RouteBys on '" + method + "'");
                 }
@@ -46,11 +46,11 @@ public class BizScenarioParamScanner extends BaseExtScanner {
             return index;
         }
 
-        if (method.getAnnotation(RouteByContext.class) != null) {
+        if (method.isAnnotationPresent(RouteByContext.class)) {
             return -1;
         }
 
-        if (extensibleClass.getAnnotation(RouteByContext.class) != null) {
+        if (extensibleClass.isAnnotationPresent(RouteByContext.class)) {
             return -1;
         }
 
