@@ -61,7 +61,7 @@ public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
         }
 
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder
-                .genericBeanDefinition(extensibleClass)
+                .genericBeanDefinition()
                 .setFactoryMethodOnBean(ExtProxyFactory.FACTORY_METHOD_NAME, ExtProxyFactory.FACTORY_BEAN_NAME)
                 .addConstructorArgValue(extensibleClass)
                 .setScope(ConfigurableBeanFactory.SCOPE_SINGLETON)

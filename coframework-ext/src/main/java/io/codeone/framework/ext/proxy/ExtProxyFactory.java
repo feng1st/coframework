@@ -6,7 +6,6 @@ import io.codeone.framework.ext.repo.ExtensionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
@@ -17,13 +16,12 @@ public class ExtProxyFactory {
 
     public static final String FACTORY_METHOD_NAME = "getProxy";
 
-    @Resource
+    @Autowired
     private BizScenarioParamRepo bizScenarioParamRepo;
 
-    @Resource
+    @Autowired
     private ExtensionRepo extensionRepo;
 
-    // TODO: more proper way?
     @Autowired(required = false)
     private ExtInvocationMonitor extInvocationMonitor;
 

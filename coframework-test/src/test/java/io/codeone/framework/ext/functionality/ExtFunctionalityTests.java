@@ -20,4 +20,9 @@ public class ExtFunctionalityTests {
         Assertions.assertEquals(1, ability1.doSomething(BizScenario.ofBizId("biz1")));
         Assertions.assertEquals(2, ability1.doSomething(BizScenario.ofBizId("biz2", "sub1")));
     }
+
+    @Test
+    void testClass() {
+        Assertions.assertTrue(Ability1.class.isAssignableFrom(ability1.getClass()));
+    }
 }
