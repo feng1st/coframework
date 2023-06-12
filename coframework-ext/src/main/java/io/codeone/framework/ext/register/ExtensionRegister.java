@@ -3,6 +3,7 @@ package io.codeone.framework.ext.register;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.Extension;
 import io.codeone.framework.ext.repo.ExtensionRepo;
+import io.codeone.framework.ext.util.ClassUtils;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class ExtensionRegister {
     }
 
     private void register(String beanName, Object ext) {
-        Class<?> extClass = ExtUtils.getExtClass(ext);
+        Class<?> extClass = ClassUtils.getTargetClass(ext);
 
         Extension extAnno = extClass.getAnnotation(Extension.class);
         BizScenario bizScenario = BizScenario.of(extAnno.bizId(), extAnno.scenario());

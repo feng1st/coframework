@@ -2,6 +2,7 @@ package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.Extension;
+import io.codeone.framework.ext.util.ClassUtils;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.ReflectionUtils;
@@ -22,7 +23,7 @@ public abstract class BaseExtScanner implements ExtScanner {
     }
 
     private void scan(String beanName, Object ext) {
-        Class<?> extClass = ExtUtils.getExtClass(ext);
+        Class<?> extClass = ClassUtils.getTargetClass(ext);
 
         List<Class<?>> extensibleClasses = ExtUtils.getAllExtensibleClasses(extClass);
         for (Class<?> extensibleClass : extensibleClasses) {

@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface BizScenarioResolve {
 
-    BizScenarioResolvePolicy value() default BizScenarioResolvePolicy.FIRST_PARAM;
+    BizScenarioResolvePolicy value() default BizScenarioResolvePolicy.AUTO;
 
     Class<? extends BizScenarioResolver> customResolver() default BizScenarioResolver.class;
 }

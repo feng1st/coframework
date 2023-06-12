@@ -1,6 +1,7 @@
 package io.codeone.framework.ext.proxy;
 
 import io.codeone.framework.ext.Extensible;
+import io.codeone.framework.ext.util.ClassUtils;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -23,7 +24,7 @@ public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
 
     public static final String PREFIX = "extProxy$";
 
-    private final Set<Class<?>> set = new HashSet<>();
+    private final Set<Class<?>> registered = new HashSet<>();
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -43,7 +44,7 @@ public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
             BeanDefinition extBeanDefinition = beanFactory.getBeanDefinition(extBeanName);
             extBeanDefinition.setPrimary(false);
 
-            Class<?> extClass = getExtClass(extBeanDefinition.getBeanClassName());
+            Class<?> extClass = ClassUtils.forName(extBeanDefinition.getBeanClassName());
             List<Class<?>> extensibleClasses = ExtUtils.getAllExtensibleClasses(extClass);
             if (extensibleClasses.isEmpty()) {
                 continue;
@@ -56,7 +57,7 @@ public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
     }
 
     private <T> void registerProxy(BeanDefinitionRegistry registry, Class<T> extensibleClass) {
-        if (!set.add(extensibleClass)) {
+        if (!registered.add(extensibleClass)) {
             return;
         }
 
@@ -68,13 +69,5 @@ public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
                 .setPrimary(true)
                 .getBeanDefinition();
         registry.registerBeanDefinition(PREFIX + extensibleClass.getSimpleName(), beanDefinition);
-    }
-
-    private Class<?> getExtClass(String extClassName) {
-        try {
-            return Class.forName(extClassName);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException(e);
-        }
     }
 }

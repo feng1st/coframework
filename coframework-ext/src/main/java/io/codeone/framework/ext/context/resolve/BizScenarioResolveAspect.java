@@ -42,7 +42,7 @@ public class BizScenarioResolveAspect {
         Method method = methodSignature.getMethod();
         BizScenario bizScenario = resolveBizScenario(method, pjp.getArgs(), resolve);
         if (bizScenario == null) {
-            throw new IllegalArgumentException("Could not resolve BizScenario from arguments of '" + method + "'");
+            throw new IllegalArgumentException("Could not resolve BizScenario from args of '" + method + "'");
         }
         return BizScenarioContext.invoke(bizScenario, pjp::proceed);
     }

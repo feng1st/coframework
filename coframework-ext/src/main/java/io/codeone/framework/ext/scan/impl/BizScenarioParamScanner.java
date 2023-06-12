@@ -43,14 +43,15 @@ public class BizScenarioParamScanner extends BaseExtScanner {
             }
         }
         if (index != null) {
+            if (method.isAnnotationPresent(RouteByContext.class)) {
+                throw new IllegalStateException("Found both @RouteBy and @RouteByContext on '" + method + "'");
+            }
+
             return index;
         }
 
-        if (method.isAnnotationPresent(RouteByContext.class)) {
-            return -1;
-        }
-
-        if (extensibleClass.isAnnotationPresent(RouteByContext.class)) {
+        if (method.isAnnotationPresent(RouteByContext.class)
+                || extensibleClass.isAnnotationPresent(RouteByContext.class)) {
             return -1;
         }
 

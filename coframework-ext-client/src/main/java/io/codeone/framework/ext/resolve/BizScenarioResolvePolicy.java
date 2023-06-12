@@ -1,16 +1,17 @@
 package io.codeone.framework.ext.resolve;
 
 public enum BizScenarioResolvePolicy {
+    AUTO,
     /**
      * Uses the first BizScenarioParam.
      */
-    FIRST_PARAM,
+    FIRST,
     /**
      * Uses the last BizScenarioParam.
      */
-    LAST_PARAM,
+    LAST,
     /**
-     * Uses the parameter that annotated by @ResolveBy.
+     * Uses the parameter that annotated by @ResolveFrom.
      */
     SPECIFIED,
     /**
