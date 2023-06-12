@@ -10,7 +10,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -19,9 +18,6 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class BizScenarioResolveAspect {
-
-    @Resource
-    private ApplicationContext applicationContext;
 
     @Resource
     private BizScenarioResolveRepo bizScenarioResolveRepo;
