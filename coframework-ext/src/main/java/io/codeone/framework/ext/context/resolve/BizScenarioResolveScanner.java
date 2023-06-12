@@ -122,7 +122,7 @@ public class BizScenarioResolveScanner {
 
     private int tryCustomResolver(Method method, BizScenarioResolve resolve) {
         try {
-            if (resolve.customResolver() != BizScenarioResolver.class) {
+            if (resolve.customResolver() == BizScenarioResolver.class) {
                 throw new IllegalStateException("Did not specify BizScenarioResolver for '" + method + "'");
             }
             BizScenarioResolver ignored = applicationContext.getBean(resolve.customResolver());
