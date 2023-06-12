@@ -5,7 +5,6 @@ import io.codeone.framework.ext.BizScenarioParam;
 import io.codeone.framework.ext.context.BizScenarioContext;
 import io.codeone.framework.ext.repo.BizScenarioResolveRepo;
 import io.codeone.framework.ext.resolve.BizScenarioResolve;
-import io.codeone.framework.ext.resolve.BizScenarioResolvePolicy;
 import io.codeone.framework.ext.resolve.BizScenarioResolver;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -48,12 +47,11 @@ public class BizScenarioResolveAspect {
     }
 
     private BizScenario resolveBizScenario(Method method, Object[] args, BizScenarioResolve resolve) {
-        if (resolve.value() == BizScenarioResolvePolicy.CUSTOM) {
-            BizScenarioResolver resolver = bizScenarioResolveRepo.getResolver(resolve.customResolver());
-            return resolver.resolve(args);
-        } else {
-            int paramIndex = bizScenarioResolveRepo.getParamIndex(method);
-            return ((BizScenarioParam) args[paramIndex]).getBizScenario();
+        int index = bizScenarioResolveRepo.getParamIndex(method);
+        if (index != -1) {
+            return ((BizScenarioParam) args[index]).getBizScenario();
         }
+        BizScenarioResolver resolver = bizScenarioResolveRepo.getResolver(resolve.customResolver());
+        return resolver.resolve(args);
     }
 }

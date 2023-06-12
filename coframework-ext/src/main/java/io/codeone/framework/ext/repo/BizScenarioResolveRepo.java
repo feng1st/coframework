@@ -10,7 +10,5 @@ public interface BizScenarioResolveRepo {
 
     int getParamIndex(Method method);
 
-    void putResolver(Class<? extends BizScenarioResolver> clazz, BizScenarioResolver resolver);
-
     BizScenarioResolver getResolver(Class<? extends BizScenarioResolver> clazz);
 }
