@@ -21,7 +21,8 @@ public class ExtResolveTests {
         BizScenario param1 = BizScenario.ofBizId(TestExtConstants.BIZ1);
         BizScenario param2 = BizScenario.ofBizId(TestExtConstants.BIZ2);
 
-        Assertions.assertEquals("2", testResolveService.genCodeByClass(param1, param2));
+        Assertions.assertEquals("1", testResolveService.genCodeClassAutoFirst(param1, param2));
+        Assertions.assertEquals("2", testResolveService.genCodeClassAutoSpecified(param1, param2));
     }
 
     @Test
@@ -30,9 +31,22 @@ public class ExtResolveTests {
         BizScenario param2 = BizScenario.ofBizId(TestExtConstants.BIZ2);
         BizScenario param3 = BizScenario.ofBizId(TestExtConstants.BIZ3);
 
-        Assertions.assertEquals("1", testResolveService.genCodeFirstParam(param1, param2, param3));
-        Assertions.assertEquals("3", testResolveService.genCodeLastParam(param1, param2, param3));
+        Assertions.assertEquals("1", testResolveService.genCodeFirst(param1, param2, param3));
+        Assertions.assertEquals("3", testResolveService.genCodeLast(param1, param2, param3));
         Assertions.assertEquals("2", testResolveService.genCodeSpecified(param1, param2, param3));
+    }
+
+    @Test
+    void testAuto() {
+        BizScenario param1 = BizScenario.ofBizId(TestExtConstants.BIZ1);
+        BizScenario param2 = BizScenario.ofBizId(TestExtConstants.BIZ2);
+        BizScenario param3 = BizScenario.ofBizId(TestExtConstants.BIZ3);
+
+        Assertions.assertEquals("1", testResolveService.genCodeAutoFirst(param1, param2, param3));
+        Assertions.assertEquals("2", testResolveService.genCodeAutoSpecified(param1, param2, param3));
+        Assertions.assertEquals("2", testResolveService.genCodeAutoCustom("John"));
+        Assertions.assertEquals("3", testResolveService.genCodeAutoCustom("Bob"));
+        Assertions.assertEquals("1", testResolveService.genCodeAutoCustom("Jim"));
     }
 
     @Test
