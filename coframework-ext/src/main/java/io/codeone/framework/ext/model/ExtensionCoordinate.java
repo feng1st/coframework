@@ -14,13 +14,13 @@ public class ExtensionCoordinate {
         return new ExtensionCoordinate(extensibleClass, bizScenario);
     }
 
-    public ExtensionCoordinate ofBizScenario(BizScenario bizScenario) {
-        return new ExtensionCoordinate(this.extensibleClass, bizScenario);
-    }
-
     public ExtensionCoordinate(Class<?> extensibleClass, BizScenario bizScenario) {
         this.extensibleClass = extensibleClass;
         this.bizScenario = bizScenario;
+    }
+
+    public ExtensionCoordinate ofBizScenario(BizScenario bizScenario) {
+        return new ExtensionCoordinate(this.extensibleClass, bizScenario);
     }
 
     public BizScenario getBizScenario() {
