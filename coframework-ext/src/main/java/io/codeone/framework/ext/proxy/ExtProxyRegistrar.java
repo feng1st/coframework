@@ -6,11 +6,9 @@ import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Component;
 
@@ -56,18 +54,19 @@ public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
         }
     }
 
-    private <T> void registerProxy(BeanDefinitionRegistry registry, Class<T> extensibleClass) {
+    private <T> void registerProxy(DefaultListableBeanFactory beanFactory, Class<T> extensibleClass) {
         if (!registered.add(extensibleClass)) {
             return;
         }
 
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder
-                .genericBeanDefinition()
-                .setFactoryMethodOnBean(ExtProxyFactory.FACTORY_METHOD_NAME, ExtProxyFactory.FACTORY_BEAN_NAME)
+                .genericBeanDefinition(ExtProxyFactory.class)
+                .setFactoryMethod(ExtProxyFactory.FACTORY_METHOD_NAME)
+                .addConstructorArgValue(beanFactory)
                 .addConstructorArgValue(extensibleClass)
-                .setScope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+                .setScope(BeanDefinition.SCOPE_SINGLETON)
                 .setPrimary(true)
                 .getBeanDefinition();
-        registry.registerBeanDefinition(PREFIX + extensibleClass.getSimpleName(), beanDefinition);
+        beanFactory.registerBeanDefinition(PREFIX + extensibleClass.getSimpleName(), beanDefinition);
     }
 }

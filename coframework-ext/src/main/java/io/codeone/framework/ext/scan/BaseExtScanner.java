@@ -32,21 +32,21 @@ public abstract class BaseExtScanner implements ExtScanner {
             for (Method method : extensibleClass.getDeclaredMethods()) {
                 scanExtensibleMethod(extensibleClass, method);
 
-                Class<?> methodDeclaringClass = findMethodDeclaringClass(method, extClass);
-                if (methodDeclaringClass == null) {
+                Class<?> implementingClass = findImplementingClass(method, extClass);
+                if (implementingClass == null) {
                     continue;
                 }
-                BizScenario methodBizScenario = findMethodBizScenario(methodDeclaringClass, extClass);
-                if (methodBizScenario == null) {
+                BizScenario workingBizScenario = findWorkingBizScenario(implementingClass, extClass);
+                if (workingBizScenario == null) {
                     continue;
                 }
 
-                scanExtension(extensibleClass, method, methodDeclaringClass, methodBizScenario);
+                scanExtension(extensibleClass, method, implementingClass, workingBizScenario);
             }
         }
     }
 
-    private Class<?> findMethodDeclaringClass(Method method, Class<?> extClass) {
+    private Class<?> findImplementingClass(Method method, Class<?> extClass) {
         Method extMethod = ReflectionUtils.findMethod(extClass, method.getName(), method.getParameterTypes());
         if (extMethod == null) {
             return null;
@@ -54,14 +54,14 @@ public abstract class BaseExtScanner implements ExtScanner {
         return extMethod.getDeclaringClass();
     }
 
-    private BizScenario findMethodBizScenario(Class<?> methodDeclaringClass, Class<?> extClass) {
+    private BizScenario findWorkingBizScenario(Class<?> implementingClass, Class<?> extClass) {
         Extension workingExtension = null;
         for (Class<?> clazz = extClass; clazz != null; clazz = clazz.getSuperclass()) {
             Extension extension = clazz.getAnnotation(Extension.class);
             if (extension != null) {
                 workingExtension = extension;
             }
-            if (clazz == methodDeclaringClass) {
+            if (clazz == implementingClass) {
                 break;
             }
         }

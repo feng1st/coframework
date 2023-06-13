@@ -7,28 +7,32 @@ import io.codeone.framework.ext.model.BizScenarioExtension;
 import io.codeone.framework.ext.monitor.ExtInvocationMonitor;
 import io.codeone.framework.ext.repo.BizScenarioParamRepo;
 import io.codeone.framework.ext.repo.ExtensionRepo;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 
+@Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class ExtProxyInvocationHandler<T> implements InvocationHandler {
-
-    private final BizScenarioParamRepo bizScenarioParamRepo;
-
-    private final ExtensionRepo extensionRepo;
-
-    private final ExtInvocationMonitor extInvocationMonitor;
 
     private final Class<T> extensibleClass;
 
-    public ExtProxyInvocationHandler(BizScenarioParamRepo bizScenarioParamRepo,
-                                     ExtensionRepo extensionRepo,
-                                     ExtInvocationMonitor extInvocationMonitor,
-                                     Class<T> extensibleClass) {
-        this.bizScenarioParamRepo = bizScenarioParamRepo;
-        this.extensionRepo = extensionRepo;
-        this.extInvocationMonitor = extInvocationMonitor;
+    @Resource
+    private BizScenarioParamRepo bizScenarioParamRepo;
+
+    @Resource
+    private ExtensionRepo extensionRepo;
+
+    @Resource
+    private Optional<ExtInvocationMonitor> extInvocationMonitor;
+
+    public ExtProxyInvocationHandler(Class<T> extensibleClass) {
         this.extensibleClass = extensibleClass;
     }
 
@@ -59,11 +63,9 @@ public class ExtProxyInvocationHandler<T> implements InvocationHandler {
     private Object invoke(Method method, Object[] args, BizScenario bizScenario) throws Throwable {
         BizScenarioExtension bizExt = extensionRepo.getExtension(extensibleClass, bizScenario);
 
-        if (extInvocationMonitor != null) {
-            try {
-                extInvocationMonitor.monitor(extensibleClass, method, bizScenario, bizExt);
-            } catch (Exception ignored) {
-            }
+        try {
+            extInvocationMonitor.ifPresent(o -> o.monitor(extensibleClass, method, bizScenario, bizExt));
+        } catch (Exception ignored) {
         }
 
         try {

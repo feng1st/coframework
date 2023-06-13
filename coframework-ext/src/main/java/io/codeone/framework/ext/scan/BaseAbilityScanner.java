@@ -2,6 +2,7 @@ package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.ext.ExtMethod;
 
 import java.lang.reflect.Method;
 
@@ -13,7 +14,7 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
         if (ability == null) {
             return;
         }
-        scanAbility(extensibleClass, ability);
+        scanAbility(ability, extensibleClass);
     }
 
     @Override
@@ -22,30 +23,32 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
         if (ability == null) {
             return;
         }
-        scanAbilityMethod(extensibleClass, ability, method);
+        ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
+        scanAbilityMethod(ability, extMethod, extensibleClass, method);
     }
 
     @Override
     public void scanExtension(Class<?> extensibleClass, Method method,
-                              Class<?> methodDeclaringClass, BizScenario methodBizScenario) {
+                              Class<?> implementingClass, BizScenario workingBizScenario) {
         Ability ability = getAbility(extensibleClass);
         if (ability == null) {
             return;
         }
-        scanAbilityImpl(extensibleClass, ability, method, methodDeclaringClass, methodBizScenario);
+        ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
+        scanAbilityImpl(ability, extMethod, extensibleClass, method, implementingClass, workingBizScenario);
     }
 
     private Ability getAbility(Class<?> extensibleClass) {
         return extensibleClass.getAnnotation(Ability.class);
     }
 
-    protected void scanAbility(Class<?> extensibleClass, Ability ability) {
+    protected void scanAbility(Ability ability, Class<?> extensibleClass) {
     }
 
-    protected void scanAbilityMethod(Class<?> extensibleClass, Ability ability, Method method) {
+    protected void scanAbilityMethod(Ability ability, ExtMethod extMethod, Class<?> extensibleClass, Method method) {
     }
 
-    protected void scanAbilityImpl(Class<?> extensibleClass, Ability ability, Method method,
-                                   Class<?> methodDeclaringClass, BizScenario methodBizScenario) {
+    protected void scanAbilityImpl(Ability ability, ExtMethod extMethod, Class<?> extensibleClass, Method method,
+                                   Class<?> implementingClass, BizScenario workingBizScenario) {
     }
 }
