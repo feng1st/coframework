@@ -15,7 +15,7 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
         if (ability == null) {
             return;
         }
-        scanAbility(ability, extensibleClass);
+        scanAbility(AbilityInfo.of(ability, extensibleClass));
     }
 
     @Override
@@ -25,7 +25,7 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
             return;
         }
         ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
-        scanAbilityMethod(ability, extMethod, extensibleClass, method);
+        scanAbilityMethod(AbilityMethodInfo.of(ability, extMethod, extensibleClass, method));
     }
 
     @Override
@@ -36,20 +36,20 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
             return;
         }
         ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
-        scanAbilityImpl(ability, extMethod, extensibleClass, method, implementingClass, workingBizScenario);
+        scanAbilityImpl(AbilityImplInfo.of(ability, extMethod, extensibleClass, method,
+                implementingClass, workingBizScenario));
     }
 
     private Ability getAbility(Class<?> extensibleClass) {
         return extensibleClass.getAnnotation(Ability.class);
     }
 
-    protected void scanAbility(Ability ability, Class<?> extensibleClass) {
+    protected void scanAbility(AbilityInfo abilityInfo) {
     }
 
-    protected void scanAbilityMethod(Ability ability, ExtMethod extMethod, Class<?> extensibleClass, Method method) {
+    protected void scanAbilityMethod(AbilityMethodInfo abilityMethodInfo) {
     }
 
-    protected void scanAbilityImpl(Ability ability, ExtMethod extMethod, Class<?> extensibleClass, Method method,
-                                   Class<?> implementingClass, BizScenario workingBizScenario) {
+    protected void scanAbilityImpl(AbilityImplInfo abilityImplInfo) {
     }
 }

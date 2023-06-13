@@ -15,7 +15,7 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
         if (extPt == null) {
             return;
         }
-        scanExtensionPoint(extPt, extensibleClass);
+        scanExtensionPoint(ExtPtInfo.of(extPt, extensibleClass));
     }
 
     @Override
@@ -25,7 +25,7 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
             return;
         }
         ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
-        scanExtensionPointMethod(extPt, extMethod, extensibleClass, method);
+        scanExtensionPointMethod(ExtPtMethodInfo.of(extPt, extMethod, extensibleClass, method));
     }
 
     @Override
@@ -36,22 +36,20 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
             return;
         }
         ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
-        scanExtensionPointImpl(extPt, extMethod, extensibleClass, method, implementingClass, workingBizScenario);
+        scanExtensionPointImpl(ExtPtImplInfo.of(extPt, extMethod, extensibleClass, method,
+                implementingClass, workingBizScenario));
     }
 
     private ExtensionPoint getExtensionPoint(Class<?> extensibleClass) {
         return extensibleClass.getAnnotation(ExtensionPoint.class);
     }
 
-    protected void scanExtensionPoint(ExtensionPoint extPt, Class<?> extensibleClass) {
+    protected void scanExtensionPoint(ExtPtInfo extPtInfo) {
     }
 
-    protected void scanExtensionPointMethod(ExtensionPoint extPt, ExtMethod extMethod,
-                                            Class<?> extensibleClass, Method method) {
+    protected void scanExtensionPointMethod(ExtPtMethodInfo extPtMethodInfo) {
     }
 
-    protected void scanExtensionPointImpl(ExtensionPoint extPt, ExtMethod extMethod,
-                                          Class<?> extensibleClass, Method method,
-                                          Class<?> implementingClass, BizScenario workingBizScenario) {
+    protected void scanExtensionPointImpl(ExtPtImplInfo extPtImplInfo) {
     }
 }
