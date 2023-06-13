@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.model;
+package io.codeone.framework.ext.repo;
 
 import io.codeone.framework.ext.BizScenario;
 

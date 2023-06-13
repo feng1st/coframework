@@ -1,8 +1,9 @@
-package io.codeone.framework.ext.scan;
+package io.codeone.framework.ext.scan.extpt;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.ExtMethod;
 import io.codeone.framework.ext.ExtensionPoint;
+import io.codeone.framework.ext.scan.BaseExtScanner;
 
 import java.lang.reflect.Method;
 

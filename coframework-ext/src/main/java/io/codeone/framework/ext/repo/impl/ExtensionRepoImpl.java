@@ -3,8 +3,8 @@ package io.codeone.framework.ext.repo.impl;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.model.BizScenarioExtension;
-import io.codeone.framework.ext.model.ExtensionCoordinate;
+import io.codeone.framework.ext.repo.BizScenarioExtension;
+import io.codeone.framework.ext.repo.ExtensionCoordinate;
 import io.codeone.framework.ext.repo.ExtensionRepo;
 import org.springframework.stereotype.Repository;
 
