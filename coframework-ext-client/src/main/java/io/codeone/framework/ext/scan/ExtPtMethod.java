@@ -1,10 +1,11 @@
-package io.codeone.framework.ext.scan.extpt;
+package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.ExtensionPoint;
-import io.codeone.framework.ext.util.ExtUtils;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ExtPtMethod {
 
@@ -23,9 +24,9 @@ public class ExtPtMethod {
     }
 
     public ExtPtMethod(ExtensionPoint.Method extPtMethod, Method method) {
-        String classCode = ExtUtils.getClassKey(method);
+        String classCode = getClassKey(method);
         this.classCode = classCode;
-        this.code = classCode + "." + ExtUtils.getMethodSubKey(method);
+        this.code = classCode + "." + getMethodKey(method);
         this.name = (extPtMethod == null || extPtMethod.name().isEmpty())
                 ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : extPtMethod.name();
         this.description = extPtMethod == null ? "" : extPtMethod.description();
@@ -72,5 +73,18 @@ public class ExtPtMethod {
     @Override
     public String toString() {
         return name;
+    }
+
+    private static String getClassKey(Method method) {
+        return method.getDeclaringClass().getName();
+    }
+
+    private static String getMethodKey(Method method) {
+        return method.getName()
+                + "("
+                + Arrays.stream(method.getParameterTypes())
+                .map(Class::getSimpleName)
+                .collect(Collectors.joining(","))
+                + ")";
     }
 }

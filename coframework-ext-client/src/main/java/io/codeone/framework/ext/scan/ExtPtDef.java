@@ -1,7 +1,6 @@
-package io.codeone.framework.ext.scan.extpt;
+package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.ExtensionPoint;
-import io.codeone.framework.ext.util.ExtUtils;
 
 import java.util.Objects;
 
@@ -18,7 +17,7 @@ public class ExtPtDef {
     }
 
     public ExtPtDef(ExtensionPoint extPt, Class<?> extensibleClass) {
-        this.code = ExtUtils.getClassKey(extensibleClass);
+        this.code = getClassKey(extensibleClass);
         this.name = extPt.name().isEmpty() ? extensibleClass.getSimpleName() : extPt.name();
         this.description = extPt.description();
     }
@@ -55,5 +54,9 @@ public class ExtPtDef {
     @Override
     public String toString() {
         return name;
+    }
+
+    private static String getClassKey(Class<?> clazz) {
+        return clazz.getName();
     }
 }

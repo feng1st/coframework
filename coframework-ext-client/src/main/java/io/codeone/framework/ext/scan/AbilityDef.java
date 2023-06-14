@@ -1,7 +1,6 @@
-package io.codeone.framework.ext.scan.ability;
+package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
-import io.codeone.framework.ext.util.ExtUtils;
 
 import java.util.Objects;
 
@@ -18,7 +17,7 @@ public class AbilityDef {
     }
 
     public AbilityDef(Ability ability, Class<?> extensibleClass) {
-        this.code = ExtUtils.getClassKey(extensibleClass);
+        this.code = getClassKey(extensibleClass);
         this.name = ability.name().isEmpty() ? extensibleClass.getSimpleName() : ability.name();
         this.description = ability.description();
     }
@@ -55,5 +54,9 @@ public class AbilityDef {
     @Override
     public String toString() {
         return name;
+    }
+
+    private static String getClassKey(Class<?> clazz) {
+        return clazz.getName();
     }
 }

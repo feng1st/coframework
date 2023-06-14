@@ -1,8 +1,7 @@
-package io.codeone.framework.ext.scan.ability;
+package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.scan.BaseExtScanner;
 
 import java.lang.reflect.Method;
 

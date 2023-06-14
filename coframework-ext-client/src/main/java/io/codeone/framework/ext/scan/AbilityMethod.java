@@ -1,10 +1,11 @@
-package io.codeone.framework.ext.scan.ability;
+package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
-import io.codeone.framework.ext.util.ExtUtils;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AbilityMethod {
 
@@ -23,9 +24,9 @@ public class AbilityMethod {
     }
 
     public AbilityMethod(Ability.Method abilityMethod, Method method) {
-        String classCode = ExtUtils.getClassKey(method);
+        String classCode = getClassKey(method);
         this.classCode = classCode;
-        this.code = classCode + "." + ExtUtils.getMethodSubKey(method);
+        this.code = classCode + "." + getMethodKey(method);
         this.name = (abilityMethod == null || abilityMethod.name().isEmpty())
                 ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : abilityMethod.name();
         this.description = abilityMethod == null ? "" : abilityMethod.description();
@@ -72,5 +73,18 @@ public class AbilityMethod {
     @Override
     public String toString() {
         return name;
+    }
+
+    private static String getClassKey(Method method) {
+        return method.getDeclaringClass().getName();
+    }
+
+    private static String getMethodKey(Method method) {
+        return method.getName()
+                + "("
+                + Arrays.stream(method.getParameterTypes())
+                .map(Class::getSimpleName)
+                .collect(Collectors.joining(","))
+                + ")";
     }
 }

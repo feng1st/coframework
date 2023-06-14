@@ -1,10 +1,11 @@
-package io.codeone.framework.ext.scan.extpt;
+package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.util.ExtUtils;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ExtPtImpl {
 
@@ -23,12 +24,12 @@ public class ExtPtImpl {
     }
 
     public ExtPtImpl(Method method, Class<?> implementingClass, BizScenario bizScenario) {
-        String classCode = ExtUtils.getClassKey(method);
-        String methodSubKey = ExtUtils.getMethodSubKey(method);
+        String classCode = getClassKey(method);
+        String methodKey = getMethodKey(method);
         this.classCode = classCode;
-        this.methodCode = classCode + "." + methodSubKey;
-        this.code = classCode + "[" + bizScenario.toCode() + "]." + methodSubKey;
-        this.implementingClass = ExtUtils.getClassKey(implementingClass);
+        this.methodCode = classCode + "." + methodKey;
+        this.code = classCode + "[" + bizScenario.toCode() + "]." + methodKey;
+        this.implementingClass = getClassKey(implementingClass);
         this.bizScenario = bizScenario.toCode();
     }
 
@@ -72,5 +73,22 @@ public class ExtPtImpl {
     @Override
     public String toString() {
         return code;
+    }
+
+    private static String getClassKey(Class<?> clazz) {
+        return clazz.getName();
+    }
+
+    private static String getClassKey(Method method) {
+        return getClassKey(method.getDeclaringClass());
+    }
+
+    private static String getMethodKey(Method method) {
+        return method.getName()
+                + "("
+                + Arrays.stream(method.getParameterTypes())
+                .map(Class::getSimpleName)
+                .collect(Collectors.joining(","))
+                + ")";
     }
 }
