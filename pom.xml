@@ -19,7 +19,9 @@
     </properties>
 
     <modules>
+        <!-- ORDER IS IMPORTANT -->
         <module>coframework-ext-client</module>
+        <module>coframework-api</module>
         <module>coframework-ext</module>
         <module>coframework-test</module>
     </modules>
@@ -29,6 +31,11 @@
             <dependency>
                 <groupId>io.codeone</groupId>
                 <artifactId>coframework-ext-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.codeone</groupId>
+                <artifactId>coframework-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
