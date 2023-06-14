@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ExtPtMethod {
+public class ExtensionPointMethod {
 
     private final String classCode;
 
@@ -19,11 +19,11 @@ public class ExtPtMethod {
 
     private final int order;
 
-    public static ExtPtMethod of(ExtensionPoint.Method extPtMethod, Method method) {
-        return new ExtPtMethod(extPtMethod, method);
+    public static ExtensionPointMethod of(ExtensionPoint.Method extPtMethod, Method method) {
+        return new ExtensionPointMethod(extPtMethod, method);
     }
 
-    public ExtPtMethod(ExtensionPoint.Method extPtMethod, Method method) {
+    public ExtensionPointMethod(ExtensionPoint.Method extPtMethod, Method method) {
         String classCode = getClassKey(method);
         this.classCode = classCode;
         this.code = classCode + "." + getMethodKey(method);
@@ -61,7 +61,7 @@ public class ExtPtMethod {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ExtPtMethod that = (ExtPtMethod) o;
+        ExtensionPointMethod that = (ExtensionPointMethod) o;
         return Objects.equals(code, that.code);
     }
 

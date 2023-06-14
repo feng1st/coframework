@@ -4,7 +4,7 @@ import io.codeone.framework.ext.ExtensionPoint;
 
 import java.util.Objects;
 
-public class ExtPtDef {
+public class ExtensionPointDef {
 
     private final String code;
 
@@ -12,11 +12,11 @@ public class ExtPtDef {
 
     private final String description;
 
-    public static ExtPtDef of(ExtensionPoint extPt, Class<?> extensibleClass) {
-        return new ExtPtDef(extPt, extensibleClass);
+    public static ExtensionPointDef of(ExtensionPoint extPt, Class<?> extensibleClass) {
+        return new ExtensionPointDef(extPt, extensibleClass);
     }
 
-    public ExtPtDef(ExtensionPoint extPt, Class<?> extensibleClass) {
+    public ExtensionPointDef(ExtensionPoint extPt, Class<?> extensibleClass) {
         this.code = getClassKey(extensibleClass);
         this.name = extPt.name().isEmpty() ? extensibleClass.getSimpleName() : extPt.name();
         this.description = extPt.description();
@@ -42,7 +42,7 @@ public class ExtPtDef {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ExtPtDef that = (ExtPtDef) o;
+        ExtensionPointDef that = (ExtensionPointDef) o;
         return Objects.equals(code, that.code);
     }
 

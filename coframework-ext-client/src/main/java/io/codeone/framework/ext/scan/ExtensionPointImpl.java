@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ExtPtImpl {
+public class ExtensionPointImpl {
 
     private final String classCode;
 
@@ -19,11 +19,11 @@ public class ExtPtImpl {
 
     private final String bizScenario;
 
-    public static ExtPtImpl of(Method method, Class<?> implementingClass, BizScenario bizScenario) {
-        return new ExtPtImpl(method, implementingClass, bizScenario);
+    public static ExtensionPointImpl of(Method method, Class<?> implementingClass, BizScenario bizScenario) {
+        return new ExtensionPointImpl(method, implementingClass, bizScenario);
     }
 
-    public ExtPtImpl(Method method, Class<?> implementingClass, BizScenario bizScenario) {
+    public ExtensionPointImpl(Method method, Class<?> implementingClass, BizScenario bizScenario) {
         String classCode = getClassKey(method);
         String methodKey = getMethodKey(method);
         this.classCode = classCode;
@@ -61,7 +61,7 @@ public class ExtPtImpl {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ExtPtImpl extPt = (ExtPtImpl) o;
+        ExtensionPointImpl extPt = (ExtensionPointImpl) o;
         return Objects.equals(code, extPt.code);
     }
 

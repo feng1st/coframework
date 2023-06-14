@@ -13,7 +13,7 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
             return;
         }
         ExtensionPoint extPt = extensibleClass.getAnnotation(ExtensionPoint.class);
-        scanExtPt(ExtPtDef.of(extPt, extensibleClass));
+        scanExtensionPoint(ExtensionPointDef.of(extPt, extensibleClass));
     }
 
     @Override
@@ -22,7 +22,7 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
             return;
         }
         ExtensionPoint.Method extPtMethod = method.getAnnotation(ExtensionPoint.Method.class);
-        scanExtPtMethod(ExtPtMethod.of(extPtMethod, method));
+        scanExtensionPointMethod(ExtensionPointMethod.of(extPtMethod, method));
     }
 
     @Override
@@ -31,15 +31,15 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
         if (!extensibleClass.isAnnotationPresent(ExtensionPoint.class)) {
             return;
         }
-        scanExtPtImpl(ExtPtImpl.of(method, implementingClass, bizScenario));
+        scanExtensionPointImpl(ExtensionPointImpl.of(method, implementingClass, bizScenario));
     }
 
-    protected void scanExtPt(ExtPtDef extPtDef) {
+    protected void scanExtensionPoint(ExtensionPointDef extensionPointDef) {
     }
 
-    protected void scanExtPtMethod(ExtPtMethod extPtMethod) {
+    protected void scanExtensionPointMethod(ExtensionPointMethod extensionPointMethod) {
     }
 
-    protected void scanExtPtImpl(ExtPtImpl extPtImpl) {
+    protected void scanExtensionPointImpl(ExtensionPointImpl extensionPointImpl) {
     }
 }
