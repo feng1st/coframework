@@ -1,10 +1,11 @@
 package io.codeone.framework.ext.repo;
 
-import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.ext.model.BizScenarioExtension;
+import io.codeone.framework.ext.model.ExtensionCoordinate;
 
 public interface ExtensionRepo {
 
-    void putExtension(Class<?> extensibleClass, BizScenario bizScenario, Object ext);
+    void putExtension(ExtensionCoordinate coordinate, Object ext);
 
-    BizScenarioExtension getExtension(Class<?> extensibleClass, BizScenario bizScenario);
+    BizScenarioExtension getExtension(ExtensionCoordinate coordinate);
 }

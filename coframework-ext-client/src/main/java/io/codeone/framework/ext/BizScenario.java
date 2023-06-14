@@ -62,6 +62,10 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         this.scenario = scenario;
     }
 
+    public String toCode() {
+        return bizId + "@" + scenario;
+    }
+
     @Override
     public BizScenario getBizScenario() {
         return this;
@@ -91,7 +95,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     @Override
     public String toString() {
-        return bizId + '#' + scenario;
+        return toCode();
     }
 
     private class Itr implements Iterator<BizScenario> {

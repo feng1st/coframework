@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.repo;
+package io.codeone.framework.ext.model;
 
 import io.codeone.framework.ext.BizScenario;
 
@@ -38,6 +38,6 @@ public class BizScenarioExtension {
         if (isEmpty()) {
             return "(empty)";
         }
-        return extension.getClass().getSimpleName() + '(' + bizScenario + ')';
+        return extension.getClass().getSimpleName() + "<" + bizScenario + ">";
     }
 }

@@ -3,8 +3,8 @@ package io.codeone.framework.ext.repo.impl;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.repo.BizScenarioExtension;
-import io.codeone.framework.ext.repo.ExtensionCoordinate;
+import io.codeone.framework.ext.model.BizScenarioExtension;
+import io.codeone.framework.ext.model.ExtensionCoordinate;
 import io.codeone.framework.ext.repo.ExtensionRepo;
 import org.springframework.stereotype.Repository;
 
@@ -30,8 +30,7 @@ public class ExtensionRepoImpl implements ExtensionRepo {
             });
 
     @Override
-    public void putExtension(Class<?> extensibleClass, BizScenario bizScenario, Object ext) {
-        ExtensionCoordinate coordinate = ExtensionCoordinate.of(extensibleClass, bizScenario);
+    public void putExtension(ExtensionCoordinate coordinate, Object ext) {
         Object former = map.put(coordinate, ext);
         if (former != null) {
             throw new IllegalStateException("Found duplicate Extensions for '" + coordinate + "'");
@@ -39,12 +38,7 @@ public class ExtensionRepoImpl implements ExtensionRepo {
     }
 
     @Override
-    public BizScenarioExtension getExtension(Class<?> extensibleClass, BizScenario bizScenario) {
-        if (bizScenario == null) {
-            throw new IllegalArgumentException("bizScenario is null");
-        }
-
-        ExtensionCoordinate coordinate = ExtensionCoordinate.of(extensibleClass, bizScenario);
+    public BizScenarioExtension getExtension(ExtensionCoordinate coordinate) {
         BizScenarioExtension bizExt = cache.get(coordinate);
         if (bizExt.isEmpty()) {
             throw new IllegalArgumentException("Could not find Extension for '" + coordinate + "'");

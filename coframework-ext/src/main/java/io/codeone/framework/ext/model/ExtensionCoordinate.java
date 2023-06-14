@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.repo;
+package io.codeone.framework.ext.model;
 
 import io.codeone.framework.ext.BizScenario;
 
@@ -21,6 +21,10 @@ public class ExtensionCoordinate {
 
     public ExtensionCoordinate ofBizScenario(BizScenario bizScenario) {
         return new ExtensionCoordinate(this.extensibleClass, bizScenario);
+    }
+
+    public Class<?> getExtensibleClass() {
+        return extensibleClass;
     }
 
     public BizScenario getBizScenario() {
@@ -46,6 +50,6 @@ public class ExtensionCoordinate {
 
     @Override
     public String toString() {
-        return extensibleClass.getSimpleName() + '@' + bizScenario;
+        return extensibleClass.getSimpleName() + "[" + bizScenario + "]";
     }
 }

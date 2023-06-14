@@ -3,9 +3,10 @@ package io.codeone.framework.ext.proxy;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
 import io.codeone.framework.ext.context.BizScenarioContext;
-import io.codeone.framework.ext.monitor.ExtInvocationInfo;
+import io.codeone.framework.ext.model.BizScenarioExtension;
+import io.codeone.framework.ext.model.ExtensionCoordinate;
+import io.codeone.framework.ext.monitor.ExtInvocation;
 import io.codeone.framework.ext.monitor.ExtInvocationMonitor;
-import io.codeone.framework.ext.repo.BizScenarioExtension;
 import io.codeone.framework.ext.repo.BizScenarioParamRepo;
 import io.codeone.framework.ext.repo.ExtensionRepo;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -62,11 +63,12 @@ public class ExtProxyInvocationHandler<T> implements InvocationHandler {
     }
 
     private Object invoke(Method method, Object[] args, BizScenario bizScenario) throws Throwable {
-        BizScenarioExtension bizExt = extensionRepo.getExtension(extensibleClass, bizScenario);
+        ExtensionCoordinate coordinate = ExtensionCoordinate.of(extensibleClass, bizScenario);
+        BizScenarioExtension bizExt = extensionRepo.getExtension(coordinate);
 
         if (extInvocationMonitor.isPresent()) {
             try {
-                extInvocationMonitor.get().monitor(ExtInvocationInfo.of(extensibleClass, method, bizScenario, bizExt));
+                extInvocationMonitor.get().monitor(ExtInvocation.of(method, coordinate, bizExt));
             } catch (Exception ignored) {
             }
         }

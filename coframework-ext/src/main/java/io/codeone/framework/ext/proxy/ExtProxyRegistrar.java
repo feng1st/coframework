@@ -12,7 +12,6 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Component;
 
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +19,7 @@ import java.util.Set;
 @Component
 public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
 
-    public static final String PREFIX = "extProxy$";
+    public static final String PROXY_PREFIX = "extProxy$";
 
     private final Set<Class<?>> registered = new HashSet<>();
 
@@ -32,10 +31,10 @@ public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
         registerAllProxies((DefaultListableBeanFactory) beanFactory);
     }
 
-    private <A extends Annotation> void registerAllProxies(DefaultListableBeanFactory beanFactory) {
+    private void registerAllProxies(DefaultListableBeanFactory beanFactory) {
         String[] extBeanNames = beanFactory.getBeanNamesForAnnotation(Extensible.class);
         for (String extBeanName : extBeanNames) {
-            if (extBeanName.startsWith(PREFIX)) {
+            if (extBeanName.startsWith(PROXY_PREFIX)) {
                 continue;
             }
 
@@ -67,6 +66,6 @@ public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
                 .setScope(BeanDefinition.SCOPE_SINGLETON)
                 .setPrimary(true)
                 .getBeanDefinition();
-        beanFactory.registerBeanDefinition(PREFIX + extensibleClass.getSimpleName(), beanDefinition);
+        beanFactory.registerBeanDefinition(PROXY_PREFIX + extensibleClass.getSimpleName(), beanDefinition);
     }
 }
