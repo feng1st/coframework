@@ -28,11 +28,11 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
 
     @Override
     public void scanExtension(Class<?> extensibleClass, Method method,
-                              Class<?> implementingClass, BizScenario workingBizScenario) {
+                              Class<?> implementingClass, BizScenario bizScenario) {
         if (!extensibleClass.isAnnotationPresent(Ability.class)) {
             return;
         }
-        scanAbilityImpl(AbilityImpl.of(method, implementingClass, workingBizScenario));
+        scanAbilityImpl(AbilityImpl.of(method, implementingClass, bizScenario));
     }
 
     protected void scanAbility(AbilityDef abilityDef) {

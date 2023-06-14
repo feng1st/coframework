@@ -13,6 +13,6 @@ public interface ExtScanner {
     }
 
     default void scanExtension(Class<?> extensibleClass, Method method,
-                               Class<?> implementingClass, BizScenario workingBizScenario) {
+                               Class<?> implementingClass, BizScenario bizScenario) {
     }
 }

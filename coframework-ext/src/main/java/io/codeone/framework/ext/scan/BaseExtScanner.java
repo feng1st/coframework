@@ -36,12 +36,12 @@ public abstract class BaseExtScanner implements ExtScanner {
                 if (implementingClass == null) {
                     continue;
                 }
-                BizScenario workingBizScenario = findWorkingBizScenario(implementingClass, extClass);
-                if (workingBizScenario == null) {
+                BizScenario bizScenario = findBizScenario(implementingClass, extClass);
+                if (bizScenario == null) {
                     continue;
                 }
 
-                scanExtension(extensibleClass, method, implementingClass, workingBizScenario);
+                scanExtension(extensibleClass, method, implementingClass, bizScenario);
             }
         }
     }
@@ -54,7 +54,7 @@ public abstract class BaseExtScanner implements ExtScanner {
         return extMethod.getDeclaringClass();
     }
 
-    private BizScenario findWorkingBizScenario(Class<?> implementingClass, Class<?> extClass) {
+    private BizScenario findBizScenario(Class<?> implementingClass, Class<?> extClass) {
         Extension workingExtension = null;
         for (Class<?> clazz = extClass; clazz != null; clazz = clazz.getSuperclass()) {
             Extension extension = clazz.getAnnotation(Extension.class);

@@ -14,21 +14,21 @@ public class ExtPtImpl {
 
     private final String code;
 
-    private final String implClass;
+    private final String implementingClass;
 
     private final String bizScenario;
 
-    public static ExtPtImpl of(Method method, Class<?> implClass, BizScenario bizScenario) {
-        return new ExtPtImpl(method, implClass, bizScenario);
+    public static ExtPtImpl of(Method method, Class<?> implementingClass, BizScenario bizScenario) {
+        return new ExtPtImpl(method, implementingClass, bizScenario);
     }
 
-    public ExtPtImpl(Method method, Class<?> implClass, BizScenario bizScenario) {
+    public ExtPtImpl(Method method, Class<?> implementingClass, BizScenario bizScenario) {
         String classCode = ExtUtils.getClassKey(method);
         String methodSubKey = ExtUtils.getMethodSubKey(method);
         this.classCode = classCode;
         this.methodCode = classCode + "." + methodSubKey;
         this.code = classCode + "[" + bizScenario.toCode() + "]." + methodSubKey;
-        this.implClass = ExtUtils.getClassKey(implClass);
+        this.implementingClass = ExtUtils.getClassKey(implementingClass);
         this.bizScenario = bizScenario.toCode();
     }
 
@@ -44,8 +44,8 @@ public class ExtPtImpl {
         return code;
     }
 
-    public String getImplClass() {
-        return implClass;
+    public String getImplementingClass() {
+        return implementingClass;
     }
 
     public String getBizScenario() {

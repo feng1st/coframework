@@ -28,11 +28,11 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
 
     @Override
     public void scanExtension(Class<?> extensibleClass, Method method,
-                              Class<?> implementingClass, BizScenario workingBizScenario) {
+                              Class<?> implementingClass, BizScenario bizScenario) {
         if (!extensibleClass.isAnnotationPresent(ExtensionPoint.class)) {
             return;
         }
-        scanExtPtImpl(ExtPtImpl.of(method, implementingClass, workingBizScenario));
+        scanExtPtImpl(ExtPtImpl.of(method, implementingClass, bizScenario));
     }
 
     protected void scanExtPt(ExtPtDef extPtDef) {
