@@ -8,6 +8,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
+@Inherited
 public @interface BizScenarioScope {
 
     BizScenarioResolvePolicy value() default BizScenarioResolvePolicy.AUTO;

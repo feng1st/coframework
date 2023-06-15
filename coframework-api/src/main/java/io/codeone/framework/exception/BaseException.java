@@ -3,7 +3,7 @@ package io.codeone.framework.exception;
 /**
  * Base class of all biz runtime exceptions.
  */
-public abstract class BaseException extends RuntimeException implements Error {
+public abstract class BaseException extends RuntimeException implements ApiError {
 
     private String code;
 
@@ -23,11 +23,11 @@ public abstract class BaseException extends RuntimeException implements Error {
         this(code, cause.getMessage(), cause);
     }
 
-    public BaseException(Error error) {
+    public BaseException(ApiError error) {
         this(error.getCode(), error.getMessage(), null);
     }
 
-    public BaseException(Error error, Throwable cause) {
+    public BaseException(ApiError error, Throwable cause) {
         this(error.getCode(), error.getMessage(), cause);
     }
 

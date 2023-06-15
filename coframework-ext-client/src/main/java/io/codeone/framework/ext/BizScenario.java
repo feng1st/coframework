@@ -7,6 +7,8 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     public static final String ANY = "*";
 
+    private static final String CONNECTOR = "@";
+
     private String bizId = ANY;
 
     private String scenario = ANY;
@@ -28,6 +30,14 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         bizScenario.setBizId(bizId);
         bizScenario.setScenario(scenario);
         return bizScenario;
+    }
+
+    public static BizScenario parse(String code) {
+        String[] array = code.split(CONNECTOR);
+        if (array.length != 2) {
+            throw new IllegalArgumentException("Invalid bizScenario '" + code + "'");
+        }
+        return of(array[0], array[1]);
     }
 
     public BizScenario withBizId(String... bizId) {
@@ -62,8 +72,8 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         this.scenario = scenario;
     }
 
-    public String toCode() {
-        return bizId + "@" + scenario;
+    public String getCode() {
+        return bizId + CONNECTOR + scenario;
     }
 
     @Override
@@ -95,7 +105,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     @Override
     public String toString() {
-        return toCode();
+        return getCode();
     }
 
     private class Itr implements Iterator<BizScenario> {

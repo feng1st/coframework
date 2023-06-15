@@ -81,10 +81,8 @@ public class ExtensionPointMethod {
 
     private static String getMethodKey(Method method) {
         return method.getName()
-                + "("
                 + Arrays.stream(method.getParameterTypes())
                 .map(Class::getSimpleName)
-                .collect(Collectors.joining(","))
-                + ")";
+                .collect(Collectors.joining(",", "(", ")"));
     }
 }

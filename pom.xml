@@ -22,8 +22,9 @@
         <!-- ORDER IS IMPORTANT -->
         <module>coframework-ext-client</module>
         <module>coframework-api</module>
+        <module>coframework-core</module>
         <module>coframework-ext</module>
-        <module>coframework-test</module>
+        <module>coframework-tests</module>
     </modules>
 
     <dependencyManagement>
@@ -36,6 +37,11 @@
             <dependency>
                 <groupId>io.codeone</groupId>
                 <artifactId>coframework-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.codeone</groupId>
+                <artifactId>coframework-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

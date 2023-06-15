@@ -3,7 +3,7 @@ package io.codeone.framework.exception;
 /**
  * Some commonly used biz error enumerations.
  */
-public enum CommonErrors implements Error {
+public enum CommonErrors implements ApiError {
     /**
      * Success
      */

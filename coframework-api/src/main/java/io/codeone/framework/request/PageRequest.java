@@ -33,7 +33,7 @@ public abstract class PageRequest extends BaseRequest {
     }
 
     public PageRequest setPageSize(int pageSize) {
-        this.pageSize = Math.max(pageIndex, 1);
+        this.pageSize = Math.max(pageSize, 1);
         return this;
     }
 

@@ -28,9 +28,9 @@ public class AbilityImpl {
         String methodKey = getMethodKey(method);
         this.classCode = classCode;
         this.methodCode = classCode + "." + methodKey;
-        this.code = classCode + "[" + bizScenario.toCode() + "]." + methodKey;
+        this.code = classCode + "[" + bizScenario.getCode() + "]." + methodKey;
         this.implementingClass = getClassKey(implementingClass);
-        this.bizScenario = bizScenario.toCode();
+        this.bizScenario = bizScenario.getCode();
     }
 
     public String getClassCode() {
@@ -85,10 +85,8 @@ public class AbilityImpl {
 
     private static String getMethodKey(Method method) {
         return method.getName()
-                + "("
                 + Arrays.stream(method.getParameterTypes())
                 .map(Class::getSimpleName)
-                .collect(Collectors.joining(","))
-                + ")";
+                .collect(Collectors.joining(",", "(", ")"));
     }
 }

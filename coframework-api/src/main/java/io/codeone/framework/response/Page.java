@@ -54,7 +54,7 @@ public class Page<T> {
     }
 
     public Page<T> setPageSize(int pageSize) {
-        this.pageSize = Math.max(pageIndex, 1);
+        this.pageSize = Math.max(pageSize, 1);
         return this;
     }
 
