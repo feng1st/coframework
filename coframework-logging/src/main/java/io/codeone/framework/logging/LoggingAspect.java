@@ -21,7 +21,7 @@ public class LoggingAspect {
 
     private final Logger logger = LoggerFactory.getLogger("coframework.logging");
 
-    @Around("@within(logging) && !@annotation(io.codeone.coframework.logging.Logging)")
+    @Around("@within(logging) && !@annotation(io.codeone.framework.logging.Logging)")
     public Object aroundClass(ProceedingJoinPoint pjp, Logging logging) throws Throwable {
         return around(pjp, logging);
     }
