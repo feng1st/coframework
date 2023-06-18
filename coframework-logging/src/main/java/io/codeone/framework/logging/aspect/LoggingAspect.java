@@ -1,7 +1,11 @@
-package io.codeone.framework.logging;
+package io.codeone.framework.logging.aspect;
 
 import io.codeone.framework.exception.CommonErrors;
+import io.codeone.framework.logging.Log;
+import io.codeone.framework.logging.Logging;
+import io.codeone.framework.logging.util.LoggingSpelParser;
 import io.codeone.framework.response.Result;
+import io.codeone.framework.util.AspectOrders;
 import io.codeone.framework.util.ErrorUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,7 +19,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
 @Aspect
-@Order(Integer.MAX_VALUE - 3)
+@Order(AspectOrders.LOGGING)
 @Component
 public class LoggingAspect {
 

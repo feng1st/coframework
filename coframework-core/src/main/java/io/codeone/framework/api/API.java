@@ -7,6 +7,12 @@ import java.lang.annotation.*;
  * <p>
  * With this annotation on, the service implementation will be processed by the
  * following aspects:
+ * <p>
+ * 1. CheckArgsAspect, it will make sure any 'ApiParam' type of parameter has
+ * its checkArgs() method passed before the execution of the service method.
+ * <p>
+ * 2. ExToResultAspect, it will convert any exception to a failed Result and
+ * return that result, if the return type of the service method is Result.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

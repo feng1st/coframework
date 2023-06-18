@@ -64,7 +64,7 @@ public class Log {
         return this;
     }
 
-    Log method(Method method) {
+    public Log method(Method method) {
         return method(method.getDeclaringClass(), method.getName());
     }
 
@@ -74,7 +74,7 @@ public class Log {
         return this;
     }
 
-    Log args(String[] parameterNames, Object[] args) {
+    public Log args(String[] parameterNames, Object[] args) {
         if (this.args == null) {
             this.args = new LinkedHashMap<>();
         }
@@ -121,19 +121,19 @@ public class Log {
         return this;
     }
 
-    Log code(boolean success, String code, String message) {
+    public Log code(boolean success, String code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
         return this;
     }
 
-    Log resultBody(Object result) {
+    public Log resultBody(Object result) {
         this.result = result;
         return this;
     }
 
-    Log errorBody(Throwable error) {
+    public Log errorBody(Throwable error) {
         this.error = error;
         return this;
     }

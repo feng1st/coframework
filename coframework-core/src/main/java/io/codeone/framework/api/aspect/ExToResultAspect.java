@@ -1,6 +1,7 @@
 package io.codeone.framework.api.aspect;
 
 import io.codeone.framework.response.Result;
+import io.codeone.framework.util.AspectOrders;
 import io.codeone.framework.util.ErrorUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -10,7 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Aspect
-@Order(Integer.MAX_VALUE - 2)
+@Order(AspectOrders.WRAPPING_EXCEPTION)
 @Component
 public class ExToResultAspect {
 
