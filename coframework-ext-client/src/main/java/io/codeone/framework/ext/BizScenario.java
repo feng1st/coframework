@@ -15,13 +15,13 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     private static final String CONNECTOR = "@";
 
     /**
-     * The business identity of a caller. Can be a sequence of keywords, e.g.,
-     * "BIZ1.TEAM_A", or "*" to represent anyone.
+     * The business identity of a caller. Should be a sequence of keywords,
+     * e.g., "BIZ1.TEAM_A", or "*" to represent anyone.
      */
     private String bizId = ANY;
 
     /**
-     * The scenario is going to use. Can be a sequence of keywords, e.g.,
+     * The scenario is going to use. Should be a sequence of keywords, e.g.,
      * "holiday.new-year", or "*" to indicate there is no limit.
      */
     private String scenario = ANY;
