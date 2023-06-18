@@ -3,14 +3,27 @@ package io.codeone.framework.ext;
 import java.util.Iterator;
 import java.util.Objects;
 
+/**
+ * BizScenario indicates the business identity of a service caller, and in
+ * which scenario the service call will be. With these information, the service
+ * provider can process the requests respectively.
+ */
 public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     public static final String ANY = "*";
 
     private static final String CONNECTOR = "@";
 
+    /**
+     * The business identity of a caller. Can be a sequence of keywords, e.g.,
+     * "BIZ1.TEAM_A", or "*" to represent anyone.
+     */
     private String bizId = ANY;
 
+    /**
+     * The scenario is going to use. Can be a sequence of keywords, e.g.,
+     * "holiday.new-year", or "*" to indicate there is no limit.
+     */
     private String scenario = ANY;
 
     public static BizScenario ofBizId(String... bizId) {
@@ -35,7 +48,8 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     public static BizScenario parse(String code) {
         String[] array = code.split(CONNECTOR);
         if (array.length != 2) {
-            throw new IllegalArgumentException("Invalid bizScenario '" + code + "'");
+            throw new IllegalArgumentException(
+                    "Invalid bizScenario '" + code + "'");
         }
         return of(array[0], array[1]);
     }
@@ -54,8 +68,10 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     public void setBizId(String bizId) {
         if (!isValueValid(bizId)) {
-            throw new IllegalArgumentException("Invalid bizId '" + bizId + "', should be '*' (which means ANY), or "
-                    + "'.' separated keywords which are composed of only alphabets, numbers, '-' and '_'.");
+            throw new IllegalArgumentException("Invalid bizId '" + bizId
+                    + "', should be '*' (which means ANY), or '.' separated "
+                    + "keywords which are composed of only alphabets, "
+                    + "numbers, '-' and '_'.");
         }
         this.bizId = bizId;
     }
@@ -66,8 +82,10 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     public void setScenario(String scenario) {
         if (!isValueValid(scenario)) {
-            throw new IllegalArgumentException("Invalid scenario '" + scenario + "', should be '*' (which means ANY), "
-                    + "or '.' separated keywords which are composed of only alphabets, numbers, '-' and '_'.");
+            throw new IllegalArgumentException("Invalid scenario '" + scenario
+                    + "', should be '*' (which means ANY), or '.' separated "
+                    + "keywords which are composed of only alphabets, "
+                    + "numbers, '-' and '_'.");
         }
         this.scenario = scenario;
     }
@@ -95,7 +113,8 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
             return false;
         }
         BizScenario that = (BizScenario) o;
-        return Objects.equals(bizId, that.bizId) && Objects.equals(scenario, that.scenario);
+        return Objects.equals(bizId, that.bizId)
+                && Objects.equals(scenario, that.scenario);
     }
 
     @Override
