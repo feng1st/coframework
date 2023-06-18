@@ -15,8 +15,8 @@ public interface AspectOrders {
     int AFTER_LOGGING = LOGGING + 1;
 
     /**
-     * Wrapping exceptions to failed results, including those exceptions thrown
-     * by arg-checking.
+     * Wrapping an exception to a failed result, including those exceptions
+     * thrown by arg-checking.
      */
     int WRAPPING_EXCEPTION = Integer.MAX_VALUE - 40;
 
