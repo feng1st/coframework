@@ -1,7 +1,7 @@
 package io.codeone.framework.response;
 
 /**
- * Indicates this is a Result of an API.
+ * ApiResult indicates a result of an API call.
  */
 public interface ApiResult {
 }

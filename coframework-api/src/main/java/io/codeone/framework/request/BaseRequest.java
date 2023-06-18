@@ -6,12 +6,17 @@ import io.codeone.framework.ext.BizScenarioParam;
 import java.util.Objects;
 
 /**
- * Base class of all Requests.
+ * Base class of all requests.
  * <p>
- * By default, it implemented ApiParam and BizScenarioParam. But they can be safely ignored if not relevant.
+ * By default, it implemented ApiParam and BizScenarioParam. But they can be
+ * safely ignored if not relevant.
  */
 public abstract class BaseRequest implements ApiParam, BizScenarioParam {
 
+    /**
+     * The business identity of the caller, and in which scenario this
+     * invocation would be. In case it will be handled differently.
+     */
     private BizScenario bizScenario;
 
     @Override

@@ -1,8 +1,15 @@
 package io.codeone.framework.util;
 
+import io.codeone.framework.request.ApiParam;
+
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * ArgChecker provides a variety of util functions for checking parameters.
+ *
+ * @see ApiParam
+ */
 public final class ArgChecker {
 
     private ArgChecker() {
@@ -62,13 +69,15 @@ public final class ArgChecker {
         }
     }
 
-    public static void checkIn(Object value, Collection<?> expectedSet, String message) {
+    public static void checkIn(Object value, Collection<?> expectedSet,
+                               String message) {
         if (value == null || !expectedSet.contains(value)) {
             throw new IllegalArgumentException(message);
         }
     }
 
-    public static void checkNotIn(Object value, Collection<?> unexpectedSet, String message) {
+    public static void checkNotIn(Object value, Collection<?> unexpectedSet,
+                                  String message) {
         if (value != null && unexpectedSet.contains(value)) {
             throw new IllegalArgumentException(message);
         }

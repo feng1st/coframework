@@ -1,12 +1,20 @@
 package io.codeone.framework.exception;
 
 /**
- * Base class of all biz runtime exceptions.
+ * Base class of all business runtime exceptions.
  */
-public abstract class BaseException extends RuntimeException implements ApiError {
+public abstract class BaseException extends RuntimeException
+        implements ApiError {
 
+    /**
+     * The code to identify the exception. It should use a constant since this
+     * is a part of the API.
+     */
     private String code;
 
+    /**
+     * More specific details about the exception provided to customers.
+     */
     private String message;
 
     public BaseException(String code, String message, Throwable cause) {
