@@ -1,4 +1,4 @@
-package io.codeone.framework.api;
+package io.codeone.framework.api.aspect;
 
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
