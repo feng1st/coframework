@@ -15,6 +15,9 @@ public interface ApiParam {
      * An IllegalArgumentException should be thrown if any checking failed. The
      * framework provided an {@link ArgChecker} util to facilitate these
      * checking.
+     * <p>
+     * Expose this method to clients will help them to know explicitly how to
+     * supply with the argument.
      */
     default void checkArgs() {
     }
