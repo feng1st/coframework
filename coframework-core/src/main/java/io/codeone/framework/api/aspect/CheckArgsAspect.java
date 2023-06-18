@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * CheckArgsAspect will execute the checkArgs() method of 'ApiParam' type args,
- * upon the invocation of a method of a service, which is annotated by @API.
+ * upon the invocation of a method of a service, which is annotated by '@API'.
  *
  * @see API
  * @see ApiParam

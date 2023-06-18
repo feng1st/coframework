@@ -10,7 +10,7 @@ public interface ApiParam {
 
     /**
      * checkArgs() of an ApiParam will be called before the invocation of its
-     * belonging method of a service if that service is annotated by @API.
+     * belonging method of a service if that service is annotated by '@API'.
      * <p>
      * An IllegalArgumentException should be thrown if any checking failed. The
      * framework provided an {@link ArgChecker} util to facilitate these
