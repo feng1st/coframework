@@ -1,5 +1,6 @@
 package io.codeone.framework.api.aspect;
 
+import io.codeone.framework.api.API;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.AspectOrders;
 import io.codeone.framework.util.ErrorUtils;
@@ -10,6 +11,14 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+/**
+ * ExToResultAspect will convert any exception thrown by a method to a failed
+ * Result, if the return type of that method is a Result, and the class of that
+ * method is annotated by @API.
+ *
+ * @see API
+ * @see Result
+ */
 @Aspect
 @Order(AspectOrders.WRAPPING_EXCEPTION)
 @Component
