@@ -1,4 +1,4 @@
-package io.codeone.framework.api.aop.domain.exception;
+package io.codeone.framework.api.extoresult.domain.exception;
 
 import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.exception.BaseException;
