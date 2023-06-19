@@ -38,7 +38,7 @@ public final class ErrorUtils {
 
     /**
      * Returns whether this cause is NOT an error that the system admin should
-     * pay close attension to.
+     * pay close attention to.
      */
     public static boolean isWarnOnly(Throwable cause) {
         return cause instanceof ApiError

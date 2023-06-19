@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 @Service
 @BizScenarioScope
-public class TestScopeService {
+public class TestExtScopeService {
 
     @Resource
     private TestExtScopeAbility testExtScopeAbility;
