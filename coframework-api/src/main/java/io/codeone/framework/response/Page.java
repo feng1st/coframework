@@ -36,7 +36,7 @@ public class Page<T> {
      * The total number of all records. It may be zero if the total number is
      * impossible or expensive to calculate, e.g. an endless feed.
      */
-    private long totalCount = 0;
+    private long totalCount = 0L;
 
     /**
      * Constructs a result with no data.
@@ -121,7 +121,7 @@ public class Page<T> {
      * has the default value 0.
      */
     public boolean getHasMore() {
-        return (long) pageIndex * pageSize < totalCount;
+        return (long) pageSize * pageIndex < totalCount;
     }
 
     @Override

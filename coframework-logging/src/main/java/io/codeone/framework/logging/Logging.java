@@ -20,7 +20,7 @@ public @interface Logging {
 
     /**
      * Set a list of name/SpEL expression pairs of 'key' information to be logged, e.g.
-     * {"id", "#arg0?.id", "type", "#arg0?.type", ...}
+     * {"id", "#arg0?.id", "type", "#arg0?.type", ...}.
      * <p>
      * Available variables: arguments "arg0", "arg1", ..., result "ret", and exception "err".
      * <p>
@@ -36,7 +36,7 @@ public @interface Logging {
      * The success of a method invocation is always false if there is an exception thrown.
      * <p>
      * This attribute will be ignored if the return type of the method is
-     * {@link io.codeone.framework.response.Result}, Result#isSuccess() wil be used instead then.
+     * {@link io.codeone.framework.response.Result}, Result#isSuccess() will be used instead then.
      */
     String expSuccess() default "";
 
@@ -51,7 +51,7 @@ public @interface Logging {
      * be the simple class name of that exception.
      * <p>
      * This attribute will be ignored if the return type of the method is
-     * {@link io.codeone.framework.response.Result}, Result#getErrorCode() wil be used instead then.
+     * {@link io.codeone.framework.response.Result}, Result#getErrorCode() will be used instead then.
      */
     String expCode() default "";
 
@@ -63,7 +63,7 @@ public @interface Logging {
      * The value will be Throwable#getMessage() if an exception has been thrown during the invocation.
      * <p>
      * This attribute will be ignored if the return type of the method is
-     * {@link io.codeone.framework.response.Result}, Result#getErrorMessage() wil be used instead then.
+     * {@link io.codeone.framework.response.Result}, Result#getErrorMessage() will be used instead then.
      */
     String expMessage() default "";
 

@@ -21,8 +21,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CheckArgsAspect {
 
-    @Before("@within(io.codeone.framework.api.API)")
-    public void around(JoinPoint jp) throws Throwable {
+    @Before("@within(io.codeone.framework.api.API)"
+            + " || @annotation(io.codeone.framework.api.API)")
+    public void before(JoinPoint jp) throws Throwable {
         for (Object arg : jp.getArgs()) {
             if (arg instanceof ApiParam) {
                 ((ApiParam) arg).checkArgs();

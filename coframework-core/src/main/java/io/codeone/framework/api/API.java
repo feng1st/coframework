@@ -16,7 +16,17 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Inherited
 public @interface API {
+
+    /**
+     * A more user-friendly message such as "System is busy, please try again
+     * later." instead of verbose technical details returns to the customer
+     * if there is a SysError thrown.
+     * <p>
+     * This attribute does not affect the logging, and the original message
+     * will always be logged.
+     */
+    String sysErrorMessage() default "";
 }

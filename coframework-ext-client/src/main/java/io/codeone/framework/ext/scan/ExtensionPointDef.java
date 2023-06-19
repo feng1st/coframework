@@ -18,7 +18,7 @@ public class ExtensionPointDef {
 
     public ExtensionPointDef(ExtensionPoint extPt, Class<?> extensibleClass) {
         this.code = getClassKey(extensibleClass);
-        this.name = extPt.name().isEmpty() ? extensibleClass.getSimpleName() : extPt.name();
+        this.name = getName(extPt, extensibleClass);
         this.description = extPt.description();
     }
 
@@ -58,5 +58,9 @@ public class ExtensionPointDef {
 
     private static String getClassKey(Class<?> clazz) {
         return clazz.getName();
+    }
+
+    private static String getName(ExtensionPoint extPt, Class<?> extensibleClass) {
+        return extPt.name().isEmpty() ? extensibleClass.getSimpleName() : extPt.name();
     }
 }

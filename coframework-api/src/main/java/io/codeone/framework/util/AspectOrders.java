@@ -6,23 +6,23 @@ package io.codeone.framework.util;
 public interface AspectOrders {
 
     /**
-     * Logging the invocation of a method.
-     */
-    int LOGGING = Integer.MAX_VALUE - 60;
-
-    int BEFORE_LOGGING = LOGGING - 1;
-
-    int AFTER_LOGGING = LOGGING + 1;
-
-    /**
      * Wrapping an exception to a failed result, including those exceptions
      * thrown by arg-checking.
      */
-    int WRAPPING_EXCEPTION = Integer.MAX_VALUE - 40;
+    int WRAPPING_EXCEPTION = Integer.MAX_VALUE - 60;
 
     int BEFORE_WRAPPING_EXCEPTION = WRAPPING_EXCEPTION - 1;
 
     int AFTER_WRAPPING_EXCEPTION = WRAPPING_EXCEPTION + 1;
+
+    /**
+     * Logging the invocation of a method.
+     */
+    int LOGGING = Integer.MAX_VALUE - 40;
+
+    int BEFORE_LOGGING = LOGGING - 1;
+
+    int AFTER_LOGGING = LOGGING + 1;
 
     /**
      * Checking all args, may throw exceptions.

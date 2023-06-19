@@ -26,6 +26,8 @@ public class Log {
 
     private String method;
 
+    private boolean warnOnly;
+
     private boolean success;
 
     private String code;
@@ -109,6 +111,7 @@ public class Log {
     }
 
     public Log result(Result<?> result) {
+        warnOnly(true);
         code(result.isSuccess(), result.getErrorCode(), result.getErrorMessage());
         resultBody(result.getData());
         return this;
@@ -116,8 +119,14 @@ public class Log {
 
     public Log error(Throwable error) {
         Throwable cause = ErrorUtils.getCause(error);
+        warnOnly(ErrorUtils.isWarnOnly(cause));
         code(false, ErrorUtils.getCode(cause), cause.getMessage());
         errorBody(error);
+        return this;
+    }
+
+    public Log warnOnly(boolean warnOnly) {
+        this.warnOnly = warnOnly;
         return this;
     }
 
@@ -171,8 +180,9 @@ public class Log {
         if (level == null) {
             if (success) {
                 level = Level.INFO;
+            } else if (warnOnly) {
+                level = Level.WARN;
             } else {
-                // TODO: To support biz error and WARN.
                 level = Level.ERROR;
             }
         }
@@ -193,30 +203,20 @@ public class Log {
     }
 
     private void doLog(String msg) {
+        Throwable t = null;
+        if (error != null
+                // Reduce distractions if it is a WARN.
+                && !warnOnly) {
+            t = error;
+        }
         if (level == Level.ERROR) {
-            if (error != null) {
-                logger.error(msg, error);
-            } else {
-                logger.error(msg);
-            }
+            logger.error(msg, t);
         } else if (level == Level.WARN) {
-            if (error != null) {
-                logger.warn(msg, error);
-            } else {
-                logger.warn(msg);
-            }
+            logger.warn(msg, t);
         } else if (level == Level.INFO) {
-            if (error != null) {
-                logger.info(msg, error);
-            } else {
-                logger.info(msg);
-            }
+            logger.info(msg, t);
         } else {
-            if (error != null) {
-                logger.debug(msg, error);
-            } else {
-                logger.debug(msg);
-            }
+            logger.debug(msg, t);
         }
     }
 

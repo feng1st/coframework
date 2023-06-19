@@ -27,10 +27,9 @@ public class AbilityMethod {
         String classCode = getClassKey(method);
         this.classCode = classCode;
         this.code = classCode + "." + getMethodKey(method);
-        this.name = (abilityMethod == null || abilityMethod.name().isEmpty())
-                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : abilityMethod.name();
-        this.description = abilityMethod == null ? "" : abilityMethod.description();
-        this.order = abilityMethod == null ? -1 : abilityMethod.order();
+        this.name = getName(abilityMethod, method);
+        this.description = getDescription(abilityMethod);
+        this.order = getOrder(abilityMethod);
     }
 
     public String getClassCode() {
@@ -84,5 +83,18 @@ public class AbilityMethod {
                 + Arrays.stream(method.getParameterTypes())
                 .map(Class::getSimpleName)
                 .collect(Collectors.joining(",", "(", ")"));
+    }
+
+    private static String getName(Ability.Method abilityMethod, Method method) {
+        return (abilityMethod == null || abilityMethod.name().isEmpty())
+                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : abilityMethod.name();
+    }
+
+    private static String getDescription(Ability.Method abilityMethod) {
+        return abilityMethod == null ? "" : abilityMethod.description();
+    }
+
+    private static int getOrder(Ability.Method abilityMethod) {
+        return abilityMethod == null ? -1 : abilityMethod.order();
     }
 }

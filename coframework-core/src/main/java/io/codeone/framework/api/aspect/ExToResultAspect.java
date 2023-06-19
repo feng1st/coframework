@@ -1,6 +1,7 @@
 package io.codeone.framework.api.aspect;
 
 import io.codeone.framework.api.API;
+import io.codeone.framework.exception.SysError;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.AspectOrders;
 import io.codeone.framework.util.ErrorUtils;
@@ -24,34 +25,52 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExToResultAspect {
 
-    @Around("@within(io.codeone.framework.api.API)")
-    public Object around(ProceedingJoinPoint pjp) throws Throwable {
+    @Around("@within(api) && !@annotation(io.codeone.framework.api.API)")
+    public Object aroundClass(ProceedingJoinPoint pjp, API api)
+            throws Throwable {
+        return around(pjp, api);
+    }
+
+    @Around("@annotation(api)")
+    public Object aroundMethod(ProceedingJoinPoint pjp, API api)
+            throws Throwable {
+        return around(pjp, api);
+    }
+
+    private Object around(ProceedingJoinPoint pjp, API api) throws Throwable {
         try {
             return pjp.proceed();
         } catch (Throwable t) {
-            return exToResult(pjp, t);
+            return exToResult(pjp, api, t);
         }
     }
 
-    private Result<?> exToResult(ProceedingJoinPoint pjp, Throwable t) throws Throwable {
-        Class<?> returnType = ((MethodSignature) pjp.getSignature()).getReturnType();
+    private Result<?> exToResult(ProceedingJoinPoint pjp, API api, Throwable t)
+            throws Throwable {
+        Class<?> returnType = ((MethodSignature) pjp.getSignature())
+                .getReturnType();
         if (!Result.class.isAssignableFrom(returnType)) {
             throw t;
         }
         try {
-            return buildResult(t, returnType);
+            return buildResult(t, returnType, api);
         } catch (Exception e) {
             throw t;
         }
     }
 
-    private Result<?> buildResult(Throwable t, Class<?> returnType)
+    private Result<?> buildResult(Throwable t, Class<?> returnType, API api)
             throws InstantiationException, IllegalAccessException {
         Throwable cause = ErrorUtils.getCause(t);
         Result<?> result = (Result<?>) returnType.newInstance();
         result.setSuccess(false);
         result.setErrorCode(ErrorUtils.getCode(cause));
-        result.setErrorMessage(cause.getMessage());
+        if (cause instanceof SysError
+                && !api.sysErrorMessage().isEmpty()) {
+            result.setErrorMessage(api.sysErrorMessage());
+        } else {
+            result.setErrorMessage(cause.getMessage());
+        }
         return result;
     }
 }

@@ -18,7 +18,7 @@ public class AbilityDef {
 
     public AbilityDef(Ability ability, Class<?> extensibleClass) {
         this.code = getClassKey(extensibleClass);
-        this.name = ability.name().isEmpty() ? extensibleClass.getSimpleName() : ability.name();
+        this.name = getName(ability, extensibleClass);
         this.description = ability.description();
     }
 
@@ -58,5 +58,9 @@ public class AbilityDef {
 
     private static String getClassKey(Class<?> clazz) {
         return clazz.getName();
+    }
+
+    private static String getName(Ability ability, Class<?> extensibleClass) {
+        return ability.name().isEmpty() ? extensibleClass.getSimpleName() : ability.name();
     }
 }

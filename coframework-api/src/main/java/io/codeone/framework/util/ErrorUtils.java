@@ -2,6 +2,7 @@ package io.codeone.framework.util;
 
 import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.exception.CommonErrors;
+import io.codeone.framework.exception.SysError;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,18 +37,27 @@ public final class ErrorUtils {
     }
 
     /**
-     * Interprets the code from a throwable. Returns ApiError::getCode() if it
-     * was an ApiError, returns "INVALID_PARAM" if it was a
+     * Returns whether this cause is NOT an error that the system admin should
+     * pay close attension to.
+     */
+    public static boolean isWarnOnly(Throwable cause) {
+        return cause instanceof ApiError
+                && !(cause instanceof SysError);
+    }
+
+    /**
+     * Interprets the code from a cause. Returns ApiError::getCode() if it was
+     * an ApiError, returns "INVALID_PARAM" if it was a
      * IllegalArgumentException, otherwise returns the simple name of its
      * class.
      */
-    public static String getCode(Throwable t) {
-        if (t instanceof ApiError) {
-            return ((ApiError) t).getCode();
+    public static String getCode(Throwable cause) {
+        if (cause instanceof ApiError) {
+            return ((ApiError) cause).getCode();
         }
-        if (t instanceof IllegalArgumentException) {
+        if (cause instanceof IllegalArgumentException) {
             return CommonErrors.INVALID_PARAM.getCode();
         }
-        return t.getClass().getSimpleName();
+        return cause.getClass().getSimpleName();
     }
 }

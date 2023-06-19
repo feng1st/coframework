@@ -71,7 +71,7 @@ public class LoggingSpelParser {
         ValueOrThrowable<Expression, ParseException> expressionOrException
                 = subCache.computeIfAbsent(expressionString, k -> {
             try {
-                return new ValueOrThrowable<>(PARSER.parseExpression(expressionString));
+                return new ValueOrThrowable<>(PARSER.parseExpression(k));
             } catch (ParseException e) {
                 return new ValueOrThrowable<>(e);
             }

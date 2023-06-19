@@ -27,10 +27,9 @@ public class ExtensionPointMethod {
         String classCode = getClassKey(method);
         this.classCode = classCode;
         this.code = classCode + "." + getMethodKey(method);
-        this.name = (extPtMethod == null || extPtMethod.name().isEmpty())
-                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : extPtMethod.name();
-        this.description = extPtMethod == null ? "" : extPtMethod.description();
-        this.order = extPtMethod == null ? -1 : extPtMethod.order();
+        this.name = getName(extPtMethod, method);
+        this.description = getDescription(extPtMethod);
+        this.order = getOrder(extPtMethod);
     }
 
     public String getClassCode() {
@@ -84,5 +83,18 @@ public class ExtensionPointMethod {
                 + Arrays.stream(method.getParameterTypes())
                 .map(Class::getSimpleName)
                 .collect(Collectors.joining(",", "(", ")"));
+    }
+
+    private static String getName(ExtensionPoint.Method extPtMethod, Method method) {
+        return (extPtMethod == null || extPtMethod.name().isEmpty())
+                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : extPtMethod.name();
+    }
+
+    private static String getDescription(ExtensionPoint.Method extPtMethod) {
+        return extPtMethod == null ? "" : extPtMethod.description();
+    }
+
+    private static int getOrder(ExtensionPoint.Method extPtMethod) {
+        return extPtMethod == null ? -1 : extPtMethod.order();
     }
 }

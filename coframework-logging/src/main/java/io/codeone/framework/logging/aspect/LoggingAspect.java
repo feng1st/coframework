@@ -81,6 +81,8 @@ public class LoggingAspect {
         if (error != null) {
             cause = ErrorUtils.getCause(error);
         }
+        boolean warnOnly = getWarnOnly(result, cause);
+        log.warnOnly(warnOnly);
         boolean success = getSuccess(logging, result, cause, spelParser);
         String code = getCode(logging, result, cause, spelParser);
         String message = getMessage(logging, result, cause, spelParser);
@@ -90,14 +92,25 @@ public class LoggingAspect {
                 log.errorBody(error);
             }
         } else {
+            Object resultBody = getResultBody(result);
             if (logging.value().logResult()) {
-                log.resultBody(getResultBody(result));
+                log.resultBody(resultBody);
             }
         }
 
         log.elapsed(elapsed);
 
         log.log();
+    }
+
+    private boolean getWarnOnly(Object result, Throwable cause) {
+        if (ErrorUtils.isWarnOnly(cause)) {
+            return true;
+        }
+        if (result instanceof Result) {
+            return true;
+        }
+        return false;
     }
 
     private boolean getSuccess(Logging logging, Object result, Throwable cause, LoggingSpelParser spelParser) {
