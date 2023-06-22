@@ -6,12 +6,8 @@ import java.lang.reflect.Parameter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class TargetMethod {
-
-    private static final Map<Method, TargetMethod> CACHE
-            = new ConcurrentHashMap<>();
+public class Signature {
 
     private final Method method;
 
@@ -21,11 +17,7 @@ public class TargetMethod {
 
     private Map<Class<? extends Annotation>, Annotation> annotations;
 
-    public static TargetMethod of(Method method) {
-        return CACHE.computeIfAbsent(method, TargetMethod::new);
-    }
-
-    public TargetMethod(Method method) {
+    public Signature(Method method) {
         this.method = method;
     }
 

@@ -4,24 +4,21 @@ import java.lang.reflect.Method;
 
 public class Context {
 
-    private final TargetMethod method;
+    private final Signature signature;
 
     private final Object[] args;
-
-    private final Class<?> resultType;
 
     private Object result;
 
     private Throwable error;
 
     public Context(Method method, Object[] args) {
-        this.method = TargetMethod.of(method);
+        this.signature = SignatureFactory.get(method);
         this.args = args;
-        this.resultType = method.getReturnType();
     }
 
-    public TargetMethod getMethod() {
-        return method;
+    public Signature getSignature() {
+        return signature;
     }
 
     public Object[] getArgs() {
@@ -33,7 +30,7 @@ public class Context {
     }
 
     public void setResult(Object result) {
-        this.result = resultType.cast(result);
+        this.result = signature.getReturnType().cast(result);
         this.error = null;
     }
 

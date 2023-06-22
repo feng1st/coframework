@@ -2,7 +2,7 @@ package io.codeone.framework.plugin.ext.plugin;
 
 import io.codeone.framework.intercept.Intercept;
 import io.codeone.framework.intercept.Stage;
-import io.codeone.framework.intercept.util.TargetMethod;
+import io.codeone.framework.intercept.util.Signature;
 import io.codeone.framework.plugin.Plugin;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class BlockSmallResultTestPlugin implements Plugin<Void> {
 
     @Override
-    public Object afterReturning(TargetMethod method, Object[] args,
+    public Object afterReturning(Signature signature, Object[] args,
                                  Object result) throws Throwable {
         if ((result instanceof Long
                 && (Long) result < 10L)

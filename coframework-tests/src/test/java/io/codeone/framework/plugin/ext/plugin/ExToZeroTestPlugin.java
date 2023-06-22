@@ -2,7 +2,7 @@ package io.codeone.framework.plugin.ext.plugin;
 
 import io.codeone.framework.intercept.Intercept;
 import io.codeone.framework.intercept.Stage;
-import io.codeone.framework.intercept.util.TargetMethod;
+import io.codeone.framework.intercept.util.Signature;
 import io.codeone.framework.plugin.Plugin;
 import org.springframework.stereotype.Component;
 
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 public class ExToZeroTestPlugin implements Plugin<Void> {
 
     @Override
-    public Object afterThrowing(TargetMethod method, Object[] args,
+    public Object afterThrowing(Signature signature, Object[] args,
                                 Throwable error) throws Throwable {
-        if (method.getReturnType() == Long.class) {
+        if (signature.getReturnType() == Long.class) {
             return 0L;
         }
-        if (method.getReturnType() == Integer.class) {
+        if (signature.getReturnType() == Integer.class) {
             return 0;
         }
         throw error;

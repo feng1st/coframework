@@ -4,7 +4,7 @@ import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiInterceptor;
 import io.codeone.framework.intercept.Intercept;
 import io.codeone.framework.intercept.Stage;
-import io.codeone.framework.intercept.util.TargetMethod;
+import io.codeone.framework.intercept.util.Signature;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
 import org.springframework.stereotype.Component;
@@ -14,19 +14,19 @@ import org.springframework.stereotype.Component;
 public class ExToResultApiInterceptor implements ApiInterceptor<Void> {
 
     @Override
-    public Object afterThrowing(TargetMethod method, Object[] args,
+    public Object afterThrowing(Signature signature, Object[] args,
                                 Throwable error) throws Throwable {
-        return exToResult(method, error);
+        return exToResult(signature, error);
     }
 
-    private Result<?> exToResult(TargetMethod method, Throwable t)
+    private Result<?> exToResult(Signature signature, Throwable t)
             throws Throwable {
-        Class<?> returnType = method.getReturnType();
+        Class<?> returnType = signature.getReturnType();
         if (!Result.class.isAssignableFrom(returnType)) {
             throw t;
         }
         try {
-            API api = method.getAnnotation(API.class);
+            API api = signature.getAnnotation(API.class);
             return buildResult(t, returnType, api);
         } catch (Exception e) {
             throw t;
