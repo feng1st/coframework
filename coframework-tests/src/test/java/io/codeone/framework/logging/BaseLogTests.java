@@ -37,6 +37,7 @@ public class BaseLogTests {
         if (errClass == null) {
             Assertions.assertNull(argument.getValue().getThrowableProxy());
         } else {
+            Assertions.assertNotNull(argument.getValue().getThrowableProxy());
             Assertions.assertEquals(errClass.getName(), argument.getValue().getThrowableProxy().getClassName());
         }
         Assertions.assertEquals(msg, argument.getValue().getMessage().replaceAll("elapsed=>\\d+", "elapsed=>0"));
