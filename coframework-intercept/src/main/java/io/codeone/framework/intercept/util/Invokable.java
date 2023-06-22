@@ -1,4 +1,4 @@
-package io.codeone.framework.util;
+package io.codeone.framework.intercept.util;
 
 /**
  * Represents an invokable function.

@@ -1,13 +1,12 @@
 package io.codeone.framework.api.aspect;
 
 import io.codeone.framework.api.API;
+import io.codeone.framework.api.util.AspectOrders;
 import io.codeone.framework.request.ApiParam;
-import io.codeone.framework.util.AspectOrders;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * CheckArgsAspect will execute the checkArgs() method of 'ApiParam' type args,
@@ -18,7 +17,8 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Order(AspectOrders.CHECKING_ARGS)
-@Component
+//@Component
+@Deprecated
 public class CheckArgsAspect {
 
     @Before("@within(io.codeone.framework.api.API)"

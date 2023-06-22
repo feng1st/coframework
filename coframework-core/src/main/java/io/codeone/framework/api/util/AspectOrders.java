@@ -1,8 +1,9 @@
-package io.codeone.framework.util;
+package io.codeone.framework.api.util;
 
 /**
  * Predefined constants for the order of aspects.
  */
+@Deprecated
 public interface AspectOrders {
 
     /**

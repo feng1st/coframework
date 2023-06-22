@@ -1,6 +1,5 @@
 package io.codeone.framework.logging.util;
 
-import io.codeone.framework.util.ValueOrThrowable;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ParseException;
 import org.springframework.expression.spel.SpelCompilerMode;

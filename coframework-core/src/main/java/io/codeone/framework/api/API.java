@@ -1,5 +1,7 @@
 package io.codeone.framework.api;
 
+import io.codeone.framework.logging.LoggingPresets;
+
 import java.lang.annotation.*;
 
 /**
@@ -29,4 +31,6 @@ public @interface API {
      * will always be logged.
      */
     String errorMessage() default "";
+
+    LoggingPresets loggingPreset() default LoggingPresets.NONE;
 }

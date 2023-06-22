@@ -1,4 +1,4 @@
-package io.codeone.framework.util;
+package io.codeone.framework.logging.util;
 
 /**
  * Used to cache the result of a computation, or any exception it throws, if

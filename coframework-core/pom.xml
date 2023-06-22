@@ -16,6 +16,14 @@
             <groupId>io.codeone</groupId>
             <artifactId>coframework-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-intercept</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-logging</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.aspectj</groupId>

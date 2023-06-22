@@ -5,7 +5,6 @@ import io.codeone.framework.logging.Log;
 import io.codeone.framework.logging.Logging;
 import io.codeone.framework.logging.util.LoggingSpelParser;
 import io.codeone.framework.response.Result;
-import io.codeone.framework.util.AspectOrders;
 import io.codeone.framework.util.ErrorUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,13 +12,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
 @Aspect
-@Order(AspectOrders.LOGGING)
 @Component
 public class LoggingAspect {
 

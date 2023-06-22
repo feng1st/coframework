@@ -1,15 +1,14 @@
 package io.codeone.framework.api.aspect;
 
 import io.codeone.framework.api.API;
+import io.codeone.framework.api.util.AspectOrders;
 import io.codeone.framework.response.Result;
-import io.codeone.framework.util.AspectOrders;
 import io.codeone.framework.util.ErrorUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * ExToResultAspect will convert any exception thrown by a method to a failed
@@ -21,7 +20,8 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Order(AspectOrders.WRAPPING_EXCEPTION)
-@Component
+//@Component
+@Deprecated
 public class ExToResultAspect {
 
     @Around("@within(api) && !@annotation(io.codeone.framework.api.API)")
