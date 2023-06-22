@@ -12,10 +12,10 @@ public class BizScenarioContext {
         return stack.get().peek();
     }
 
-    public static <T> T invoke(BizScenario bizScenario, WrappedMethod<T> method) throws Throwable {
+    public static <T> T invoke(BizScenario bizScenario, Invokable<T> invokable) throws Throwable {
         stack.get().push(bizScenario);
         try {
-            return method.invoke();
+            return invokable.invoke();
         } finally {
             stack.get().pop();
         }
