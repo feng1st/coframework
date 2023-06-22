@@ -4,7 +4,6 @@ import io.codeone.framework.api.API;
 import io.codeone.framework.api.extoresult.domain.exception.MyException;
 import io.codeone.framework.api.extoresult.domain.param.MyParam;
 import io.codeone.framework.exception.CommonErrors;
-import io.codeone.framework.exception.SysException;
 import io.codeone.framework.response.Result;
 import org.springframework.stereotype.Service;
 
@@ -16,24 +15,20 @@ public class TestApiExToResultService {
         return Result.success();
     }
 
-    public Result<Void> throwSysError() {
-        throw new SysException(CommonErrors.SYS_ERROR);
+    @API(errorMessage = "What's wrong")
+    public Result<Void> withCustomMessage() {
+        throw new RuntimeException("BE CONFUSED AND PANIC!");
     }
 
-    @API(sysErrorMessage = "What's wrong")
-    public Result<Void> throwSysErrorCustomMessage() {
-        throw new SysException(CommonErrors.SYS_ERROR);
-    }
-
-    public Result<Void> throwNonSysError() {
+    public Result<Void> apiError() {
         throw new RuntimeException(new MyException(CommonErrors.INVALID_PARAM, new Exception("not the cause")));
     }
 
-    public Result<Void> throwInvalidParam() {
+    public Result<Void> invalidParam() {
         throw new RuntimeException(new IllegalArgumentException("Negative", new Exception("ignored")));
     }
 
-    public Result<Void> throwException() {
+    public Result<Void> otherException() {
         throw new RuntimeException(new Exception(new Exception(new Exception("Deeply sorry"))));
     }
 }

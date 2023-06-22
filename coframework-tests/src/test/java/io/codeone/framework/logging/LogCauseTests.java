@@ -17,9 +17,9 @@ public class LogCauseTests extends BaseLogTests {
     void testApiError() {
         testLogCauseService.apiError();
 
-        assertLog(TestLogCauseService.class.getName(), Level.WARN, null,
+        assertLog(TestLogCauseService.class.getName(), Level.ERROR, null,
                 // Cause found is MyException(CommonErrors.INVALID_PARAM, ...).
-                "||level=>WARN||method=>TestLogCauseService.apiError||success=>false||code=>INVALID_PARAM||message=>Invalid param||elapsed=>0");
+                "||level=>ERROR||method=>TestLogCauseService.apiError||success=>false||code=>INVALID_PARAM||message=>Invalid param||elapsed=>0");
     }
 
     @Test

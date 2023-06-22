@@ -26,9 +26,9 @@ public class Log {
 
     private String method;
 
-    private boolean warnOnly;
-
     private boolean success;
+
+    private boolean hasError;
 
     private String code;
 
@@ -111,7 +111,6 @@ public class Log {
     }
 
     public Log result(Result<?> result) {
-        warnOnly(true);
         code(result.isSuccess(), result.getErrorCode(), result.getErrorMessage());
         resultBody(result.getData());
         return this;
@@ -119,14 +118,8 @@ public class Log {
 
     public Log error(Throwable error) {
         Throwable cause = ErrorUtils.getCause(error);
-        warnOnly(ErrorUtils.isWarnOnly(cause));
         code(false, ErrorUtils.getCode(cause), cause.getMessage());
         errorBody(error);
-        return this;
-    }
-
-    public Log warnOnly(boolean warnOnly) {
-        this.warnOnly = warnOnly;
         return this;
     }
 
@@ -137,12 +130,18 @@ public class Log {
         return this;
     }
 
+    public Log hasError(boolean hasError) {
+        this.hasError = hasError;
+        return this;
+    }
+
     public Log resultBody(Object result) {
         this.result = result;
         return this;
     }
 
     public Log errorBody(Throwable error) {
+        this.hasError = true;
         this.error = error;
         return this;
     }
@@ -180,10 +179,10 @@ public class Log {
         if (level == null) {
             if (success) {
                 level = Level.INFO;
-            } else if (warnOnly) {
-                level = Level.WARN;
-            } else {
+            } else if (hasError) {
                 level = Level.ERROR;
+            } else {
+                level = Level.WARN;
             }
         }
     }
@@ -203,20 +202,14 @@ public class Log {
     }
 
     private void doLog(String msg) {
-        Throwable t = null;
-        if (error != null
-                // Reduce distractions if it is a WARN.
-                && !warnOnly) {
-            t = error;
-        }
         if (level == Level.ERROR) {
-            logger.error(msg, t);
+            logger.error(msg, error);
         } else if (level == Level.WARN) {
-            logger.warn(msg, t);
+            logger.warn(msg, error);
         } else if (level == Level.INFO) {
-            logger.info(msg, t);
+            logger.info(msg, error);
         } else {
-            logger.debug(msg, t);
+            logger.debug(msg, error);
         }
     }
 

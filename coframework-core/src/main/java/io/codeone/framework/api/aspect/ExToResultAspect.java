@@ -1,7 +1,6 @@
 package io.codeone.framework.api.aspect;
 
 import io.codeone.framework.api.API;
-import io.codeone.framework.exception.SysError;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.AspectOrders;
 import io.codeone.framework.util.ErrorUtils;
@@ -65,9 +64,8 @@ public class ExToResultAspect {
         Result<?> result = (Result<?>) returnType.newInstance();
         result.setSuccess(false);
         result.setErrorCode(ErrorUtils.getCode(cause));
-        if (cause instanceof SysError
-                && !api.sysErrorMessage().isEmpty()) {
-            result.setErrorMessage(api.sysErrorMessage());
+        if (!api.errorMessage().isEmpty()) {
+            result.setErrorMessage(api.errorMessage());
         } else {
             result.setErrorMessage(cause.getMessage());
         }

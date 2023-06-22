@@ -25,24 +25,16 @@ public class ApiExToResultTests {
     }
 
     @Test
-    void testSysError() {
-        Result<Void> result = testApiExToResultService.throwSysError();
+    void testWithCustomMessage() {
+        Result<Void> result = testApiExToResultService.withCustomMessage();
         Assertions.assertFalse(result.isSuccess());
-        Assertions.assertEquals(result.getErrorCode(), CommonErrors.SYS_ERROR.getCode());
-        Assertions.assertEquals(result.getErrorMessage(), CommonErrors.SYS_ERROR.getMessage());
-    }
-
-    @Test
-    void testSysErrorCustomMessage() {
-        Result<Void> result = testApiExToResultService.throwSysErrorCustomMessage();
-        Assertions.assertFalse(result.isSuccess());
-        Assertions.assertEquals(result.getErrorCode(), CommonErrors.SYS_ERROR.getCode());
+        Assertions.assertEquals(result.getErrorCode(), RuntimeException.class.getSimpleName());
         Assertions.assertEquals(result.getErrorMessage(), "What's wrong");
     }
 
     @Test
-    void testNonSysError() {
-        Result<Void> result = testApiExToResultService.throwNonSysError();
+    void testApiError() {
+        Result<Void> result = testApiExToResultService.apiError();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertEquals(result.getErrorCode(), CommonErrors.INVALID_PARAM.getCode());
         Assertions.assertEquals(result.getErrorMessage(), CommonErrors.INVALID_PARAM.getMessage());
@@ -50,17 +42,17 @@ public class ApiExToResultTests {
 
     @Test
     void testInvalidParam() {
-        Result<Void> result = testApiExToResultService.throwInvalidParam();
+        Result<Void> result = testApiExToResultService.invalidParam();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertEquals(result.getErrorCode(), CommonErrors.INVALID_PARAM.getCode());
         Assertions.assertEquals(result.getErrorMessage(), "Negative");
     }
 
     @Test
-    void testException() {
-        Result<Void> result = testApiExToResultService.throwException();
+    void testOtherException() {
+        Result<Void> result = testApiExToResultService.otherException();
         Assertions.assertFalse(result.isSuccess());
-        Assertions.assertEquals(result.getErrorCode(), "Exception");
+        Assertions.assertEquals(result.getErrorCode(), Exception.class.getSimpleName());
         Assertions.assertEquals(result.getErrorMessage(), "Deeply sorry");
     }
 }

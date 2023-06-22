@@ -54,8 +54,8 @@ public class LogSpelTests extends BaseLogTests {
         param.setId(2L);
         testLogSpelService.code(param);
 
-        assertLog(TestLogSpelService.class.getName(), Level.ERROR, null,
+        assertLog(TestLogSpelService.class.getName(), Level.WARN, null,
                 // success=>false by evaluation.
-                "||level=>ERROR||method=>TestLogSpelService.code||success=>false||code=>2||message=>2||elapsed=>0");
+                "||level=>WARN||method=>TestLogSpelService.code||success=>false||code=>2||message=>2||elapsed=>0");
     }
 }

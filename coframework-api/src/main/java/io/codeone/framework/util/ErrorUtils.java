@@ -2,7 +2,6 @@ package io.codeone.framework.util;
 
 import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.exception.CommonErrors;
-import io.codeone.framework.exception.SysError;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,15 +33,6 @@ public final class ErrorUtils {
             t = cause;
         }
         return t;
-    }
-
-    /**
-     * Returns whether this cause is NOT an error that the system admin should
-     * pay close attention to.
-     */
-    public static boolean isWarnOnly(Throwable cause) {
-        return cause instanceof ApiError
-                && !(cause instanceof SysError);
     }
 
     /**
