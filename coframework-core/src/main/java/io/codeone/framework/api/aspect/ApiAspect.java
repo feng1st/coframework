@@ -1,7 +1,7 @@
 package io.codeone.framework.api.aspect;
 
 import io.codeone.framework.api.API;
-import io.codeone.framework.api.ApiInterceptorChain;
+import io.codeone.framework.api.ApiInterceptChain;
 import io.codeone.framework.request.ApiParam;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,13 +26,13 @@ import java.lang.reflect.Method;
 public class ApiAspect {
 
     @Resource
-    private ApiInterceptorChain apiInterceptorChain;
+    private ApiInterceptChain apiInterceptChain;
 
     @Around("@within(io.codeone.framework.api.API)"
             + " || @annotation(io.codeone.framework.api.API)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
-        return apiInterceptorChain.intercept(method, pjp.getArgs(),
+        return apiInterceptChain.intercept(method, pjp.getArgs(),
                 pjp::proceed);
     }
 }
