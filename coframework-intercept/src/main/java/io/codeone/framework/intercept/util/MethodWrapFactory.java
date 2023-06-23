@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MethodWrapCache {
+public class MethodWrapFactory {
 
     private static final Map<Method, MethodWrap> CACHE
             = new ConcurrentHashMap<>();

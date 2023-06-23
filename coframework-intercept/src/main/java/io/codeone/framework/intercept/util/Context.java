@@ -13,7 +13,7 @@ public class Context {
     private Throwable error;
 
     public Context(Method method, Object[] args) {
-        this.methodWrap = MethodWrapCache.get(method);
+        this.methodWrap = MethodWrapFactory.get(method);
         this.args = args;
     }
 
