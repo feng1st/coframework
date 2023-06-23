@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,7 +17,7 @@ public class BizScenarioScopeRepoImpl implements BizScenarioScopeRepo {
     @Resource
     private ApplicationContext applicationContext;
 
-    private final Map<Method, Integer> paramIndexMap = new ConcurrentHashMap<>();
+    private final Map<Method, Integer> paramIndexMap = new HashMap<>();
 
     private final Map<Class<? extends BizScenarioResolver>, BizScenarioResolver> resolverMap = new ConcurrentHashMap<>();
 

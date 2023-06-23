@@ -6,11 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -19,8 +15,7 @@ public class PluginFactory {
     @Resource
     private ApplicationContext applicationContext;
 
-    private final Map<Class<?>, Interceptor<?>> pluginMap
-            = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Interceptor<?>> pluginMap = new HashMap<>();
 
     @PostConstruct
     private void postConstruct() {
