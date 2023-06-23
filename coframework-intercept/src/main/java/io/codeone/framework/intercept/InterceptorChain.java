@@ -9,9 +9,9 @@ import java.util.*;
 
 public class InterceptorChain {
 
-    private final List<Interceptor<?>> interceptors;
+    private final List<? extends Interceptor<?>> interceptors;
 
-    public InterceptorChain(List<Interceptor<?>> interceptors) {
+    public InterceptorChain(List<? extends Interceptor<?>> interceptors) {
         Objects.requireNonNull(interceptors);
         this.interceptors = interceptors;
         sortInterceptors();

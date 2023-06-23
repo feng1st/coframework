@@ -1,6 +1,5 @@
 package io.codeone.framework.api;
 
-import io.codeone.framework.intercept.Interceptor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +14,7 @@ public class ApiInterceptorFactory {
     @Resource
     private ApplicationContext applicationContext;
 
-    private final List<Interceptor<?>> interceptors = new ArrayList<>();
+    private final List<ApiInterceptor<?>> interceptors = new ArrayList<>();
 
     @PostConstruct
     private void postConstruct() {
@@ -23,7 +22,7 @@ public class ApiInterceptorFactory {
                 .forEach(interceptors::add);
     }
 
-    public List<Interceptor<?>> getInterceptors() {
+    public List<ApiInterceptor<?>> getApiInterceptors() {
         return interceptors;
     }
 }

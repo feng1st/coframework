@@ -1,6 +1,7 @@
 package io.codeone.framework.intercept;
 
 import io.codeone.framework.api.ApiInterceptorFactory;
+import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.PluginFactory;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +35,7 @@ public class InterceptorChainFactory {
             synchronized (this) {
                 if ((chain = apiInterceptorChain) == null) {
                     chain = new InterceptorChain(
-                            apiInterceptorFactory.getInterceptors());
+                            apiInterceptorFactory.getApiInterceptors());
                     apiInterceptorChain = chain;
                 }
             }
@@ -43,23 +44,25 @@ public class InterceptorChainFactory {
     }
 
     public InterceptorChain getPluginChainOfMethod(
-            Method method, Class<?>[] pluginClasses, boolean isApi) {
+            Method method, Class<? extends Plugin<?>>[] pluginClasses,
+            boolean isApi) {
         return methodPluginMap.computeIfAbsent(method,
                 k -> getPluginChain(pluginClasses, isApi));
     }
 
     public InterceptorChain getPluginChainOfClass(
-            Class<?> clazz, Class<?>[] pluginClasses, boolean isApi) {
+            Class<?> clazz, Class<? extends Plugin<?>>[] pluginClasses,
+            boolean isApi) {
         return classPluginMap.computeIfAbsent(clazz,
                 k -> getPluginChain(pluginClasses, isApi));
     }
 
     private InterceptorChain getPluginChain(
-            Class<?>[] pluginClasses, boolean isApi) {
+            Class<? extends Plugin<?>>[] pluginClasses, boolean isApi) {
         List<Interceptor<?>> interceptors = new ArrayList<>();
-        interceptors.addAll(pluginFactory.getInterceptors(pluginClasses));
+        interceptors.addAll(pluginFactory.getPlugins(pluginClasses));
         if (isApi) {
-            interceptors.addAll(apiInterceptorFactory.getInterceptors());
+            interceptors.addAll(apiInterceptorFactory.getApiInterceptors());
         }
         return new InterceptorChain(interceptors);
     }
