@@ -9,6 +9,14 @@ import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
 import org.springframework.stereotype.Component;
 
+/**
+ * ExToResultApiInterceptor will convert any exception thrown by a method to a
+ * failed Result, if the return type of that method is a Result, and the class
+ * of that method is annotated by '@API'.
+ *
+ * @see API
+ * @see Result
+ */
 @Component
 @Intercept(Stage.EXCEPTION_HANDLING)
 public class ExToResultApiInterceptor implements ApiInterceptor<Void> {

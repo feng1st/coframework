@@ -1,14 +1,15 @@
 package io.codeone.framework.intercept;
 
 import io.codeone.framework.api.ApiInterceptorFactory;
+import io.codeone.framework.plugin.PluginFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 @Component
 public class InterceptorChainFactory {
@@ -16,12 +17,15 @@ public class InterceptorChainFactory {
     @Resource
     private ApiInterceptorFactory apiInterceptorFactory;
 
+    @Resource
+    private PluginFactory pluginFactory;
+
     private InterceptorChain apiInterceptorChain;
 
-    private final Map<Method, InterceptorChain> methodMap
+    private final Map<Method, InterceptorChain> methodPluginMap
             = new ConcurrentHashMap<>();
 
-    private final Map<Class<?>, InterceptorChain> classMap
+    private final Map<Class<?>, InterceptorChain> classPluginMap
             = new ConcurrentHashMap<>();
 
     public InterceptorChain getApiInterceptorChain() {
@@ -29,7 +33,8 @@ public class InterceptorChainFactory {
         if ((chain = apiInterceptorChain) == null) {
             synchronized (this) {
                 if ((chain = apiInterceptorChain) == null) {
-                    chain = new InterceptorChain(apiInterceptorFactory.getInterceptors());
+                    chain = new InterceptorChain(
+                            apiInterceptorFactory.getInterceptors());
                     apiInterceptorChain = chain;
                 }
             }
@@ -37,13 +42,25 @@ public class InterceptorChainFactory {
         return chain;
     }
 
-    public InterceptorChain getPluginChain(Method method,
-                                           Supplier<List<Interceptor<?>>> interceptorsSupplier) {
-        return methodMap.computeIfAbsent(method, k -> new InterceptorChain(interceptorsSupplier.get()));
+    public InterceptorChain getPluginChainOfMethod(
+            Method method, Class<?>[] pluginClasses, boolean isApi) {
+        return methodPluginMap.computeIfAbsent(method,
+                k -> getPluginChain(pluginClasses, isApi));
     }
 
-    public InterceptorChain getPluginChain(Class<?> clazz,
-                                           Supplier<List<Interceptor<?>>> interceptorsSupplier) {
-        return classMap.computeIfAbsent(clazz, k -> new InterceptorChain(interceptorsSupplier.get()));
+    public InterceptorChain getPluginChainOfClass(
+            Class<?> clazz, Class<?>[] pluginClasses, boolean isApi) {
+        return classPluginMap.computeIfAbsent(clazz,
+                k -> getPluginChain(pluginClasses, isApi));
+    }
+
+    private InterceptorChain getPluginChain(
+            Class<?>[] pluginClasses, boolean isApi) {
+        List<Interceptor<?>> interceptors = new ArrayList<>();
+        interceptors.addAll(pluginFactory.getInterceptors(pluginClasses));
+        if (isApi) {
+            interceptors.addAll(apiInterceptorFactory.getInterceptors());
+        }
+        return new InterceptorChain(interceptors);
     }
 }
