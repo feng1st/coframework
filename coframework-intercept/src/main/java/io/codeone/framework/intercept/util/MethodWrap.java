@@ -17,12 +17,20 @@ public class MethodWrap {
 
     private Map<Class<? extends Annotation>, Annotation> annotations;
 
+    private Map<Class<? extends Annotation>, Annotation> methodAnnotations;
+
+    private Map<Class<? extends Annotation>, Annotation> classAnnotations;
+
     public MethodWrap(Method method) {
         this.method = method;
     }
 
     public Method getMethod() {
         return method;
+    }
+
+    public Class<?> getDeclaringClass() {
+        return method.getDeclaringClass();
     }
 
     public Class<?>[] getParameterTypes() {
@@ -69,6 +77,30 @@ public class MethodWrap {
         return annotationClass.cast(getAnnotations().get(annotationClass));
     }
 
+    public boolean isMethodAnnotationPresent(
+            Class<? extends Annotation> annotationClass) {
+        return getMethodAnnotation(annotationClass) != null;
+    }
+
+    public <T extends Annotation> T getMethodAnnotation(
+            Class<T> annotationClass) {
+        Objects.requireNonNull(annotationClass);
+        return annotationClass.cast(getMethodAnnotations().get(
+                annotationClass));
+    }
+
+    public boolean isClassAnnotationPresent(
+            Class<? extends Annotation> annotationClass) {
+        return getClassAnnotation(annotationClass) != null;
+    }
+
+    public <T extends Annotation> T getClassAnnotation(
+            Class<T> annotationClass) {
+        Objects.requireNonNull(annotationClass);
+        return annotationClass.cast(getClassAnnotations().get(
+                annotationClass));
+    }
+
     private Map<Class<? extends Annotation>, Annotation> getAnnotations() {
         Map<Class<? extends Annotation>, Annotation> annos;
         if ((annos = annotations) == null) {
@@ -83,6 +115,41 @@ public class MethodWrap {
                         annos.putIfAbsent(anno.annotationType(), anno);
                     }
                     annotations = annos;
+                }
+            }
+        }
+        return annos;
+    }
+
+    private Map<Class<? extends Annotation>, Annotation>
+    getMethodAnnotations() {
+        Map<Class<? extends Annotation>, Annotation> annos;
+        if ((annos = methodAnnotations) == null) {
+            synchronized (this) {
+                if ((annos = methodAnnotations) == null) {
+                    annos = new LinkedHashMap<>();
+                    for (Annotation anno : method.getAnnotations()) {
+                        annos.put(anno.annotationType(), anno);
+                    }
+                    methodAnnotations = annos;
+                }
+            }
+        }
+        return annos;
+    }
+
+    private Map<Class<? extends Annotation>, Annotation>
+    getClassAnnotations() {
+        Map<Class<? extends Annotation>, Annotation> annos;
+        if ((annos = classAnnotations) == null) {
+            synchronized (this) {
+                if ((annos = classAnnotations) == null) {
+                    annos = new LinkedHashMap<>();
+                    Class<?> clazz = method.getDeclaringClass();
+                    for (Annotation anno : clazz.getAnnotations()) {
+                        annos.put(anno.annotationType(), anno);
+                    }
+                    classAnnotations = annos;
                 }
             }
         }

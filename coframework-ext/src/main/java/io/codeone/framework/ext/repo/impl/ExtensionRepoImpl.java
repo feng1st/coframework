@@ -8,14 +8,14 @@ import io.codeone.framework.ext.model.ExtensionCoordinate;
 import io.codeone.framework.ext.repo.ExtensionRepo;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Repository
 public class ExtensionRepoImpl implements ExtensionRepo {
 
-    private final Map<ExtensionCoordinate, Object> map = new HashMap<>();
+    private final Map<ExtensionCoordinate, Object> map = new ConcurrentHashMap<>();
 
     private final LoadingCache<ExtensionCoordinate, BizScenarioExtension> cache = Caffeine.newBuilder()
             .expireAfterAccess(24, TimeUnit.HOURS)

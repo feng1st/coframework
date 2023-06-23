@@ -8,13 +8,12 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class BaseInterceptChain<T extends Interceptor<?>>
-        implements InterceptChain {
+public abstract class BaseInterceptorChain implements InterceptorChain {
 
     @Override
     public Object intercept(Method method, Object[] args,
                             Invokable<Object> invokable) throws Throwable {
-        List<T> interceptors = getInterceptors();
+        List<Interceptor<?>> interceptors = getInterceptors();
         if (interceptors == null || interceptors.isEmpty()) {
             return invokable.invoke();
         }
@@ -24,7 +23,7 @@ public abstract class BaseInterceptChain<T extends Interceptor<?>>
         LinkedList<Interception<?>> stack = new LinkedList<>();
 
         try {
-            before(interceptors, stack, context);
+            before(stack, context, interceptors);
 
             context.setResult(invokable.invoke());
         } catch (Throwable t) {
@@ -36,11 +35,10 @@ public abstract class BaseInterceptChain<T extends Interceptor<?>>
         return context.getResultOrThrow();
     }
 
-    protected abstract List<T> getInterceptors();
+    protected abstract List<Interceptor<?>> getInterceptors();
 
-    private void before(List<T> interceptors,
-                        LinkedList<Interception<?>> stack, Context context)
-            throws Throwable {
+    private void before(LinkedList<Interception<?>> stack, Context context,
+                        List<Interceptor<?>> interceptors) throws Throwable {
         for (Interceptor<?> interceptor : interceptors) {
             Interception<?> interception = new Interception<>(interceptor);
             stack.push(interception);
