@@ -26,8 +26,7 @@ public class LoggingApiPlugin implements ApiPlugin<Long> {
                         Throwable error, Long before) throws Throwable {
         long elapsed = System.currentTimeMillis() - before;
         log(methodWrap, args, result, error, elapsed);
-        return ApiPlugin.super.after(
-                methodWrap, args, result, error, before);
+        return ApiPlugin.super.after(methodWrap, args, result, error, before);
     }
 
     private void log(MethodWrap methodWrap, Object[] args, Object result,
