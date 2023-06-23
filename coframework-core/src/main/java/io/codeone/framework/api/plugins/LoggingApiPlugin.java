@@ -1,19 +1,19 @@
-package io.codeone.framework.api.interceptors;
+package io.codeone.framework.api.plugins;
 
 import io.codeone.framework.api.API;
-import io.codeone.framework.api.ApiInterceptor;
+import io.codeone.framework.api.ApiPlugin;
 import io.codeone.framework.exception.CommonErrors;
-import io.codeone.framework.intercept.Intercept;
-import io.codeone.framework.intercept.Stage;
-import io.codeone.framework.intercept.util.MethodWrap;
 import io.codeone.framework.logging.Log;
+import io.codeone.framework.plugin.Plug;
+import io.codeone.framework.plugin.Stage;
+import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-@Intercept(Stage.AFTER_TARGET)
-public class LoggingApiInterceptor implements ApiInterceptor<Long> {
+@Plug(Stage.AFTER_TARGET)
+public class LoggingApiPlugin implements ApiPlugin<Long> {
 
     @Override
     public Long roundBefore(MethodWrap methodWrap, Object[] args)
@@ -26,7 +26,7 @@ public class LoggingApiInterceptor implements ApiInterceptor<Long> {
                         Throwable error, Long before) throws Throwable {
         long elapsed = System.currentTimeMillis() - before;
         log(methodWrap, args, result, error, elapsed);
-        return ApiInterceptor.super.after(
+        return ApiPlugin.super.after(
                 methodWrap, args, result, error, before);
     }
 

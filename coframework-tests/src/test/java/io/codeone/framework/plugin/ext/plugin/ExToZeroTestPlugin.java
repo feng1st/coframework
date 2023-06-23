@@ -1,13 +1,13 @@
 package io.codeone.framework.plugin.ext.plugin;
 
-import io.codeone.framework.intercept.Intercept;
-import io.codeone.framework.intercept.Stage;
-import io.codeone.framework.intercept.util.MethodWrap;
+import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
+import io.codeone.framework.plugin.Stage;
+import io.codeone.framework.plugin.util.MethodWrap;
 import org.springframework.stereotype.Component;
 
 @Component
-@Intercept(Stage.EXCEPTION_HANDLING)
+@Plug(Stage.EXCEPTION_HANDLING)
 public class ExToZeroTestPlugin implements Plugin<Void> {
 
     @Override

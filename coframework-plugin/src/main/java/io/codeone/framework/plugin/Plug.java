@@ -1,4 +1,4 @@
-package io.codeone.framework.intercept;
+package io.codeone.framework.plugin;
 
 import java.lang.annotation.*;
 
@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
-public @interface Intercept {
+public @interface Plug {
 
     Stage value() default Stage.BEFORE_TARGET;
 

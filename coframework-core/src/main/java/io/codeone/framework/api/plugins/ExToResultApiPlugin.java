@@ -1,16 +1,16 @@
-package io.codeone.framework.api.interceptors;
+package io.codeone.framework.api.plugins;
 
 import io.codeone.framework.api.API;
-import io.codeone.framework.api.ApiInterceptor;
-import io.codeone.framework.intercept.Intercept;
-import io.codeone.framework.intercept.Stage;
-import io.codeone.framework.intercept.util.MethodWrap;
+import io.codeone.framework.api.ApiPlugin;
+import io.codeone.framework.plugin.Plug;
+import io.codeone.framework.plugin.Stage;
+import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
 import org.springframework.stereotype.Component;
 
 /**
- * ExToResultApiInterceptor will convert any exception thrown by a method to a
+ * ExToResultApiPlugin will convert any exception thrown by a method to a
  * failed Result, if the return type of that method is a Result, and the class
  * of that method is annotated by '@API'.
  *
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
  * @see Result
  */
 @Component
-@Intercept(Stage.EXCEPTION_HANDLING)
-public class ExToResultApiInterceptor implements ApiInterceptor<Void> {
+@Plug(Stage.EXCEPTION_HANDLING)
+public class ExToResultApiPlugin implements ApiPlugin<Void> {
 
     @Override
     public Object afterThrowing(MethodWrap methodWrap, Object[] args,

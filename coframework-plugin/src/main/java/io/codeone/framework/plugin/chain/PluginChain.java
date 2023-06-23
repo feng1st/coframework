@@ -1,25 +1,28 @@
-package io.codeone.framework.intercept;
+package io.codeone.framework.plugin.chain;
 
-import io.codeone.framework.intercept.util.Context;
-import io.codeone.framework.intercept.util.Interception;
-import io.codeone.framework.intercept.util.Invokable;
+import io.codeone.framework.plugin.Plug;
+import io.codeone.framework.plugin.Plugin;
+import io.codeone.framework.plugin.Stage;
+import io.codeone.framework.plugin.util.Context;
+import io.codeone.framework.plugin.util.Interception;
+import io.codeone.framework.plugin.util.Invokable;
 
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class InterceptorChain {
+public class PluginChain {
 
-    private final List<? extends Interceptor<?>> interceptors;
+    private final List<? extends Plugin<?>> plugins;
 
-    public InterceptorChain(List<? extends Interceptor<?>> interceptors) {
-        Objects.requireNonNull(interceptors);
-        this.interceptors = interceptors;
-        sortInterceptors();
+    public PluginChain(List<? extends Plugin<?>> plugins) {
+        Objects.requireNonNull(plugins);
+        this.plugins = plugins;
+        sortPlugins();
     }
 
     public Object intercept(Method method, Object[] args,
                             Invokable<Object> invokable) throws Throwable {
-        if (interceptors.isEmpty()) {
+        if (plugins.isEmpty()) {
             return invokable.invoke();
         }
 
@@ -40,23 +43,23 @@ public class InterceptorChain {
         return context.getResultOrThrow();
     }
 
-    private void sortInterceptors() {
-        interceptors.sort(Comparator
+    private void sortPlugins() {
+        plugins.sort(Comparator
                 .comparing(o -> Optional.ofNullable(
-                                o.getClass().getAnnotation(Intercept.class))
-                        .map(Intercept::value)
+                                o.getClass().getAnnotation(Plug.class))
+                        .map(Plug::value)
                         .map(Stage::order)
                         .orElse(Integer.MAX_VALUE))
                 .thenComparing(o -> Optional.ofNullable(
-                                o.getClass().getAnnotation(Intercept.class))
-                        .map(Intercept::order)
+                                o.getClass().getAnnotation(Plug.class))
+                        .map(Plug::order)
                         .orElse(Integer.MAX_VALUE)));
     }
 
     private void before(LinkedList<Interception<?>> stack, Context context)
             throws Throwable {
-        for (Interceptor<?> interceptor : interceptors) {
-            Interception<?> interception = new Interception<>(interceptor);
+        for (Plugin<?> plugin : plugins) {
+            Interception<?> interception = new Interception<>(plugin);
             stack.push(interception);
             interception.before(context);
         }

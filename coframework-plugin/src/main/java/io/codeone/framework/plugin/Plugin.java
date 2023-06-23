@@ -1,8 +1,8 @@
-package io.codeone.framework.intercept;
+package io.codeone.framework.plugin;
 
-import io.codeone.framework.intercept.util.MethodWrap;
+import io.codeone.framework.plugin.util.MethodWrap;
 
-public interface Interceptor<T> {
+public interface Plugin<T> {
 
     default T roundBefore(MethodWrap methodWrap, Object[] args)
             throws Throwable {

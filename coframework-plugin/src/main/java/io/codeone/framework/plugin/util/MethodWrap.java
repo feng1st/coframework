@@ -1,4 +1,4 @@
-package io.codeone.framework.intercept.util;
+package io.codeone.framework.plugin.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

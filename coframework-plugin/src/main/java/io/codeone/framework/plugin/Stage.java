@@ -1,4 +1,4 @@
-package io.codeone.framework.intercept;
+package io.codeone.framework.plugin;
 
 public enum Stage {
     ARG_PREPARING(false),

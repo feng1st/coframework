@@ -8,18 +8,17 @@ import java.lang.annotation.*;
  * This annotation is used to mark an implementation of a service as API.
  * <p>
  * With this annotation on, the service implementation will be processed by the
- * following ApiInterceptors:
+ * following ApiPlugins:
  * <p>
- * 1. ArgCheckingApiInterceptor, it will make sure any 'ApiParam' type of
- * parameter has its checkArgs() method passed before the execution of the
- * service method.
+ * 1. ArgCheckingApiPlugin, it will make sure any 'ApiParam' type of parameter
+ * has its checkArgs() method passed before the execution of the service
+ * method.
  * <p>
- * 2. LoggingApiInterceptor, it will log the successfulness, code and message
- * of an API call.
+ * 2. LoggingApiPlugin, it will log the successfulness, code and message of an
+ * API call.
  * <p>
- * 3. ExToResultApiInterceptor, it will convert any exception to a failed
- * Result and return that result, if the return type of the service method is
- * Result.
+ * 3. ExToResultApiPlugin, it will convert any exception to a failed Result and
+ * return that result, if the return type of the service method is Result.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

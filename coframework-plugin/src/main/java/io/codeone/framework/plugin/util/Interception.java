@@ -1,25 +1,25 @@
-package io.codeone.framework.intercept.util;
+package io.codeone.framework.plugin.util;
 
-import io.codeone.framework.intercept.Interceptor;
+import io.codeone.framework.plugin.Plugin;
 
 public class Interception<T> {
 
-    private final Interceptor<T> interceptor;
+    private final Plugin<T> plugin;
 
     private T before;
 
-    public Interception(Interceptor<T> interceptor) {
-        this.interceptor = interceptor;
+    public Interception(Plugin<T> plugin) {
+        this.plugin = plugin;
     }
 
     public void before(Context context) throws Throwable {
-        before = interceptor.roundBefore(
+        before = plugin.roundBefore(
                 context.getMethodWrap(), context.getArgs());
     }
 
     public void after(Context context) {
         try {
-            context.setResult(interceptor.after(
+            context.setResult(plugin.after(
                     context.getMethodWrap(), context.getArgs(),
                     context.getResult(), context.getError(),
                     before));
