@@ -1,4 +1,6 @@
-package io.codeone.framework.plugin.util;
+package io.codeone.framework.plugin.factory;
+
+import io.codeone.framework.plugin.util.MethodWrap;
 
 import java.lang.reflect.Method;
 import java.util.Map;

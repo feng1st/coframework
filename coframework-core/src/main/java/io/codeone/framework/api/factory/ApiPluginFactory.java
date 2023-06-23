@@ -1,5 +1,6 @@
-package io.codeone.framework.api;
+package io.codeone.framework.api.factory;
 
+import io.codeone.framework.api.ApiPlugin;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
