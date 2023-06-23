@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Signature {
+public class MethodWrap {
 
     private final Method method;
 
@@ -17,7 +17,7 @@ public class Signature {
 
     private Map<Class<? extends Annotation>, Annotation> annotations;
 
-    public Signature(Method method) {
+    public MethodWrap(Method method) {
         this.method = method;
     }
 

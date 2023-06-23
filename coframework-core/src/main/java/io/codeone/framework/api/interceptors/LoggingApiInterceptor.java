@@ -5,7 +5,7 @@ import io.codeone.framework.api.ApiInterceptor;
 import io.codeone.framework.exception.CommonErrors;
 import io.codeone.framework.intercept.Intercept;
 import io.codeone.framework.intercept.Stage;
-import io.codeone.framework.intercept.util.Signature;
+import io.codeone.framework.intercept.util.MethodWrap;
 import io.codeone.framework.logging.Log;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
@@ -16,30 +16,30 @@ import org.springframework.stereotype.Component;
 public class LoggingApiInterceptor implements ApiInterceptor<Long> {
 
     @Override
-    public Long roundBefore(Signature signature, Object[] args)
+    public Long roundBefore(MethodWrap methodWrap, Object[] args)
             throws Throwable {
         return System.currentTimeMillis();
     }
 
     @Override
-    public Object after(Signature signature, Object[] args, Object result,
+    public Object after(MethodWrap methodWrap, Object[] args, Object result,
                         Throwable error, Long before) throws Throwable {
         long elapsed = System.currentTimeMillis() - before;
-        log(signature, args, result, error, elapsed);
+        log(methodWrap, args, result, error, elapsed);
         return ApiInterceptor.super.after(
-                signature, args, result, error, before);
+                methodWrap, args, result, error, before);
     }
 
-    private void log(Signature signature, Object[] args, Object result,
+    private void log(MethodWrap methodWrap, Object[] args, Object result,
                      Throwable error, long elapsed) {
-        API api = signature.getAnnotation(API.class);
+        API api = methodWrap.getAnnotation(API.class);
 
         Log log = Log.newBuilder();
 
-        log.method(signature.getMethod());
+        log.method(methodWrap.getMethod());
 
         if (api.loggingPreset().logArgs()) {
-            log.args(signature.getParameterNames(), args);
+            log.args(methodWrap.getParameterNames(), args);
         }
 
         Throwable cause = null;

@@ -1,44 +1,44 @@
 package io.codeone.framework.intercept;
 
-import io.codeone.framework.intercept.util.Signature;
+import io.codeone.framework.intercept.util.MethodWrap;
 
 public interface Interceptor<T> {
 
-    default T roundBefore(Signature signature, Object[] args)
+    default T roundBefore(MethodWrap methodWrap, Object[] args)
             throws Throwable {
-        before(signature, args);
+        before(methodWrap, args);
         return null;
     }
 
-    default void before(Signature signature, Object[] args) throws
-            Throwable {
+    default void before(MethodWrap methodWrap, Object[] args)
+            throws Throwable {
     }
 
-    default Object after(Signature signature, Object[] args,
+    default Object after(MethodWrap methodWrap, Object[] args,
                          Object result, Throwable error,
                          T before) throws Throwable {
         if (error != null) {
-            return afterThrowing(signature, args, error, before);
+            return afterThrowing(methodWrap, args, error, before);
         }
-        return afterReturning(signature, args, result, before);
+        return afterReturning(methodWrap, args, result, before);
     }
 
-    default Object afterThrowing(Signature signature, Object[] args,
+    default Object afterThrowing(MethodWrap methodWrap, Object[] args,
                                  Throwable error, T before) throws Throwable {
-        return afterThrowing(signature, args, error);
+        return afterThrowing(methodWrap, args, error);
     }
 
-    default Object afterThrowing(Signature signature, Object[] args,
+    default Object afterThrowing(MethodWrap methodWrap, Object[] args,
                                  Throwable error) throws Throwable {
         throw error;
     }
 
-    default Object afterReturning(Signature signature, Object[] args,
+    default Object afterReturning(MethodWrap methodWrap, Object[] args,
                                   Object result, T before) throws Throwable {
-        return afterReturning(signature, args, result);
+        return afterReturning(methodWrap, args, result);
     }
 
-    default Object afterReturning(Signature signature, Object[] args,
+    default Object afterReturning(MethodWrap methodWrap, Object[] args,
                                   Object result) throws Throwable {
         return result;
     }

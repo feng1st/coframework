@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 public class Context {
 
-    private final Signature signature;
+    private final MethodWrap methodWrap;
 
     private final Object[] args;
 
@@ -13,12 +13,12 @@ public class Context {
     private Throwable error;
 
     public Context(Method method, Object[] args) {
-        this.signature = SignatureFactory.get(method);
+        this.methodWrap = MethodWrapCache.get(method);
         this.args = args;
     }
 
-    public Signature getSignature() {
-        return signature;
+    public MethodWrap getMethodWrap() {
+        return methodWrap;
     }
 
     public Object[] getArgs() {
@@ -30,7 +30,7 @@ public class Context {
     }
 
     public void setResult(Object result) {
-        this.result = signature.getReturnType().cast(result);
+        this.result = methodWrap.getReturnType().cast(result);
         this.error = null;
     }
 

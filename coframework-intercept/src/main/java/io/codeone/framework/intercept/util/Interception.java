@@ -14,13 +14,13 @@ public class Interception<T> {
 
     public void before(Context context) throws Throwable {
         before = interceptor.roundBefore(
-                context.getSignature(), context.getArgs());
+                context.getMethodWrap(), context.getArgs());
     }
 
     public void after(Context context) {
         try {
             context.setResult(interceptor.after(
-                    context.getSignature(), context.getArgs(),
+                    context.getMethodWrap(), context.getArgs(),
                     context.getResult(), context.getError(),
                     before));
         } catch (Throwable t) {

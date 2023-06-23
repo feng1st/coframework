@@ -2,7 +2,7 @@ package io.codeone.framework.plugin.ext.plugin;
 
 import io.codeone.framework.intercept.Intercept;
 import io.codeone.framework.intercept.Stage;
-import io.codeone.framework.intercept.util.Signature;
+import io.codeone.framework.intercept.util.MethodWrap;
 import io.codeone.framework.plugin.Plugin;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class BlockLargeArgsTestPlugin implements Plugin<Void> {
 
     @Override
-    public void before(Signature signature, Object[] args)
+    public void before(MethodWrap methodWrap, Object[] args)
             throws Throwable {
         for (int i = 0; i < args.length; i++) {
             if ((args[i] instanceof Long
