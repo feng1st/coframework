@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestLogSpelService {
 
-    @Logging(keyPairs = {"bizId", "#arg0?.bizScenario?.bizId",
+    @Logging(keyPairs = {"city", "#arg0?.address?.city",
             "id", "#arg0?.id",
             "ret", "#ret?.data?.id"})
     public Result<MyParam> keyPairs(MyParam param) {

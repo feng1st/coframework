@@ -59,6 +59,7 @@ public class ApiAspect {
             pluginChain = apiPluginChainFactory.getChainOfMethod(
                     method, api.enablePlugins());
         }
-        return pluginChain.intercept(method, pjp.getArgs(), pjp::proceed);
+        return pluginChain.intercept(method, pjp.getArgs(),
+                () -> pjp.proceed(pjp.getArgs()));
     }
 }

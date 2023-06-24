@@ -16,7 +16,7 @@ public class LogPresetTests extends BaseLogTests {
 
     @Test
     void testNoneSuccess() {
-        testLogPresetService.none(new MyParam().setId(1L));
+        testLogPresetService.none(new MyParam().setId(1L).setAddress(new MyParam.Address().setCity("test")));
 
         assertLog(TestLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are not logged.
@@ -25,32 +25,38 @@ public class LogPresetTests extends BaseLogTests {
 
     @Test
     void testAllSuccess() {
-        testLogPresetService.all(new MyParam().setId(1L));
+        testLogPresetService.all(new MyParam().setId(1L).setAddress(new MyParam.Address().setCity("test")));
 
         assertLog(TestLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are logged.
-                "||level=>INFO||method=>TestLogPresetService.all||success=>true||elapsed=>0||arg.param=>BaseRequest{bizScenario=null}||result=>1");
+                "||level=>INFO||method=>TestLogPresetService.all||success=>true||elapsed=>0||arg.param=>MyParam{id=1, address=Address{city='test'}}||result=>1");
     }
 
     @Test
     void testNoneError() {
-        testLogPresetService.none(new MyParam());
+        try {
+            testLogPresetService.none(new MyParam());
+        } catch (Exception ignored) {
+        }
 
         assertLog(TestLogPresetService.class.getName(), Level.ERROR,
                 // Stack trace is not logged.
                 null,
                 // arg.param and error are not logged.
-                "||level=>ERROR||method=>TestLogPresetService.none||success=>false||code=>INVALID_PARAM||message=>id is null||elapsed=>0");
+                "||level=>ERROR||method=>TestLogPresetService.none||success=>false||code=>NullPointerException||elapsed=>0");
     }
 
     @Test
     void testAllError() {
-        testLogPresetService.all(new MyParam());
+        try {
+            testLogPresetService.all(new MyParam());
+        } catch (Exception ignored) {
+        }
 
         assertLog(TestLogPresetService.class.getName(), Level.ERROR,
                 // Stack trace is logged.
-                IllegalArgumentException.class,
+                NullPointerException.class,
                 // arg.param and error are logged.
-                "||level=>ERROR||method=>TestLogPresetService.all||success=>false||code=>INVALID_PARAM||message=>id is null||elapsed=>0||arg.param=>BaseRequest{bizScenario=null}||error=>java.lang.IllegalArgumentException: id is null");
+                "||level=>ERROR||method=>TestLogPresetService.all||success=>false||code=>NullPointerException||elapsed=>0||arg.param=>MyParam{id=null, address=null}||error=>java.lang.NullPointerException");
     }
 }

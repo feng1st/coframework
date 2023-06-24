@@ -27,7 +27,7 @@ public class ApiCheckArgsTests {
     void testBalrog() {
         Result<Void> result = gandalfTheGrey.letThrough(new Passenger().setName("Balrog"));
         Assertions.assertFalse(result.isSuccess());
-        Assertions.assertEquals(result.getErrorCode(), CommonErrors.INVALID_PARAM.getCode());
-        Assertions.assertEquals(result.getErrorMessage(), GandalfsQuotes.YOU_SHALL_NOT_PASS);
+        Assertions.assertEquals(CommonErrors.INVALID_PARAM.getCode(), result.getErrorCode());
+        Assertions.assertEquals(GandalfsQuotes.YOU_SHALL_NOT_PASS, result.getErrorMessage());
     }
 }

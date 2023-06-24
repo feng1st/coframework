@@ -15,7 +15,10 @@ public class LogCauseTests extends BaseLogTests {
 
     @Test
     void testApiError() {
-        testLogCauseService.apiError();
+        try {
+            testLogCauseService.apiError();
+        } catch (Exception ignored) {
+        }
 
         assertLog(TestLogCauseService.class.getName(), Level.ERROR, null,
                 // Cause found is MyException(CommonErrors.INVALID_PARAM, ...).
@@ -24,7 +27,10 @@ public class LogCauseTests extends BaseLogTests {
 
     @Test
     void testInvalidParam() {
-        testLogCauseService.invalidParam();
+        try {
+            testLogCauseService.invalidParam();
+        } catch (Exception ignored) {
+        }
 
         assertLog(TestLogCauseService.class.getName(), Level.ERROR, null,
                 // Cause found is IllegalArgumentException("Negative", ...).
@@ -33,7 +39,10 @@ public class LogCauseTests extends BaseLogTests {
 
     @Test
     void testOtherException() {
-        testLogCauseService.otherException();
+        try {
+            testLogCauseService.otherException();
+        } catch (Exception ignored) {
+        }
 
         assertLog(TestLogCauseService.class.getName(), Level.ERROR, null,
                 // Cause found is Exception("Deeply sorry").

@@ -8,16 +8,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Plug(Stages.RESULT_VALIDATING)
-public class BlockSmallResultTestPlugin implements Plugin<Void> {
+public class BlockLargeResultTestPlugin implements Plugin<Void> {
 
     @Override
     public Object afterReturning(MethodWrap methodWrap, Object[] args,
                                  Object result) throws Throwable {
         if ((result instanceof Long
-                && (Long) result < 10L)
+                && (Long) result > 21L)
                 || (result instanceof Integer
-                && (Integer) result < 10)) {
-            throw new IllegalStateException("Result is too small");
+                && (Integer) result > 21)) {
+            throw new IllegalStateException("Result is too large");
         }
         return result;
     }
