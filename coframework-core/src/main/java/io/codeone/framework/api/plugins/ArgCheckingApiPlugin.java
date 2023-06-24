@@ -3,7 +3,7 @@ package io.codeone.framework.api.plugins;
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiPlugin;
 import io.codeone.framework.plugin.Plug;
-import io.codeone.framework.plugin.Stage;
+import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.request.ApiParam;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  * @see ApiParam
  */
 @Component
-@Plug(Stage.ARG_VALIDATING)
+@Plug(Stages.ARG_VALIDATING)
 public class ArgCheckingApiPlugin implements ApiPlugin<Void> {
 
     @Override

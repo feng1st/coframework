@@ -7,6 +7,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Wrap of a method, caches its commonly used properties.
+ * <p>
+ * Please do not modify any of these properties since they are globally cached.
+ */
 public class MethodWrap {
 
     private final Method method;

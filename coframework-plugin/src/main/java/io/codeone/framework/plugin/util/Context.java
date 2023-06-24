@@ -4,6 +4,9 @@ import io.codeone.framework.plugin.factory.MethodWrapFactory;
 
 import java.lang.reflect.Method;
 
+/**
+ * A context including the input and output of the interception.
+ */
 public class Context {
 
     private final MethodWrap methodWrap;

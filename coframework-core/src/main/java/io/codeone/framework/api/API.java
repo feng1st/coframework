@@ -37,7 +37,14 @@ public @interface API {
      */
     String errorMessage() default "";
 
+    /**
+     * Specifies how this API call will be logged.
+     */
     LoggingPresets loggingPreset() default LoggingPresets.NONE;
 
-    Class<? extends Plugin<?>>[] extraPlugins() default {};
+    /**
+     * Specifies any extra non-'ApiPlugin' plugins that will be applied beside
+     * all 'ApiPlugin's.
+     */
+    Class<? extends Plugin<?>>[] enablePlugins() default {};
 }

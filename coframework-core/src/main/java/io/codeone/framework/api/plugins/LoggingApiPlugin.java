@@ -5,7 +5,7 @@ import io.codeone.framework.api.ApiPlugin;
 import io.codeone.framework.exception.CommonErrors;
 import io.codeone.framework.logging.Log;
 import io.codeone.framework.plugin.Plug;
-import io.codeone.framework.plugin.Stage;
+import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-@Plug(Stage.AFTER_TARGET)
+@Plug(Stages.AFTER_TARGET)
 public class LoggingApiPlugin implements ApiPlugin<Long> {
 
     private final Logger logger = LoggerFactory.getLogger("coframework.api");

@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
 @Aspect
-@Order(0)
+@Order(1)
 @Component
 public class PluginAspect {
 

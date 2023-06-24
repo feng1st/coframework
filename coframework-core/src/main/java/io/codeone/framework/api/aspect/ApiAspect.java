@@ -50,14 +50,14 @@ public class ApiAspect {
                     + " plugins work incorrectly");
         }
         PluginChain pluginChain;
-        if (api.extraPlugins().length == 0) {
+        if (api.enablePlugins().length == 0) {
             pluginChain = apiPluginChainFactory.getDefaultChain();
         } else if (atClassLevel) {
             pluginChain = apiPluginChainFactory.getChainOfClass(
-                    clazz, api.extraPlugins());
+                    clazz, api.enablePlugins());
         } else {
             pluginChain = apiPluginChainFactory.getChainOfMethod(
-                    method, api.extraPlugins());
+                    method, api.enablePlugins());
         }
         return pluginChain.intercept(method, pjp.getArgs(), pjp::proceed);
     }

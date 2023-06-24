@@ -3,7 +3,7 @@ package io.codeone.framework.api.plugins;
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiPlugin;
 import io.codeone.framework.plugin.Plug;
-import io.codeone.framework.plugin.Stage;
+import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @see Result
  */
 @Component
-@Plug(Stage.EXCEPTION_HANDLING)
+@Plug(Stages.EXCEPTION_HANDLING)
 public class ExToResultApiPlugin implements ApiPlugin<Void> {
 
     @Override
