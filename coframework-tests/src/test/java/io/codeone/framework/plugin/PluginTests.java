@@ -26,6 +26,7 @@ public class PluginTests {
     void testArgChecking() {
         long a = 10L;
         long b = 11L;
+        // Arg1 is too large.
         Assertions.assertEquals(RESULT_IF_ERROR, testPluginService.sum(a, b));
     }
 
@@ -33,6 +34,7 @@ public class PluginTests {
     void testResultChecking() {
         long a = 10L;
         long b = 10L;
+        // Result is too large.
         Assertions.assertEquals(RESULT_IF_ERROR, testPluginService.sum(a, b));
     }
 
@@ -60,6 +62,7 @@ public class PluginTests {
         {
             long a = 10L;
             long b = 11L;
+            // Arg1 is too large.
             Assertions.assertEquals(RESULT_IF_ERROR, testPluginService.sumNoAltering(a, b));
         }
     }
