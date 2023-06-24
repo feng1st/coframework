@@ -1,6 +1,7 @@
 package io.codeone.framework.api;
 
 import io.codeone.framework.logging.LoggingPresets;
+import io.codeone.framework.plugin.Plugin;
 
 import java.lang.annotation.*;
 
@@ -37,4 +38,6 @@ public @interface API {
     String errorMessage() default "";
 
     LoggingPresets loggingPreset() default LoggingPresets.NONE;
+
+    Class<? extends Plugin<?>>[] extraPlugins() default {};
 }

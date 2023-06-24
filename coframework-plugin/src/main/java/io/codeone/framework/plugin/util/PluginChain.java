@@ -1,11 +1,8 @@
-package io.codeone.framework.plugin.chain;
+package io.codeone.framework.plugin.util;
 
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stage;
-import io.codeone.framework.plugin.util.Context;
-import io.codeone.framework.plugin.util.Interception;
-import io.codeone.framework.plugin.util.Invokable;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -45,13 +42,13 @@ public class PluginChain {
 
     private void sortPlugins() {
         plugins.sort(Comparator
-                .comparing(o -> Optional.ofNullable(
-                                o.getClass().getAnnotation(Plug.class))
+                .comparing(o -> Optional.ofNullable(o.getClass()
+                                .getAnnotation(Plug.class))
                         .map(Plug::value)
                         .map(Stage::order)
                         .orElse(Integer.MAX_VALUE))
-                .thenComparing(o -> Optional.ofNullable(
-                                o.getClass().getAnnotation(Plug.class))
+                .thenComparing(o -> Optional.ofNullable(o.getClass()
+                                .getAnnotation(Plug.class))
                         .map(Plug::order)
                         .orElse(Integer.MAX_VALUE)));
     }
