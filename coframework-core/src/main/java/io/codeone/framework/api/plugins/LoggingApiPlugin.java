@@ -9,11 +9,15 @@ import io.codeone.framework.plugin.Stage;
 import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 @Plug(Stage.AFTER_TARGET)
 public class LoggingApiPlugin implements ApiPlugin<Long> {
+
+    private final Logger logger = LoggerFactory.getLogger("coframework.api");
 
     @Override
     public Long roundBefore(MethodWrap methodWrap, Object[] args)
@@ -25,7 +29,12 @@ public class LoggingApiPlugin implements ApiPlugin<Long> {
     public Object after(MethodWrap methodWrap, Object[] args, Object result,
                         Throwable error, Long before) throws Throwable {
         long elapsed = System.currentTimeMillis() - before;
-        log(methodWrap, args, result, error, elapsed);
+        try {
+            log(methodWrap, args, result, error, elapsed);
+        } catch (Throwable t) {
+            logger.error("Error logging invocation of '"
+                    + methodWrap.getMethod() + "'", t);
+        }
         return ApiPlugin.super.after(methodWrap, args, result, error, before);
     }
 

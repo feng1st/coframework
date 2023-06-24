@@ -44,9 +44,9 @@ public class LoggingAspect {
             long elapsed = System.currentTimeMillis() - start;
             try {
                 log(pjp, logging, result, error, elapsed);
-            } catch (Exception e) {
+            } catch (Throwable t) {
                 logger.error("Error logging invocation of '"
-                        + ((MethodSignature) pjp.getSignature()).getMethod() + "'");
+                        + ((MethodSignature) pjp.getSignature()).getMethod() + "'", t);
             }
         }
     }
