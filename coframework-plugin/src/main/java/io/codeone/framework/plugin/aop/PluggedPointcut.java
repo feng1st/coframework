@@ -1,6 +1,6 @@
 package io.codeone.framework.plugin.aop;
 
-import io.codeone.framework.plugin.plug.Pluggers;
+import io.codeone.framework.plugin.plug.MethodPluggers;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 public class PluggedPointcut extends StaticMethodMatcherPointcut {
 
     @Resource
-    private Pluggers pluggers;
+    private MethodPluggers methodPluggers;
 
     @Override
     public boolean matches(Method method, Class<?> targetClass) {
@@ -22,10 +22,6 @@ public class PluggedPointcut extends StaticMethodMatcherPointcut {
         } catch (NoSuchMethodException ignored) {
         }
 
-        return isPlugged(method);
-    }
-
-    private boolean isPlugged(Method method) {
-        return pluggers.isPlugged(method);
+        return methodPluggers.isPlugged(method);
     }
 }

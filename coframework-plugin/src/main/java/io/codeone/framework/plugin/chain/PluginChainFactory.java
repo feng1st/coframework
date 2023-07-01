@@ -1,7 +1,7 @@
 package io.codeone.framework.plugin.chain;
 
 import io.codeone.framework.plugin.Plugin;
-import io.codeone.framework.plugin.plug.Pluggers;
+import io.codeone.framework.plugin.plug.MethodPluggers;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -16,23 +16,22 @@ import java.util.stream.Collectors;
 public class PluginChainFactory {
 
     @Resource
-    private Pluggers pluggers;
+    private MethodPluggers methodPluggers;
 
     private final Map<Method, PluginChain> chainMap
             = new ConcurrentHashMap<>();
 
-    private final Map<Set<Class<?>>, PluginChain> pluginTypeMap
+    private final Map<Set<Class<?>>, PluginChain> pluginClassMap
             = new ConcurrentHashMap<>();
 
     public PluginChain getChain(Method method) {
-        return chainMap.computeIfAbsent(method,
-                k1 -> {
-                    List<Plugin<?>> plugins = pluggers.getPlugins(method);
-                    Set<Class<?>> pluginTypes = plugins.stream()
-                            .map(Object::getClass)
-                            .collect(Collectors.toSet());
-                    return pluginTypeMap.computeIfAbsent(pluginTypes,
-                            k2 -> new PluginChain(plugins));
-                });
+        return chainMap.computeIfAbsent(method, k1 -> {
+            List<Plugin<?>> plugins = methodPluggers.getPlugins(method);
+            Set<Class<?>> pluginClasses = plugins.stream()
+                    .map(Object::getClass)
+                    .collect(Collectors.toSet());
+            return pluginClassMap.computeIfAbsent(pluginClasses,
+                    k2 -> new PluginChain(plugins));
+        });
     }
 }

@@ -13,32 +13,24 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
-public class Pluggers {
+public class MethodPluggers implements MethodPlugger {
 
     @Resource
     private ApplicationContext applicationContext;
 
-    private final List<Plugger> pluggers = new ArrayList<>();
+    private final List<MethodPlugger> pluggers = new ArrayList<>();
 
     @PostConstruct
     private void postConstruct() {
-        applicationContext.getBeansOfType(Plugger.class).values()
+        applicationContext.getBeansOfType(MethodPlugger.class).values()
                 .forEach(this::registerPlugger);
     }
 
-    private void registerPlugger(Plugger plugger) {
+    private void registerPlugger(MethodPlugger plugger) {
         pluggers.add(plugger);
     }
 
-    public boolean isPlugged(Method method) {
-        for (Plugger plugger : pluggers) {
-            if (plugger.isPlugged(method)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    @Override
     public List<Plugin<?>> getPlugins(Method method) {
         return pluggers.stream()
                 .map(o -> o.getPlugins(method))

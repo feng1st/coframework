@@ -6,15 +6,18 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * A Plugger is the one who decides whether a method is plugged and what
- * plugins are plugged in.
+ * MethodPlugger decides whether a method is plugged and what plugins are
+ * plugged in.
  */
-public interface Plugger {
+public interface MethodPlugger {
 
     /**
      * Returns whether the method is plugged.
      */
-    boolean isPlugged(Method method);
+    default boolean isPlugged(Method method) {
+        List<Plugin<?>> plugins = getPlugins(method);
+        return plugins != null && !plugins.isEmpty();
+    }
 
     /**
      * Returns what plugins are plugged into the method.
