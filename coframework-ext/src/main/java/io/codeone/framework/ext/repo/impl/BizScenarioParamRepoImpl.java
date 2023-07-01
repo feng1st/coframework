@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Repository
 public class BizScenarioParamRepoImpl implements BizScenarioParamRepo {
@@ -13,8 +14,8 @@ public class BizScenarioParamRepoImpl implements BizScenarioParamRepo {
     private final Map<Method, Integer> map = new HashMap<>();
 
     @Override
-    public void putParamIndex(Method method, int index) {
-        map.put(method, index);
+    public void computeParamIndexIfAbsent(Method method, Function<Method, Integer> func) {
+        map.computeIfAbsent(method, func);
     }
 
     @Override

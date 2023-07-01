@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 @Repository
 public class BizScenarioScopeRepoImpl implements BizScenarioScopeRepo {
@@ -22,8 +23,8 @@ public class BizScenarioScopeRepoImpl implements BizScenarioScopeRepo {
     private final Map<Class<? extends BizScenarioResolver>, BizScenarioResolver> resolverMap = new ConcurrentHashMap<>();
 
     @Override
-    public void putParamIndex(Method method, int index) {
-        paramIndexMap.put(method, index);
+    public void computeParamIndexIfAbsent(Method method, Function<Method, Integer> func) {
+        paramIndexMap.computeIfAbsent(method, func);
     }
 
     @Override

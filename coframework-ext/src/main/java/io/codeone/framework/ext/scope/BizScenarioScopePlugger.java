@@ -1,18 +1,21 @@
 package io.codeone.framework.ext.scope;
 
 import io.codeone.framework.ext.repo.BizScenarioScopeRepo;
-import io.codeone.framework.ext.util.ClassUtils;
 import io.codeone.framework.ext.util.ExtUtils;
+import io.codeone.framework.plugin.Plugin;
+import io.codeone.framework.plugin.plug.AnnotationMethodPlugger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Collections;
+import java.util.List;
 
 @Component
-public class BizScenarioScopeScanner {
+public class BizScenarioScopePlugger
+        extends AnnotationMethodPlugger<BizScenarioScope> {
 
     @Resource
     private ApplicationContext applicationContext;
@@ -20,37 +23,19 @@ public class BizScenarioScopeScanner {
     @Resource
     private BizScenarioScopeRepo bizScenarioScopeRepo;
 
-    @PostConstruct
-    private void postConstruct() {
-        for (String beanName : applicationContext.getBeanDefinitionNames()) {
-            if (applicationContext.isTypeMatch(beanName, BizScenarioScopeScanner.class)) {
-                continue;
-            }
-            if (!applicationContext.isSingleton(beanName)) {
-                continue;
-            }
+    @Resource
+    private BizScenarioScopePlugin plugin;
 
-            Object bean = applicationContext.getBean(beanName);
-            Class<?> clazz = ClassUtils.getTargetClass(bean);
+    @Override
+    protected Class<BizScenarioScope> getAnnotationType() {
+        return BizScenarioScope.class;
+    }
 
-            for (Method method : clazz.getMethods()) {
-                if (method.getDeclaringClass() == Object.class) {
-                    continue;
-                }
-
-                // Uses the same mechanism in BizScenarioScopeAspect
-                BizScenarioScope scope = method.getAnnotation(BizScenarioScope.class);
-                if (scope == null) {
-                    scope = method.getDeclaringClass().getAnnotation(BizScenarioScope.class);
-                    if (scope == null) {
-                        continue;
-                    }
-                }
-
-                int index = getParamIndex(method, scope);
-                bizScenarioScopeRepo.putParamIndex(method, index);
-            }
-        }
+    @Override
+    protected List<Plugin<?>> getPlugins(Method method, BizScenarioScope annotation) {
+        bizScenarioScopeRepo.computeParamIndexIfAbsent(method,
+                k -> getParamIndex(method, annotation));
+        return Collections.singletonList(plugin);
     }
 
     private int getParamIndex(Method method, BizScenarioScope scope) {

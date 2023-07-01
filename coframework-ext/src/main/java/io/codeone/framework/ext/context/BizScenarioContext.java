@@ -12,12 +12,20 @@ public class BizScenarioContext {
         return stack.get().peek();
     }
 
-    public static <T> T invoke(BizScenario bizScenario, Invokable<T> invokable) throws Throwable {
+    public static void push(BizScenario bizScenario) {
         stack.get().push(bizScenario);
+    }
+
+    public static void pop() {
+        stack.get().pop();
+    }
+
+    public static <T> T invoke(BizScenario bizScenario, Invokable<T> invokable) throws Throwable {
+        push(bizScenario);
         try {
             return invokable.invoke();
         } finally {
-            stack.get().pop();
+            pop();
         }
     }
 }

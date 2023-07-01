@@ -11,18 +11,27 @@ public abstract class AnnotationMethodPlugger<A extends Annotation>
 
     @Override
     public List<Plugin<?>> getPlugins(Method method) {
-        Class<A> annoType = getAnnotationType();
-        A anno = method.getAnnotation(annoType);
+        A anno = getAnnotation(method);
         if (anno == null) {
-            anno = method.getDeclaringClass().getAnnotation(annoType);
-            if (anno == null) {
-                return null;
-            }
+            return null;
         }
         return getPlugins(method, anno);
     }
 
     protected abstract Class<A> getAnnotationType();
+
+    protected A getAnnotation(Method method) {
+        Class<A> annoType = getAnnotationType();
+        A anno;
+        if ((anno = method.getAnnotation(annoType)) != null) {
+            return anno;
+        }
+        Class<?> clazz = method.getDeclaringClass();
+        if ((anno = clazz.getAnnotation(annoType)) != null) {
+            return anno;
+        }
+        return null;
+    }
 
     protected List<Plugin<?>> getPlugins(Method method, A annotation) {
         return null;
