@@ -20,9 +20,10 @@ public class LogCauseTests extends BaseLogTests {
         } catch (Exception ignored) {
         }
 
-        assertLog(TestLogCauseService.class.getName(), Level.ERROR, null,
+        assertLog(TestLogCauseService.class.getName(), Level.ERROR,
+                RuntimeException.class,
                 // Cause found is MyException(CommonErrors.INVALID_PARAM, ...).
-                "||level=>ERROR||method=>TestLogCauseService.apiError||success=>false||code=>INVALID_PARAM||message=>Invalid param||elapsed=>0");
+                "||level=>ERROR||method=>TestLogCauseService.apiError||success=>false||code=>INVALID_PARAM||message=>Invalid param||elapsed=>0||error=>java.lang.RuntimeException: io.codeone.framework.logging.domain.exception.MyException: Invalid param");
     }
 
     @Test
@@ -32,9 +33,10 @@ public class LogCauseTests extends BaseLogTests {
         } catch (Exception ignored) {
         }
 
-        assertLog(TestLogCauseService.class.getName(), Level.ERROR, null,
+        assertLog(TestLogCauseService.class.getName(), Level.ERROR,
+                RuntimeException.class,
                 // Cause found is IllegalArgumentException("Negative", ...).
-                "||level=>ERROR||method=>TestLogCauseService.invalidParam||success=>false||code=>INVALID_PARAM||message=>Negative||elapsed=>0");
+                "||level=>ERROR||method=>TestLogCauseService.invalidParam||success=>false||code=>INVALID_PARAM||message=>Negative||elapsed=>0||error=>java.lang.RuntimeException: java.lang.IllegalArgumentException: Negative");
     }
 
     @Test
@@ -44,8 +46,9 @@ public class LogCauseTests extends BaseLogTests {
         } catch (Exception ignored) {
         }
 
-        assertLog(TestLogCauseService.class.getName(), Level.ERROR, null,
+        assertLog(TestLogCauseService.class.getName(), Level.ERROR,
+                RuntimeException.class,
                 // Cause found is Exception("Deeply sorry").
-                "||level=>ERROR||method=>TestLogCauseService.otherException||success=>false||code=>Exception||message=>Deeply sorry||elapsed=>0");
+                "||level=>ERROR||method=>TestLogCauseService.otherException||success=>false||code=>Exception||message=>Deeply sorry||elapsed=>0||error=>java.lang.RuntimeException: java.lang.Exception: java.lang.Exception: java.lang.Exception: Deeply sorry");
     }
 }

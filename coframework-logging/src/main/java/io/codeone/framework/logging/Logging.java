@@ -11,7 +11,7 @@ public @interface Logging {
     /**
      * To set how to trace the detail of the invocation.
      */
-    LoggingPresets value() default LoggingPresets.NONE;
+    LoggingPresets value() default LoggingPresets.ALL;
 
     /**
      * Set the name of the logger, default is the same to the annotated class.
