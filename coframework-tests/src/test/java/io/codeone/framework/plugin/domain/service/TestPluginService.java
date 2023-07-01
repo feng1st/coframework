@@ -37,4 +37,15 @@ public class TestPluginService {
     public Long sumNoWrapping(Long a, Long b) {
         return a + b;
     }
+
+    @EnablePlugin({IncrArgsTestPlugin.class,
+            IncrArgsTestPlugin.class})
+    public Long dupPlugins(Long a, Long b) {
+        return a + b;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

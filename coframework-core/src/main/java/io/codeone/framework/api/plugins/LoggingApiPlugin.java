@@ -20,7 +20,7 @@ public class LoggingApiPlugin implements ApiPlugin<Long> {
     private final Logger logger = LoggerFactory.getLogger("coframework.api");
 
     @Override
-    public Long roundBefore(MethodWrap methodWrap, Object[] args)
+    public Long aroundBefore(MethodWrap methodWrap, Object[] args)
             throws Throwable {
         return System.currentTimeMillis();
     }

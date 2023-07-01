@@ -27,7 +27,7 @@ public class Interception<T> {
      * value(s).
      */
     public void before(Context context) throws Throwable {
-        before = plugin.roundBefore(
+        before = plugin.aroundBefore(
                 context.getMethodWrap(), context.getArgs());
     }
 

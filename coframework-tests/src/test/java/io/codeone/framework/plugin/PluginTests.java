@@ -86,4 +86,17 @@ public class PluginTests {
             Assertions.assertEquals("Result is too large", e.getMessage());
         }
     }
+
+    @Test
+    void testDup() {
+        long a = 10L;
+        long b = 10L;
+        // Only add once.
+        Assertions.assertEquals((a + 1L) + (b + 1L), testPluginService.dupPlugins(a, b));
+    }
+
+    @Test
+    void testOverriddenMethodOfObject() {
+        Assertions.assertNotEquals("", testPluginService.toString());
+    }
 }

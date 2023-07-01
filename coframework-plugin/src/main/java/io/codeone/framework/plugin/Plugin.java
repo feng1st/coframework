@@ -37,7 +37,7 @@ public interface Plugin<T> {
      * Returns anything that you want to pass to the 'after' method of this
      * plugin.
      */
-    default T roundBefore(MethodWrap methodWrap, Object[] args)
+    default T aroundBefore(MethodWrap methodWrap, Object[] args)
             throws Throwable {
         before(methodWrap, args);
         return null;
@@ -46,7 +46,7 @@ public interface Plugin<T> {
     /**
      * Intercepts before the invocation of the target.
      * <p>
-     * Is the same to 'roundBefore', except does not handle the
+     * Is the same to 'aroundBefore', except does not handle the
      * variable-passing, i.e. no return value.
      */
     default void before(MethodWrap methodWrap, Object[] args)

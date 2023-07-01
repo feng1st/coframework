@@ -19,6 +19,9 @@ public class DecrResultTestPlugin implements Plugin<Void> {
         if (result instanceof Integer) {
             return (Integer) result - 5;
         }
+        if (result instanceof String) {
+            return "";
+        }
         return result;
     }
 }

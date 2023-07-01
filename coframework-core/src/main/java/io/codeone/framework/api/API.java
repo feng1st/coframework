@@ -1,7 +1,6 @@
 package io.codeone.framework.api;
 
 import io.codeone.framework.logging.LoggingPresets;
-import io.codeone.framework.plugin.Plugin;
 
 import java.lang.annotation.*;
 
@@ -41,10 +40,4 @@ public @interface API {
      * Specifies how this API call will be logged.
      */
     LoggingPresets loggingPreset() default LoggingPresets.NONE;
-
-    /**
-     * Specifies any extra non-'ApiPlugin' plugins that will be applied beside
-     * all 'ApiPlugin's.
-     */
-    Class<? extends Plugin<?>>[] enablePlugins() default {};
 }
