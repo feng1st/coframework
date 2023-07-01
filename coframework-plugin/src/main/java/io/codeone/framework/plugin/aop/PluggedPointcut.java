@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.aspect;
+package io.codeone.framework.plugin.aop;
 
 import io.codeone.framework.plugin.plug.Pluggers;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;

@@ -1,7 +1,5 @@
 package io.codeone.framework.plugin.util;
 
-import io.codeone.framework.plugin.factory.MethodWrapFactory;
-
 import java.lang.reflect.Method;
 
 /**
@@ -18,7 +16,7 @@ public class Context {
     private Throwable error;
 
     public Context(Method method, Object[] args) {
-        this.methodWrap = MethodWrapFactory.get(method);
+        this.methodWrap = MethodWrapCache.get(method);
         this.args = args;
     }
 

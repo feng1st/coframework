@@ -1,12 +1,10 @@
-package io.codeone.framework.plugin.factory;
-
-import io.codeone.framework.plugin.util.MethodWrap;
+package io.codeone.framework.plugin.util;
 
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MethodWrapFactory {
+public class MethodWrapCache {
 
     private static final Map<Method, MethodWrap> CACHE
             = new ConcurrentHashMap<>();

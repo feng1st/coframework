@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.aspect;
+package io.codeone.framework.plugin.aop;
 
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
