@@ -5,9 +5,7 @@ import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
-import org.springframework.stereotype.Component;
 
-@Component
 @Plug(Stages.ARG_PREPARING)
 public class InitMyParamTestPlugin implements Plugin<Void> {
 

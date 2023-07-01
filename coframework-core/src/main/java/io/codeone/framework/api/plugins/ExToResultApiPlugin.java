@@ -7,7 +7,6 @@ import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
-import org.springframework.stereotype.Component;
 
 /**
  * ExToResultApiPlugin will convert any exception thrown by a method to a
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
  * @see API
  * @see Result
  */
-@Component
 @Plug(Stages.EXCEPTION_HANDLING)
 public class ExToResultApiPlugin implements ApiPlugin<Void> {
 

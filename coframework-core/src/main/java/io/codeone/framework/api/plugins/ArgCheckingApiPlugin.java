@@ -6,7 +6,6 @@ import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.request.ApiParam;
-import org.springframework.stereotype.Component;
 
 /**
  * ArgCheckingApiPlugin will execute the checkArgs() method of 'ApiParam' type
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
  * @see API
  * @see ApiParam
  */
-@Component
 @Plug(Stages.ARG_VALIDATING)
 public class ArgCheckingApiPlugin implements ApiPlugin<Void> {
 
