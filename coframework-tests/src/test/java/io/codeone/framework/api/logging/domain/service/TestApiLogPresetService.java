@@ -2,6 +2,7 @@ package io.codeone.framework.api.logging.domain.service;
 
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.logging.domain.param.MyParam;
+import io.codeone.framework.logging.Logging;
 import io.codeone.framework.logging.LoggingPresets;
 import io.codeone.framework.response.Result;
 import org.springframework.stereotype.Service;
@@ -10,12 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestApiLogPresetService {
 
-    @API(loggingPreset = LoggingPresets.NONE)
+    @Logging(LoggingPresets.NONE)
     public Result<Long> none(MyParam param) {
         return Result.success(param.getId());
     }
 
-    @API(loggingPreset = LoggingPresets.ALL)
+    @Logging(LoggingPresets.ALL)
     public Result<Long> all(MyParam param) {
         return Result.success(param.getId());
     }

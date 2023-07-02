@@ -11,8 +11,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 @Component
-public class DefaultAnnotationMethodPlugger
-        extends AnnotationMethodPlugger<EnablePlugin> {
+public class DefaultPlugger extends AnnotationMethodPlugger<EnablePlugin> {
 
     @Resource
     private PluginFactory pluginFactory;

@@ -11,8 +11,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 @Component
-public class ApiAnnotationMethodPlugger
-        extends AnnotationMethodPlugger<API> {
+public class ApiPlugger extends AnnotationMethodPlugger<API> {
 
     @Resource
     private ApiPluginFactory apiPluginFactory;

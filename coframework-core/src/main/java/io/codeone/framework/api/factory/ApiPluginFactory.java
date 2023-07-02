@@ -1,6 +1,7 @@
 package io.codeone.framework.api.factory;
 
 import io.codeone.framework.api.ApiPlugin;
+import io.codeone.framework.logging.aop.LoggingPlugin;
 import io.codeone.framework.plugin.Plugin;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,8 @@ public class ApiPluginFactory {
     @PostConstruct
     private void postConstruct() {
         applicationContext.getBeansOfType(ApiPlugin.class).values()
+                .forEach(plugins::add);
+        applicationContext.getBeansOfType(LoggingPlugin.class).values()
                 .forEach(plugins::add);
     }
 

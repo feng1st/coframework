@@ -34,14 +34,9 @@ public class BaseLogTests {
 
         Assertions.assertEquals(loggerName, argument.getValue().getLoggerName());
         Assertions.assertEquals(level, argument.getValue().getLevel());
-        if (errClass == null) {
-            if (argument.getValue().getThrowableProxy() != null) {
-                Assertions.fail(argument.getValue().getThrowableProxy().getClassName());
-            }
-        } else {
-            Assertions.assertNotNull(argument.getValue().getThrowableProxy());
-            Assertions.assertEquals(errClass.getName(), argument.getValue().getThrowableProxy().getClassName());
-        }
+        Assertions.assertEquals(errClass == null ? null : errClass.getName(),
+                argument.getValue().getThrowableProxy() == null ? null
+                        : argument.getValue().getThrowableProxy().getClassName());
         Assertions.assertEquals(msg, argument.getValue().getMessage().replaceAll("elapsed=>\\d+", "elapsed=>0"));
     }
 }
