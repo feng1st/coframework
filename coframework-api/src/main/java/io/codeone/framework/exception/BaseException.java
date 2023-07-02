@@ -1,7 +1,7 @@
 package io.codeone.framework.exception;
 
 /**
- * Base class of all business runtime exceptions.
+ * Base class of all custom runtime exceptions.
  */
 public abstract class BaseException extends RuntimeException
         implements ApiError {

@@ -1,7 +1,7 @@
 package io.codeone.framework.exception;
 
 /**
- * Some commonly used business error enumerations.
+ * Provides some commonly used error enumerations.
  */
 public enum CommonErrors implements ApiError {
     /**

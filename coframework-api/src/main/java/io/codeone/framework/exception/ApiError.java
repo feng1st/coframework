@@ -1,8 +1,10 @@
 package io.codeone.framework.exception;
 
 /**
- * Interface of all business error enumerations and all business runtime
- * exceptions.
+ * Interface of all custom exceptions and error enumerations.
+ * <p>
+ * ApiErrors will be recognized by the framework, and their properties will be
+ * used in logging and API result wrapping.
  */
 public interface ApiError {
 
