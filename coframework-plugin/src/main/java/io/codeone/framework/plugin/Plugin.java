@@ -63,9 +63,8 @@ public interface Plugin<T> {
      * The value(s) returned by the 'before' method will be passed in as the
      * 'before' parameter.
      */
-    default Object after(MethodWrap methodWrap, Object[] args,
-                         Object result, Throwable error,
-                         T before) throws Throwable {
+    default Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error, T before)
+            throws Throwable {
         if (error != null) {
             return afterThrowing(methodWrap, args, error, before);
         }
@@ -82,8 +81,8 @@ public interface Plugin<T> {
      * The value(s) returned by the 'before' method will be passed in as the
      * 'before' parameter.
      */
-    default Object afterThrowing(MethodWrap methodWrap, Object[] args,
-                                 Throwable error, T before) throws Throwable {
+    default Object afterThrowing(MethodWrap methodWrap, Object[] args, Throwable error, T before)
+            throws Throwable {
         return afterThrowing(methodWrap, args, error);
     }
 
@@ -94,8 +93,8 @@ public interface Plugin<T> {
      * Is the same to the other 'afterThrowing', except omits the value
      * returned by the 'before' method.
      */
-    default Object afterThrowing(MethodWrap methodWrap, Object[] args,
-                                 Throwable error) throws Throwable {
+    default Object afterThrowing(MethodWrap methodWrap, Object[] args, Throwable error)
+            throws Throwable {
         throw error;
     }
 
@@ -108,8 +107,8 @@ public interface Plugin<T> {
      * The value(s) returned by the 'before' method will be passed in as the
      * 'before' parameter.
      */
-    default Object afterReturning(MethodWrap methodWrap, Object[] args,
-                                  Object result, T before) throws Throwable {
+    default Object afterReturning(MethodWrap methodWrap, Object[] args, Object result, T before)
+            throws Throwable {
         return afterReturning(methodWrap, args, result);
     }
 
@@ -119,8 +118,8 @@ public interface Plugin<T> {
      * Is the same to the other 'afterReturning', except omits the value
      * returned by the 'before' method.
      */
-    default Object afterReturning(MethodWrap methodWrap, Object[] args,
-                                  Object result) throws Throwable {
+    default Object afterReturning(MethodWrap methodWrap, Object[] args, Object result)
+            throws Throwable {
         return result;
     }
 }

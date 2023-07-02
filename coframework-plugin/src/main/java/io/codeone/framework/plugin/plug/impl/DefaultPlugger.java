@@ -22,8 +22,7 @@ public class DefaultPlugger extends AnnotationMethodPlugger<EnablePlugin> {
     }
 
     @Override
-    protected List<Plugin<?>> getPlugins(Method method,
-                                         EnablePlugin annotation) {
+    protected List<Plugin<?>> getPlugins(Method method, EnablePlugin annotation) {
         return pluginFactory.getPlugins(annotation.value());
     }
 }

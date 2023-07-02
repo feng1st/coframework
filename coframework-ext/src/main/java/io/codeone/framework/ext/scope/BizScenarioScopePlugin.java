@@ -31,7 +31,8 @@ public class BizScenarioScopePlugin implements Plugin<BizScenario> {
     }
 
     @Override
-    public Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error, BizScenario before) throws Throwable {
+    public Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error, BizScenario before)
+            throws Throwable {
         if (before != null) {
             BizScenarioContext.pop();
         }

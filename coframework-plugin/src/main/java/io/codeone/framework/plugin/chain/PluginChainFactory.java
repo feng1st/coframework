@@ -18,11 +18,9 @@ public class PluginChainFactory {
     @Resource
     private MethodPluggers methodPluggers;
 
-    private final Map<Method, PluginChain> chainMap
-            = new ConcurrentHashMap<>();
+    private final Map<Method, PluginChain> chainMap = new ConcurrentHashMap<>();
 
-    private final Map<Set<Class<?>>, PluginChain> pluginClassMap
-            = new ConcurrentHashMap<>();
+    private final Map<Set<Class<?>>, PluginChain> pluginClassMap = new ConcurrentHashMap<>();
 
     public PluginChain getChain(Method method) {
         return chainMap.computeIfAbsent(method, k1 -> {

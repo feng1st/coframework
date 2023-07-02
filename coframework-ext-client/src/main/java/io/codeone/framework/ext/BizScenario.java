@@ -48,8 +48,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     public static BizScenario parse(String code) {
         String[] array = code.split(CONNECTOR);
         if (array.length != 2) {
-            throw new IllegalArgumentException(
-                    "Invalid bizScenario '" + code + "'");
+            throw new IllegalArgumentException("Invalid bizScenario '" + code + "'");
         }
         return of(array[0], array[1]);
     }
@@ -69,9 +68,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     public void setBizId(String bizId) {
         if (!isValueValid(bizId)) {
             throw new IllegalArgumentException("Invalid bizId '" + bizId
-                    + "', should be '*' (which means ANY), or '.' separated "
-                    + "keywords which are composed of only alphabets, "
-                    + "numbers, '-' and '_'.");
+                    + "', should be '*' (which means ANY), or '.' separated keywords which are composed of only alphabets, numbers, '-' and '_'.");
         }
         this.bizId = bizId;
     }
@@ -83,9 +80,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     public void setScenario(String scenario) {
         if (!isValueValid(scenario)) {
             throw new IllegalArgumentException("Invalid scenario '" + scenario
-                    + "', should be '*' (which means ANY), or '.' separated "
-                    + "keywords which are composed of only alphabets, "
-                    + "numbers, '-' and '_'.");
+                    + "', should be '*' (which means ANY), or '.' separated keywords which are composed of only alphabets, numbers, '-' and '_'.");
         }
         this.scenario = scenario;
     }

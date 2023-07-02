@@ -20,7 +20,8 @@ public class BizScenarioScopeRepoImpl implements BizScenarioScopeRepo {
 
     private final Map<Method, Integer> paramIndexMap = new HashMap<>();
 
-    private final Map<Class<? extends BizScenarioResolver>, BizScenarioResolver> resolverMap = new ConcurrentHashMap<>();
+    private final Map<Class<? extends BizScenarioResolver>, BizScenarioResolver> resolverMap
+            = new ConcurrentHashMap<>();
 
     @Override
     public void computeParamIndexIfAbsent(Method method, Function<Method, Integer> func) {

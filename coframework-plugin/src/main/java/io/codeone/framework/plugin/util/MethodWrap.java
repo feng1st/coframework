@@ -72,8 +72,7 @@ public class MethodWrap {
         return method.getReturnType();
     }
 
-    public boolean isAnnotationPresent(
-            Class<? extends Annotation> annotationClass) {
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getAnnotation(annotationClass) != null;
     }
 
@@ -82,28 +81,22 @@ public class MethodWrap {
         return annotationClass.cast(getAnnotations().get(annotationClass));
     }
 
-    public boolean isMethodAnnotationPresent(
-            Class<? extends Annotation> annotationClass) {
+    public boolean isMethodAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getMethodAnnotation(annotationClass) != null;
     }
 
-    public <T extends Annotation> T getMethodAnnotation(
-            Class<T> annotationClass) {
+    public <T extends Annotation> T getMethodAnnotation(Class<T> annotationClass) {
         Objects.requireNonNull(annotationClass);
-        return annotationClass.cast(getMethodAnnotations().get(
-                annotationClass));
+        return annotationClass.cast(getMethodAnnotations().get(annotationClass));
     }
 
-    public boolean isClassAnnotationPresent(
-            Class<? extends Annotation> annotationClass) {
+    public boolean isClassAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getClassAnnotation(annotationClass) != null;
     }
 
-    public <T extends Annotation> T getClassAnnotation(
-            Class<T> annotationClass) {
+    public <T extends Annotation> T getClassAnnotation(Class<T> annotationClass) {
         Objects.requireNonNull(annotationClass);
-        return annotationClass.cast(getClassAnnotations().get(
-                annotationClass));
+        return annotationClass.cast(getClassAnnotations().get(annotationClass));
     }
 
     private Map<Class<? extends Annotation>, Annotation> getAnnotations() {
@@ -126,8 +119,7 @@ public class MethodWrap {
         return annos;
     }
 
-    private Map<Class<? extends Annotation>, Annotation>
-    getMethodAnnotations() {
+    private Map<Class<? extends Annotation>, Annotation> getMethodAnnotations() {
         Map<Class<? extends Annotation>, Annotation> annos;
         if ((annos = methodAnnotations) == null) {
             synchronized (this) {
@@ -143,8 +135,7 @@ public class MethodWrap {
         return annos;
     }
 
-    private Map<Class<? extends Annotation>, Annotation>
-    getClassAnnotations() {
+    private Map<Class<? extends Annotation>, Annotation> getClassAnnotations() {
         Map<Class<? extends Annotation>, Annotation> annos;
         if ((annos = classAnnotations) == null) {
             synchronized (this) {

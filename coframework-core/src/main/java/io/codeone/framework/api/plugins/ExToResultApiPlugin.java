@@ -20,8 +20,8 @@ import io.codeone.framework.util.ErrorUtils;
 public class ExToResultApiPlugin implements ApiPlugin<Void> {
 
     @Override
-    public Object afterThrowing(MethodWrap methodWrap, Object[] args,
-                                Throwable error) throws Throwable {
+    public Object afterThrowing(MethodWrap methodWrap, Object[] args, Throwable error)
+            throws Throwable {
         return exToResult(methodWrap, error);
     }
 

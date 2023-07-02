@@ -27,8 +27,7 @@ public class Interception<T> {
      * value(s).
      */
     public void before(Context context) throws Throwable {
-        before = plugin.aroundBefore(
-                context.getMethodWrap(), context.getArgs());
+        before = plugin.aroundBefore(context.getMethodWrap(), context.getArgs());
     }
 
     /**
@@ -39,10 +38,8 @@ public class Interception<T> {
      */
     public void after(Context context) {
         try {
-            context.setResult(plugin.after(
-                    context.getMethodWrap(), context.getArgs(),
-                    context.getResult(), context.getError(),
-                    before));
+            context.setResult(plugin.after(context.getMethodWrap(), context.getArgs(),
+                    context.getResult(), context.getError(), before));
         } catch (Throwable t) {
             context.setError(t);
         }

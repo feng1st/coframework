@@ -27,20 +27,18 @@ public class LoggingPlugin implements Plugin<Long> {
     }
 
     @Override
-    public Object after(MethodWrap methodWrap, Object[] args, Object result,
-                        Throwable error, Long before) throws Throwable {
+    public Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error, Long before)
+            throws Throwable {
         long elapsed = System.currentTimeMillis() - before;
         try {
             log(methodWrap, args, result, error, elapsed);
         } catch (Throwable t) {
-            logger.error("Error logging invocation of '"
-                    + methodWrap.getMethod() + "'", t);
+            logger.error("Error logging invocation of '" + methodWrap.getMethod() + "'", t);
         }
         return Plugin.super.after(methodWrap, args, result, error, before);
     }
 
-    private void log(MethodWrap methodWrap, Object[] args,
-                     Object result, Throwable error, long elapsed) {
+    private void log(MethodWrap methodWrap, Object[] args, Object result, Throwable error, long elapsed) {
         Method method = methodWrap.getMethod();
         Logging logging = methodWrap.getAnnotation(Logging.class);
 

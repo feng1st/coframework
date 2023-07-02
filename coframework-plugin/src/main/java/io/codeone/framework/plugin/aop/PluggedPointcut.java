@@ -16,8 +16,7 @@ public class PluggedPointcut extends StaticMethodMatcherPointcut {
     @Override
     public boolean matches(Method method, Class<?> targetClass) {
         try {
-            Object.class.getDeclaredMethod(method.getName(),
-                    method.getParameterTypes());
+            Object.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
             return false;
         } catch (NoSuchMethodException ignored) {
         }

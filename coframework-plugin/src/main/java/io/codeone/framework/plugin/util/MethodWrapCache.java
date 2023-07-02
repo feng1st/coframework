@@ -6,8 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MethodWrapCache {
 
-    private static final Map<Method, MethodWrap> CACHE
-            = new ConcurrentHashMap<>();
+    private static final Map<Method, MethodWrap> CACHE = new ConcurrentHashMap<>();
 
     public static MethodWrap get(Method method) {
         return CACHE.computeIfAbsent(method, MethodWrap::new);

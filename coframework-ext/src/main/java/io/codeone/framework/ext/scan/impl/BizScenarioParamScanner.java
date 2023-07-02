@@ -36,8 +36,8 @@ public class BizScenarioParamScanner extends BaseExtScanner {
                     throw new IllegalStateException("Found duplicate @RouteBys on '" + method + "'");
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
-                    throw new IllegalStateException("The parameter of '" + method
-                            + "' annotated by @RouteBy is not a BizScenarioParam");
+                    throw new IllegalStateException(
+                            "The parameter of '" + method + "' annotated by @RouteBy is not a BizScenarioParam");
                 }
                 index = i;
             }

@@ -90,15 +90,15 @@ public class BizScenarioScopePlugger
                     throw new IllegalStateException("Found duplicate @ResolveFroms on '" + method + "'");
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
-                    throw new IllegalStateException("The parameter of '" + method
-                            + "' annotated by @ResolveFrom is not a BizScenarioParam");
+                    throw new IllegalStateException(
+                            "The parameter of '" + method + "' annotated by @ResolveFrom is not a BizScenarioParam");
                 }
                 index = i;
             }
         }
         if (index == null) {
-            throw new IllegalStateException("Could not find BizScenarioParam annotated by @ResolveFrom on '"
-                    + method + "'");
+            throw new IllegalStateException(
+                    "Could not find BizScenarioParam annotated by @ResolveFrom on '" + method + "'");
         }
         return index;
     }

@@ -26,8 +26,8 @@ public class PluginChain {
     /**
      * Executes the chain on an invokable.
      */
-    public Object intercept(Method method, Object[] args,
-                            Invokable<Object> invokable) throws Throwable {
+    public Object intercept(Method method, Object[] args, Invokable<Object> invokable)
+            throws Throwable {
         if (plugins.isEmpty()) {
             return invokable.invoke();
         }
@@ -50,16 +50,14 @@ public class PluginChain {
     }
 
     private void sortPlugins() {
-        plugins.sort(Comparator
-                .comparing(o -> Optional.ofNullable(o.getClass()
-                                .getAnnotation(Plug.class))
-                        .map(Plug::value)
-                        .map(Stages::getOrder)
-                        .orElse(Integer.MAX_VALUE))
-                .thenComparing(o -> Optional.ofNullable(o.getClass()
-                                .getAnnotation(Plug.class))
-                        .map(Plug::order)
-                        .orElse(Integer.MAX_VALUE)));
+        plugins.sort(Comparator.comparing(o
+                -> Optional.ofNullable(o.getClass().getAnnotation(Plug.class))
+                .map(Plug::value)
+                .map(Stages::getOrder)
+                .orElse(Integer.MAX_VALUE)).thenComparing(o
+                -> Optional.ofNullable(o.getClass().getAnnotation(Plug.class))
+                .map(Plug::order)
+                .orElse(Integer.MAX_VALUE)));
     }
 
     private void before(LinkedList<Interception<?>> stack, Context context)

@@ -23,8 +23,7 @@ public class PluginFactory {
                 .forEach(o -> plugins.put(o.getClass(), o));
     }
 
-    public List<Plugin<?>> getPlugins(
-            Class<? extends Plugin<?>>[] pluginClasses) {
+    public List<Plugin<?>> getPlugins(Class<? extends Plugin<?>>[] pluginClasses) {
         Objects.requireNonNull(pluginClasses);
         return Arrays.stream(pluginClasses)
                 .map(plugins::get)

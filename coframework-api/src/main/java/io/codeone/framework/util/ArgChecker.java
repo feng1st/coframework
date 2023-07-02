@@ -109,8 +109,7 @@ public final class ArgChecker {
      * Returns true if the arg is not null and in the specific set, otherwise
      * throws IllegalArgumentException.
      */
-    public static void checkIn(Object arg, Collection<?> set,
-                               String message) {
+    public static void checkIn(Object arg, Collection<?> set, String message) {
         if (arg == null || !set.contains(arg)) {
             throw new IllegalArgumentException(message);
         }
@@ -120,8 +119,7 @@ public final class ArgChecker {
      * Returns true if the arg is null or not in the specific set, otherwise
      * throws IllegalArgumentException.
      */
-    public static void checkNotIn(Object arg, Collection<?> set,
-                                  String message) {
+    public static void checkNotIn(Object arg, Collection<?> set, String message) {
         if (arg != null && set.contains(arg)) {
             throw new IllegalArgumentException(message);
         }
