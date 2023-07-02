@@ -68,7 +68,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     public void setBizId(String bizId) {
         if (!isValueValid(bizId)) {
             throw new IllegalArgumentException("Invalid bizId '" + bizId
-                    + "', should be '*' (which means ANY), or '.' separated keywords which are composed of only alphabets, numbers, '-' and '_'.");
+                    + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'.");
         }
         this.bizId = bizId;
     }
@@ -80,7 +80,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     public void setScenario(String scenario) {
         if (!isValueValid(scenario)) {
             throw new IllegalArgumentException("Invalid scenario '" + scenario
-                    + "', should be '*' (which means ANY), or '.' separated keywords which are composed of only alphabets, numbers, '-' and '_'.");
+                    + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'.");
         }
         this.scenario = scenario;
     }
