@@ -1,6 +1,7 @@
 package io.codeone.framework.ext.context;
 
 import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.plugin.util.Invokable;
 
 import java.util.LinkedList;
 
