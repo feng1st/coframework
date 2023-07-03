@@ -24,7 +24,7 @@ public class PluginChainFactory {
 
     public PluginChain getChain(Method method) {
         return chainMap.computeIfAbsent(method, k1 -> {
-            List<Plugin<?>> plugins = methodPluggers.getPlugins(method);
+            List<Plugin> plugins = methodPluggers.getPlugins(method);
             Set<Class<?>> pluginClasses = plugins.stream()
                     .map(Object::getClass)
                     .collect(Collectors.toSet());

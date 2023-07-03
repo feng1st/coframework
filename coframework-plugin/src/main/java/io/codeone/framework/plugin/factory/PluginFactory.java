@@ -15,7 +15,7 @@ public class PluginFactory {
     @Resource
     private ApplicationContext applicationContext;
 
-    private final Map<Class<?>, Plugin<?>> plugins = new HashMap<>();
+    private final Map<Class<?>, Plugin> plugins = new HashMap<>();
 
     @PostConstruct
     private void postConstruct() {
@@ -23,7 +23,7 @@ public class PluginFactory {
                 .forEach(o -> plugins.put(o.getClass(), o));
     }
 
-    public List<Plugin<?>> getPlugins(Class<? extends Plugin<?>>[] pluginClasses) {
+    public List<Plugin> getPlugins(Class<? extends Plugin>[] pluginClasses) {
         Objects.requireNonNull(pluginClasses);
         return Arrays.stream(pluginClasses)
                 .map(plugins::get)

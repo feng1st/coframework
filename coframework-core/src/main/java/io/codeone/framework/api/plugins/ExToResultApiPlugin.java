@@ -17,7 +17,7 @@ import io.codeone.framework.util.ErrorUtils;
  * @see Result
  */
 @Plug(Stages.EXCEPTION_HANDLING)
-public class ExToResultApiPlugin implements ApiPlugin<Void> {
+public class ExToResultApiPlugin implements ApiPlugin {
 
     @Override
     public Object afterThrowing(MethodWrap methodWrap, Object[] args, Throwable error)

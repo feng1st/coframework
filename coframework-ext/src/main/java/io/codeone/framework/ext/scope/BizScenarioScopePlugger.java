@@ -32,7 +32,7 @@ public class BizScenarioScopePlugger
     }
 
     @Override
-    protected List<Plugin<?>> getPlugins(Method method, BizScenarioScope annotation) {
+    protected List<Plugin> getPlugins(Method method, BizScenarioScope annotation) {
         bizScenarioScopeRepo.computeParamIndexIfAbsent(method,
                 k -> getParamIndex(method, annotation));
         return Collections.singletonList(plugin);

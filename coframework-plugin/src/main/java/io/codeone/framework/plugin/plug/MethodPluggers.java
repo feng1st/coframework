@@ -31,7 +31,7 @@ public class MethodPluggers implements MethodPlugger {
     }
 
     @Override
-    public List<Plugin<?>> getPlugins(Method method) {
+    public List<Plugin> getPlugins(Method method) {
         return pluggers.stream()
                 .map(o -> o.getPlugins(method))
                 .filter(Objects::nonNull)

@@ -10,7 +10,7 @@ public abstract class AnnotationMethodPlugger<A extends Annotation>
         implements MethodPlugger {
 
     @Override
-    public List<Plugin<?>> getPlugins(Method method) {
+    public List<Plugin> getPlugins(Method method) {
         A anno = getAnnotation(method);
         if (anno == null) {
             return null;
@@ -33,7 +33,7 @@ public abstract class AnnotationMethodPlugger<A extends Annotation>
         return null;
     }
 
-    protected List<Plugin<?>> getPlugins(Method method, A annotation) {
+    protected List<Plugin> getPlugins(Method method, A annotation) {
         return null;
     }
 }

@@ -8,5 +8,5 @@ import io.codeone.framework.plugin.Plugin;
  *
  * @see API
  */
-public interface ApiPlugin<T> extends Plugin<T> {
+public interface ApiPlugin extends Plugin {
 }

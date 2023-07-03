@@ -22,6 +22,6 @@ public class PluggedMethodInterceptor implements MethodInterceptor {
         if (pluginChain == null) {
             return invocation.proceed();
         }
-        return pluginChain.intercept(method, invocation.getArguments(), invocation::proceed);
+        return pluginChain.invoke(method, invocation.getArguments(), invocation::proceed);
     }
 }

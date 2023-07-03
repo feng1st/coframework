@@ -6,7 +6,7 @@ import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 
 @Plug(Stages.RESULT_ADJUSTING)
-public class DecrResultTestPlugin implements Plugin<Void> {
+public class DecrResultTestPlugin implements Plugin {
 
     @Override
     public Object afterReturning(MethodWrap methodWrap, Object[] args,

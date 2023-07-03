@@ -1,5 +1,6 @@
 package io.codeone.framework.plugin;
 
+import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.MethodWrap;
 
 /**
@@ -17,15 +18,25 @@ import io.codeone.framework.plugin.util.MethodWrap;
  * both its 'before' and 'after' methods, will not be executed, as well as the
  * target. On the other hand, the 'after' method of this plugin, and of those
  * plugins before it in the chain, will always be executed.
- * <p>
- * There is also a mechanism to pass value(s) between the 'before' and the
- * 'after' methods in one plugin: Anything returned by the 'before' method,
- * will be passed as a parameter to the 'after' method.
- *
- * @param <T> The type of the variable that passed between the 'before' and the
- *            'after' methods.
  */
-public interface Plugin<T> {
+public interface Plugin {
+
+    /**
+     * Intercepts the invocation of the target, by executing the 'before()' and
+     * 'after()' methods around the target.
+     */
+    default Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable)
+            throws Throwable {
+        Object result = null;
+        Throwable error = null;
+        try {
+            before(methodWrap, args);
+            result = invokable.invoke();
+        } catch (Throwable t) {
+            error = t;
+        }
+        return after(methodWrap, args, result, error);
+    }
 
     /**
      * Intercepts before the invocation of the target.
@@ -33,24 +44,8 @@ public interface Plugin<T> {
      * In here you can manipulate the args, the environment, etc. Or throw an
      * exception to break the invocation of the target and other plugins in
      * this chain earlier.
-     * <p>
-     * Returns anything that you want to pass to the 'after' method of this
-     * plugin.
      */
-    default T aroundBefore(MethodWrap methodWrap, Object[] args)
-            throws Throwable {
-        before(methodWrap, args);
-        return null;
-    }
-
-    /**
-     * Intercepts before the invocation of the target.
-     * <p>
-     * Is the same to 'aroundBefore', except does not handle the
-     * variable-passing, i.e. no return value.
-     */
-    default void before(MethodWrap methodWrap, Object[] args)
-            throws Throwable {
+    default void before(MethodWrap methodWrap, Object[] args) {
     }
 
     /**
@@ -59,16 +54,13 @@ public interface Plugin<T> {
      * In here you can handle the value returned by, or the exception thrown by
      * the target or other plugins in this chain. The return value or exception
      * thrown will be replaced if you return or throw a new one.
-     * <p>
-     * The value(s) returned by the 'before' method will be passed in as the
-     * 'before' parameter.
      */
-    default Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error, T before)
+    default Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error)
             throws Throwable {
         if (error != null) {
-            return afterThrowing(methodWrap, args, error, before);
+            return afterThrowing(methodWrap, args, error);
         }
-        return afterReturning(methodWrap, args, result, before);
+        return afterReturning(methodWrap, args, result);
     }
 
     /**
@@ -77,21 +69,6 @@ public interface Plugin<T> {
      * <p>
      * The thrown exception will be replaced if you return a new value or throw
      * a new exception here.
-     * <p>
-     * The value(s) returned by the 'before' method will be passed in as the
-     * 'before' parameter.
-     */
-    default Object afterThrowing(MethodWrap methodWrap, Object[] args, Throwable error, T before)
-            throws Throwable {
-        return afterThrowing(methodWrap, args, error);
-    }
-
-    /**
-     * Intercepts after the invocation of the target, if an exception has been
-     * thrown.
-     * <p>
-     * Is the same to the other 'afterThrowing', except omits the value
-     * returned by the 'before' method.
      */
     default Object afterThrowing(MethodWrap methodWrap, Object[] args, Throwable error)
             throws Throwable {
@@ -103,20 +80,6 @@ public interface Plugin<T> {
      * <p>
      * The returned value will be replaced if you return a new value or throw a
      * new exception here.
-     * <p>
-     * The value(s) returned by the 'before' method will be passed in as the
-     * 'before' parameter.
-     */
-    default Object afterReturning(MethodWrap methodWrap, Object[] args, Object result, T before)
-            throws Throwable {
-        return afterReturning(methodWrap, args, result);
-    }
-
-    /**
-     * Intercepts after the invocation of the target, if there is no exception.
-     * <p>
-     * Is the same to the other 'afterReturning', except omits the value
-     * returned by the 'before' method.
      */
     default Object afterReturning(MethodWrap methodWrap, Object[] args, Object result)
             throws Throwable {

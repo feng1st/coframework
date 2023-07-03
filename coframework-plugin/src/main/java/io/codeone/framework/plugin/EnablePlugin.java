@@ -12,5 +12,5 @@ import java.lang.annotation.*;
 @Inherited
 public @interface EnablePlugin {
 
-    Class<? extends Plugin<?>>[] value() default {};
+    Class<? extends Plugin>[] value() default {};
 }

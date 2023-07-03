@@ -7,6 +7,7 @@ import io.codeone.framework.logging.util.LoggingSpelParser;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
@@ -16,26 +17,27 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 
 @Plug(Stages.AFTER_TARGET)
-public class LoggingPlugin implements Plugin<Long> {
+public class LoggingPlugin implements Plugin {
 
     private final Logger logger = LoggerFactory.getLogger("coframework.logging");
 
     @Override
-    public Long aroundBefore(MethodWrap methodWrap, Object[] args)
-            throws Throwable {
-        return System.currentTimeMillis();
-    }
-
-    @Override
-    public Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error, Long before)
-            throws Throwable {
-        long elapsed = System.currentTimeMillis() - before;
+    public Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable) throws Throwable {
+        long start = System.currentTimeMillis();
+        Object result = null;
+        Throwable error = null;
         try {
-            log(methodWrap, args, result, error, elapsed);
+            return (result = invokable.invoke());
         } catch (Throwable t) {
-            logger.error("Error logging invocation of '" + methodWrap.getMethod() + "'", t);
+            throw (error = t);
+        } finally {
+            long elapsed = System.currentTimeMillis() - start;
+            try {
+                log(methodWrap, args, result, error, elapsed);
+            } catch (Throwable t) {
+                logger.error("Error logging invocation of '" + methodWrap.getMethod() + "'", t);
+            }
         }
-        return Plugin.super.after(methodWrap, args, result, error, before);
     }
 
     private void log(MethodWrap methodWrap, Object[] args, Object result, Throwable error, long elapsed) {

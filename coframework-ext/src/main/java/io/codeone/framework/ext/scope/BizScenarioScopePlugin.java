@@ -7,36 +7,27 @@ import io.codeone.framework.ext.repo.BizScenarioScopeRepo;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.MethodWrap;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
 @Plug(Stages.BEFORE_TARGET)
-public class BizScenarioScopePlugin implements Plugin<BizScenario> {
+public class BizScenarioScopePlugin implements Plugin {
 
     @Resource
     private BizScenarioScopeRepo bizScenarioScopeRepo;
 
     @Override
-    public BizScenario aroundBefore(MethodWrap methodWrap, Object[] args) throws Throwable {
+    public Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable) throws Throwable {
         Method method = methodWrap.getMethod();
         BizScenarioScope scope = methodWrap.getAnnotation(BizScenarioScope.class);
         BizScenario bizScenario = resolveBizScenario(method, args, scope);
         if (bizScenario == null) {
             throw new IllegalArgumentException("Could not resolve BizScenario from args of '" + method + "'");
         }
-        BizScenarioContext.push(bizScenario);
-        return bizScenario;
-    }
-
-    @Override
-    public Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error, BizScenario before)
-            throws Throwable {
-        if (before != null) {
-            BizScenarioContext.pop();
-        }
-        return Plugin.super.after(methodWrap, args, result, error, before);
+        return BizScenarioContext.invoke(bizScenario, invokable::invoke);
     }
 
     private BizScenario resolveBizScenario(Method method, Object[] args, BizScenarioScope scope) {

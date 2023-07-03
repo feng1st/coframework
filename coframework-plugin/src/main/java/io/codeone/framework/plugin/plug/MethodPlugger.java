@@ -15,12 +15,12 @@ public interface MethodPlugger {
      * Returns whether the method is plugged.
      */
     default boolean isPlugged(Method method) {
-        List<Plugin<?>> plugins = getPlugins(method);
+        List<Plugin> plugins = getPlugins(method);
         return plugins != null && !plugins.isEmpty();
     }
 
     /**
      * Returns what plugins are plugged into the method.
      */
-    List<Plugin<?>> getPlugins(Method method);
+    List<Plugin> getPlugins(Method method);
 }

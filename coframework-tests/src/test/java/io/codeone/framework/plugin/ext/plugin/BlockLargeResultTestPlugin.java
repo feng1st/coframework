@@ -6,7 +6,7 @@ import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 
 @Plug(Stages.RESULT_VALIDATING)
-public class BlockLargeResultTestPlugin implements Plugin<Void> {
+public class BlockLargeResultTestPlugin implements Plugin {
 
     @Override
     public Object afterReturning(MethodWrap methodWrap, Object[] args,

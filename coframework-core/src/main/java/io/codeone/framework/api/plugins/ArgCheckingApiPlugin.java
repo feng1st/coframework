@@ -16,11 +16,10 @@ import io.codeone.framework.request.ApiParam;
  * @see ApiParam
  */
 @Plug(Stages.ARG_VALIDATING)
-public class ArgCheckingApiPlugin implements ApiPlugin<Void> {
+public class ArgCheckingApiPlugin implements ApiPlugin {
 
     @Override
-    public void before(MethodWrap methodWrap, Object[] args)
-            throws Throwable {
+    public void before(MethodWrap methodWrap, Object[] args) {
         for (Object arg : args) {
             if (arg instanceof ApiParam) {
                 ((ApiParam) arg).checkArgs();

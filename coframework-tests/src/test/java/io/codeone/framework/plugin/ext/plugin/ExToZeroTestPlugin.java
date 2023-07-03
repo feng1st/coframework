@@ -6,7 +6,7 @@ import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 
 @Plug(Stages.EXCEPTION_HANDLING)
-public class ExToZeroTestPlugin implements Plugin<Void> {
+public class ExToZeroTestPlugin implements Plugin {
 
     @Override
     public Object afterThrowing(MethodWrap methodWrap, Object[] args,

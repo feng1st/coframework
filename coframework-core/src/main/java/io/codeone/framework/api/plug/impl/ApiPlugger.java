@@ -22,7 +22,7 @@ public class ApiPlugger extends AnnotationMethodPlugger<API> {
     }
 
     @Override
-    protected List<Plugin<?>> getPlugins(Method method, API annotation) {
+    protected List<Plugin> getPlugins(Method method, API annotation) {
         return apiPluginFactory.getPlugins();
     }
 }

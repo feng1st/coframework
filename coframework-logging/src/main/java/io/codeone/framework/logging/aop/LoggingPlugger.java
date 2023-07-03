@@ -22,7 +22,7 @@ public class LoggingPlugger extends AnnotationMethodPlugger<Logging> {
     }
 
     @Override
-    protected List<Plugin<?>> getPlugins(Method method, Logging annotation) {
+    protected List<Plugin> getPlugins(Method method, Logging annotation) {
         return Collections.singletonList(plugin);
     }
 }

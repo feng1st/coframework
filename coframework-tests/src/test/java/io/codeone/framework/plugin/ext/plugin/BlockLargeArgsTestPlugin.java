@@ -6,11 +6,10 @@ import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 
 @Plug(Stages.ARG_VALIDATING)
-public class BlockLargeArgsTestPlugin implements Plugin<Void> {
+public class BlockLargeArgsTestPlugin implements Plugin {
 
     @Override
-    public void before(MethodWrap methodWrap, Object[] args)
-            throws Throwable {
+    public void before(MethodWrap methodWrap, Object[] args) {
         for (int i = 0; i < args.length; i++) {
             if ((args[i] instanceof Long
                     && (Long) args[i] > 10L)

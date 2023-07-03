@@ -17,7 +17,7 @@ public class ApiPluginFactory {
     @Resource
     private ApplicationContext applicationContext;
 
-    private final List<Plugin<?>> plugins = new ArrayList<>();
+    private final List<Plugin> plugins = new ArrayList<>();
 
     @PostConstruct
     private void postConstruct() {
@@ -27,7 +27,7 @@ public class ApiPluginFactory {
                 .forEach(plugins::add);
     }
 
-    public List<Plugin<?>> getPlugins() {
+    public List<Plugin> getPlugins() {
         return plugins;
     }
 }

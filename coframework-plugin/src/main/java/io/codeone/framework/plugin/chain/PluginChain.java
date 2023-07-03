@@ -3,9 +3,9 @@ package io.codeone.framework.plugin.chain;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.util.Context;
-import io.codeone.framework.plugin.util.Interception;
 import io.codeone.framework.plugin.util.Invokable;
+import io.codeone.framework.plugin.util.MethodWrap;
+import io.codeone.framework.plugin.util.MethodWrapCache;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -15,9 +15,9 @@ import java.util.*;
  */
 public class PluginChain {
 
-    private final List<? extends Plugin<?>> plugins;
+    private final List<Plugin> plugins;
 
-    public PluginChain(List<? extends Plugin<?>> plugins) {
+    public PluginChain(List<Plugin> plugins) {
         Objects.requireNonNull(plugins);
         this.plugins = plugins;
         sortPlugins();
@@ -26,27 +26,22 @@ public class PluginChain {
     /**
      * Executes the chain on an invokable.
      */
-    public Object intercept(Method method, Object[] args, Invokable<Object> invokable)
+    public Object invoke(Method method, Object[] args, Invokable<Object> invokable)
             throws Throwable {
         if (plugins.isEmpty()) {
             return invokable.invoke();
         }
+        return invoke(plugins.iterator(), MethodWrapCache.get(method), args, invokable);
+    }
 
-        Context context = new Context(method, args);
-
-        LinkedList<Interception<?>> stack = new LinkedList<>();
-
-        try {
-            before(stack, context);
-
-            context.setResult(invokable.invoke());
-        } catch (Throwable t) {
-            context.setError(t);
+    private Object invoke(Iterator<Plugin> iter, MethodWrap methodWrap, Object[] args, Invokable<Object> invokable)
+            throws Throwable {
+        if (iter.hasNext()) {
+            return iter.next().around(methodWrap, args,
+                    () -> invoke(iter, methodWrap, args, invokable));
+        } else {
+            return invokable.invoke();
         }
-
-        after(stack, context);
-
-        return context.getResultOrThrow();
     }
 
     private void sortPlugins() {
@@ -58,20 +53,5 @@ public class PluginChain {
                 -> Optional.ofNullable(o.getClass().getAnnotation(Plug.class))
                 .map(Plug::order)
                 .orElse(Integer.MAX_VALUE)));
-    }
-
-    private void before(LinkedList<Interception<?>> stack, Context context)
-            throws Throwable {
-        for (Plugin<?> plugin : plugins) {
-            Interception<?> interception = new Interception<>(plugin);
-            stack.push(interception);
-            interception.before(context);
-        }
-    }
-
-    private void after(LinkedList<Interception<?>> stack, Context context) {
-        while (!stack.isEmpty()) {
-            stack.pop().after(context);
-        }
     }
 }
