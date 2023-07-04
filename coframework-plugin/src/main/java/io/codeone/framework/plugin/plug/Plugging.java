@@ -6,6 +6,9 @@ import io.codeone.framework.plugin.factory.PluginFactory;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Decides how to plug plugins.
+ */
 public interface Plugging {
 
     static List<Plugging> asList(Plugging... pluggingList) {

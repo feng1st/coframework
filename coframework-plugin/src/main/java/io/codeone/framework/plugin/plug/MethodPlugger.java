@@ -18,7 +18,8 @@ public interface MethodPlugger {
     }
 
     /**
-     * Returns what plugins are plugged into the method.
+     * Returns list of plugging that decide what plugins will be plugged into
+     * the method.
      */
     List<Plugging> getPluggingList(Method method);
 }

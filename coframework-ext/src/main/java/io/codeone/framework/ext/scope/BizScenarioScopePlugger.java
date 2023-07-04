@@ -23,7 +23,11 @@ public class BizScenarioScopePlugger
 
     @Override
     protected List<Plugging> getPluggingList(Method method, BizScenarioScope annotation) {
+        // Finish the indexing of scope resolvers before the evaluation of
+        // plugging. This is a proper chance since the whole scope resolving is
+        // driven by plugging.
         bizScenarioScopeIndexer.index(method, annotation);
+
         return Plugging.asList(ClassPlugging.of(BizScenarioScopePlugin.class));
     }
 }
