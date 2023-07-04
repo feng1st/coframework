@@ -21,7 +21,7 @@ public @interface Plug {
      * chain.
      * <p>
      * You can use the '@Order' annotation to further specify the order of
-     * plugins that belong to the same stage, if that matter.
+     * plugins that belong to the same stage, if that matters.
      *
      * @see Stages
      */
