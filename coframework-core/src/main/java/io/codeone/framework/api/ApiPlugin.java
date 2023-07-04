@@ -9,4 +9,6 @@ import io.codeone.framework.plugin.Plugin;
  * @see API
  */
 public interface ApiPlugin extends Plugin {
+
+    String GROUP = "API";
 }

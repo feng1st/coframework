@@ -16,7 +16,7 @@ import io.codeone.framework.util.ErrorUtils;
  * @see API
  * @see Result
  */
-@Plug(Stages.EXCEPTION_HANDLING)
+@Plug(value = Stages.EXCEPTION_HANDLING, group = ApiPlugin.GROUP)
 public class ExToResultApiPlugin implements ApiPlugin {
 
     @Override

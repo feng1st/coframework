@@ -1,7 +1,5 @@
 package io.codeone.framework.plugin.plug;
 
-import io.codeone.framework.plugin.Plugin;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -15,12 +13,12 @@ public interface MethodPlugger {
      * Returns whether the method is plugged.
      */
     default boolean isPlugged(Method method) {
-        List<Plugin> plugins = getPlugins(method);
-        return plugins != null && !plugins.isEmpty();
+        List<Plugging> pluggingList = getPluggingList(method);
+        return pluggingList != null && !pluggingList.isEmpty();
     }
 
     /**
      * Returns what plugins are plugged into the method.
      */
-    List<Plugin> getPlugins(Method method);
+    List<Plugging> getPluggingList(Method method);
 }

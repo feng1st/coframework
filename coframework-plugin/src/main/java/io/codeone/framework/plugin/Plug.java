@@ -24,4 +24,6 @@ public @interface Plug {
      * @see Stages
      */
     Stages value() default Stages.BEFORE_TARGET;
+
+    String group() default "";
 }

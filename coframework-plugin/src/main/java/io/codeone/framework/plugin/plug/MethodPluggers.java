@@ -1,6 +1,5 @@
 package io.codeone.framework.plugin.plug;
 
-import io.codeone.framework.plugin.Plugin;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -31,12 +30,11 @@ public class MethodPluggers implements MethodPlugger {
     }
 
     @Override
-    public List<Plugin> getPlugins(Method method) {
+    public List<Plugging> getPluggingList(Method method) {
         return pluggers.stream()
-                .map(o -> o.getPlugins(method))
+                .map(o -> o.getPluggingList(method))
                 .filter(Objects::nonNull)
                 .flatMap(List::stream)
-                .distinct()
                 .collect(Collectors.toList());
     }
 }

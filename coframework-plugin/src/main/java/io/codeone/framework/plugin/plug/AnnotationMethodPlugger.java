@@ -1,7 +1,5 @@
 package io.codeone.framework.plugin.plug;
 
-import io.codeone.framework.plugin.Plugin;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -10,12 +8,12 @@ public abstract class AnnotationMethodPlugger<A extends Annotation>
         implements MethodPlugger {
 
     @Override
-    public List<Plugin> getPlugins(Method method) {
+    public List<Plugging> getPluggingList(Method method) {
         A anno = getAnnotation(method);
         if (anno == null) {
             return null;
         }
-        return getPlugins(method, anno);
+        return getPluggingList(method, anno);
     }
 
     protected abstract Class<A> getAnnotationType();
@@ -33,7 +31,5 @@ public abstract class AnnotationMethodPlugger<A extends Annotation>
         return null;
     }
 
-    protected List<Plugin> getPlugins(Method method, A annotation) {
-        return null;
-    }
+    protected abstract List<Plugging> getPluggingList(Method method, A annotation);
 }
