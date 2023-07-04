@@ -15,7 +15,7 @@ import io.codeone.framework.request.ApiParam;
  * @see API
  * @see ApiParam
  */
-@Plug(Stages.ARG_VALIDATING)
+@Plug(Stages.ARG_VALIDATION)
 public class ArgCheckingApiPlugin implements ApiPlugin {
 
     @Override

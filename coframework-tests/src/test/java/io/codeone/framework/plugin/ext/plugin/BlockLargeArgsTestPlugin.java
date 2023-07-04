@@ -5,7 +5,7 @@ import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.MethodWrap;
 
-@Plug(Stages.ARG_VALIDATING)
+@Plug(Stages.ARG_VALIDATION)
 public class BlockLargeArgsTestPlugin implements Plugin {
 
     @Override

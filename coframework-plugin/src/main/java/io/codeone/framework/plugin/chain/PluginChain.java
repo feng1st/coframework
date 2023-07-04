@@ -6,6 +6,7 @@ import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.MethodWrap;
 import io.codeone.framework.plugin.util.MethodWrapCache;
+import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -50,8 +51,8 @@ public class PluginChain {
                 .map(Plug::value)
                 .map(Stages::getOrder)
                 .orElse(Integer.MAX_VALUE)).thenComparing(o
-                -> Optional.ofNullable(o.getClass().getAnnotation(Plug.class))
-                .map(Plug::order)
+                -> Optional.ofNullable(o.getClass().getAnnotation(Order.class))
+                .map(Order::value)
                 .orElse(Integer.MAX_VALUE)));
     }
 }

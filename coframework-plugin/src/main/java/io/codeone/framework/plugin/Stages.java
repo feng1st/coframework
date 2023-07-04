@@ -1,71 +1,79 @@
 package io.codeone.framework.plugin;
 
 /**
- * Stages of interceptions, decide the order of these interceptions.
+ * Stages of interceptions, decide the order of plugins in a chain.
  */
 public enum Stages {
     /**
-     * Modifies any args in this stage, before they get validated.
+     * Initializes or supplies any args that not supposed to be provided by the
+     * caller. For example, the account id of the operator which should be
+     * retrieved only from the logged-in session.
      * <p>
-     * The interception is mainly on the 'before' method of the plugin.
+     * The interception is mainly on the 'before' part of the plugin.
      */
-    ARG_PREPARING(false),
+    ARG_INITIALIZATION(false),
     /**
-     * Validates args in this stage.
+     * Validates args and aborts the execution of the target if something went
+     * wrong, by for example throwing an IllegalArgumentException.
      * <p>
-     * The interception is mainly on the 'before' method of the plugin.
+     * The interception is mainly on the 'before' part of the plugin.
      */
-    ARG_VALIDATING(false),
+    ARG_VALIDATION(false),
     /**
-     * Modifies any args in this stage, after they get validated.
+     * Modifies any args after they get validated.
      * <p>
-     * The interception is mainly on the 'before' method of the plugin.
+     * The interception is mainly on the 'before' part of the plugin.
      */
-    ARG_ADJUSTING(false),
+    ARG_UPDATING(false),
     /**
      * Just before the execution of the target method.
      * <p>
-     * The interception is mainly on the 'before' method of the plugin.
+     * The interception is mainly on the 'before' part of the plugin.
      */
     BEFORE_TARGET(false),
     /**
      * Just after the execution of the target method.
      * <p>
-     * The interception is mainly on the 'after' method of the plugin. This is
-     * very important: Since the FIFO nature of the chain, in order to execute
-     * its 'after' method in the order as expected, the plugin decorated by
-     * this stage is actually in front of the chain, as well as the execution
-     * of its 'before' method.
+     * The interception is mainly on the 'after' part of the plugin.
+     * <p>
+     * This is VERY IMPORTANT: Since the FIFO nature of the chain, in order to
+     * execute its 'after' part in a desired order, the plugin decorated by
+     * this stage is actually put in front of the chain. As the result, you may
+     * get an unexpected outcome if you put the main interception logic in the
+     * 'before' part of the plugin.
      */
     AFTER_TARGET(true),
     /**
-     * Validates the result in this stage.
+     * Validates the result before it get returned to the caller. For example,
+     * throws an exception if it contains classified information.
      * <p>
-     * The interception is mainly on the 'after' method of the plugin.
+     * The interception is mainly on the 'after' part of the plugin.
      */
-    RESULT_VALIDATING(true),
+    RESULT_VALIDATION(true),
     /**
-     * Modifies the result or exception in this stage.
+     * Modifies the result, for example, desensitizes some information.
      * <p>
-     * The interception is mainly on the 'after' method of the plugin.
+     * Or modifies the exception, for example, clarifies the error message.
+     * <p>
+     * The interception is mainly on the 'after' part of the plugin.
      */
-    RESULT_ADJUSTING(true),
+    RESULT_UPDATING(true),
     /**
      * Handles any exception thrown by the target or during the interception,
      * and this is the chance to wrap the thrown exception.
      * <p>
-     * The interception is mainly on the 'after' method of the plugin.
+     * The interception is mainly on the 'after' part of the plugin.
      */
     EXCEPTION_HANDLING(true),
     ;
 
     /**
-     * Whether the interception logic happened mainly in the 'after' method of
+     * Whether the interception logic happened mainly in the 'after' part of
      * the plugin.
      * <p>
-     * Since the FIFO nature of the chain, in order to put the 'after' method
+     * Since the FIFO nature of the chain, in order to execute the 'after' part
      * of the plugin in the right order, the plugin need to be put in front of
-     * the chain, as we do in the 'getOrder'.
+     * the chain, as we do in the 'getOrder()'.
      *
      * @see #getOrder()
      */

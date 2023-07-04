@@ -25,6 +25,6 @@ public class BizScenarioScopePlugin implements Plugin {
         if (bizScenario == null) {
             throw new IllegalArgumentException("Could not resolve BizScenario from args of '" + method + "'");
         }
-        return BizScenarioContext.invoke(bizScenario, invokable::invoke);
+        return BizScenarioContext.invoke(bizScenario, invokable);
     }
 }

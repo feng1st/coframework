@@ -24,9 +24,4 @@ public @interface Plug {
      * @see Stages
      */
     Stages value() default Stages.BEFORE_TARGET;
-
-    /**
-     * The order in that stage the plugin has.
-     */
-    int order() default Integer.MAX_VALUE;
 }
