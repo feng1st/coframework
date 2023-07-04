@@ -44,6 +44,11 @@ public class TestPluginService {
         return a + b;
     }
 
+    @EnablePlugin({ContextReaderTestPlugin.class,
+            ContextWriterTestPlugin.class})
+    public void context() {
+    }
+
     @Override
     public String toString() {
         return super.toString();

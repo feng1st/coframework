@@ -32,7 +32,8 @@ public class PluginChain {
         if (plugins.isEmpty()) {
             return invokable.invoke();
         }
-        return invoke(plugins.iterator(), MethodWrapCache.get(method), args, invokable);
+        return PluginChainContext.invoke(() ->
+                invoke(plugins.iterator(), MethodWrapCache.get(method), args, invokable));
     }
 
     private Object invoke(Iterator<Plugin> iter, MethodWrap methodWrap, Object[] args, Invokable<Object> invokable)
