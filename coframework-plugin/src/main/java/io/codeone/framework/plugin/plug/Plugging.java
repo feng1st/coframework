@@ -11,6 +11,9 @@ import java.util.List;
  */
 public interface Plugging {
 
+    /**
+     * Just a syntactic sugar function.
+     */
     static List<Plugging> asList(Plugging... pluggingList) {
         return Arrays.asList(pluggingList);
     }
