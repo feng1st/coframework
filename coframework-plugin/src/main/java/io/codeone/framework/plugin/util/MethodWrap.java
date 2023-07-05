@@ -20,6 +20,8 @@ public class MethodWrap {
 
     private String[] parameterNames;
 
+    private Class<?>[] exceptionTypes;
+
     private Map<Class<? extends Annotation>, Annotation> annotations;
 
     private Map<Class<? extends Annotation>, Annotation> methodAnnotations;
@@ -70,6 +72,19 @@ public class MethodWrap {
 
     public Class<?> getReturnType() {
         return method.getReturnType();
+    }
+
+    public Class<?>[] getExceptionTypes() {
+        Class<?>[] exTypes;
+        if ((exTypes = exceptionTypes) == null) {
+            synchronized (this) {
+                if ((exTypes = exceptionTypes) == null) {
+                    exTypes = method.getExceptionTypes();
+                    exceptionTypes = exTypes;
+                }
+            }
+        }
+        return exTypes;
     }
 
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
