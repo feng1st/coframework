@@ -3,16 +3,23 @@ package io.codeone.framework.plugin.util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
- * Wrap of a method, caches its commonly used properties.
+ * A snapshot of a method and its commonly used properties.
  * <p>
  * Please do not modify any of these properties since they are globally cached.
  */
 public class MethodWrap {
+
+    private static final Map<Method, MethodWrap> CACHE = new ConcurrentHashMap<>();
 
     private final Method method;
 
@@ -28,6 +35,10 @@ public class MethodWrap {
 
     private Map<Class<? extends Annotation>, Annotation> classAnnotations;
 
+    public static MethodWrap of(Method method) {
+        return CACHE.computeIfAbsent(method, MethodWrap::new);
+    }
+
     public MethodWrap(Method method) {
         this.method = method;
     }
@@ -41,33 +52,12 @@ public class MethodWrap {
     }
 
     public Class<?>[] getParameterTypes() {
-        Class<?>[] paramTypes;
-        if ((paramTypes = parameterTypes) == null) {
-            synchronized (this) {
-                if ((paramTypes = parameterTypes) == null) {
-                    paramTypes = method.getParameterTypes();
-                    parameterTypes = paramTypes;
-                }
-            }
-        }
-        return paramTypes;
+        return cacheAndReturn(() -> parameterTypes, o -> parameterTypes = o, method::getParameterTypes);
     }
 
     public String[] getParameterNames() {
-        String[] paramNames;
-        if ((paramNames = parameterNames) == null) {
-            synchronized (this) {
-                if ((paramNames = parameterNames) == null) {
-                    Parameter[] params = method.getParameters();
-                    paramNames = new String[params.length];
-                    for (int i = 0; i < params.length; i++) {
-                        paramNames[i] = params[i].getName();
-                    }
-                }
-                parameterNames = paramNames;
-            }
-        }
-        return paramNames;
+        return cacheAndReturn(() -> parameterNames, o -> parameterNames = o, () ->
+                Arrays.stream(method.getParameters()).map(Parameter::getName).toArray(String[]::new));
     }
 
     public Class<?> getReturnType() {
@@ -75,16 +65,7 @@ public class MethodWrap {
     }
 
     public Class<?>[] getExceptionTypes() {
-        Class<?>[] exTypes;
-        if ((exTypes = exceptionTypes) == null) {
-            synchronized (this) {
-                if ((exTypes = exceptionTypes) == null) {
-                    exTypes = method.getExceptionTypes();
-                    exceptionTypes = exTypes;
-                }
-            }
-        }
-        return exTypes;
+        return cacheAndReturn(() -> exceptionTypes, o -> exceptionTypes = o, method::getExceptionTypes);
     }
 
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
@@ -115,55 +96,33 @@ public class MethodWrap {
     }
 
     private Map<Class<? extends Annotation>, Annotation> getAnnotations() {
-        Map<Class<? extends Annotation>, Annotation> annos;
-        if ((annos = annotations) == null) {
-            synchronized (this) {
-                if ((annos = annotations) == null) {
-                    annos = new LinkedHashMap<>();
-                    for (Annotation anno : method.getAnnotations()) {
-                        annos.put(anno.annotationType(), anno);
-                    }
-                    Class<?> clazz = method.getDeclaringClass();
-                    for (Annotation anno : clazz.getAnnotations()) {
-                        annos.putIfAbsent(anno.annotationType(), anno);
-                    }
-                    annotations = annos;
-                }
-            }
-        }
-        return annos;
+        return cacheAndReturn(() -> annotations, o -> annotations = o, ()
+                -> Stream.concat(Arrays.stream(method.getDeclaringClass().getAnnotations()),
+                        Arrays.stream(method.getAnnotations()))
+                .collect(LinkedHashMap::new, (m, o) -> m.put(o.annotationType(), o), Map::putAll));
     }
 
     private Map<Class<? extends Annotation>, Annotation> getMethodAnnotations() {
-        Map<Class<? extends Annotation>, Annotation> annos;
-        if ((annos = methodAnnotations) == null) {
-            synchronized (this) {
-                if ((annos = methodAnnotations) == null) {
-                    annos = new LinkedHashMap<>();
-                    for (Annotation anno : method.getAnnotations()) {
-                        annos.put(anno.annotationType(), anno);
-                    }
-                    methodAnnotations = annos;
-                }
-            }
-        }
-        return annos;
+        return cacheAndReturn(() -> methodAnnotations, o -> methodAnnotations = o, ()
+                -> Arrays.stream(method.getAnnotations())
+                .collect(LinkedHashMap::new, (m, o) -> m.put(o.annotationType(), o), Map::putAll));
     }
 
     private Map<Class<? extends Annotation>, Annotation> getClassAnnotations() {
-        Map<Class<? extends Annotation>, Annotation> annos;
-        if ((annos = classAnnotations) == null) {
+        return cacheAndReturn(() -> classAnnotations, o -> classAnnotations = o, ()
+                -> Arrays.stream(method.getDeclaringClass().getAnnotations())
+                .collect(LinkedHashMap::new, (m, o) -> m.put(o.annotationType(), o), Map::putAll));
+    }
+
+    private <T> T cacheAndReturn(Supplier<T> getter, Consumer<T> setter, Supplier<T> supplier) {
+        T cache;
+        if ((cache = getter.get()) == null) {
             synchronized (this) {
-                if ((annos = classAnnotations) == null) {
-                    annos = new LinkedHashMap<>();
-                    Class<?> clazz = method.getDeclaringClass();
-                    for (Annotation anno : clazz.getAnnotations()) {
-                        annos.put(anno.annotationType(), anno);
-                    }
-                    classAnnotations = annos;
+                if ((cache = getter.get()) == null) {
+                    setter.accept((cache = supplier.get()));
                 }
             }
         }
-        return annos;
+        return cache;
     }
 }

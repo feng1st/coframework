@@ -22,7 +22,8 @@ public class LoggingPlugin implements Plugin {
     private final Logger logger = LoggerFactory.getLogger("coframework.logging");
 
     @Override
-    public Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable) throws Throwable {
+    public Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable)
+            throws Throwable {
         long start = System.currentTimeMillis();
         Object result = null;
         Throwable error = null;

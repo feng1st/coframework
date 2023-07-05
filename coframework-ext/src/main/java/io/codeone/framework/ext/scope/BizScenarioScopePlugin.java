@@ -18,7 +18,8 @@ public class BizScenarioScopePlugin implements Plugin {
     private BizScenarioScopeIndexer bizScenarioScopeIndexer;
 
     @Override
-    public Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable) throws Throwable {
+    public Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable)
+            throws Throwable {
         Method method = methodWrap.getMethod();
         BizScenarioScope scope = methodWrap.getAnnotation(BizScenarioScope.class);
         BizScenario bizScenario = bizScenarioScopeIndexer.resolve(method, args, scope);

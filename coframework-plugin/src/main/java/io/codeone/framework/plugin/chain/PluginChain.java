@@ -5,7 +5,6 @@ import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.MethodWrap;
-import io.codeone.framework.plugin.util.MethodWrapCache;
 import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
@@ -33,7 +32,7 @@ public class PluginChain {
             return invokable.invoke();
         }
         return PluginChainContext.invoke(() ->
-                invoke(plugins.iterator(), MethodWrapCache.get(method), args, invokable));
+                invoke(plugins.iterator(), MethodWrap.of(method), args, invokable));
     }
 
     private Object invoke(Iterator<Plugin> iter, MethodWrap methodWrap, Object[] args, Invokable<Object> invokable)

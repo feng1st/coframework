@@ -17,7 +17,8 @@ public class ContextReaderTestPlugin implements Plugin {
     }
 
     @Override
-    public Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error) throws Throwable {
+    public Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error)
+            throws Throwable {
         if (Objects.equals(PluginChainContext.get("test"), 1)) {
             throw new RuntimeException("Context is working");
         } else {
