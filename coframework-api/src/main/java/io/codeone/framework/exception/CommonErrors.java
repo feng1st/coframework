@@ -1,8 +1,13 @@
 package io.codeone.framework.exception;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Provides some commonly used error enumerations.
  */
+@RequiredArgsConstructor
+@Getter
 public enum CommonErrors implements ApiError {
     /**
      * Success
@@ -28,17 +33,8 @@ public enum CommonErrors implements ApiError {
 
     private final String message;
 
-    CommonErrors(String message) {
-        this.message = message;
-    }
-
     @Override
     public String getCode() {
         return name();
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
     }
 }

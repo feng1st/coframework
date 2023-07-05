@@ -2,6 +2,7 @@ package io.codeone.framework.util;
 
 import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.exception.CommonErrors;
+import lombok.experimental.UtilityClass;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,10 +10,8 @@ import java.util.Set;
 /**
  * Utilities to handle exceptions.
  */
-public final class ErrorUtils {
-
-    private ErrorUtils() {
-    }
+@UtilityClass
+public class ErrorUtils {
 
     /**
      * Returns the top-most user custom exception, or IllegalArgumentException,

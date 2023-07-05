@@ -1,12 +1,15 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.ExtensionPoint;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Getter
+@EqualsAndHashCode
 public class ExtensionPointMethod {
 
     private final String classCode;
@@ -30,43 +33,6 @@ public class ExtensionPointMethod {
         this.name = getName(extPtMethod, method);
         this.description = getDescription(extPtMethod);
         this.order = getOrder(extPtMethod);
-    }
-
-    public String getClassCode() {
-        return classCode;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getOrder() {
-        return order;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ExtensionPointMethod that = (ExtensionPointMethod) o;
-        return Objects.equals(code, that.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(code);
     }
 
     @Override

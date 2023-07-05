@@ -2,6 +2,7 @@ package io.codeone.framework.ext.util;
 
 import io.codeone.framework.ext.BizScenarioParam;
 import io.codeone.framework.ext.Extensible;
+import lombok.experimental.UtilityClass;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 
@@ -9,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@UtilityClass
 public class ExtUtils {
 
     public static List<Class<?>> getAllExtensibleClasses(Class<?> extClass) {

@@ -2,8 +2,8 @@ package io.codeone.framework.request;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
-
-import java.util.Objects;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Base class of all requests.
@@ -11,6 +11,8 @@ import java.util.Objects;
  * By default, it implemented ApiParam and BizScenarioParam. But they can be
  * safely ignored if not relevant.
  */
+@Data
+@Accessors(chain = true)
 public abstract class BaseRequest implements ApiParam, BizScenarioParam {
 
     /**
@@ -18,16 +20,6 @@ public abstract class BaseRequest implements ApiParam, BizScenarioParam {
      * invocation would be. In case it will be handled differently.
      */
     private BizScenario bizScenario;
-
-    @Override
-    public BizScenario getBizScenario() {
-        return bizScenario;
-    }
-
-    public BaseRequest setBizScenario(BizScenario bizScenario) {
-        this.bizScenario = bizScenario;
-        return this;
-    }
 
     public String getBizId() {
         return bizScenario == null ? null : bizScenario.getBizId();
@@ -53,29 +45,5 @@ public abstract class BaseRequest implements ApiParam, BizScenarioParam {
             bizScenario.setScenario(scenario);
         }
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        BaseRequest that = (BaseRequest) o;
-        return Objects.equals(bizScenario, that.bizScenario);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bizScenario);
-    }
-
-    @Override
-    public String toString() {
-        return "BaseRequest{" +
-                "bizScenario=" + bizScenario +
-                '}';
     }
 }

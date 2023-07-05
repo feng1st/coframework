@@ -1,9 +1,10 @@
 package io.codeone.framework.response;
 
 import io.codeone.framework.util.PageConstants;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A container for paged result.
@@ -13,6 +14,8 @@ import java.util.Objects;
  *
  * @param <T> Type of the contained data.
  */
+@Data
+@Accessors(chain = true)
 public class Page<T> {
 
     /**
@@ -65,19 +68,6 @@ public class Page<T> {
                 .setTotalCount(totalCount);
     }
 
-    public List<T> getData() {
-        return data;
-    }
-
-    public Page<T> setData(List<T> data) {
-        this.data = data;
-        return this;
-    }
-
-    public int getPageIndex() {
-        return pageIndex;
-    }
-
     /**
      * Sets current page of the returned data. It should start from 1.
      */
@@ -86,24 +76,11 @@ public class Page<T> {
         return this;
     }
 
-    public int getPageSize() {
-        return pageSize;
-    }
-
     /**
      * Sets the size of records of one page. It can't be zero or negative.
      */
     public Page<T> setPageSize(int pageSize) {
         this.pageSize = Math.max(pageSize, 1);
-        return this;
-    }
-
-    public long getTotalCount() {
-        return totalCount;
-    }
-
-    public Page<T> setTotalCount(long totalCount) {
-        this.totalCount = totalCount;
         return this;
     }
 
@@ -122,35 +99,5 @@ public class Page<T> {
      */
     public boolean getHasMore() {
         return (long) pageSize * pageIndex < totalCount;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Page<?> page = (Page<?>) o;
-        return pageIndex == page.pageIndex
-                && pageSize == page.pageSize
-                && totalCount == page.totalCount
-                && Objects.equals(data, page.data);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(data, pageIndex, pageSize, totalCount);
-    }
-
-    @Override
-    public String toString() {
-        return "Page{" +
-                "data=" + data +
-                ", pageIndex=" + pageIndex +
-                ", pageSize=" + pageSize +
-                ", totalCount=" + totalCount +
-                '}';
     }
 }

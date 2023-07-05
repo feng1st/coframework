@@ -1,8 +1,11 @@
 package io.codeone.framework.plugin;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Stages of interceptions, decide the order of plugins in a chain.
  */
+@RequiredArgsConstructor
 public enum Stages {
     /**
      * Initializes or supplies any args that not supposed to be provided by the
@@ -78,10 +81,6 @@ public enum Stages {
      * @see #getOrder()
      */
     private final boolean after;
-
-    Stages(boolean after) {
-        this.after = after;
-    }
 
     public int getOrder() {
         if (after) {

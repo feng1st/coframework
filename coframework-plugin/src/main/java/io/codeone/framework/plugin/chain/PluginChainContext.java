@@ -1,18 +1,17 @@
 package io.codeone.framework.plugin.chain;
 
 import io.codeone.framework.plugin.util.Invokable;
+import lombok.experimental.UtilityClass;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@UtilityClass
 @SuppressWarnings("unchecked")
-public final class PluginChainContext {
+public class PluginChainContext {
 
     private static final ThreadLocal<Map<String, Object>> MAP = ThreadLocal.withInitial(HashMap::new);
-
-    private PluginChainContext() {
-    }
 
     static Object invoke(Invokable<?> invokable) throws Throwable {
         try {

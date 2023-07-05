@@ -1,9 +1,11 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-import java.util.Objects;
-
+@Getter
+@EqualsAndHashCode
 public class AbilityDef {
 
     private final String code;
@@ -20,35 +22,6 @@ public class AbilityDef {
         this.code = getClassKey(extensibleClass);
         this.name = getName(ability, extensibleClass);
         this.description = ability.description();
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        AbilityDef that = (AbilityDef) o;
-        return Objects.equals(code, that.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(code);
     }
 
     @Override

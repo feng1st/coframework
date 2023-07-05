@@ -1,5 +1,7 @@
 package io.codeone.framework.ext;
 
+import lombok.Getter;
+
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -8,6 +10,7 @@ import java.util.Objects;
  * which scenario the service call will be. With these information, the service
  * provider can process the requests respectively.
  */
+@Getter
 public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     public static final String ANY = "*";
@@ -61,20 +64,12 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         return of(this.bizId, joinValues(scenario));
     }
 
-    public String getBizId() {
-        return bizId;
-    }
-
     public void setBizId(String bizId) {
         if (!isValueValid(bizId)) {
             throw new IllegalArgumentException("Invalid bizId '" + bizId
                     + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'.");
         }
         this.bizId = bizId;
-    }
-
-    public String getScenario() {
-        return scenario;
     }
 
     public void setScenario(String scenario) {

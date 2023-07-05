@@ -1,6 +1,7 @@
 package io.codeone.framework.util;
 
 import io.codeone.framework.request.ApiParam;
+import lombok.experimental.UtilityClass;
 
 import java.util.Collection;
 import java.util.Map;
@@ -10,10 +11,8 @@ import java.util.Map;
  *
  * @see ApiParam
  */
-public final class ArgChecker {
-
-    private ArgChecker() {
-    }
+@UtilityClass
+public class ArgChecker {
 
     /**
      * Checks if the given condition is true, throws IllegalArgumentException

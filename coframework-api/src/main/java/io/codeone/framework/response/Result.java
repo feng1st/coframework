@@ -1,6 +1,7 @@
 package io.codeone.framework.response;
 
-import java.util.Objects;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * The result of an API call. For example:
@@ -18,6 +19,8 @@ import java.util.Objects;
  *
  * @param <T> The type of returned data.
  */
+@Data
+@Accessors(chain = true)
 public class Result<T> {
 
     /**
@@ -65,71 +68,5 @@ public class Result<T> {
                 .setSuccess(false)
                 .setErrorCode(errorCode)
                 .setErrorMessage(errorMessage);
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public Result<T> setSuccess(boolean success) {
-        this.success = success;
-        return this;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public Result<T> setData(T data) {
-        this.data = data;
-        return this;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public Result<T> setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-        return this;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public Result<T> setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Result<?> result = (Result<?>) o;
-        return success == result.success
-                && Objects.equals(data, result.data)
-                && Objects.equals(errorCode, result.errorCode)
-                && Objects.equals(errorMessage, result.errorMessage);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(success, data, errorCode, errorMessage);
-    }
-
-    @Override
-    public String toString() {
-        return "Result{" +
-                "success=" + success +
-                ", data=" + data +
-                ", errorCode='" + errorCode + '\'' +
-                ", errorMessage='" + errorMessage + '\'' +
-                '}';
     }
 }

@@ -3,9 +3,11 @@ package io.codeone.framework.ext.monitor;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.model.BizScenarioExtension;
 import io.codeone.framework.ext.model.ExtensionCoordinate;
+import lombok.Data;
 
 import java.lang.reflect.Method;
 
+@Data(staticConstructor = "of")
 public class ExtInvocation {
 
     private final Method method;
@@ -13,20 +15,6 @@ public class ExtInvocation {
     private final ExtensionCoordinate coordinate;
 
     private final BizScenarioExtension bizExt;
-
-    public static ExtInvocation of(Method method, ExtensionCoordinate coordinate, BizScenarioExtension bizExt) {
-        return new ExtInvocation(method, coordinate, bizExt);
-    }
-
-    public ExtInvocation(Method method, ExtensionCoordinate coordinate, BizScenarioExtension bizExt) {
-        this.method = method;
-        this.coordinate = coordinate;
-        this.bizExt = bizExt;
-    }
-
-    public Method getMethod() {
-        return method;
-    }
 
     public Class<?> getExtensibleClass() {
         return coordinate.getExtensibleClass();

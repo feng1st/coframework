@@ -1,7 +1,9 @@
 package io.codeone.framework.ext.util;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.aop.support.AopUtils;
 
+@UtilityClass
 public class ClassUtils {
 
     public static Class<?> forName(String className) {

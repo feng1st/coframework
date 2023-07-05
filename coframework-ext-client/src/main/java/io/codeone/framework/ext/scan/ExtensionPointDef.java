@@ -1,9 +1,11 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.ExtensionPoint;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-import java.util.Objects;
-
+@Getter
+@EqualsAndHashCode
 public class ExtensionPointDef {
 
     private final String code;
@@ -20,35 +22,6 @@ public class ExtensionPointDef {
         this.code = getClassKey(extensibleClass);
         this.name = getName(extPt, extensibleClass);
         this.description = extPt.description();
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ExtensionPointDef that = (ExtensionPointDef) o;
-        return Objects.equals(code, that.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(code);
     }
 
     @Override

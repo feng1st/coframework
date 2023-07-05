@@ -1,12 +1,15 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.BizScenario;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Getter
+@EqualsAndHashCode
 public class ExtensionPointImpl {
 
     private final String classCode;
@@ -31,43 +34,6 @@ public class ExtensionPointImpl {
         this.code = classCode + "[" + bizScenario.getCode() + "]." + methodKey;
         this.implementingClass = getClassKey(implementingClass);
         this.bizScenario = bizScenario.getCode();
-    }
-
-    public String getClassCode() {
-        return classCode;
-    }
-
-    public String getMethodCode() {
-        return methodCode;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getImplementingClass() {
-        return implementingClass;
-    }
-
-    public String getBizScenario() {
-        return bizScenario;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ExtensionPointImpl extPt = (ExtensionPointImpl) o;
-        return Objects.equals(code, extPt.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(code);
     }
 
     @Override

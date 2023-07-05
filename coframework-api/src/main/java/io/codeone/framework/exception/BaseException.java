@@ -1,8 +1,15 @@
 package io.codeone.framework.exception;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 /**
  * Base class of all custom runtime exceptions.
  */
+@Getter
+@Setter
+@Accessors(chain = true)
 public abstract class BaseException extends RuntimeException
         implements ApiError {
 
@@ -41,25 +48,5 @@ public abstract class BaseException extends RuntimeException
 
     public BaseException(Throwable cause) {
         this(cause.getClass().getSimpleName(), cause.getMessage(), cause);
-    }
-
-    @Override
-    public String getCode() {
-        return code;
-    }
-
-    public BaseException setCode(String code) {
-        this.code = code;
-        return this;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    public BaseException setMessage(String message) {
-        this.message = message;
-        return this;
     }
 }

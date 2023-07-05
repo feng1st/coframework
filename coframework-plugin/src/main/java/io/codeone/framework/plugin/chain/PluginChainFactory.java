@@ -29,19 +29,23 @@ public class PluginChainFactory {
     private final Map<Set<Class<?>>, PluginChain> pluginClassMap = new ConcurrentHashMap<>();
 
     public PluginChain getChain(Method method) {
-        return chainMap.computeIfAbsent(method, k1 -> {
+        return chainMap.computeIfAbsent(method, k -> {
             List<Plugging> pluggingList = methodPluggers.getPluggingList(method);
-            List<Plugin> plugins = pluggingList.stream()
-                    .map(pluginFactory::getPlugins)
-                    .filter(Objects::nonNull)
-                    .flatMap(List::stream)
-                    .distinct()
-                    .collect(Collectors.toList());
-            Set<Class<?>> pluginClasses = plugins.stream()
-                    .map(Object::getClass)
-                    .collect(Collectors.toSet());
-            return pluginClassMap.computeIfAbsent(pluginClasses,
-                    k2 -> new PluginChain(plugins));
+            return getChain(pluggingList);
         });
+    }
+
+    private PluginChain getChain(List<Plugging> pluggingList) {
+        List<Plugin> plugins = pluggingList.stream()
+                .map(pluginFactory::getPlugins)
+                .filter(Objects::nonNull)
+                .flatMap(List::stream)
+                .distinct()
+                .collect(Collectors.toList());
+        Set<Class<?>> pluginClasses = plugins.stream()
+                .map(Object::getClass)
+                .collect(Collectors.toSet());
+        return pluginClassMap.computeIfAbsent(pluginClasses,
+                k -> new PluginChain(plugins));
     }
 }
