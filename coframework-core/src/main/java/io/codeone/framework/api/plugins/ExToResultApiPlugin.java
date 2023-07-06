@@ -1,8 +1,9 @@
 package io.codeone.framework.api.plugins;
 
 import io.codeone.framework.api.API;
-import io.codeone.framework.api.ApiPlugin;
+import io.codeone.framework.api.ApiConstants;
 import io.codeone.framework.plugin.Plug;
+import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
@@ -16,8 +17,8 @@ import io.codeone.framework.util.ErrorUtils;
  * @see API
  * @see Result
  */
-@Plug(value = Stages.EXCEPTION_HANDLING, group = ApiPlugin.GROUP)
-public class ExToResultApiPlugin implements ApiPlugin {
+@Plug(value = Stages.EXCEPTION_HANDLING, group = ApiConstants.PLUGIN_GROUP)
+public class ExToResultApiPlugin implements Plugin {
 
     @Override
     public Object afterThrowing(TargetMethod targetMethod, Object[] args, Throwable error)

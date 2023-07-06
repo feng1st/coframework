@@ -1,7 +1,7 @@
 package io.codeone.framework.api.plug.impl;
 
 import io.codeone.framework.api.API;
-import io.codeone.framework.api.ApiPlugin;
+import io.codeone.framework.api.ApiConstants;
 import io.codeone.framework.logging.aop.LoggingPlugin;
 import io.codeone.framework.plugin.plug.AnnotationMethodPlugger;
 import io.codeone.framework.plugin.plug.ClassPlugging;
@@ -22,7 +22,7 @@ public class ApiPlugger extends AnnotationMethodPlugger<API> {
 
     @Override
     protected List<Plugging> getPluggingList(Method method, API annotation) {
-        return Plugging.asList(GroupPlugging.of(ApiPlugin.GROUP),
+        return Plugging.asList(GroupPlugging.of(ApiConstants.PLUGIN_GROUP),
                 ClassPlugging.of(LoggingPlugin.class));
     }
 }
