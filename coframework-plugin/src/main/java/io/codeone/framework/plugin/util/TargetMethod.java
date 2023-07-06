@@ -17,9 +17,9 @@ import java.util.stream.Stream;
  * <p>
  * Please do not modify any of these properties since they are globally cached.
  */
-public class MethodWrap {
+public class TargetMethod {
 
-    private static final Map<Method, MethodWrap> CACHE = new ConcurrentHashMap<>();
+    private static final Map<Method, TargetMethod> CACHE = new ConcurrentHashMap<>();
 
     private final Method method;
 
@@ -35,11 +35,11 @@ public class MethodWrap {
 
     private Map<Class<? extends Annotation>, Annotation> classAnnotations;
 
-    public static MethodWrap of(Method method) {
-        return CACHE.computeIfAbsent(method, MethodWrap::new);
+    public static TargetMethod of(Method method) {
+        return CACHE.computeIfAbsent(method, TargetMethod::new);
     }
 
-    public MethodWrap(Method method) {
+    private TargetMethod(Method method) {
         this.method = method;
     }
 

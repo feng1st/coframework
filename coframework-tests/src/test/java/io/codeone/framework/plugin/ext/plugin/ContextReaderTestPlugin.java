@@ -4,7 +4,7 @@ import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.chain.PluginChainContext;
-import io.codeone.framework.plugin.util.MethodWrap;
+import io.codeone.framework.plugin.util.TargetMethod;
 
 import java.util.Objects;
 
@@ -12,12 +12,12 @@ import java.util.Objects;
 public class ContextReaderTestPlugin implements Plugin {
 
     @Override
-    public void before(MethodWrap methodWrap, Object[] args) {
+    public void before(TargetMethod targetMethod, Object[] args) {
         PluginChainContext.put("test", 1);
     }
 
     @Override
-    public Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error)
+    public Object after(TargetMethod targetMethod, Object[] args, Object result, Throwable error)
             throws Throwable {
         if (Objects.equals(PluginChainContext.get("test"), 1)) {
             throw new RuntimeException("Context is working");

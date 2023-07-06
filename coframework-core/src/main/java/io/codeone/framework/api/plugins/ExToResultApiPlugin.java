@@ -4,7 +4,7 @@ import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiPlugin;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.util.MethodWrap;
+import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
 
@@ -20,19 +20,19 @@ import io.codeone.framework.util.ErrorUtils;
 public class ExToResultApiPlugin implements ApiPlugin {
 
     @Override
-    public Object afterThrowing(MethodWrap methodWrap, Object[] args, Throwable error)
+    public Object afterThrowing(TargetMethod targetMethod, Object[] args, Throwable error)
             throws Throwable {
-        return exToResult(methodWrap, error);
+        return exToResult(targetMethod, error);
     }
 
-    private Result<?> exToResult(MethodWrap methodWrap, Throwable t)
+    private Result<?> exToResult(TargetMethod targetMethod, Throwable t)
             throws Throwable {
-        Class<?> returnType = methodWrap.getReturnType();
+        Class<?> returnType = targetMethod.getReturnType();
         if (!Result.class.isAssignableFrom(returnType)) {
             throw t;
         }
         try {
-            API api = methodWrap.getAnnotation(API.class);
+            API api = targetMethod.getAnnotation(API.class);
             return buildResult(t, returnType, api);
         } catch (Exception e) {
             throw t;

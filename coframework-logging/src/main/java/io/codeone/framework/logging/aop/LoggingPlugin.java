@@ -8,7 +8,7 @@ import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.Invokable;
-import io.codeone.framework.plugin.util.MethodWrap;
+import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class LoggingPlugin implements Plugin {
     private final Logger logger = LoggerFactory.getLogger("coframework.logging");
 
     @Override
-    public Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable)
+    public Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
             throws Throwable {
         long start = System.currentTimeMillis();
         Object result = null;
@@ -34,16 +34,16 @@ public class LoggingPlugin implements Plugin {
         } finally {
             long elapsed = System.currentTimeMillis() - start;
             try {
-                log(methodWrap, args, result, error, elapsed);
+                log(targetMethod, args, result, error, elapsed);
             } catch (Throwable t) {
-                logger.error("Error logging invocation of '" + methodWrap.getMethod() + "'", t);
+                logger.error("Error logging invocation of '" + targetMethod.getMethod() + "'", t);
             }
         }
     }
 
-    private void log(MethodWrap methodWrap, Object[] args, Object result, Throwable error, long elapsed) {
-        Method method = methodWrap.getMethod();
-        Logging logging = methodWrap.getAnnotation(Logging.class);
+    private void log(TargetMethod targetMethod, Object[] args, Object result, Throwable error, long elapsed) {
+        Method method = targetMethod.getMethod();
+        Logging logging = targetMethod.getAnnotation(Logging.class);
 
         LoggingSpelParser spelParser = new LoggingSpelParser(method, args, result, error);
 
@@ -65,7 +65,7 @@ public class LoggingPlugin implements Plugin {
                     log.addArg(logging.keyPairs()[i], spelParser.evalString(logging.keyPairs()[i + 1]));
                 }
             } else if (logging.value().logArgs()) {
-                log.args(methodWrap.getParameterNames(), args);
+                log.args(targetMethod.getParameterNames(), args);
             }
         }
 

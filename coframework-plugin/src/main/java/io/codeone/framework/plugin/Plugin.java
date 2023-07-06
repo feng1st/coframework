@@ -1,7 +1,7 @@
 package io.codeone.framework.plugin;
 
 import io.codeone.framework.plugin.util.Invokable;
-import io.codeone.framework.plugin.util.MethodWrap;
+import io.codeone.framework.plugin.util.TargetMethod;
 
 /**
  * A plugin is where you can intercept the invocation of a method.
@@ -25,17 +25,17 @@ public interface Plugin {
      * Intercepts the invocation of the target, by executing the 'before()' and
      * 'after()' methods around the target.
      */
-    default Object around(MethodWrap methodWrap, Object[] args, Invokable<?> invokable)
+    default Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
             throws Throwable {
         Object result = null;
         Throwable error = null;
         try {
-            before(methodWrap, args);
+            before(targetMethod, args);
             result = invokable.invoke();
         } catch (Throwable t) {
             error = t;
         }
-        return after(methodWrap, args, result, error);
+        return after(targetMethod, args, result, error);
     }
 
     /**
@@ -45,7 +45,7 @@ public interface Plugin {
      * exception to break the invocation of the target and other plugins in
      * this chain earlier.
      */
-    default void before(MethodWrap methodWrap, Object[] args) {
+    default void before(TargetMethod targetMethod, Object[] args) {
     }
 
     /**
@@ -55,12 +55,12 @@ public interface Plugin {
      * the target or other plugins in this chain. The return value or exception
      * thrown will be replaced if you return or throw a new one.
      */
-    default Object after(MethodWrap methodWrap, Object[] args, Object result, Throwable error)
+    default Object after(TargetMethod targetMethod, Object[] args, Object result, Throwable error)
             throws Throwable {
         if (error != null) {
-            return afterThrowing(methodWrap, args, error);
+            return afterThrowing(targetMethod, args, error);
         }
-        return afterReturning(methodWrap, args, result);
+        return afterReturning(targetMethod, args, result);
     }
 
     /**
@@ -70,7 +70,7 @@ public interface Plugin {
      * The thrown exception will be replaced if you return a new value or throw
      * a new exception here.
      */
-    default Object afterThrowing(MethodWrap methodWrap, Object[] args, Throwable error)
+    default Object afterThrowing(TargetMethod targetMethod, Object[] args, Throwable error)
             throws Throwable {
         throw error;
     }
@@ -81,7 +81,7 @@ public interface Plugin {
      * The returned value will be replaced if you return a new value or throw a
      * new exception here.
      */
-    default Object afterReturning(MethodWrap methodWrap, Object[] args, Object result)
+    default Object afterReturning(TargetMethod targetMethod, Object[] args, Object result)
             throws Throwable {
         return result;
     }
