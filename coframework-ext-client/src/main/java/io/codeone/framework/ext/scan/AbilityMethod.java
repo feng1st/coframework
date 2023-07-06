@@ -1,12 +1,11 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
+import io.codeone.framework.ext.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @Getter
 @EqualsAndHashCode
@@ -27,40 +26,16 @@ public class AbilityMethod {
     }
 
     public AbilityMethod(Ability.Method abilityMethod, Method method) {
-        String classCode = getClassKey(method);
+        String classCode = ScanModelUtils.getClassKey(method);
         this.classCode = classCode;
-        this.code = classCode + "." + getMethodKey(method);
-        this.name = getName(abilityMethod, method);
-        this.description = getDescription(abilityMethod);
-        this.order = getOrder(abilityMethod);
+        this.code = classCode + "." + ScanModelUtils.getMethodKey(method);
+        this.name = ScanModelUtils.getName(abilityMethod, method);
+        this.description = ScanModelUtils.getDescription(abilityMethod);
+        this.order = ScanModelUtils.getOrder(abilityMethod);
     }
 
     @Override
     public String toString() {
         return name;
-    }
-
-    private static String getClassKey(Method method) {
-        return method.getDeclaringClass().getName();
-    }
-
-    private static String getMethodKey(Method method) {
-        return method.getName()
-                + Arrays.stream(method.getParameterTypes())
-                .map(Class::getSimpleName)
-                .collect(Collectors.joining(",", "(", ")"));
-    }
-
-    private static String getName(Ability.Method abilityMethod, Method method) {
-        return (abilityMethod == null || abilityMethod.name().isEmpty())
-                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : abilityMethod.name();
-    }
-
-    private static String getDescription(Ability.Method abilityMethod) {
-        return abilityMethod == null ? "" : abilityMethod.description();
-    }
-
-    private static int getOrder(Ability.Method abilityMethod) {
-        return abilityMethod == null ? -1 : abilityMethod.order();
     }
 }

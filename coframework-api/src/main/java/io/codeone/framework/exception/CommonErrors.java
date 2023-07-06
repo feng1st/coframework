@@ -1,12 +1,13 @@
 package io.codeone.framework.exception;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * Provides some commonly used error enumerations.
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public enum CommonErrors implements ApiError {
     /**

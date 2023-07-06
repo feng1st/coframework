@@ -1,6 +1,7 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.ExtensionPoint;
+import io.codeone.framework.ext.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -19,21 +20,13 @@ public class ExtensionPointDef {
     }
 
     public ExtensionPointDef(ExtensionPoint extPt, Class<?> extensibleClass) {
-        this.code = getClassKey(extensibleClass);
-        this.name = getName(extPt, extensibleClass);
+        this.code = ScanModelUtils.getClassKey(extensibleClass);
+        this.name = ScanModelUtils.getName(extPt, extensibleClass);
         this.description = extPt.description();
     }
 
     @Override
     public String toString() {
         return name;
-    }
-
-    private static String getClassKey(Class<?> clazz) {
-        return clazz.getName();
-    }
-
-    private static String getName(ExtensionPoint extPt, Class<?> extensibleClass) {
-        return extPt.name().isEmpty() ? extensibleClass.getSimpleName() : extPt.name();
     }
 }

@@ -1,11 +1,12 @@
 package io.codeone.framework.plugin;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 /**
  * Stages of interceptions, decide the order of plugins in a chain.
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Stages {
     /**
      * Initializes or supplies any args that not supposed to be provided by the

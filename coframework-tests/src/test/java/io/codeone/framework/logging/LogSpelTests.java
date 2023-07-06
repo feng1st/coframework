@@ -20,7 +20,7 @@ public class LogSpelTests extends BaseLogTests {
 
         assertLog(TestLogSpelService.class.getName(), Level.INFO, null,
                 // arg.bizId, arg.id and arg.ret have values.
-                "||level=>INFO||method=>TestLogSpelService.keyPairs||success=>true||elapsed=>0||arg.city=>test||arg.id=>1||arg.ret=>1||result=>MyParam{id=1, address=Address{city='test'}}");
+                "||level=>INFO||method=>TestLogSpelService.keyPairs||success=>true||elapsed=>0||arg.city=>test||arg.id=>1||arg.ret=>1||result=>MyParam(id=1, address=MyParam.Address(city=test))");
     }
 
     @Test
@@ -29,7 +29,7 @@ public class LogSpelTests extends BaseLogTests {
 
         assertLog(TestLogSpelService.class.getName(), Level.INFO, null,
                 // '#arg0?.bizScenario?.bizId' doesn't throw when bizScenario is null.
-                "||level=>INFO||method=>TestLogSpelService.keyPairs||success=>true||elapsed=>0||arg.id=>1||arg.ret=>1||result=>MyParam{id=1, address=null}");
+                "||level=>INFO||method=>TestLogSpelService.keyPairs||success=>true||elapsed=>0||arg.id=>1||arg.ret=>1||result=>MyParam(id=1, address=null)");
     }
 
     @Test
@@ -38,7 +38,7 @@ public class LogSpelTests extends BaseLogTests {
 
         assertLog(TestLogSpelService.class.getName(), Level.INFO, null,
                 // success=>true by evaluation.
-                "||level=>INFO||method=>TestLogSpelService.code||success=>true||code=>1||message=>1||elapsed=>0||arg.param=>MyParam{id=1, address=null}||result=>MyParam{id=1, address=null}");
+                "||level=>INFO||method=>TestLogSpelService.code||success=>true||code=>1||message=>1||elapsed=>0||arg.param=>MyParam(id=1, address=null)||result=>MyParam(id=1, address=null)");
     }
 
     @Test
@@ -47,6 +47,6 @@ public class LogSpelTests extends BaseLogTests {
 
         assertLog(TestLogSpelService.class.getName(), Level.WARN, null,
                 // success=>false by evaluation.
-                "||level=>WARN||method=>TestLogSpelService.code||success=>false||code=>2||message=>2||elapsed=>0||arg.param=>MyParam{id=2, address=null}||result=>MyParam{id=2, address=null}");
+                "||level=>WARN||method=>TestLogSpelService.code||success=>false||code=>2||message=>2||elapsed=>0||arg.param=>MyParam(id=2, address=null)||result=>MyParam(id=2, address=null)");
     }
 }

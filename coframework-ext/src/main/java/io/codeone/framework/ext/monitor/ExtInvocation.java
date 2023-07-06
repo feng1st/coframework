@@ -3,13 +3,15 @@ package io.codeone.framework.ext.monitor;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.model.BizScenarioExtension;
 import io.codeone.framework.ext.model.ExtensionCoordinate;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Method;
 
-@Data(staticConstructor = "of")
+@RequiredArgsConstructor(staticName = "of")
 public class ExtInvocation {
 
+    @Getter
     private final Method method;
 
     private final ExtensionCoordinate coordinate;

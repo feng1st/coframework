@@ -1,9 +1,9 @@
 package io.codeone.framework.ext;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Iterator;
-import java.util.Objects;
 
 /**
  * BizScenario indicates the business identity of a service caller, and in
@@ -11,6 +11,7 @@ import java.util.Objects;
  * provider can process the requests respectively.
  */
 @Getter
+@EqualsAndHashCode
 public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     public static final String ANY = "*";
@@ -65,6 +66,9 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     }
 
     public void setBizId(String bizId) {
+        if (bizId == null || bizId.isEmpty()) {
+            bizId = ANY;
+        }
         if (!isValueValid(bizId)) {
             throw new IllegalArgumentException("Invalid bizId '" + bizId
                     + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'.");
@@ -73,6 +77,9 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     }
 
     public void setScenario(String scenario) {
+        if (scenario == null || scenario.isEmpty()) {
+            scenario = ANY;
+        }
         if (!isValueValid(scenario)) {
             throw new IllegalArgumentException("Invalid scenario '" + scenario
                     + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'.");
@@ -92,24 +99,6 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     @Override
     public Iterator<BizScenario> iterator() {
         return new Itr();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        BizScenario that = (BizScenario) o;
-        return Objects.equals(bizId, that.bizId)
-                && Objects.equals(scenario, that.scenario);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bizId, scenario);
     }
 
     @Override

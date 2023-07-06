@@ -1,6 +1,7 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
+import io.codeone.framework.ext.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -19,21 +20,13 @@ public class AbilityDef {
     }
 
     public AbilityDef(Ability ability, Class<?> extensibleClass) {
-        this.code = getClassKey(extensibleClass);
-        this.name = getName(ability, extensibleClass);
+        this.code = ScanModelUtils.getClassKey(extensibleClass);
+        this.name = ScanModelUtils.getName(ability, extensibleClass);
         this.description = ability.description();
     }
 
     @Override
     public String toString() {
         return name;
-    }
-
-    private static String getClassKey(Class<?> clazz) {
-        return clazz.getName();
-    }
-
-    private static String getName(Ability ability, Class<?> extensibleClass) {
-        return ability.name().isEmpty() ? extensibleClass.getSimpleName() : ability.name();
     }
 }

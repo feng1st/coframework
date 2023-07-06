@@ -6,14 +6,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(staticName = "of")
 public class GroupPlugging implements Plugging {
 
     private final String group;
-
-    public static GroupPlugging of(String group) {
-        return new GroupPlugging(group);
-    }
 
     @Override
     public List<Plugin> getPlugins(PluginFactory pluginFactory) {

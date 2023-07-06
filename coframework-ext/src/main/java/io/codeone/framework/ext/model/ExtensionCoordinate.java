@@ -1,9 +1,15 @@
 package io.codeone.framework.ext.model;
 
 import io.codeone.framework.ext.BizScenario;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data(staticConstructor = "of")
+@RequiredArgsConstructor(staticName = "of")
+@Getter
+@Setter
+@EqualsAndHashCode
 public class ExtensionCoordinate {
 
     private final Class<?> extensibleClass;

@@ -1,12 +1,11 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.ext.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @Getter
 @EqualsAndHashCode
@@ -27,32 +26,17 @@ public class ExtensionPointImpl {
     }
 
     public ExtensionPointImpl(Method method, Class<?> implementingClass, BizScenario bizScenario) {
-        String classCode = getClassKey(method);
-        String methodKey = getMethodKey(method);
+        String classCode = ScanModelUtils.getClassKey(method);
+        String methodKey = ScanModelUtils.getMethodKey(method);
         this.classCode = classCode;
         this.methodCode = classCode + "." + methodKey;
         this.code = classCode + "[" + bizScenario.getCode() + "]." + methodKey;
-        this.implementingClass = getClassKey(implementingClass);
+        this.implementingClass = ScanModelUtils.getClassKey(implementingClass);
         this.bizScenario = bizScenario.getCode();
     }
 
     @Override
     public String toString() {
         return code;
-    }
-
-    private static String getClassKey(Class<?> clazz) {
-        return clazz.getName();
-    }
-
-    private static String getClassKey(Method method) {
-        return getClassKey(method.getDeclaringClass());
-    }
-
-    private static String getMethodKey(Method method) {
-        return method.getName()
-                + Arrays.stream(method.getParameterTypes())
-                .map(Class::getSimpleName)
-                .collect(Collectors.joining(",", "(", ")"));
     }
 }
