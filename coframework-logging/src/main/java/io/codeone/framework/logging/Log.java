@@ -76,6 +76,11 @@ public class Log {
         return this;
     }
 
+    public Log method(String method) {
+        this.method = method;
+        return this;
+    }
+
     public Log args(String[] parameterNames, Object[] args) {
         if (this.args == null) {
             this.args = new LinkedHashMap<>();

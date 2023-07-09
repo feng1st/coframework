@@ -5,6 +5,7 @@ import io.codeone.framework.ext.RouteByContext;
 import io.codeone.framework.ext.repo.BizScenarioParamRepo;
 import io.codeone.framework.ext.scan.BaseExtScanner;
 import io.codeone.framework.ext.util.ExtUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -16,6 +17,9 @@ public class BizScenarioParamScanner extends BaseExtScanner {
 
     @Resource
     private BizScenarioParamRepo bizScenarioParamRepo;
+
+    @Value("${coframework.ext.route-by-context-by-default:false}")
+    private boolean routeByContextByDefault;
 
     @Override
     public void scanExtensibleMethod(Class<?> extensibleClass, Method method) {
@@ -63,6 +67,10 @@ public class BizScenarioParamScanner extends BaseExtScanner {
                 }
                 index = i;
             }
+        }
+
+        if (routeByContextByDefault) {
+            return -1;
         }
 
         if (index == null) {
