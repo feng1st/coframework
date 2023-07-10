@@ -23,9 +23,10 @@
         <module>coframework-ext-client</module>
         <module>coframework-api</module>
         <module>coframework-plugin</module>
-        <module>coframework-core</module>
         <module>coframework-ext</module>
         <module>coframework-logging</module>
+        <module>coframework-core</module>
+        <module>coframework-chain</module>
         <module>coframework-tests</module>
     </modules>
 
@@ -48,17 +49,22 @@
             </dependency>
             <dependency>
                 <groupId>io.codeone</groupId>
-                <artifactId>coframework-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.codeone</groupId>
                 <artifactId>coframework-ext</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.codeone</groupId>
                 <artifactId>coframework-logging</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.codeone</groupId>
+                <artifactId>coframework-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.codeone</groupId>
+                <artifactId>coframework-chain</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
