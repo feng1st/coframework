@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -30,17 +32,25 @@ public class ExtensionRegister {
     private void register(String beanName, Object ext) {
         Class<?> extClass = ClassUtils.getTargetClass(ext);
 
-        Extension extAnno = extClass.getAnnotation(Extension.class);
-        BizScenario bizScenario = BizScenario.of(extAnno.bizId(), extAnno.scenario());
-
         List<Class<?>> extensibleClasses = ExtUtils.getAllExtensibleClasses(extClass);
         if (extensibleClasses.isEmpty()) {
             throw new IllegalStateException(beanName + " did not extend anything");
         }
 
+        Extension extAnno = extClass.getAnnotation(Extension.class);
+        List<BizScenario> bizScenarios = new ArrayList<>();
+        if (extAnno.scenarios().length > 0) {
+            Arrays.stream(extAnno.scenarios())
+                    .forEach(o -> bizScenarios.add(BizScenario.of(extAnno.bizId(), o)));
+        } else {
+            bizScenarios.add(BizScenario.of(extAnno.bizId(), extAnno.scenario()));
+        }
+
         for (Class<?> extensibleClass : extensibleClasses) {
-            ExtensionCoordinate coordinate = ExtensionCoordinate.of(extensibleClass, bizScenario);
-            extensionRepo.putExtension(coordinate, ext);
+            for (BizScenario bizScenario : bizScenarios) {
+                ExtensionCoordinate coordinate = ExtensionCoordinate.of(extensibleClass, bizScenario);
+                extensionRepo.putExtension(coordinate, ext);
+            }
         }
     }
 }

@@ -42,6 +42,10 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         return of(joinValues(bizId), joinValues(scenario));
     }
 
+    public static BizScenario of(String[] bizId, String scenario) {
+        return of(joinValues(bizId), scenario);
+    }
+
     public static BizScenario of(String bizId, String scenario) {
         BizScenario bizScenario = new BizScenario();
         bizScenario.setBizId(bizId);

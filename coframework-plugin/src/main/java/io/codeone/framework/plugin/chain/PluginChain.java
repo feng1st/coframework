@@ -50,9 +50,9 @@ public class PluginChain {
                 -> Optional.ofNullable(o.getClass().getAnnotation(Plug.class))
                 .map(Plug::value)
                 .map(Stages::getOrder)
-                .orElse(Integer.MAX_VALUE)).thenComparing(o
+                .orElse(0)).thenComparing(o
                 -> Optional.ofNullable(o.getClass().getAnnotation(Order.class))
                 .map(Order::value)
-                .orElse(Integer.MAX_VALUE)));
+                .orElse(0)));
     }
 }

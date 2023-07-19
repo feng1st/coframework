@@ -10,7 +10,10 @@ import org.springframework.util.ReflectionUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class BaseExtScanner implements ExtScanner {
 
@@ -36,12 +39,14 @@ public abstract class BaseExtScanner implements ExtScanner {
                 if (implementingClass == null) {
                     continue;
                 }
-                BizScenario bizScenario = findBizScenario(implementingClass, extClass);
-                if (bizScenario == null) {
+                List<BizScenario> bizScenarios = findBizScenarios(implementingClass, extClass);
+                if (bizScenarios == null || bizScenarios.isEmpty()) {
                     continue;
                 }
 
-                scanExtension(extensibleClass, method, implementingClass, bizScenario);
+                for (BizScenario bizScenario : bizScenarios) {
+                    scanExtension(extensibleClass, method, implementingClass, bizScenario);
+                }
             }
         }
     }
@@ -54,7 +59,7 @@ public abstract class BaseExtScanner implements ExtScanner {
         return extMethod.getDeclaringClass();
     }
 
-    private BizScenario findBizScenario(Class<?> implementingClass, Class<?> extClass) {
+    private List<BizScenario> findBizScenarios(Class<?> implementingClass, Class<?> extClass) {
         Extension workingExtension = null;
         for (Class<?> clazz = extClass; clazz != null; clazz = clazz.getSuperclass()) {
             Extension extension = clazz.getAnnotation(Extension.class);
@@ -68,6 +73,13 @@ public abstract class BaseExtScanner implements ExtScanner {
         if (workingExtension == null) {
             return null;
         }
-        return BizScenario.of(workingExtension.bizId(), workingExtension.scenario());
+        if (workingExtension.scenarios().length > 0) {
+            String[] bizId = workingExtension.bizId();
+            return Arrays.stream(workingExtension.scenarios())
+                    .map(o -> BizScenario.of(bizId, o))
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.singletonList(BizScenario.of(workingExtension.bizId(), workingExtension.scenario()));
+        }
     }
 }
