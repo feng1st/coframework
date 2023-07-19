@@ -22,6 +22,8 @@ public class Log {
 
     private Level level;
 
+    private String scene;
+
     private Class<?> clazz;
 
     private String method;
@@ -63,6 +65,11 @@ public class Log {
 
     public Log level(Level level) {
         this.level = level;
+        return this;
+    }
+
+    public Log scene(String scene) {
+        this.scene = scene;
         return this;
     }
 
@@ -195,6 +202,7 @@ public class Log {
     private String buildMsg() {
         StringBuilder builder = new StringBuilder();
         append(builder, "level", level);
+        append(builder, "scene", scene);
         append(builder, "method", method);
         append(builder, "success", success);
         append(builder, "code", code);
