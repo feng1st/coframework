@@ -18,10 +18,6 @@ public class Chain<T> {
     private final List<Node> nodes;
 
     public T execute(Context<T> context) {
-        if (context == null) {
-            context = Context.of(null);
-        }
-
         Log chainLog = Log.newBuilder()
                 .logger(log)
                 .scene(spec.getName());
@@ -29,28 +25,35 @@ public class Chain<T> {
         chainLog.success().log();
 
         for (Node node : nodes) {
-            Log nodeLog = Log.newBuilder()
-                    .logger(log)
-                    .scene(spec.getName())
-                    .method(node.getClass().getSimpleName());
-            long start = System.currentTimeMillis();
-            try {
-                if (node.execute(context, nodeLog::addArg)) {
-                    nodeLog.success(true);
-                    break;
-                }
-                nodeLog.success(false);
-            } catch (Throwable t) {
-                nodeLog.error(t);
-                throw t;
-            } finally {
-                nodeLog.elapsed(System.currentTimeMillis() - start).log();
+            if (executeNode(context, node)) {
+                break;
             }
         }
         return context.getTarget();
     }
 
     public T execute() {
-        return execute(null);
+        return execute(Context.of(null));
+    }
+
+    private boolean executeNode(Context<T> context, Node node) {
+        Log nodeLog = Log.newBuilder()
+                .logger(log)
+                .scene(spec.getName())
+                .method(node.getClass().getSimpleName());
+        long start = System.currentTimeMillis();
+        try {
+            if (node.execute(context, nodeLog::addArg)) {
+                nodeLog.success(true);
+                return true;
+            }
+            nodeLog.success(false);
+            return false;
+        } catch (Throwable t) {
+            nodeLog.error(t);
+            throw t;
+        } finally {
+            nodeLog.elapsed(System.currentTimeMillis() - start).log();
+        }
     }
 }

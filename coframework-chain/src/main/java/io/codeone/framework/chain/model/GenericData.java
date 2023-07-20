@@ -2,14 +2,14 @@ package io.codeone.framework.chain.model;
 
 import io.codeone.framework.chain.constants.Key;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class GenericData {
 
-    private final Map<String, Object> data = new LinkedHashMap<>();
+    private final Map<String, Object> data = new ConcurrentHashMap<>();
 
     public boolean hasData(Key key) {
         return data.containsKey(key.getKey());

@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -16,11 +16,11 @@ public class Context<T> {
 
     @Getter
     @Setter
-    private T target;
+    private volatile T target;
 
-    private final Map<Key, Object> argumentsByKey = new LinkedHashMap<>();
+    private final Map<Key, Object> argumentsByKey = new ConcurrentHashMap<>();
 
-    private final Map<Class<?>, Object> argumentsByClass = new LinkedHashMap<>();
+    private final Map<Class<?>, Object> argumentsByClass = new ConcurrentHashMap<>();
 
     public boolean hasArgument(Key key) {
         return argumentsByKey.containsKey(key);
