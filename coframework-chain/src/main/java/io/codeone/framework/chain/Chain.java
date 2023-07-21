@@ -18,12 +18,7 @@ public class Chain<T> {
     private final List<Node> nodes;
 
     public T execute(Context<T> context) {
-        Log chainLog = Log.newBuilder()
-                .logger(log)
-                .scene(spec.getName());
-        context.log(chainLog::addArg);
-        chainLog.success().log();
-
+        logChain(context);
         for (Node node : nodes) {
             if (executeNode(context, node)) {
                 break;
@@ -34,6 +29,14 @@ public class Chain<T> {
 
     public T execute() {
         return execute(Context.of(null));
+    }
+
+    private void logChain(Context<T> context) {
+        Log chainLog = Log.newBuilder()
+                .logger(log)
+                .scene(spec.getName());
+        context.log(chainLog::addArg);
+        chainLog.success().log();
     }
 
     private boolean executeNode(Context<T> context, Node node) {

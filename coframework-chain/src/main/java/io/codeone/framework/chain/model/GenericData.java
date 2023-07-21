@@ -1,12 +1,16 @@
 package io.codeone.framework.chain.model;
 
 import io.codeone.framework.chain.constants.Key;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@NoArgsConstructor(staticName = "of")
+@ToString
 public class GenericData {
 
     private final Map<String, Object> data = new ConcurrentHashMap<>();
