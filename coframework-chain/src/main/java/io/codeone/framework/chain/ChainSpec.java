@@ -1,10 +1,11 @@
-package io.codeone.framework.chain.spec;
+package io.codeone.framework.chain;
 
+import io.codeone.framework.chain.constants.ChainName;
+import io.codeone.framework.chain.dag.Dag;
+import io.codeone.framework.chain.dag.Edge;
+import io.codeone.framework.chain.dag.Path;
 import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.node.NodeFactory;
-import io.codeone.framework.chain.util.Dag;
-import io.codeone.framework.chain.util.Edge;
-import io.codeone.framework.chain.util.Path;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

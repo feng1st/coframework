@@ -11,61 +11,61 @@ import java.util.function.Supplier;
 
 @NoArgsConstructor(staticName = "of")
 @ToString
-public class GenericData {
+public class Data {
 
     private final Map<String, Object> data = new ConcurrentHashMap<>();
 
-    public boolean hasData(Key key) {
+    public boolean has(Key key) {
         return data.containsKey(key.getKey());
     }
 
-    public <P> P getData(Key key) {
+    public <P> P get(Key key) {
         return key.<P>getClazz().cast(data.get(key.getKey()));
     }
 
-    public <P> P getDataOrDefault(Key key, P defaultValue) {
+    public <P> P getOrDefault(Key key, P defaultValue) {
         return key.<P>getClazz().cast(data.getOrDefault(key.getKey(), defaultValue));
     }
 
-    public GenericData setData(Key key, Object value) {
+    public Data set(Key key, Object value) {
         data.put(key.getKey(), key.getClazz().cast(value));
         return this;
     }
 
-    public GenericData setDataIfAbsent(Key key, Object value) {
+    public Data setIfAbsent(Key key, Object value) {
         data.putIfAbsent(key.getKey(), key.getClazz().cast(value));
         return this;
     }
 
-    public GenericData setDataIfAbsent(Key key, Supplier<?> valueSupplier) {
+    public Data setIfAbsent(Key key, Supplier<?> valueSupplier) {
         data.computeIfAbsent(key.getKey(), k -> key.getClazz().cast(valueSupplier.get()));
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    public <P> GenericData updateData(Key key, Function<P, P> valueUpdater) {
+    public <P> Data update(Key key, Function<P, P> valueUpdater) {
         data.computeIfPresent(key.getKey(), (k, v) -> key.getClazz().cast(valueUpdater.apply((P) v)));
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    public <P> GenericData setOrUpdateData(Key key, Function<P, P> valueSetter) {
+    public <P> Data setOrUpdate(Key key, Function<P, P> valueSetter) {
         data.compute(key.getKey(), (k, v) -> key.getClazz().cast(valueSetter.apply((P) v)));
         return this;
     }
 
-    public GenericData resetData(Key key) {
+    public Data reset(Key key) {
         data.remove(key.getKey());
         return this;
     }
 
-    public GenericData copyFromParameter(Context<?> context, Key key) {
-        setOrUpdateData(key, v -> context.getArgument(key));
+    public Data copyFromParameter(Context<?> context, Key key) {
+        setOrUpdate(key, v -> context.getArgument(key));
         return this;
     }
 
-    public GenericData copyToParameter(Context<?> context, Key key) {
-        context.setOrUpdateArgument(key, v -> getData(key));
+    public Data copyToParameter(Context<?> context, Key key) {
+        context.setOrUpdateArgument(key, v -> get(key));
         return this;
     }
 }

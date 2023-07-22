@@ -1,4 +1,4 @@
-package io.codeone.framework.chain.util;
+package io.codeone.framework.chain.dag;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

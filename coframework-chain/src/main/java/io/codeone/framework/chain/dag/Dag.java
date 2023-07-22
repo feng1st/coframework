@@ -1,17 +1,19 @@
-package io.codeone.framework.chain.util;
+package io.codeone.framework.chain.dag;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.*;
 
+@EqualsAndHashCode
 public class Dag<T> {
 
-    private final Map<T, Set<T>> nextMap = new IdentityHashMap<>();
+    private final Map<T, Set<T>> nextMap = new HashMap<>();
 
-    private final Map<T, Set<T>> prevMap = new IdentityHashMap<>();
+    private final Map<T, Set<T>> prevMap = new HashMap<>();
 
     @Getter
-    private final Set<T> startingVertices = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<T> startingVertices = new HashSet<>();
 
     /**
      * Constructs an empty dag.
@@ -35,9 +37,9 @@ public class Dag<T> {
         }
         if (edges != null && !edges.isEmpty()) {
             for (Edge<T> edge : edges) {
-                nextMap.computeIfAbsent(edge.getFrom(), k -> Collections.newSetFromMap(new IdentityHashMap<>()))
+                nextMap.computeIfAbsent(edge.getFrom(), k -> new HashSet<>())
                         .add(edge.getTo());
-                prevMap.computeIfAbsent(edge.getTo(), k -> Collections.newSetFromMap(new IdentityHashMap<>()))
+                prevMap.computeIfAbsent(edge.getTo(), k -> new HashSet<>())
                         .add(edge.getFrom());
             }
             startingVertices.addAll(nextMap.keySet());

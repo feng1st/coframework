@@ -7,13 +7,15 @@ import io.codeone.framework.chain.model.Data;
 import io.codeone.framework.chain.node.TargetProcessor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
-public class TestChainCounter extends TargetProcessor<Data> {
+public class TestChainAsyncMapper extends TargetProcessor<Data> {
 
     @Override
     protected boolean process(Data target, Context<?> context, Logger logger) {
-        target.update(TestKey.COUNT, count -> (int) count + 1);
-        logger.log(TestKey.COUNT, target.get(TestKey.COUNT));
+        target.set(TestKey.ASYNC_SUM, 0);
+        target.set(TestKey.ASYNC_LIST, new ArrayList<>());
         return false;
     }
 }

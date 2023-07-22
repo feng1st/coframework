@@ -1,19 +1,22 @@
 package io.codeone.framework.chain.state;
 
+import io.codeone.framework.chain.dag.Dag;
 import io.codeone.framework.chain.node.Node;
-import io.codeone.framework.chain.util.Dag;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class AsyncChainState implements ChainState {
 
     private final Dag<Node> nodeDag;
 
-    private final Set<Node> queued = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<Node> queued = new HashSet<>();
 
-    private final Set<Node> working = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<Node> working = new HashSet<>();
 
-    private final Set<Node> finished = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<Node> finished = new HashSet<>();
 
     private boolean broken = false;
 

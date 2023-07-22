@@ -1,10 +1,10 @@
 package io.codeone.framework.chain.extension;
 
+import io.codeone.framework.chain.ChainSpec;
 import io.codeone.framework.chain.constants.Key;
+import io.codeone.framework.chain.dag.Path;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.node.Node;
-import io.codeone.framework.chain.spec.ChainSpec;
-import io.codeone.framework.chain.util.Path;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,17 +13,17 @@ import java.util.Map;
 
 public class Interference {
 
-    private List<Path<Class<? extends Node>>> alterations;
+    private List<Path<Class<? extends Node>>> paths;
 
     private Map<Key, Object> argumentsByKey;
 
     private Map<Class<?>, Object> argumentsByClass;
 
-    public Interference addAlteration(Path<Class<? extends Node>> alteration) {
-        if (alterations == null) {
-            alterations = new ArrayList<>();
+    public Interference addPath(Path<Class<? extends Node>> path) {
+        if (paths == null) {
+            paths = new ArrayList<>();
         }
-        alterations.add(alteration);
+        paths.add(path);
         return this;
     }
 
@@ -44,10 +44,10 @@ public class Interference {
     }
 
     public ChainSpec interfere(ChainSpec chainSpec) {
-        if (alterations == null || alterations.isEmpty()) {
+        if (paths == null || paths.isEmpty()) {
             return chainSpec;
         }
-        return ChainSpec.of(chainSpec, alterations);
+        return ChainSpec.of(chainSpec, paths);
     }
 
     public <T> Context<T> interfere(Context<T> context) {

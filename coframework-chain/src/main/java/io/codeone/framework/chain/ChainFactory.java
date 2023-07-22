@@ -1,9 +1,8 @@
 package io.codeone.framework.chain;
 
+import io.codeone.framework.chain.dag.Dag;
 import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.node.NodeFactory;
-import io.codeone.framework.chain.spec.ChainSpec;
-import io.codeone.framework.chain.util.Dag;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

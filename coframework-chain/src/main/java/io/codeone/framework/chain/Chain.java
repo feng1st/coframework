@@ -1,12 +1,11 @@
 package io.codeone.framework.chain;
 
+import io.codeone.framework.chain.dag.Dag;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.node.Node;
-import io.codeone.framework.chain.spec.ChainSpec;
 import io.codeone.framework.chain.state.AsyncChainState;
 import io.codeone.framework.chain.state.ChainState;
 import io.codeone.framework.chain.state.SyncChainState;
-import io.codeone.framework.chain.util.Dag;
 import io.codeone.framework.logging.Log;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -55,7 +54,14 @@ public class Chain<T> {
         while (state.isRunning()) {
             List<Node> nodes = state.pullNodes();
             for (Node node : nodes) {
-                executor.execute(() -> state.finishNode(node, executeNode(context, node)));
+                executor.execute(() -> {
+                    try {
+                        state.finishNode(node, executeNode(context, node));
+                    } catch (Throwable t) {
+                        state.finishNode(node, true);
+                        throw t;
+                    }
+                });
             }
             state.waitNodes();
         }
