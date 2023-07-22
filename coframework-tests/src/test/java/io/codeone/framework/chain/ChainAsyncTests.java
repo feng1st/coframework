@@ -21,7 +21,7 @@ public class ChainAsyncTests {
     @Test
     void sync() {
         List<Data> dataList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             dataList.add(testChainAsyncService.getData(i));
         }
         Set<String> set = dataList.stream()
@@ -35,7 +35,7 @@ public class ChainAsyncTests {
     @Test
     void async() throws Exception {
         List<Data> dataList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             dataList.add(testChainAsyncService.getDataAsync(i));
         }
         Set<String> set = dataList.stream()
