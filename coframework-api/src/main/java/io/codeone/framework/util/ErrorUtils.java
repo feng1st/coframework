@@ -17,7 +17,7 @@ public class ErrorUtils {
      * Returns the top-most user custom exception, or IllegalArgumentException,
      * as a reasonable cause. Or returns the root cause of the throwable.
      */
-    public static Throwable getCause(Throwable t) {
+    public Throwable getCause(Throwable t) {
         Set<Throwable> set = new HashSet<>();
         set.add(t);
         while (!(t instanceof ApiError
@@ -40,7 +40,7 @@ public class ErrorUtils {
      * IllegalArgumentException, otherwise returns the simple name of its
      * class.
      */
-    public static String getCode(Throwable cause) {
+    public String getCode(Throwable cause) {
         if (cause instanceof ApiError) {
             return ((ApiError) cause).getCode();
         }

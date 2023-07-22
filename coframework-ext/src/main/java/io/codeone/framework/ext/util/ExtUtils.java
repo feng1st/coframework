@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class ExtUtils {
 
-    public static List<Class<?>> getAllExtensibleClasses(Class<?> extClass) {
+    public List<Class<?>> getAllExtensibleClasses(Class<?> extClass) {
         return Arrays.stream(ClassUtils.getAllInterfacesForClass(extClass))
                 .filter(o -> AnnotationUtils.findAnnotation(o, Extensible.class) != null)
                 .collect(Collectors.toList());
     }
 
-    public static boolean isBizScenarioParam(Class<?> paramType) {
+    public boolean isBizScenarioParam(Class<?> paramType) {
         return BizScenarioParam.class.isAssignableFrom(paramType);
     }
 }

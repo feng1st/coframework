@@ -6,7 +6,7 @@ import org.springframework.aop.support.AopUtils;
 @UtilityClass
 public class ClassUtils {
 
-    public static Class<?> forName(String className) {
+    public Class<?> forName(String className) {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
@@ -14,7 +14,7 @@ public class ClassUtils {
         }
     }
 
-    public static Class<?> getTargetClass(Object obj) {
+    public Class<?> getTargetClass(Object obj) {
         if (AopUtils.isAopProxy(obj)) {
             return AopUtils.getTargetClass(obj);
         }

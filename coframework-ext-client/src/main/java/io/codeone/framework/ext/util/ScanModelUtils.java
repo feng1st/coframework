@@ -11,52 +11,52 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class ScanModelUtils {
 
-    public static String getClassKey(Class<?> clazz) {
+    public String getClassKey(Class<?> clazz) {
         return clazz.getName();
     }
 
-    public static String getClassKey(Method method) {
+    public String getClassKey(Method method) {
         return method.getDeclaringClass().getName();
     }
 
-    public static String getMethodKey(Method method) {
+    public String getMethodKey(Method method) {
         return method.getName()
                 + Arrays.stream(method.getParameterTypes())
                 .map(Class::getSimpleName)
                 .collect(Collectors.joining(",", "(", ")"));
     }
 
-    public static String getName(Ability ability, Class<?> extensibleClass) {
+    public String getName(Ability ability, Class<?> extensibleClass) {
         return ability.name().isEmpty() ? extensibleClass.getSimpleName() : ability.name();
     }
 
-    public static String getName(Ability.Method abilityMethod, Method method) {
+    public String getName(Ability.Method abilityMethod, Method method) {
         return (abilityMethod == null || abilityMethod.name().isEmpty())
                 ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : abilityMethod.name();
     }
 
-    public static String getDescription(Ability.Method abilityMethod) {
+    public String getDescription(Ability.Method abilityMethod) {
         return abilityMethod == null ? "" : abilityMethod.description();
     }
 
-    public static int getOrder(Ability.Method abilityMethod) {
+    public int getOrder(Ability.Method abilityMethod) {
         return abilityMethod == null ? -1 : abilityMethod.order();
     }
 
-    public static String getName(ExtensionPoint extPt, Class<?> extensibleClass) {
+    public String getName(ExtensionPoint extPt, Class<?> extensibleClass) {
         return extPt.name().isEmpty() ? extensibleClass.getSimpleName() : extPt.name();
     }
 
-    public static String getName(ExtensionPoint.Method extPtMethod, Method method) {
+    public String getName(ExtensionPoint.Method extPtMethod, Method method) {
         return (extPtMethod == null || extPtMethod.name().isEmpty())
                 ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : extPtMethod.name();
     }
 
-    public static String getDescription(ExtensionPoint.Method extPtMethod) {
+    public String getDescription(ExtensionPoint.Method extPtMethod) {
         return extPtMethod == null ? "" : extPtMethod.description();
     }
 
-    public static int getOrder(ExtensionPoint.Method extPtMethod) {
+    public int getOrder(ExtensionPoint.Method extPtMethod) {
         return extPtMethod == null ? -1 : extPtMethod.order();
     }
 }

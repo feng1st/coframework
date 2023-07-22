@@ -9,15 +9,15 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ExtensionUtils {
 
-    public static BizScenario getBizScenario() {
+    public BizScenario getBizScenario() {
         return BizScenarioContext.getBizScenario();
     }
 
-    public static <T> T invoke(BizScenario bizScenario, Invokable<T> invokable) throws Throwable {
+    public <T> T invoke(BizScenario bizScenario, Invokable<T> invokable) throws Throwable {
         return BizScenarioContext.invoke(bizScenario, invokable);
     }
 
-    public static void invoke(BizScenario bizScenario, VoidInvokable invokable) throws Throwable {
+    public void invoke(BizScenario bizScenario, VoidInvokable invokable) throws Throwable {
         BizScenarioContext.invoke(bizScenario, () -> {
             invokable.invoke();
             return null;
