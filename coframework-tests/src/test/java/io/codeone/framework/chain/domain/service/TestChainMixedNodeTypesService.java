@@ -38,9 +38,8 @@ public class TestChainMixedNodeTypesService {
     public Data getData(long userId) {
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
 
-        Context<Data> context = Context.of(Data.of());
-
-        context.setArgument(TestKey.USER_ID, userId);
+        Context<Data> context = Context.of(Data.of())
+                .setArgument(TestKey.USER_ID, userId);
 
         return chain.execute(context);
     }

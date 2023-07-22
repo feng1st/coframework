@@ -41,13 +41,9 @@ public class TestChainDynamicChainService {
     }
 
     private Data getData(Interference interference) {
-        ChainSpec chainSpec = interference.interfere(CHAIN_SPEC);
+        Chain<Data> chain = chainFactory.getChain(interference.interfere(CHAIN_SPEC));
 
-        Chain<Data> chain = chainFactory.getChain(chainSpec);
-
-        Context<Data> context = Context.of(Data.of());
-
-        interference.interfere(context);
+        Context<Data> context = interference.interfere(Context.of(Data.of()));
 
         return chain.execute(context);
     }
@@ -58,7 +54,7 @@ public class TestChainDynamicChainService {
      */
     private void applyExt1(Interference interference) {
         interference
-                // Adds a node,
+                // Adds node TestChainExt1Render prior to TestChainCountRender,
                 .addPath(Path.of(TestChainExt1Render.class, TestChainCountRender.class))
                 // and its args.
                 .addArgument(TestKey.EXT1_PARAM, "foo");
@@ -66,7 +62,7 @@ public class TestChainDynamicChainService {
 
     private void applyExt2(Interference interference) {
         interference
-                // Adds a node,
+                // Adds node TestChainExt2Render prior to TestChainCountRender,
                 .addPath(Path.of(TestChainExt2Render.class, TestChainCountRender.class))
                 // and its args.
                 .addArgument(TestKey.EXT2_PARAM, "bar");

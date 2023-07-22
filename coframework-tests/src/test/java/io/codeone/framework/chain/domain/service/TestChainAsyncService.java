@@ -24,6 +24,9 @@ public class TestChainAsyncService {
     private final Executor executor = Executors.newCachedThreadPool();
 
     private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestNames.ASYNC,
+            // Two paths, with the same starting and end:
+            // Mapper -> ParallelA -> Reducer
+            // Mapper -> ParallelB -> Reducer
             Path.of(TestChainAsyncMapper.class,
                     TestChainAsyncParallelAProcessor.class,
                     TestChainAsyncReducer.class),
@@ -36,15 +39,19 @@ public class TestChainAsyncService {
 
     public Data getData(int conf) {
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
+
         Context<Data> context = Context.of(Data.of())
                 .setArgument(TestKey.ASYNC_CONF, conf);
+
         return chain.execute(context);
     }
 
     public Data getDataAsync(int conf) throws InterruptedException {
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
+
         Context<Data> context = Context.of(Data.of())
                 .setArgument(TestKey.ASYNC_CONF, conf);
+
         return chain.executeAsync(context, executor);
     }
 }

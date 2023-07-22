@@ -27,6 +27,7 @@ public class TestChainDerivedChainService {
      * {@link ExtensionPoint}.
      */
     private static final ChainSpec EXT1_FILTER_CHAIN_SPEC = ChainSpec.of(DEFAULT_FILTER_CHAIN_SPEC,
+            // Added an isolated vertex.
             Path.of(TestChainNon3NFilter.class));
 
     @Resource
