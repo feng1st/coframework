@@ -31,6 +31,20 @@ public class Dag<T> {
     /**
      * Constructs a dag from edges.
      */
+    public Dag(List<Edge<T>> edges) {
+        for (Edge<T> edge : edges) {
+            nextMap.computeIfAbsent(edge.getFrom(), k -> new HashSet<>())
+                    .add(edge.getTo());
+            prevMap.computeIfAbsent(edge.getTo(), k -> new HashSet<>())
+                    .add(edge.getFrom());
+        }
+        startingVertices.addAll(nextMap.keySet());
+        startingVertices.removeAll(prevMap.keySet());
+    }
+
+    /**
+     * Constructs a dag from edges and isolated vertices.
+     */
     public Dag(List<Edge<T>> edges, List<T> isolatedVertices) {
         if (isolatedVertices != null && !isolatedVertices.isEmpty()) {
             startingVertices.addAll(isolatedVertices);
