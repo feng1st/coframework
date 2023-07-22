@@ -7,7 +7,7 @@ import io.codeone.framework.chain.domain.render.TestChainExt2Render;
 import io.codeone.framework.chain.domain.service.TestChainDynamicChainService;
 import io.codeone.framework.chain.extension.Interference;
 import io.codeone.framework.chain.model.GenericData;
-import io.codeone.framework.chain.spec.AddBeforeAlteration;
+import io.codeone.framework.chain.util.Path;
 import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.ExtensionPoint;
 import org.junit.jupiter.api.Assertions;
@@ -50,8 +50,7 @@ public class ChainDynamicChainTests {
     private void applyExt1(Interference interference) {
         interference
                 // Adds a node,
-                .addAlteration(AddBeforeAlteration.of(TestChainCountRender.class,
-                        TestChainExt1Render.class))
+                .addAlteration(Path.of(TestChainExt1Render.class, TestChainCountRender.class))
                 // and its args.
                 .addArgument(TestKey.EXT1_PARAM, "foo");
     }
@@ -59,8 +58,7 @@ public class ChainDynamicChainTests {
     private void applyExt2(Interference interference) {
         interference
                 // Adds a node,
-                .addAlteration(AddBeforeAlteration.of(TestChainCountRender.class,
-                        TestChainExt2Render.class))
+                .addAlteration(Path.of(TestChainExt2Render.class, TestChainCountRender.class))
                 // and its args.
                 .addArgument(TestKey.EXT2_PARAM, "bar");
     }

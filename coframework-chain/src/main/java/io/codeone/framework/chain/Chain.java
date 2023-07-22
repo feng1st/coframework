@@ -1,12 +1,15 @@
 package io.codeone.framework.chain;
 
-import io.codeone.framework.chain.dag.ChainState;
-import io.codeone.framework.chain.dag.Dag;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.spec.ChainSpec;
+import io.codeone.framework.chain.state.AsyncChainState;
+import io.codeone.framework.chain.state.ChainState;
+import io.codeone.framework.chain.state.SyncChainState;
+import io.codeone.framework.chain.util.Dag;
 import io.codeone.framework.logging.Log;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -18,28 +21,36 @@ public class Chain<T> {
 
     private final ChainSpec spec;
 
-    private final List<Node> nodes;
-
-    private Dag<Node> nodeDag;
+    private final Dag<Node> nodeDag;
 
     public T execute() {
         return execute(Context.of(null));
     }
 
+    @SneakyThrows(InterruptedException.class)
     public T execute(Context<T> context) {
         logChain(context);
-        for (Node node : nodes) {
-            if (executeNode(context, node)) {
-                break;
+
+        ChainState state = SyncChainState.of(nodeDag);
+
+        loop:
+        while (state.isRunning()) {
+            List<Node> nodes = state.pullNodes();
+            for (Node node : nodes) {
+                if (executeNode(context, node)) {
+                    break loop;
+                }
+                state.finishNode(node, false);
             }
         }
+
         return context.getTarget();
     }
 
     public T executeAsync(Context<T> context, Executor executor) throws InterruptedException {
         logChain(context);
 
-        ChainState state = ChainState.of(nodeDag);
+        ChainState state = AsyncChainState.of(nodeDag);
 
         while (state.isRunning()) {
             List<Node> nodes = state.pullNodes();
@@ -55,7 +66,7 @@ public class Chain<T> {
     private void logChain(Context<T> context) {
         Log chainLog = Log.newBuilder()
                 .logger(log)
-                .scene(spec.getName());
+                .scene(spec.getName().toString());
         context.log(chainLog::addArg);
         chainLog.success().log();
     }
@@ -63,7 +74,7 @@ public class Chain<T> {
     private boolean executeNode(Context<T> context, Node node) {
         Log nodeLog = Log.newBuilder()
                 .logger(log)
-                .scene(spec.getName())
+                .scene(spec.getName().toString())
                 .method(node.getClass().getSimpleName());
         long start = System.currentTimeMillis();
         try {

@@ -3,10 +3,10 @@ package io.codeone.framework.chain;
 import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.node.NodeFactory;
 import io.codeone.framework.chain.spec.ChainSpec;
+import io.codeone.framework.chain.util.Dag;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,8 +21,8 @@ public class ChainFactory {
     @SuppressWarnings("unchecked")
     public <T> Chain<T> getChain(ChainSpec chainSpec) {
         return (Chain<T>) cache.computeIfAbsent(chainSpec, k -> {
-            List<Node> nodes = nodeFactory.getNodes(chainSpec.getNodeClasses());
-            return Chain.of(chainSpec, nodes);
+            Dag<Node> nodeDag = chainSpec.getNodeDag(nodeFactory);
+            return Chain.of(chainSpec, nodeDag);
         });
     }
 }

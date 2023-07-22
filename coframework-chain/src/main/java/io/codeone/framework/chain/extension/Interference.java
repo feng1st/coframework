@@ -2,9 +2,9 @@ package io.codeone.framework.chain.extension;
 
 import io.codeone.framework.chain.constants.Key;
 import io.codeone.framework.chain.model.Context;
-import io.codeone.framework.chain.spec.Alteration;
+import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.spec.ChainSpec;
-import io.codeone.framework.chain.spec.DerivedChainSpec;
+import io.codeone.framework.chain.util.Path;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,13 +13,13 @@ import java.util.Map;
 
 public class Interference {
 
-    private List<Alteration> alterations;
+    private List<Path<Class<? extends Node>>> alterations;
 
     private Map<Key, Object> argumentsByKey;
 
     private Map<Class<?>, Object> argumentsByClass;
 
-    public Interference addAlteration(Alteration alteration) {
+    public Interference addAlteration(Path<Class<? extends Node>> alteration) {
         if (alterations == null) {
             alterations = new ArrayList<>();
         }
@@ -47,7 +47,7 @@ public class Interference {
         if (alterations == null || alterations.isEmpty()) {
             return chainSpec;
         }
-        return DerivedChainSpec.of(chainSpec, alterations);
+        return ChainSpec.of(chainSpec, alterations);
     }
 
     public <T> Context<T> interfere(Context<T> context) {

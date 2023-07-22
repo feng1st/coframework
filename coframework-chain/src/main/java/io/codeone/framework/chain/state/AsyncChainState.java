@@ -1,10 +1,11 @@
-package io.codeone.framework.chain.dag;
+package io.codeone.framework.chain.state;
 
 import io.codeone.framework.chain.node.Node;
+import io.codeone.framework.chain.util.Dag;
 
 import java.util.*;
 
-public class ChainState {
+public class AsyncChainState implements ChainState {
 
     private final Dag<Node> nodeDag;
 
@@ -16,11 +17,11 @@ public class ChainState {
 
     private boolean broken = false;
 
-    public static ChainState of(Dag<Node> nodeDag) {
-        return new ChainState(nodeDag);
+    public static AsyncChainState of(Dag<Node> nodeDag) {
+        return new AsyncChainState(nodeDag);
     }
 
-    private ChainState(Dag<Node> nodeDag) {
+    private AsyncChainState(Dag<Node> nodeDag) {
         this.nodeDag = nodeDag;
 
         this.queued.addAll(nodeDag.getStartingVertices());
@@ -28,11 +29,13 @@ public class ChainState {
 
     public synchronized boolean isRunning() throws InterruptedException {
         if (broken) {
-            waitNodes();
+            // Finishes halfway-done nodes.
+            while (!working.isEmpty()) {
+                wait();
+            }
             return false;
         }
-        return !queued.isEmpty()
-                || !working.isEmpty();
+        return !queued.isEmpty();
     }
 
     public synchronized List<Node> pullNodes() {
@@ -61,7 +64,8 @@ public class ChainState {
     }
 
     public synchronized void waitNodes() throws InterruptedException {
-        if (!working.isEmpty()) {
+        while (queued.isEmpty()
+                && !working.isEmpty()) {
             wait();
         }
     }
