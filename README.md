@@ -444,13 +444,14 @@ numbers, `-` or `_`.
 
 ### 3.2 Extensible and Extensions
 
-An **Extensible** is an interface which can have different implementations for each business identity/scenario. And an
-**Extension** is one of these implementations.
+An **Extensible** is an interface which can have different implementations for each business identity/scenario. The
+Extension System uses the `@Ability` or `@ExtensionPoint` annotation to mark an **Extensible**.
 
-The Extension System uses the `@Ability` or `@ExtensionPoint` annotation to mark an **Extensible**, and uses
-the `@Extension` annotation with `bizId` and `scenario` attributes to mark one **Extension**. In the example above,
-'ActivityAbility' is an **Extensible**, and 'BizGlobalActivityAbility' is an **Extension** which is customized for the
-'BizIdConstants.BIZ_GLOBAL' business.
+An **Extension** is one of these implementations for an **Extensible**. The Extension System uses the `@Extension`
+annotation with `bizId` and `scenario` attributes to mark one **Extension**.
+
+In the example above, 'ActivityAbility' is an **Extensible**, and 'BizGlobalActivityAbility' is an **Extension** which
+is customized for the 'BizIdConstants.BIZ_GLOBAL' business.
 
 ### 3.3 Layers of Extensible: The Ability and ExtensionPoint
 
