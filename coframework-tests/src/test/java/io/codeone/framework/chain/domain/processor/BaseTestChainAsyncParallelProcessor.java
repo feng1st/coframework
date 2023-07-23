@@ -23,12 +23,12 @@ public abstract class BaseTestChainAsyncParallelProcessor extends TargetProcesso
             Thread.sleep(conf * 5L);
         }
 
-        target.update(TestKey.ASYNC_SUM, o -> {
+        target.updateIfPresent(TestKey.ASYNC_SUM, o -> {
             int sum = (int) o + delta;
             logger.log(TestKey.ASYNC_SUM, sum);
             return sum;
         });
-        target.update(TestKey.ASYNC_LIST, o -> {
+        target.updateIfPresent(TestKey.ASYNC_LIST, o -> {
             List<Integer> list = (List<Integer>) o;
             list.add(delta);
             logger.log(TestKey.ASYNC_LIST, list);

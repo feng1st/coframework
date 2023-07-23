@@ -12,7 +12,7 @@ public class TestChainCounter extends TargetProcessor<Data> {
 
     @Override
     protected boolean process(Data target, Context<?> context, Logger logger) {
-        target.update(TestKey.COUNT, count -> (int) count + 1);
+        target.updateIfPresent(TestKey.COUNT, count -> (int) count + 1);
         logger.log(TestKey.COUNT, target.get(TestKey.COUNT));
         return false;
     }

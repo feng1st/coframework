@@ -5,6 +5,11 @@ import io.codeone.framework.chain.model.Context;
 
 import java.util.List;
 
+/**
+ * A particular node that filter out undesired elements from a list.
+ *
+ * @param <T> The type of the list element.
+ */
 public abstract class TargetFilter<T> implements Node {
 
     @Override
@@ -25,5 +30,11 @@ public abstract class TargetFilter<T> implements Node {
                 || context.getTarget().isEmpty();
     }
 
+    /**
+     * Filters out unwanted elements.
+     *
+     * @param target The list that is being filtered.
+     * @return The list with remaining elements.
+     */
     protected abstract List<T> filter(List<T> target, Context<?> context, Logger logger);
 }

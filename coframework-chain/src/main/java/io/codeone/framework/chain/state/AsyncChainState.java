@@ -1,6 +1,6 @@
 package io.codeone.framework.chain.state;
 
-import io.codeone.framework.chain.dag.Dag;
+import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.node.Node;
 
 import java.util.ArrayList;
@@ -8,9 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The execution state of a chain, in an asynchronous manner.
+ */
 public class AsyncChainState implements ChainState {
 
-    private final Dag<Node> nodeDag;
+    private final Graph<Node> nodeGraph;
 
     private final Set<Node> queued = new HashSet<>();
 
@@ -20,14 +23,14 @@ public class AsyncChainState implements ChainState {
 
     private boolean broken = false;
 
-    public static AsyncChainState of(Dag<Node> nodeDag) {
-        return new AsyncChainState(nodeDag);
+    public static AsyncChainState of(Graph<Node> nodeGraph) {
+        return new AsyncChainState(nodeGraph);
     }
 
-    private AsyncChainState(Dag<Node> nodeDag) {
-        this.nodeDag = nodeDag;
+    private AsyncChainState(Graph<Node> nodeGraph) {
+        this.nodeGraph = nodeGraph;
 
-        this.queued.addAll(nodeDag.getStartingVertices());
+        this.queued.addAll(nodeGraph.getStartingVertices());
     }
 
     public synchronized boolean isRunning() throws InterruptedException {
@@ -52,10 +55,10 @@ public class AsyncChainState implements ChainState {
         working.remove(node);
         finished.add(node);
 
-        Set<Node> nodes = nodeDag.getNextVertices(node);
+        Set<Node> nodes = nodeGraph.getNextVertices(node);
         if (nodes != null && !nodes.isEmpty()) {
             nodes.stream()
-                    .filter(o -> finished.containsAll(nodeDag.getPreviousVertices(o)))
+                    .filter(o -> finished.containsAll(nodeGraph.getPreviousVertices(o)))
                     .forEach(queued::add);
         }
 

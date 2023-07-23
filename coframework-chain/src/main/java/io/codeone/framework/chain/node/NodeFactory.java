@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The factory of nodes.
+ */
 @Component
 public class NodeFactory {
 

@@ -1,6 +1,6 @@
 package io.codeone.framework.chain;
 
-import io.codeone.framework.chain.dag.Dag;
+import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.node.NodeFactory;
 import org.springframework.stereotype.Component;
@@ -9,6 +9,9 @@ import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The factory of chains.
+ */
 @Component
 public class ChainFactory {
 
@@ -20,8 +23,8 @@ public class ChainFactory {
     @SuppressWarnings("unchecked")
     public <T> Chain<T> getChain(ChainSpec chainSpec) {
         return (Chain<T>) cache.computeIfAbsent(chainSpec, k -> {
-            Dag<Node> nodeDag = chainSpec.getNodeDag(nodeFactory);
-            return Chain.of(chainSpec, nodeDag);
+            Graph<Node> nodeGraph = chainSpec.getNodeGraph(nodeFactory);
+            return Chain.of(chainSpec, nodeGraph);
         });
     }
 }

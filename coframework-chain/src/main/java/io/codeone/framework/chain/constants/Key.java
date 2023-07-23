@@ -3,10 +3,10 @@ package io.codeone.framework.chain.constants;
 import io.codeone.framework.chain.model.Data;
 
 /**
- * Represents an input/output parameter of the nodes, or the key of the target
+ * Represents an input/output parameter of chain nodes, or the key of the target
  * if its type is {@link Data}.
  * <p>
- * The best practice is using enumerations that implemented this interface.
+ * The best practice is to use enumerations to implement this interface.
  */
 public interface Key {
 
