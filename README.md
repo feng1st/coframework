@@ -564,17 +564,28 @@ try to match it with the following **Extension** "coordinates" in order:
 
 ### 3.5 Extension Sessions and Globally Routing-by-Context
 
-Considering and designing the routing approaches for every **Extensible** interface might be quite a chore. You can make
-some specifications such as every **Ability** method should have one `BizScenarioParam` parameter, and every
-**ExtensionPoint** interface should be annotated by the `@RouteByContext`. Or, you can set the application
-property `coframework.ext.route-by-context-by-default` true to make all **Extensible** route by context:
+The Extension System provided several utilities to manage an "extension session" and the `BizScenario` objects in it.
+
+> An extension session is a session in which all the **Extensible** invocations and routing happen.
+
+#### 3.5.1 The Global Routing-by-Context Setting
+
+Designing the routing approaches for every **Extensible** interface might be quite a chore. For example, you need to
+make some specifications such as every **Ability** method should have one `BizScenarioParam` parameter, and every
+**ExtensionPoint** interface should be annotated by the `@RouteByContext`.
+
+Instead, you can set the application property `coframework.ext.route-by-context-by-default` true to make all
+**Extensible** route by context:
 
 ```properties
 coframework.ext.route-by-context-by-default=true
 ```
 
-By setting this property, you need to make sure there is a `BizScenario` object in the stack of the `BizScenarioContext`
-upon the calling of an **Extensible**. The Extension System provided an `@ExtensionSession` annotation to do this job.
+#### 3.5.2 Automatic Extension Sessions
+
+By setting the `coframework.ext.route-by-context-by-default` property, you need to make sure there is a `BizScenario`
+object in the stack of the `BizScenarioContext` upon the calling of an **Extensible**. The Extension System provided an
+`@ExtensionSession` annotation to do this job.
 
 The `@ExtensionSession` annotation set up a plugin, which will try to resolve a `BizScenario` object from the arguments,
 put it in the stack, and then call the actual method.
@@ -618,6 +629,25 @@ public class BuBizScenarioResolver implements BizScenarioResolver {
     public BizScenario resolve(Object[] args) {
         Long buId = getBuId(args);
         return buBizIdMap.getOrDefault(buId, DEFAULT_BIZ_SCENARIO);
+    }
+}
+```
+
+#### 3.5.3 Manual Extension Sessions
+
+You may need to start extension sessions manually, for example, to handle multiple loaded business objects in a loop, in
+which each of them has a different `BizScenario` property.
+
+There is an `ExtensionUtils` that you can use:
+
+```java
+class Demo {
+    void demo() {
+        for (MyBO myBO : myBOs) {
+            ExtensionUtils.invoke(myBO.getBizScenario(), () -> {
+                // Handling myBO. 
+            });
+        }
     }
 }
 ```
