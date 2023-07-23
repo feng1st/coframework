@@ -37,20 +37,20 @@ public class TestChainAsyncService {
     @Resource
     private ChainFactory chainFactory;
 
-    public Data getData(int conf) {
+    public Data getData(int i) {
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
 
         Context<Data> context = Context.of(Data.of())
-                .setArgument(TestKey.ASYNC_CONF, conf);
+                .setArgument(TestKey.ASYNC_INDEX, i);
 
         return chain.execute(context);
     }
 
-    public Data getDataAsync(int conf) throws InterruptedException {
+    public Data getDataAsync(int i) throws InterruptedException {
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
 
         Context<Data> context = Context.of(Data.of())
-                .setArgument(TestKey.ASYNC_CONF, conf);
+                .setArgument(TestKey.ASYNC_INDEX, i);
 
         return chain.executeAsync(context, executor);
     }

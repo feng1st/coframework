@@ -16,11 +16,11 @@ public abstract class BaseTestChainAsyncParallelProcessor extends TargetProcesso
     protected boolean process(Data target, Context<?> context, Logger logger) {
         final int delta = getDelta();
 
-        int conf = context.getArgument(TestKey.ASYNC_CONF);
-        if ((conf % 2) == (delta % 2)) {
-            Thread.sleep(conf * 10L);
+        int i = context.getArgument(TestKey.ASYNC_INDEX);
+        if ((i % 2) == (delta % 2)) {
+            Thread.sleep(i * 10L);
         } else {
-            Thread.sleep(conf * 5L);
+            Thread.sleep(i * 5L);
         }
 
         target.updateIfPresent(TestKey.ASYNC_SUM, o -> {

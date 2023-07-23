@@ -17,7 +17,7 @@ public enum TestKey implements Key {
     EXT1_RESULT(String.class),
     EXT2_PARAM(String.class),
     EXT2_RESULT(String.class),
-    ASYNC_CONF(Integer.class),
+    ASYNC_INDEX(Integer.class),
     ASYNC_SUM(Integer.class),
     ASYNC_LIST(List.class),
     ;
