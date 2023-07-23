@@ -30,15 +30,15 @@
 
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.codeone</groupId>
             <artifactId>coframework-ext</artifactId>
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
             <artifactId>coframework-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-core</artifactId>
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
