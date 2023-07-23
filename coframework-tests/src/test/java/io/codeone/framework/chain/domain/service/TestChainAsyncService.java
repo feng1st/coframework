@@ -24,7 +24,7 @@ public class TestChainAsyncService {
     private final Executor executor = Executors.newCachedThreadPool();
 
     private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestNames.ASYNC,
-            // Two paths, with the same starting and end:
+            // Two paths, with the same starting and ending node:
             // Mapper -> ParallelA -> Reducer
             // Mapper -> ParallelB -> Reducer
             Path.of(TestChainAsyncMapper.class,
