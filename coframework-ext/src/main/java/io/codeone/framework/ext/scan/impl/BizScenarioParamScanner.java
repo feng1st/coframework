@@ -24,7 +24,7 @@ public class BizScenarioParamScanner extends BaseExtScanner {
     @Override
     public void scanExtensibleMethod(Class<?> extensibleClass, Method method) {
         bizScenarioParamRepo.computeParamIndexIfAbsent(method,
-                k -> findBizScenarioParamIndex(extensibleClass, method));
+                () -> findBizScenarioParamIndex(extensibleClass, method));
     }
 
     private int findBizScenarioParamIndex(Class<?> extensibleClass, Method method) {

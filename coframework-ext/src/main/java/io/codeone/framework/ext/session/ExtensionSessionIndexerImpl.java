@@ -23,7 +23,7 @@ public class ExtensionSessionIndexerImpl implements ExtensionSessionIndexer {
     @Override
     public void index(Method method, ExtensionSession annotation) {
         extensionSessionRepo.computeParamIndexIfAbsent(method,
-                k -> getParamIndex(method, annotation));
+                () -> getParamIndex(method, annotation));
     }
 
     @Override

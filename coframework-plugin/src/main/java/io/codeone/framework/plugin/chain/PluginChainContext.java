@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @UtilityClass
@@ -45,7 +46,7 @@ public class PluginChainContext {
         return (T) MAP.get().putIfAbsent(key, value);
     }
 
-    public <T> boolean remove(String key, T value) {
+    public boolean remove(String key, Object value) {
         return MAP.get().remove(key, value);
     }
 
@@ -57,7 +58,15 @@ public class PluginChainContext {
         return (T) MAP.get().replace(key, value);
     }
 
-    public <T> T computeIfAbsent(String key, Function<? super String, T> mappingFunction) {
+    public <T> T computeIfAbsent(String key, Function<String, T> mappingFunction) {
         return (T) MAP.get().computeIfAbsent(key, mappingFunction);
+    }
+
+    public static <T> T computeIfPresent(String key, BiFunction<String, Object, T> remappingFunction) {
+        return (T) MAP.get().computeIfPresent(key, remappingFunction);
+    }
+
+    public static <T> T compute(String key, BiFunction<String, Object, T> remappingFunction) {
+        return (T) MAP.get().compute(key, remappingFunction);
     }
 }

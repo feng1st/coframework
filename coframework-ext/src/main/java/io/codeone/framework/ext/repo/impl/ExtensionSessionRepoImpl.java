@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Repository
 public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
@@ -24,8 +24,8 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             = new ConcurrentHashMap<>();
 
     @Override
-    public void computeParamIndexIfAbsent(Method method, Function<Method, Integer> func) {
-        paramIndexMap.computeIfAbsent(method, func);
+    public void computeParamIndexIfAbsent(Method method, Supplier<Integer> supplier) {
+        paramIndexMap.computeIfAbsent(method, k -> supplier.get());
     }
 
     @Override

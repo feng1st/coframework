@@ -3,11 +3,11 @@ package io.codeone.framework.ext.repo;
 import io.codeone.framework.ext.session.BizScenarioResolver;
 
 import java.lang.reflect.Method;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface ExtensionSessionRepo {
 
-    void computeParamIndexIfAbsent(Method method, Function<Method, Integer> func);
+    void computeParamIndexIfAbsent(Method method, Supplier<Integer> supplier);
 
     int getParamIndex(Method method);
 
