@@ -671,29 +671,31 @@ And you can monitor the execution of all **Extensions** by adding one `ExtInvoca
 | `TargetProcessor<T>` |         |
 | `ContextProcessor`   |         |
 
-### 4.2 The Graph of Nodes
+### 4.2 Linear Chains
 
-#### 4.2.1 Directed Acyclic Graph
+![chain-linear](docs/images/chain-linear.png)
 
-#### 4.2.2 A Linear Chain
+### 4.3 The Target and the Context
 
-#### 4.2.3 A Complex Chain
+### 4.4 Extending a Chain
 
-### 4.3 Extending a Chain
+#### 4.4.1 Extending the Spec
 
-#### 4.3.1 Deriving from a Spec
+![chain-deriving-a](docs/images/chain-deriving-a.png)
 
-#### 4.3.2 Using Interferences
+![chain-deriving-b](docs/images/chain-deriving-b.png)
 
-### 4.4 Asynchronous Executions
+#### 4.4.2 Using Interferences
 
-### 4.5 The Target and the Context
+### 4.5 DAG of Nodes
 
-#### 4.5.1 The Target
+![chain-dag](docs/images/chain-dag.png)
 
-#### 4.5.2 The Context
+### 4.6 Synchronous and Asynchronous Executions
 
-#### 4.5.3 The Key
+![chain-sync](docs/images/chain-sync.png)
+
+![chain-async](docs/images/chain-async.png)
 
 ## 5. General Logging Tool
 
