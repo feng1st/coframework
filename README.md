@@ -659,7 +659,42 @@ and `BaseExtensionPointScanner` beans.
 
 And you can monitor the execution of all **Extensions** by adding one `ExtInvocationMonitor` bean to your project.
 
-## 4. General Logging Tool
+## 4. Chain System
+
+### 4.1 Types of Nodes
+
+| Type                 | Summary |
+|----------------------|---------|
+| `TargetFilter<T>`    |         |
+| `TargetRenderer<T>`  |         |
+| `TargetProcessor<T>` |         |
+| `ContextProcessor`   |         |
+
+### 4.2 The Graph of Nodes
+
+#### 4.2.1 Directed Acyclic Graph
+
+#### 4.2.2 A Linear Chain
+
+#### 4.2.3 A Complex Chain
+
+### 4.3 Extending a Chain
+
+#### 4.3.1 Deriving from a Spec
+
+#### 4.3.2 Using Interferences
+
+### 4.4 Asynchronous Executions
+
+### 4.5 The Target and the Context
+
+#### 4.5.1 The Target
+
+#### 4.5.2 The Context
+
+#### 4.5.3 The Key
+
+## 5. General Logging Tool
 
 The framework provided two built-in logging mechanisms: The `Log` class and the `@Logging` annotation. Both of them will
 output some "standard" logs that can be easily parsed and analyzed.
@@ -675,7 +710,7 @@ Package:
 </dependency>
 ```
 
-### 4.1 The Standard Format
+### 5.1 The Standard Format
 
 The framework defined its own standard format for logging.
 
@@ -685,7 +720,7 @@ There are some examples:
 
 `||level=>ERROR||scene=>myScene||method=>MyService.operates||success=>false||code=>SYS_ERROR||message=>System error||elapsed=>10||arg.myParam=>MyParam(type=0)||error=>...`
 
-### 4.2 The `Log`
+### 5.2 The `Log`
 
 The `Log` is a utility class that can output standard logs:
 
@@ -699,7 +734,7 @@ Log.newBuilder()
         .log();
 ```
 
-### 4.3 The `@Logging`
+### 5.3 The `@Logging`
 
 The `@Logging` annotation can be used on any method/class of a spring bean, and it will help to log the signature,
 arguments and the result of the method(s).
