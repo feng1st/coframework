@@ -26,6 +26,9 @@ public class MethodPluggers implements MethodPlugger {
     }
 
     private void registerPlugger(MethodPlugger plugger) {
+        if (plugger == this) {
+            return;
+        }
         pluggers.add(plugger);
     }
 
