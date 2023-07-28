@@ -1,5 +1,6 @@
 package io.codeone.framework.chain;
 
+import io.codeone.framework.chain.extension.Interference;
 import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.node.NodeFactory;
@@ -26,5 +27,9 @@ public class ChainFactory {
             Graph<Node> nodeGraph = chainSpec.getNodeGraph(nodeFactory);
             return Chain.of(chainSpec, nodeGraph);
         });
+    }
+
+    public <T> Chain<T> getChain(ChainSpec chainSpec, Interference interference) {
+        return getChain(interference.interfere(chainSpec));
     }
 }

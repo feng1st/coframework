@@ -5,6 +5,8 @@ import io.codeone.framework.chain.ChainFactory;
 import io.codeone.framework.chain.ChainSpec;
 import io.codeone.framework.chain.domain.constants.TestKey;
 import io.codeone.framework.chain.domain.constants.TestNames;
+import io.codeone.framework.chain.domain.node.Stage1;
+import io.codeone.framework.chain.domain.node.Stage2;
 import io.codeone.framework.chain.domain.render.TestChainCountRender;
 import io.codeone.framework.chain.domain.render.TestChainExt1Render;
 import io.codeone.framework.chain.domain.render.TestChainExt2Render;
@@ -22,7 +24,7 @@ import javax.annotation.Resource;
 public class TestChainDynamicChainService {
 
     private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestNames.DYNAMIC,
-            Path.of(TestChainCountRender.class));
+            Path.of(Stage1.class, Stage2.class, TestChainCountRender.class));
 
     @Resource
     private ChainFactory chainFactory;
@@ -41,11 +43,11 @@ public class TestChainDynamicChainService {
     }
 
     private Data getData(Interference interference) {
-        Chain<Data> chain = chainFactory.getChain(interference.interfere(CHAIN_SPEC));
+        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC, interference);
 
-        Context<Data> context = interference.interfere(Context.of(Data.of()));
+        Context<Data> context = Context.of(Data.of());
 
-        return chain.execute(context);
+        return chain.execute(context, interference);
     }
 
     /**
@@ -54,16 +56,16 @@ public class TestChainDynamicChainService {
      */
     private void applyExt1(Interference interference) {
         interference
-                // Adds node TestChainExt1Render prior to TestChainCountRender,
-                .addPath(Path.of(TestChainExt1Render.class, TestChainCountRender.class))
+                // Adds node TestChainExt1Render prior to Stage1,
+                .addPath(Path.of(TestChainExt1Render.class, Stage1.class))
                 // and its args.
                 .addArgument(TestKey.EXT1_PARAM, "foo");
     }
 
     private void applyExt2(Interference interference) {
         interference
-                // Adds node TestChainExt2Render prior to TestChainCountRender,
-                .addPath(Path.of(TestChainExt2Render.class, TestChainCountRender.class))
+                // Adds node TestChainExt2Render between Stage1 and Stage2,
+                .addPath(Path.of(Stage1.class, TestChainExt2Render.class, Stage2.class))
                 // and its args.
                 .addArgument(TestKey.EXT2_PARAM, "bar");
     }

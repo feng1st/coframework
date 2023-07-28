@@ -38,6 +38,10 @@ public class Context<T> {
      */
     private final Map<Class<?>, Object> argumentsByClass = new ConcurrentHashMap<>();
 
+    public static <T> Context<T> ofEmpty() {
+        return new Context<>(null);
+    }
+
     public boolean hasArgument(Key key) {
         return argumentsByKey.containsKey(key);
     }
