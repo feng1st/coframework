@@ -692,14 +692,17 @@ To form such a chain:
 @Service
 public class Demo {
 
-    private static final ChainSpec SPEC = ChainSpec.of(ChainNames.THE_NAME,
+    // Define the spec.
+    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(ChainNames.CHAIN_A,
             Path.of(NodeA.class, NodeB.class, NodeC.class, NodeD.class));
 
     @Resource
     private ChainFactory chainFactory;
 
     public void demo() {
-        Chain<Data> chain = chainFactory.getChain(SPEC);
+        // Create the chain.
+        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
+        // Use the chain.
         // ...
     }
 }
@@ -711,11 +714,83 @@ public class Demo {
 
 #### 4.4.1 Extending the Spec
 
+To extend a chain spec, all you have to do, is to add an extra path to it:
+
 ![chain-deriving-a](docs/images/chain-deriving-a.png)
+
+```java
+
+@Service
+public class Demo {
+
+    // The original spec.
+    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(ChainNames.CHAIN_A,
+            Path.of(NodeA.class, NodeB.class, NodeC.class, NodeD.class));
+
+    public void demo() {
+        // Extend the spec.
+        ChainSpec derivedSpec = ChainSpec.of(CHAIN_SPEC, Path.of(NodeD.class, NodeE.class));
+
+        Chain<Data> chain = chainFactory.getChain(derivedSpec);
+        // ...
+    }
+}
+```
+
+What if we extend the spec this way?
+
+`ChainSpec derivedSpec = ChainSpec.of(CHAIN_SPEC, Path.of(NodeA.class, NodeE.class, NodeC.class));`
 
 ![chain-deriving-b](docs/images/chain-deriving-b.png)
 
+It is totally legal, the Chain System supports DAG, which we will discuss later.
+
 #### 4.4.2 Using ChainExtensions
+
+It is difficult to use `public static ChainSpec of(ChainSpec source, Path<Class<? extends Node>>... paths)` to extend a
+chain spec, if there are more than one extender. They have to know each other and be coupled in order to specify the
+`source` parameter.
+
+The Chain System provided a `ChainExtension` to achieve this task, there is an example:
+
+In where the chain is being used:
+
+```java
+
+@Service
+public class Demo {
+
+    // Apply the extension and the use the chain.
+    private Data useTheChain(ChainExtension chainExtension) {
+        // Use the chainExtension to extend the chain.
+        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC, chainExtension);
+        // Use the chainExtension to extend the context i.e. arguments.
+        return chain.execute(Context.of(Data.of()), chainExtension);
+    }
+}
+```
+
+And somewhere in a business extension package:
+
+```java
+
+// An extension for BIZ_GLOBAL.
+@Extension(bizId = BizIdConstants.BIZ_GLOBAL)
+public class GlobalChainExt implements ChainExtPt {
+
+    // Record how to change the chain and to supply extra arguments.
+    @Override
+    public void extendTheChainAndArgs(ChainExtension chainExtension) {
+        chainExtension
+                // Add node NodeE after the NodeD,
+                .addPath(Path.of(NodeD.class, NodeE.class))
+                // and its args.
+                .addArgument(Keys.PARAM_FOR_NODE_E, "foo");
+    }
+}
+```
+
+#### 4.4.3 The SignNodes
 
 ### 4.5 DAG of Nodes
 
