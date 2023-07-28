@@ -792,6 +792,61 @@ public class GlobalChainExt implements ChainExtPt {
 
 #### 4.4.3 The SignNodes
 
+Sign (Signpost) nodes are non-functional nodes that assist the formation of the graph of a chain, for example, connect
+other functional nodes.
+
+Subclasses of sign nodes should be defined by the provider of the chain, and put at somewhere that is visible to the
+extenders of the chain, e.g. an SDK, so that `ChainExtension#addPath(Path)` can use them as "anchors".
+
+For example, in the SDK package:
+
+```java
+
+@Component
+public class StagePreparing extends SignNode {
+}
+
+@Component
+public class StageComputing extends SignNode {
+}
+```
+
+In the main package:
+
+```java
+
+@Service
+public class Demo {
+
+    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(ChainNames.CHAIN_A,
+            Path.of(StagePreparing.class,
+                    ArgumentASupplier.class,
+                    ArgumentBSupplier.class,
+                    StageComputing.class,
+                    ResultCalculator.class));
+}
+```
+
+And in a business extension package:
+
+```java
+
+// An extension for BIZ_GLOBAL.
+@Extension(bizId = BizIdConstants.BIZ_GLOBAL)
+public class GlobalChainExt implements ChainExtPt {
+
+    // Record how to change the chain and to supply extra arguments.
+    @Override
+    public void extendTheChainAndArgs(ChainExtension chainExtension) {
+        chainExtension
+                // Add node ArgumentCSupplier between the StagePreparing and StageComputing.
+                // The exact order, i.e. the order between ArgumentASupplier, ArgumentBSupplier and ArgumentCSupplier
+                // does not matter.
+                .addPath(Path.of(StagePreparing.class, ArgumentCSupplier.class, StageComputing.class));
+    }
+}
+```
+
 ### 4.5 DAG of Nodes
 
 ![chain-dag](docs/images/chain-dag.png)
