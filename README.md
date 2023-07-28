@@ -662,18 +662,48 @@ And you can monitor the execution of all **Extensions** by adding one `ExtInvoca
 
 ## 4. Chain System
 
+Using chains is an effective way to orchestrate and reuse functionalities. The Chain System provided a standard Directed
+Acyclic Graph (DAG) chain mechanism, and an approach to extend the chain in an extensible environment at runtime.
+
 ### 4.1 Types of Nodes
 
-| Type                 | Summary |
-|----------------------|---------|
-| `TargetFilter<T>`    |         |
-| `TargetRenderer<T>`  |         |
-| `TargetProcessor<T>` |         |
-| `ContextProcessor`   |         |
+There are 5 types of chain nodes:
+
+| Type                 | Summary                                                                                   |
+|----------------------|-------------------------------------------------------------------------------------------|
+| `SignNode`           | Non-functional, "signposts/waypoints/anchors" in graph, exposed to extenders of the chain |
+| `TargetFilter<T>`    | Filters out unwanted elements from a collection                                           |
+| `TargetRenderer<T>`  | Fills information to/Updates attributes of the target                                     |
+| `TargetProcessor<T>` | Processes the target                                                                      |
+| `ContextProcessor`   | Processes the arguments in the context                                                    |
+
+We will discuss and give examples of them later.
 
 ### 4.2 Linear Chains
 
+A linear chain is the simplest chain ever:
+
 ![chain-linear](docs/images/chain-linear.png)
+
+To form such a chain:
+
+```java
+
+@Service
+public class Demo {
+
+    private static final ChainSpec SPEC = ChainSpec.of(ChainNames.THE_NAME,
+            Path.of(NodeA.class, NodeB.class, NodeC.class, NodeD.class));
+
+    @Resource
+    private ChainFactory chainFactory;
+
+    public void demo() {
+        Chain<Data> chain = chainFactory.getChain(SPEC);
+        // ...
+    }
+}
+```
 
 ### 4.3 The Target and the Context
 
