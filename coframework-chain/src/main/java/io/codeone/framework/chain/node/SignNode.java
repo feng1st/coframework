@@ -6,8 +6,8 @@ import io.codeone.framework.chain.logging.Logger;
 import io.codeone.framework.chain.model.Context;
 
 /**
- * Sign nodes are non-functional nodes that assist the formation of the graph
- * of a chain, for example, connect other functional nodes.
+ * Sign (Signpost) nodes are non-functional nodes that assist the formation of
+ * the graph of a chain, for example, connect other functional nodes.
  * <p>
  * Subclasses of sign nodes should be defined by the provider of the chain, and
  * put at somewhere that is visible to the extenders of the chain, e.g. an SDK,
