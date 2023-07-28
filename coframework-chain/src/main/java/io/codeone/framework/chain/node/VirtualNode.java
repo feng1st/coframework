@@ -1,6 +1,6 @@
 package io.codeone.framework.chain.node;
 
-import io.codeone.framework.chain.extension.Interference;
+import io.codeone.framework.chain.extension.ChainExtension;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.logging.Logger;
 import io.codeone.framework.chain.model.Context;
@@ -11,7 +11,7 @@ import io.codeone.framework.chain.model.Context;
  * any function.
  * <p>
  * Subclasses of virtual nodes can be put at somewhere that is visible to
- * everyone, e.g. an SDK, so that {@link Interference#addPath(Path)} can use
+ * everyone, e.g. an SDK, so that {@link ChainExtension#addPath(Path)} can use
  * them as "anchors".
  */
 public abstract class VirtualNode implements Node {

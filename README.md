@@ -685,7 +685,7 @@ And you can monitor the execution of all **Extensions** by adding one `ExtInvoca
 
 ![chain-deriving-b](docs/images/chain-deriving-b.png)
 
-#### 4.4.2 Using Interferences
+#### 4.4.2 Using ChainExtensions
 
 ### 4.5 DAG of Nodes
 

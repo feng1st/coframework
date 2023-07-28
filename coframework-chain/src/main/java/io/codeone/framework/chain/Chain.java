@@ -1,6 +1,6 @@
 package io.codeone.framework.chain;
 
-import io.codeone.framework.chain.extension.Interference;
+import io.codeone.framework.chain.extension.ChainExtension;
 import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.node.Node;
@@ -38,12 +38,12 @@ public class Chain<T> {
         return execute(Context.ofEmpty());
     }
 
-    public T execute(Interference interference) {
-        return execute(Context.ofEmpty(), interference);
+    public T execute(ChainExtension chainExtension) {
+        return execute(Context.ofEmpty(), chainExtension);
     }
 
-    public T execute(Context<T> context, Interference interference) {
-        return execute(interference.interfere(context));
+    public T execute(Context<T> context, ChainExtension chainExtension) {
+        return execute(chainExtension.extend(context));
     }
 
     /**
@@ -86,14 +86,14 @@ public class Chain<T> {
         return executeAsync(Context.ofEmpty(), executor);
     }
 
-    public T executeAsync(Interference interference, Executor executor)
+    public T executeAsync(ChainExtension chainExtension, Executor executor)
             throws InterruptedException {
-        return executeAsync(Context.ofEmpty(), interference, executor);
+        return executeAsync(Context.ofEmpty(), chainExtension, executor);
     }
 
-    public T executeAsync(Context<T> context, Interference interference, Executor executor)
+    public T executeAsync(Context<T> context, ChainExtension chainExtension, Executor executor)
             throws InterruptedException {
-        return executeAsync(interference.interfere(context), executor);
+        return executeAsync(chainExtension.extend(context), executor);
     }
 
     /**
