@@ -760,7 +760,7 @@ In where the chain is being used:
 @Service
 public class Demo {
 
-    // Apply the extension and the use the chain.
+    // Apply the extension and then use the chain.
     private Data useTheChain(ChainExtension chainExtension) {
         // Use the chainExtension to extend the chain.
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC, chainExtension);
