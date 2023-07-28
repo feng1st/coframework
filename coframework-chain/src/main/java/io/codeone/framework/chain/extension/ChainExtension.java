@@ -81,7 +81,7 @@ public class ChainExtension {
      * Applies all new paths to the chain spec, before the creation of the
      * chain.
      * <p>
-     * This method should be used by the developers who define the chain.
+     * This method should be used by the developers who provide the chain.
      */
     public ChainSpec extend(ChainSpec chainSpec) {
         if (paths == null || paths.isEmpty()) {
@@ -94,7 +94,7 @@ public class ChainExtension {
      * Passes all additional arguments to the context, before the invocation of
      * the chain.
      * <p>
-     * This method should be used by the developers who define the chain.
+     * This method should be used by the developers who provide the chain.
      */
     public <T> Context<T> extend(Context<T> context) {
         if (argumentsByKey != null && !argumentsByKey.isEmpty()) {
