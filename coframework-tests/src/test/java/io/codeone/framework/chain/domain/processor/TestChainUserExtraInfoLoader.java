@@ -1,6 +1,6 @@
 package io.codeone.framework.chain.domain.processor;
 
-import io.codeone.framework.chain.domain.constants.TestKey;
+import io.codeone.framework.chain.domain.constants.TestKeys;
 import io.codeone.framework.chain.domain.model.User;
 import io.codeone.framework.chain.logging.Logger;
 import io.codeone.framework.chain.model.Context;
@@ -12,8 +12,8 @@ public class TestChainUserExtraInfoLoader extends ContextProcessor {
 
     @Override
     protected boolean process(Context<?> context, Logger logger) {
-        User user = context.getArgument(TestKey.USER);
-        logger.log(TestKey.USER, (user == null) ? null : user.getName());
+        User user = context.getArgument(TestKeys.USER);
+        logger.log(TestKeys.USER, (user == null) ? null : user.getName());
         if (user == null) {
             throw new IllegalArgumentException();
         }

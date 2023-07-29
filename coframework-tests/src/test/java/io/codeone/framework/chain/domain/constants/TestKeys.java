@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
-public enum TestKey implements Key {
+public enum TestKeys implements Key {
     USER_ID(Long.class),
     USER(User.class),
     COUNT(Integer.class),

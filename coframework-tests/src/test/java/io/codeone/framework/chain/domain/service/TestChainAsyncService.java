@@ -3,7 +3,7 @@ package io.codeone.framework.chain.domain.service;
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
 import io.codeone.framework.chain.ChainSpec;
-import io.codeone.framework.chain.domain.constants.TestKey;
+import io.codeone.framework.chain.domain.constants.TestKeys;
 import io.codeone.framework.chain.domain.constants.TestNames;
 import io.codeone.framework.chain.domain.processor.TestChainAsyncMapper;
 import io.codeone.framework.chain.domain.processor.TestChainAsyncParallelAProcessor;
@@ -41,7 +41,7 @@ public class TestChainAsyncService {
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
 
         Context<Data> context = Context.of(Data.of())
-                .setArgument(TestKey.ASYNC_INDEX, i);
+                .setArgument(TestKeys.ASYNC_INDEX, i);
 
         return chain.execute(context);
     }
@@ -50,7 +50,7 @@ public class TestChainAsyncService {
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
 
         Context<Data> context = Context.of(Data.of())
-                .setArgument(TestKey.ASYNC_INDEX, i);
+                .setArgument(TestKeys.ASYNC_INDEX, i);
 
         return chain.executeAsync(context, executor);
     }

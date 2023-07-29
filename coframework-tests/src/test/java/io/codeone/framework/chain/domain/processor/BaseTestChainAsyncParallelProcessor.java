@@ -1,6 +1,6 @@
 package io.codeone.framework.chain.domain.processor;
 
-import io.codeone.framework.chain.domain.constants.TestKey;
+import io.codeone.framework.chain.domain.constants.TestKeys;
 import io.codeone.framework.chain.logging.Logger;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.model.Data;
@@ -16,22 +16,22 @@ public abstract class BaseTestChainAsyncParallelProcessor extends TargetProcesso
     protected boolean process(Data target, Context<?> context, Logger logger) {
         final int delta = getDelta();
 
-        int i = context.getArgument(TestKey.ASYNC_INDEX);
+        int i = context.getArgument(TestKeys.ASYNC_INDEX);
         if ((i % 2) == (delta % 2)) {
             Thread.sleep(i * 10L);
         } else {
             Thread.sleep(i * 5L);
         }
 
-        target.updateIfPresent(TestKey.ASYNC_SUM, o -> {
+        target.updateIfPresent(TestKeys.ASYNC_SUM, o -> {
             int sum = (int) o + delta;
-            logger.log(TestKey.ASYNC_SUM, sum);
+            logger.log(TestKeys.ASYNC_SUM, sum);
             return sum;
         });
-        target.updateIfPresent(TestKey.ASYNC_LIST, o -> {
+        target.updateIfPresent(TestKeys.ASYNC_LIST, o -> {
             List<Integer> list = (List<Integer>) o;
             list.add(delta);
-            logger.log(TestKey.ASYNC_LIST, list);
+            logger.log(TestKeys.ASYNC_LIST, list);
             return list;
         });
 

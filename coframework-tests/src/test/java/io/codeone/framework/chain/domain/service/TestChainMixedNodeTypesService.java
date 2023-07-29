@@ -3,13 +3,13 @@ package io.codeone.framework.chain.domain.service;
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
 import io.codeone.framework.chain.ChainSpec;
-import io.codeone.framework.chain.domain.constants.TestKey;
+import io.codeone.framework.chain.domain.constants.TestKeys;
 import io.codeone.framework.chain.domain.constants.TestNames;
 import io.codeone.framework.chain.domain.processor.TestChainCounter;
 import io.codeone.framework.chain.domain.processor.TestChainUserExtraInfoLoader;
 import io.codeone.framework.chain.domain.processor.TestChainUserLoader;
-import io.codeone.framework.chain.domain.render.TestChainCountRender;
-import io.codeone.framework.chain.domain.render.TestChainUserRender;
+import io.codeone.framework.chain.domain.render.TestChainCountRenderer;
+import io.codeone.framework.chain.domain.render.TestChainUserRenderer;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.model.Data;
@@ -26,9 +26,9 @@ public class TestChainMixedNodeTypesService {
             // ContextProcessor
             TestChainUserExtraInfoLoader.class,
             // TargetRenderer<Data>
-            TestChainUserRender.class,
+            TestChainUserRenderer.class,
             // TargetRenderer<Data>
-            TestChainCountRender.class,
+            TestChainCountRenderer.class,
             // TargetProcessor<Data>
             TestChainCounter.class));
 
@@ -39,7 +39,7 @@ public class TestChainMixedNodeTypesService {
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
 
         Context<Data> context = Context.of(Data.of())
-                .setArgument(TestKey.USER_ID, userId);
+                .setArgument(TestKeys.USER_ID, userId);
 
         return chain.execute(context);
     }

@@ -1,6 +1,6 @@
 package io.codeone.framework.chain.domain.processor;
 
-import io.codeone.framework.chain.domain.constants.TestKey;
+import io.codeone.framework.chain.domain.constants.TestKeys;
 import io.codeone.framework.chain.logging.Logger;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.model.Data;
@@ -14,8 +14,8 @@ public class TestChainAsyncMapper extends TargetProcessor<Data> {
 
     @Override
     protected boolean process(Data target, Context<?> context, Logger logger) {
-        target.set(TestKey.ASYNC_SUM, 0);
-        target.set(TestKey.ASYNC_LIST, new ArrayList<>());
+        target.set(TestKeys.ASYNC_SUM, 0);
+        target.set(TestKeys.ASYNC_LIST, new ArrayList<>());
         return false;
     }
 }
