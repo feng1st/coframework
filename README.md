@@ -760,7 +760,7 @@ public class UserRenderer extends TargetRenderer<Data> {
 }
 ```
 
-The `Context<T>` also supports accessing context via its class:
+The `Context<T>` also supports accessing its context via classes:
 
 ```java
 public class Demo {
@@ -774,7 +774,7 @@ public class Demo {
 
 ### 4.3 Linear Chains
 
-A linear chain is the simplest chain ever:
+A linear chain is the simplest chain:
 
 ![chain-linear](docs/images/chain-linear.png)
 
