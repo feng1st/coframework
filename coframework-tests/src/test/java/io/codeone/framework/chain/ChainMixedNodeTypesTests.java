@@ -18,7 +18,7 @@ public class ChainMixedNodeTypesTests {
     void mixedNodeTypes() {
         Data data = testChainMixedNodeTypesService.getData(1L);
         Assertions.assertEquals(
-                "Data(data={TestKey.USER=User(id=1, name=MockUser1, extraInfo=extra info of user1), TestKey.COUNT=2})",
+                "Data(data={TestKeys.USER=User(id=1, name=MockUser1, extraInfo=extra info of user1), TestKeys.COUNT=2})",
                 data.toString());
     }
 }

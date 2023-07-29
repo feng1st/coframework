@@ -28,8 +28,8 @@ public class ChainAsyncTests {
                 .map(Object::toString)
                 .collect(Collectors.toSet());
         Assertions.assertEquals(1, set.size());
-        Assertions.assertTrue(set.contains("Data(data={TestKey.ASYNC_LIST=[1, 2, 100], TestKey.ASYNC_SUM=103})")
-                || set.contains("Data(data={TestKey.ASYNC_LIST=[2, 1, 100], TestKey.ASYNC_SUM=103})"));
+        Assertions.assertTrue(set.contains("Data(data={TestKeys.ASYNC_LIST=[1, 2, 100], TestKeys.ASYNC_SUM=103})")
+                || set.contains("Data(data={TestKeys.ASYNC_LIST=[2, 1, 100], TestKeys.ASYNC_SUM=103})"));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class ChainAsyncTests {
                 .map(Object::toString)
                 .collect(Collectors.toSet());
         Assertions.assertEquals(2, set.size());
-        Assertions.assertTrue(set.contains("Data(data={TestKey.ASYNC_LIST=[1, 2, 100], TestKey.ASYNC_SUM=103})")
-                && set.contains("Data(data={TestKey.ASYNC_LIST=[2, 1, 100], TestKey.ASYNC_SUM=103})"));
+        Assertions.assertTrue(set.contains("Data(data={TestKeys.ASYNC_LIST=[1, 2, 100], TestKeys.ASYNC_SUM=103})")
+                && set.contains("Data(data={TestKeys.ASYNC_LIST=[2, 1, 100], TestKeys.ASYNC_SUM=103})"));
     }
 }

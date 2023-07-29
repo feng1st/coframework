@@ -18,7 +18,7 @@ public class ChainDynamicChainTests {
     void onlyExt1() {
         Data data = testChainDynamicChainService.getDataExt1();
         // Extended by ext1.
-        Assertions.assertEquals("Data(data={TestKey.EXT1_RESULT=ext1: foo, TestKey.COUNT=1})", data.toString());
+        Assertions.assertEquals("Data(data={TestKeys.EXT1_RESULT=ext1: foo, TestKeys.COUNT=1})", data.toString());
     }
 
     @Test
@@ -26,7 +26,7 @@ public class ChainDynamicChainTests {
         Data data = testChainDynamicChainService.getDataExt1n2();
         // Extended by ext1 and ext2.
         Assertions.assertEquals(
-                "Data(data={TestKey.EXT2_RESULT=ext2: bar, TestKey.EXT1_RESULT=ext1: foo, TestKey.COUNT=1})",
+                "Data(data={TestKeys.EXT1_RESULT=ext1: foo, TestKeys.EXT2_RESULT=ext2: bar, TestKeys.COUNT=1})",
                 data.toString());
     }
 }
