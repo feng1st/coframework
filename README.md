@@ -663,29 +663,122 @@ And you can monitor the execution of all **Extensions** by adding one `ExtInvoca
 ## 4. Chain System
 
 Using chains is an effective way to orchestrate and reuse functionalities. The Chain System provided a standard Directed
-Acyclic Graph (DAG) chain mechanism, and an approach to extend the chain in an extensible environment at runtime.
+Acyclic Graph (DAG) chain mechanism, and an approach to extend the chain in an extensible environment at runtime, also
+the ability to execute nodes of a chain asynchronously and concurrently.
+
+Package:
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-chain</artifactId>
+    <version>...</version>
+</dependency>
+```
 
 ### 4.1 Types of Nodes
 
 There are 5 types of chain nodes:
 
-| Type                 | Summary                                                                                   |
-|----------------------|-------------------------------------------------------------------------------------------|
-| `SignNode`           | Non-functional, "signposts/waypoints/anchors" in graph, exposed to extenders of the chain |
-| `TargetFilter<T>`    | Filters out unwanted elements from a collection                                           |
-| `TargetRenderer<T>`  | Fills information to/Updates attributes of the target                                     |
-| `TargetProcessor<T>` | Processes the target                                                                      |
-| `ContextProcessor`   | Processes the arguments in the context                                                    |
+| Type                 | Summary                                                                                                              |
+|----------------------|----------------------------------------------------------------------------------------------------------------------|
+| `SignNode`           | Non-functional, "signposts/waypoints/anchors" in graph, exposed to extenders of the chain, global re-usability       |
+| `TargetFilter<T>`    | `filter(List<T> target, ...)` method, filters out unwanted elements from a collection, same-target-type re-usability |
+| `TargetRenderer<T>`  | `render(T target, ...)` method, fills information to/updates attributes of the target, same-target-type re-usability |
+| `TargetProcessor<T>` | `process(T target, ...)` method, processes the target, same-target-type re-usability                                 |
+| `ContextProcessor`   | `process(Context, ...)` method, processes the arguments in the context, target-type-independent re-usability         |
 
 We will discuss and give examples of them later.
 
-### 4.2 Linear Chains
+### 4.2 The Target and the Context
+
+The target is the object the chain operates on, and the context contains the target, the initial input arguments of the
+chain, and the input/output arguments of each node.
+
+The Chain System provided a `Context<T>` class to represent the context, in which the `T` is the type of the target.
+
+The Chain System also provided a `Data` type if you need a container of dynamic, extensible data as the target, and it
+can work seamlessly with the `Context<T>`.
+
+Both `Context<T>` and `Data` can use `Key` to access their content. The `Key` interface has a `namespace` attribute to
+achieve key isolation, and has a `clazz` attribute to perform basic content type validation.
+
+There are some examples:
+
+Custom `Key` enumerations:
+
+```java
+
+@RequiredArgsConstructor
+@Getter
+public enum MyKeys implements Key {
+    /**
+     * User id.
+     */
+    USER_ID(Long.class),
+    /**
+     * The User entity. 
+     */
+    USER(User.class),
+    ;
+
+    private final Class<?> clazz;
+}
+```
+
+A target-type-independent, reusable User entity loader:
+
+```java
+
+@Component
+public class UserLoader extends ContextProcessor {
+
+    @Override
+    protected boolean process(Context<?> context, Logger logger) {
+        Long userId = context.getArgument(MyKeys.USER_ID);
+        if (userId == null) {
+            throw new IllegalArgumentException();
+        }
+        context.setArgumentIfAbsent(MyKeys.USER, () -> loadUser(userId));
+        return false;
+    }
+}
+```
+
+Renders loaded User entity into current target:
+
+```java
+
+@Component
+public class UserRenderer extends TargetRenderer<Data> {
+
+    @Override
+    protected Data render(Data target, Context<?> context, Logger logger) {
+        return target.copyFromParameter(context, MyKeys.USER);
+    }
+}
+```
+
+The `Context<T>` also supports accessing context via its class:
+
+```java
+public class Demo {
+
+    public void demo(Context<?> context, MyEntity myEntity) {
+        context.setArgument(myEntity);
+        Assertions.assertEquals(myEntity, context.getArgument(MyEntity.class));
+    }
+}
+```
+
+### 4.3 Linear Chains
 
 A linear chain is the simplest chain ever:
 
 ![chain-linear](docs/images/chain-linear.png)
 
-To form such a chain:
+You can form such a chain by containing only one single `Path`:
 
 ```java
 
@@ -699,22 +792,24 @@ public class Demo {
     @Resource
     private ChainFactory chainFactory;
 
-    public void demo() {
+    public Data demo() {
         // Create the chain.
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
-        // Use the chain.
-        // ...
+        // Create a context.
+        Context<Data> context = Context.of(Data.of());
+        // Execute the chain.
+        return chain.execute(context);
     }
 }
 ```
 
-### 4.3 The Target and the Context
-
 ### 4.4 Extending a Chain
+
+Sometimes we need to create a chain based on an existing one, rather than to specify the whole path over again.
 
 #### 4.4.1 Extending the Spec
 
-To extend a chain spec, all you have to do, is to add an extra path to it:
+To extend a chain spec, all you have to do, is to add an extra path `Path.of(NodeD.class, NodeE.class)` to it:
 
 ![chain-deriving-a](docs/images/chain-deriving-a.png)
 
@@ -739,28 +834,27 @@ public class Demo {
 
 What if we extend the spec this way?
 
-`ChainSpec derivedSpec = ChainSpec.of(CHAIN_SPEC, Path.of(NodeA.class, NodeE.class, NodeC.class));`
-
 ![chain-deriving-b](docs/images/chain-deriving-b.png)
+
+`ChainSpec derivedSpec = ChainSpec.of(CHAIN_SPEC, Path.of(NodeA.class, NodeE.class, NodeC.class));`
 
 It is totally legal, the Chain System supports DAG, which we will discuss later.
 
 #### 4.4.2 Using ChainExtensions
 
 It is difficult to use `public static ChainSpec of(ChainSpec source, Path<Class<? extends Node>>... paths)` to extend a
-chain spec, if there are more than one extender. They have to know each other and be coupled in order to specify the
+chain spec, if there are more than one extender. They have to know each other and be coupled in order to give the
 `source` parameter.
 
 The Chain System provided a `ChainExtension` to achieve this task, there is an example:
 
-In where the chain is being used:
+In where the chain is being used, apply a `ChainExtension` while using the chain:
 
 ```java
 
 @Service
 public class Demo {
 
-    // Apply the extension and then use the chain.
     private Data useTheChain(ChainExtension chainExtension) {
         // Use the chainExtension to extend the chain.
         Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC, chainExtension);
@@ -770,7 +864,8 @@ public class Demo {
 }
 ```
 
-And somewhere in a business extension package:
+And in somewhere in a business extension package, use the same `ChainExtension` to record any change to the chain and
+the arguments, BEFORE the using of the chain of course:
 
 ```java
 
@@ -778,7 +873,6 @@ And somewhere in a business extension package:
 @Extension(bizId = BizIdConstants.BIZ_GLOBAL)
 public class GlobalChainExt implements ChainExtPt {
 
-    // Record how to change the chain and to supply extra arguments.
     @Override
     public void extendTheChainAndArgs(ChainExtension chainExtension) {
         chainExtension
@@ -798,7 +892,7 @@ other functional nodes.
 Subclasses of sign nodes should be defined by the provider of the chain, and put at somewhere that is visible to the
 extenders of the chain, e.g. an SDK, so that `ChainExtension#addPath(Path)` can use them as "anchors".
 
-For example, in the SDK package:
+For example, in the SDK package, define some "stage nodes":
 
 ```java
 
@@ -811,7 +905,7 @@ public class StageComputing extends SignNode {
 }
 ```
 
-In the main package:
+In the main package, arrange a chain spec around those "stage nodes":
 
 ```java
 
@@ -827,7 +921,8 @@ public class Demo {
 }
 ```
 
-And in a business extension package:
+And in a business extension package, use those "stage nodes" as "anchors", without awareness of other nodes from the
+main package or other extension packages:
 
 ```java
 
@@ -849,13 +944,65 @@ public class GlobalChainExt implements ChainExtPt {
 
 ### 4.5 DAG of Nodes
 
+As we mentioned before, the whole Chain System is backed by Directed Acyclic Graph. A functioning chain can be as
+complex as the following diagram:
+
 ![chain-dag](docs/images/chain-dag.png)
+
+Nodes in a DAG will be executed, if and only if all of their dependencies are finished.
+
+Technically, we can not stop the developers from providing a cyclic graph, mistakenly or intentionally. The Chain System
+**DOES NOT THROW ANY EXCEPTION** in such case, but any node in a circle will not be executed because its dependencies
+will never be finished.
 
 ### 4.6 Synchronous and Asynchronous Executions
 
+One advantage of DAG is that their vertices (nodes) can be processed simultaneously, if they do not depend on or affect
+each other.
+
+Firstly, let's see how to execute a DAG chain in a synchronous, linear fashion:
+
+```java
+
+@Service
+public class Demo {
+
+    public Data demo() {
+        // ...
+        // Execute the chain.
+        return chain.execute(context);
+    }
+}
+```
+
+One node will be executed, if and only if all of its dependencies are finished. So **ONE** of the possible execution
+orders is look like this (in RED lines):
+
 ![chain-sync](docs/images/chain-sync.png)
 
+Secondly, a DAG chain can also be executed in an asynchronous, concurrent manner, to improve the performance:
+
+```java
+
+@Service
+public class Demo {
+
+    public Data demo() {
+        // ...
+        // Execute the chain, asynchronously.
+        return chain.executeAsync(context, /* java.util.concurrent.Executor */ executor);
+    }
+}
+```
+
+A node will be put into the thread pool, if and only if all of its dependencies are finished. So the nodes grouped by
+dashed line in the following diagram, might be executed concurrently:
+
 ![chain-async](docs/images/chain-async.png)
+
+> You need to make sure those nodes in the thread pool do not race each other. For example, those nodes that access
+> different keys in a concurrent map, can be put parallel. And those who operate the same attribute, should be arranged
+> in a series, i.e. form a direct or indirect dependency.
 
 ## 5. General Logging Tool
 
