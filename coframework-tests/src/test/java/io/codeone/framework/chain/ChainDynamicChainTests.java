@@ -18,7 +18,7 @@ public class ChainDynamicChainTests {
     void onlyExt1() {
         KeyMap keyMap = testChainDynamicChainService.getDataExt1();
         // Extended by ext1.
-        Assertions.assertEquals("KeyMap(content={TestKeys.EXT1_RESULT=ext1: foo, TestKeys.COUNT=1})",
+        Assertions.assertEquals("KeyMap(data={TestKeys.EXT1_RESULT=ext1: foo, TestKeys.COUNT=1})",
                 keyMap.toString());
     }
 
@@ -27,7 +27,7 @@ public class ChainDynamicChainTests {
         KeyMap keyMap = testChainDynamicChainService.getDataExt1n2();
         // Extended by ext1 and ext2.
         Assertions.assertEquals(
-                "KeyMap(content={TestKeys.EXT1_RESULT=ext1: foo, TestKeys.EXT2_RESULT=ext2: bar, TestKeys.COUNT=1})",
+                "KeyMap(data={TestKeys.EXT1_RESULT=ext1: foo, TestKeys.EXT2_RESULT=ext2: bar, TestKeys.COUNT=1})",
                 keyMap.toString());
     }
 }

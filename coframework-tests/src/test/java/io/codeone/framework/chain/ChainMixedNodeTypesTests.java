@@ -18,7 +18,7 @@ public class ChainMixedNodeTypesTests {
     void mixedNodeTypes() {
         KeyMap keyMap = testChainMixedNodeTypesService.getData(1L);
         Assertions.assertEquals(
-                "KeyMap(content={TestKeys.USER=User(id=1, name=MockUser1, extraInfo=extra info of user1), TestKeys.COUNT=2})",
+                "KeyMap(data={TestKeys.USER=User(id=1, name=MockUser1, extraInfo=extra info of user1), TestKeys.COUNT=2})",
                 keyMap.toString());
     }
 }
