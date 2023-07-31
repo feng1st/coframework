@@ -698,10 +698,10 @@ chain, and the input/output arguments of each node.
 
 The Chain System provided a `Context<T>` class to represent the context, in which the `T` is the type of the target.
 
-The Chain System also provided a `Data` type if you need a container of dynamic, extensible data as the target, and it
-can work seamlessly with the `Context<T>`.
+You can use the `KeyMap` type if you need a container of dynamic, extensible data as the target, and it can work
+seamlessly with the `Context<T>`.
 
-Both `Context<T>` and `Data` can use `Key` to access their content. The `Key` interface has a `namespace` attribute to
+Both `Context<T>` and `KeyMap` can use `Key` to access their content. The `Key` interface has a `namespace` attribute to
 achieve key isolation, and has a `clazz` attribute to perform basic content type validation.
 
 There are some examples:

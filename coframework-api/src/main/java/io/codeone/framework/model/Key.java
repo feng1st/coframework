@@ -1,10 +1,8 @@
-package io.codeone.framework.chain.constants;
-
-import io.codeone.framework.chain.model.Data;
+package io.codeone.framework.model;
 
 /**
- * Represents an input/output parameter of chain nodes, or the key of the target
- * if its type is {@link Data}.
+ * Represents a type specified key of a map, and has a namespace to achieve key
+ * isolation.
  * <p>
  * The best practice is to use enumerations to implement this interface.
  */

@@ -11,7 +11,7 @@ import io.codeone.framework.chain.domain.processor.TestChainAsyncParallelBProces
 import io.codeone.framework.chain.domain.processor.TestChainAsyncReducer;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.model.Context;
-import io.codeone.framework.chain.model.Data;
+import io.codeone.framework.model.KeyMap;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,19 +37,19 @@ public class TestChainAsyncService {
     @Resource
     private ChainFactory chainFactory;
 
-    public Data getData(int i) {
-        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
+    public KeyMap getData(int i) {
+        Chain<KeyMap> chain = chainFactory.getChain(CHAIN_SPEC);
 
-        Context<Data> context = Context.of(Data.of())
+        Context<KeyMap> context = Context.of(new KeyMap())
                 .setArgument(TestKeys.ASYNC_INDEX, i);
 
         return chain.execute(context);
     }
 
-    public Data getDataAsync(int i) throws InterruptedException {
-        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
+    public KeyMap getDataAsync(int i) throws InterruptedException {
+        Chain<KeyMap> chain = chainFactory.getChain(CHAIN_SPEC);
 
-        Context<Data> context = Context.of(Data.of())
+        Context<KeyMap> context = Context.of(new KeyMap())
                 .setArgument(TestKeys.ASYNC_INDEX, i);
 
         return chain.executeAsync(context, executor);

@@ -13,9 +13,9 @@ import io.codeone.framework.chain.domain.render.TestChainExt2Renderer;
 import io.codeone.framework.chain.extension.ChainExtension;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.model.Context;
-import io.codeone.framework.chain.model.Data;
 import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.ExtensionPoint;
+import io.codeone.framework.model.KeyMap;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,23 +29,23 @@ public class TestChainDynamicChainService {
     @Resource
     private ChainFactory chainFactory;
 
-    public Data getDataExt1() {
+    public KeyMap getDataExt1() {
         ChainExtension chainExtension = new ChainExtension();
         applyExt1(chainExtension);
         return getData(chainExtension);
     }
 
-    public Data getDataExt1n2() {
+    public KeyMap getDataExt1n2() {
         ChainExtension chainExtension = new ChainExtension();
         applyExt1(chainExtension);
         applyExt2(chainExtension);
         return getData(chainExtension);
     }
 
-    private Data getData(ChainExtension chainExtension) {
-        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC, chainExtension);
+    private KeyMap getData(ChainExtension chainExtension) {
+        Chain<KeyMap> chain = chainFactory.getChain(CHAIN_SPEC, chainExtension);
 
-        Context<Data> context = Context.of(Data.of());
+        Context<KeyMap> context = Context.of(new KeyMap());
 
         return chain.execute(context, chainExtension);
     }

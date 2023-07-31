@@ -1,7 +1,7 @@
 package io.codeone.framework.chain;
 
 import io.codeone.framework.chain.domain.service.TestChainAsyncService;
-import io.codeone.framework.chain.model.Data;
+import io.codeone.framework.model.KeyMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,29 +20,29 @@ public class ChainAsyncTests {
 
     @Test
     void sync() {
-        List<Data> dataList = new ArrayList<>();
+        List<KeyMap> keyMaps = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            dataList.add(testChainAsyncService.getData(i));
+            keyMaps.add(testChainAsyncService.getData(i));
         }
-        Set<String> set = dataList.stream()
+        Set<String> set = keyMaps.stream()
                 .map(Object::toString)
                 .collect(Collectors.toSet());
         Assertions.assertEquals(1, set.size());
-        Assertions.assertTrue(set.contains("Data(data={TestKeys.ASYNC_LIST=[1, 2, 100], TestKeys.ASYNC_SUM=103})")
-                || set.contains("Data(data={TestKeys.ASYNC_LIST=[2, 1, 100], TestKeys.ASYNC_SUM=103})"));
+        Assertions.assertTrue(set.contains("KeyMap(data={TestKeys.ASYNC_LIST=[1, 2, 100], TestKeys.ASYNC_SUM=103})")
+                || set.contains("KeyMap(data={TestKeys.ASYNC_LIST=[2, 1, 100], TestKeys.ASYNC_SUM=103})"));
     }
 
     @Test
     void async() throws Exception {
-        List<Data> dataList = new ArrayList<>();
+        List<KeyMap> keyMaps = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            dataList.add(testChainAsyncService.getDataAsync(i));
+            keyMaps.add(testChainAsyncService.getDataAsync(i));
         }
-        Set<String> set = dataList.stream()
+        Set<String> set = keyMaps.stream()
                 .map(Object::toString)
                 .collect(Collectors.toSet());
         Assertions.assertEquals(2, set.size());
-        Assertions.assertTrue(set.contains("Data(data={TestKeys.ASYNC_LIST=[1, 2, 100], TestKeys.ASYNC_SUM=103})")
-                && set.contains("Data(data={TestKeys.ASYNC_LIST=[2, 1, 100], TestKeys.ASYNC_SUM=103})"));
+        Assertions.assertTrue(set.contains("KeyMap(data={TestKeys.ASYNC_LIST=[1, 2, 100], TestKeys.ASYNC_SUM=103})")
+                && set.contains("KeyMap(data={TestKeys.ASYNC_LIST=[2, 1, 100], TestKeys.ASYNC_SUM=103})"));
     }
 }

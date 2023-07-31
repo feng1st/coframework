@@ -1,7 +1,8 @@
 package io.codeone.framework.chain.model;
 
-import io.codeone.framework.chain.constants.Key;
 import io.codeone.framework.chain.logging.Logger;
+import io.codeone.framework.model.Key;
+import io.codeone.framework.model.KeyMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -145,6 +146,22 @@ public class Context<T> {
 
     public Context<T> resetArgument(Class<?> clazz) {
         argumentsByClass.remove(clazz);
+        return this;
+    }
+
+    /**
+     * Copies an argument from the KeyMap.
+     */
+    public Context<T> copyFrom(KeyMap keyMap, Key key) {
+        setOrUpdateArgument(key, v -> keyMap.get(key));
+        return this;
+    }
+
+    /**
+     * Copies an argument to the KeyMap.
+     */
+    public Context<T> copyTo(KeyMap keyMap, Key key) {
+        keyMap.putOrUpdate(key, v -> getArgument(key));
         return this;
     }
 

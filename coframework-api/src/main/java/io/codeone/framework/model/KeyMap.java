@@ -1,6 +1,5 @@
-package io.codeone.framework.chain.model;
+package io.codeone.framework.model;
 
-import io.codeone.framework.chain.constants.Key;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -12,13 +11,10 @@ import java.util.function.Supplier;
 /**
  * This class represents a container of dynamic, extensible data, and can be
  * accessed via {@link Key}.
- * <p>
- * This class can be used as the target of a chain, and work seamlessly with
- * the context.
  */
-@NoArgsConstructor(staticName = "of")
+@NoArgsConstructor
 @ToString
-public class Data {
+public class KeyMap {
 
     /**
      * The map that stores the data. It uses {@link Key#getKey()} as the key in
@@ -26,7 +22,7 @@ public class Data {
      */
     private final Map<String, Object> data = new ConcurrentHashMap<>();
 
-    public boolean has(Key key) {
+    public boolean contains(Key key) {
         return data.containsKey(key.getKey());
     }
 
@@ -38,23 +34,23 @@ public class Data {
         return key.<P>getClazz().cast(data.getOrDefault(key.getKey(), defaultValue));
     }
 
-    public Data set(Key key, Object value) {
+    public KeyMap put(Key key, Object value) {
         data.put(key.getKey(), key.getClazz().cast(value));
         return this;
     }
 
-    public Data setIfAbsent(Key key, Object value) {
+    public KeyMap putIfAbsent(Key key, Object value) {
         data.putIfAbsent(key.getKey(), key.getClazz().cast(value));
         return this;
     }
 
-    public Data setIfAbsent(Key key, Supplier<?> valueSupplier) {
+    public KeyMap putIfAbsent(Key key, Supplier<?> valueSupplier) {
         data.computeIfAbsent(key.getKey(), k -> key.getClazz().cast(valueSupplier.get()));
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    public <P> Data updateIfPresent(Key key, Function<P, P> valueUpdater) {
+    public <P> KeyMap updateIfPresent(Key key, Function<P, P> valueUpdater) {
         data.computeIfPresent(key.getKey(), (k, v) -> key.getClazz().cast(valueUpdater.apply((P) v)));
         return this;
     }
@@ -68,29 +64,13 @@ public class Data {
      *                    that there was no value associated with this key.
      */
     @SuppressWarnings("unchecked")
-    public <P> Data setOrUpdate(Key key, Function<P, P> valueSetter) {
+    public <P> KeyMap putOrUpdate(Key key, Function<P, P> valueSetter) {
         data.compute(key.getKey(), (k, v) -> key.getClazz().cast(valueSetter.apply((P) v)));
         return this;
     }
 
-    public Data reset(Key key) {
+    public KeyMap remove(Key key) {
         data.remove(key.getKey());
-        return this;
-    }
-
-    /**
-     * Copies an argument from a parameter in the context.
-     */
-    public Data copyFromParameter(Context<?> context, Key key) {
-        setOrUpdate(key, v -> context.getArgument(key));
-        return this;
-    }
-
-    /**
-     * Copies an argument to a parameter in the context.
-     */
-    public Data copyToParameter(Context<?> context, Key key) {
-        context.setOrUpdateArgument(key, v -> get(key));
         return this;
     }
 }

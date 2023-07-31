@@ -12,7 +12,7 @@ import io.codeone.framework.chain.domain.render.TestChainCountRenderer;
 import io.codeone.framework.chain.domain.render.TestChainUserRenderer;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.model.Context;
-import io.codeone.framework.chain.model.Data;
+import io.codeone.framework.model.KeyMap;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,20 +25,20 @@ public class TestChainMixedNodeTypesService {
             TestChainUserLoader.class,
             // ContextProcessor
             TestChainUserExtraInfoLoader.class,
-            // TargetRenderer<Data>
+            // TargetRenderer<KeyMap>
             TestChainUserRenderer.class,
-            // TargetRenderer<Data>
+            // TargetRenderer<KeyMap>
             TestChainCountRenderer.class,
-            // TargetProcessor<Data>
+            // TargetProcessor<KeyMap>
             TestChainCounter.class));
 
     @Resource
     private ChainFactory chainFactory;
 
-    public Data getData(long userId) {
-        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC);
+    public KeyMap getData(long userId) {
+        Chain<KeyMap> chain = chainFactory.getChain(CHAIN_SPEC);
 
-        Context<Data> context = Context.of(Data.of())
+        Context<KeyMap> context = Context.of(new KeyMap())
                 .setArgument(TestKeys.USER_ID, userId);
 
         return chain.execute(context);

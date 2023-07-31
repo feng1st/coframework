@@ -1,6 +1,6 @@
 package io.codeone.framework.chain.logging;
 
-import io.codeone.framework.chain.constants.Key;
+import io.codeone.framework.model.Key;
 
 /**
  * Using this logger to log selected, concise, key information.

@@ -3,17 +3,17 @@ package io.codeone.framework.chain.domain.processor;
 import io.codeone.framework.chain.domain.constants.TestKeys;
 import io.codeone.framework.chain.logging.Logger;
 import io.codeone.framework.chain.model.Context;
-import io.codeone.framework.chain.model.Data;
 import io.codeone.framework.chain.node.TargetProcessor;
+import io.codeone.framework.model.KeyMap;
 import lombok.SneakyThrows;
 
 import java.util.List;
 
-public abstract class BaseTestChainAsyncParallelProcessor extends TargetProcessor<Data> {
+public abstract class BaseTestChainAsyncParallelProcessor extends TargetProcessor<KeyMap> {
 
     @Override
     @SneakyThrows(InterruptedException.class)
-    protected boolean process(Data target, Context<?> context, Logger logger) {
+    protected boolean process(KeyMap target, Context<?> context, Logger logger) {
         final int delta = getDelta();
 
         int i = context.getArgument(TestKeys.ASYNC_INDEX);

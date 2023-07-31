@@ -1,10 +1,10 @@
 package io.codeone.framework.chain.extension;
 
 import io.codeone.framework.chain.ChainSpec;
-import io.codeone.framework.chain.constants.Key;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.node.Node;
+import io.codeone.framework.model.Key;
 
 import java.util.ArrayList;
 import java.util.HashMap;

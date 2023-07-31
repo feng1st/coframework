@@ -1,7 +1,7 @@
 package io.codeone.framework.chain.domain.constants;
 
-import io.codeone.framework.chain.constants.Key;
 import io.codeone.framework.chain.domain.model.User;
+import io.codeone.framework.model.Key;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
