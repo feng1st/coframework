@@ -4,6 +4,7 @@ import io.codeone.framework.chain.extension.ChainExtension;
 import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.node.Node;
+import io.codeone.framework.chain.spec.ChainSpec;
 import io.codeone.framework.chain.state.AsyncChainState;
 import io.codeone.framework.chain.state.ChainState;
 import io.codeone.framework.chain.state.SyncChainState;

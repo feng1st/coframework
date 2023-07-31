@@ -1,6 +1,4 @@
-package io.codeone.framework.chain.constants;
-
-import io.codeone.framework.chain.ChainSpec;
+package io.codeone.framework.chain.spec;
 
 /**
  * Used in {@link ChainSpec}, and its {@link Object#toString()} will be used as

@@ -4,6 +4,7 @@ import io.codeone.framework.chain.extension.ChainExtension;
 import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.node.NodeFactory;
+import io.codeone.framework.chain.spec.ChainSpec;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

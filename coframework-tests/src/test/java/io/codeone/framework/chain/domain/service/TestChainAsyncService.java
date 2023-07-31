@@ -2,7 +2,6 @@ package io.codeone.framework.chain.domain.service;
 
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
-import io.codeone.framework.chain.ChainSpec;
 import io.codeone.framework.chain.domain.constants.TestKeys;
 import io.codeone.framework.chain.domain.constants.TestNames;
 import io.codeone.framework.chain.domain.processor.TestChainAsyncMapper;
@@ -11,6 +10,7 @@ import io.codeone.framework.chain.domain.processor.TestChainAsyncParallelBProces
 import io.codeone.framework.chain.domain.processor.TestChainAsyncReducer;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.model.Context;
+import io.codeone.framework.chain.spec.ChainSpec;
 import io.codeone.framework.model.KeyMap;
 import org.springframework.stereotype.Service;
 

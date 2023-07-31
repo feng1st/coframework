@@ -2,7 +2,6 @@ package io.codeone.framework.chain.domain.service;
 
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
-import io.codeone.framework.chain.ChainSpec;
 import io.codeone.framework.chain.domain.constants.TestKeys;
 import io.codeone.framework.chain.domain.constants.TestNames;
 import io.codeone.framework.chain.domain.node.Stage1;
@@ -13,6 +12,7 @@ import io.codeone.framework.chain.domain.render.TestChainExt2Renderer;
 import io.codeone.framework.chain.extension.ChainExtension;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.model.Context;
+import io.codeone.framework.chain.spec.ChainSpec;
 import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.ExtensionPoint;
 import io.codeone.framework.model.KeyMap;

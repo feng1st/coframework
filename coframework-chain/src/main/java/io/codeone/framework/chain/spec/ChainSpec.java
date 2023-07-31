@@ -1,6 +1,5 @@
-package io.codeone.framework.chain;
+package io.codeone.framework.chain.spec;
 
-import io.codeone.framework.chain.constants.ChainName;
 import io.codeone.framework.chain.graph.Edge;
 import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.graph.Path;
