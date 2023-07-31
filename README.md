@@ -755,7 +755,7 @@ public class UserRenderer extends TargetRenderer<Data> {
 
     @Override
     protected Data render(Data target, Context<?> context, Logger logger) {
-        return target.copyFromParameter(context, MyKeys.USER);
+        return context.copyTo(target, MyKeys.USER);
     }
 }
 ```

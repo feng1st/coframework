@@ -20,38 +20,38 @@ public class KeyMap {
      * The map that stores the data. It uses {@link Key#getKey()} as the key in
      * order to include the namespace of the Key.
      */
-    private final Map<String, Object> data = new ConcurrentHashMap<>();
+    private final Map<String, Object> content = new ConcurrentHashMap<>();
 
     public boolean contains(Key key) {
-        return data.containsKey(key.getKey());
+        return content.containsKey(key.getKey());
     }
 
     public <P> P get(Key key) {
-        return key.<P>getClazz().cast(data.get(key.getKey()));
+        return key.<P>getClazz().cast(content.get(key.getKey()));
     }
 
     public <P> P getOrDefault(Key key, P defaultValue) {
-        return key.<P>getClazz().cast(data.getOrDefault(key.getKey(), defaultValue));
+        return key.<P>getClazz().cast(content.getOrDefault(key.getKey(), defaultValue));
     }
 
     public KeyMap put(Key key, Object value) {
-        data.put(key.getKey(), key.getClazz().cast(value));
+        content.put(key.getKey(), key.getClazz().cast(value));
         return this;
     }
 
     public KeyMap putIfAbsent(Key key, Object value) {
-        data.putIfAbsent(key.getKey(), key.getClazz().cast(value));
+        content.putIfAbsent(key.getKey(), key.getClazz().cast(value));
         return this;
     }
 
     public KeyMap putIfAbsent(Key key, Supplier<?> valueSupplier) {
-        data.computeIfAbsent(key.getKey(), k -> key.getClazz().cast(valueSupplier.get()));
+        content.computeIfAbsent(key.getKey(), k -> key.getClazz().cast(valueSupplier.get()));
         return this;
     }
 
     @SuppressWarnings("unchecked")
     public <P> KeyMap updateIfPresent(Key key, Function<P, P> valueUpdater) {
-        data.computeIfPresent(key.getKey(), (k, v) -> key.getClazz().cast(valueUpdater.apply((P) v)));
+        content.computeIfPresent(key.getKey(), (k, v) -> key.getClazz().cast(valueUpdater.apply((P) v)));
         return this;
     }
 
@@ -65,12 +65,12 @@ public class KeyMap {
      */
     @SuppressWarnings("unchecked")
     public <P> KeyMap putOrUpdate(Key key, Function<P, P> valueSetter) {
-        data.compute(key.getKey(), (k, v) -> key.getClazz().cast(valueSetter.apply((P) v)));
+        content.compute(key.getKey(), (k, v) -> key.getClazz().cast(valueSetter.apply((P) v)));
         return this;
     }
 
     public KeyMap remove(Key key) {
-        data.remove(key.getKey());
+        content.remove(key.getKey());
         return this;
     }
 }
