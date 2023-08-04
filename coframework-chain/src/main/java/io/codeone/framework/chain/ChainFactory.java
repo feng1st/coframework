@@ -1,6 +1,6 @@
 package io.codeone.framework.chain;
 
-import io.codeone.framework.chain.extension.ChainExtension;
+import io.codeone.framework.chain.extension.ChainDecorator;
 import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.node.Node;
 import io.codeone.framework.chain.node.NodeFactory;
@@ -30,7 +30,7 @@ public class ChainFactory {
         });
     }
 
-    public <T> Chain<T> getChain(ChainSpec chainSpec, ChainExtension chainExtension) {
-        return getChain(chainExtension.extend(chainSpec));
+    public <T> Chain<T> getChain(ChainSpec chainSpec, ChainDecorator chainDecorator) {
+        return getChain(chainDecorator.decorate(chainSpec));
     }
 }

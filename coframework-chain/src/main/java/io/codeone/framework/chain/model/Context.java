@@ -1,14 +1,17 @@
 package io.codeone.framework.chain.model;
 
+import io.codeone.framework.chain.logging.ContextLogger;
 import io.codeone.framework.chain.logging.Logger;
 import io.codeone.framework.model.Key;
 import io.codeone.framework.model.KeyMap;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -18,7 +21,6 @@ import java.util.function.Supplier;
  *
  * @param <T> The type of the target.
  */
-@AllArgsConstructor(staticName = "of")
 public class Context<T> {
 
     /**
@@ -30,6 +32,16 @@ public class Context<T> {
     private volatile T target;
 
     /**
+     * The logger that logs the context before the execution of the chain.
+     */
+    private final ContextLogger<T> chainLogger;
+
+    /**
+     * The logger that logs the context before the execution of each node.
+     */
+    private final ContextLogger<T> nodeLogger;
+
+    /**
      * Input and output arguments of the nodes, mapped by Keys.
      */
     private final Map<Key, Object> argumentsByKey = new ConcurrentHashMap<>();
@@ -39,8 +51,37 @@ public class Context<T> {
      */
     private final Map<Class<?>, Object> argumentsByClass = new ConcurrentHashMap<>();
 
+    public static <T> Builder<T> newBuilder() {
+        return new Builder<>();
+    }
+
     public static <T> Context<T> ofEmpty() {
-        return new Context<>(null);
+        return new Context<>(null, null, null);
+    }
+
+    public static <T> Context<T> of(T target) {
+        return new Context<>(target, null, null);
+    }
+
+    public Context(T target, ContextLogger<T> chainLogger, ContextLogger<T> nodeLogger) {
+        this.target = target;
+        this.chainLogger = (chainLogger == null) ? Context::logAll : chainLogger;
+        this.nodeLogger = nodeLogger;
+    }
+
+    public void ifTargetPresent(Consumer<T> consumer) {
+        Optional.ofNullable(target)
+                .ifPresent(consumer);
+    }
+
+    public void ifArgumentPresent(Key key, Consumer<Object> consumer) {
+        Optional.ofNullable(argumentsByKey.get(key))
+                .ifPresent(consumer);
+    }
+
+    public void ifArgumentPresent(Class<?> clazz, Consumer<Object> consumer) {
+        Optional.ofNullable(argumentsByClass.get(clazz))
+                .ifPresent(consumer);
     }
 
     public boolean hasArgument(Key key) {
@@ -165,9 +206,31 @@ public class Context<T> {
         return this;
     }
 
-    public void log(Logger logger) {
+    public void logChain(Logger logger) {
+        chainLogger.log(this, logger);
+    }
+
+    public void logNode(Logger logger) {
+        if (nodeLogger != null) {
+            nodeLogger.log(this, logger);
+        }
+    }
+
+    private void logAll(Logger logger) {
         logger.logTarget(target);
         argumentsByKey.forEach(logger::log);
         argumentsByClass.forEach(logger::log);
+    }
+
+    @Setter
+    @Accessors(fluent = true)
+    public static class Builder<T> {
+        private T withTarget;
+        private ContextLogger<T> withChainLogger;
+        private ContextLogger<T> withNodeLogger;
+
+        public Context<T> build() {
+            return new Context<>(withTarget, withChainLogger, withNodeLogger);
+        }
     }
 }

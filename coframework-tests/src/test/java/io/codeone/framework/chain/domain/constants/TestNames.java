@@ -7,4 +7,5 @@ public enum TestNames implements ChainName {
     DERIVED,
     DYNAMIC,
     ASYNC,
+    LOGGER,
 }

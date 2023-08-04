@@ -12,9 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Extends the nodes of a chain, and their input arguments at runtime.
+ * Carries the modification details to the spec of a chain, and any extra input
+ * arguments the new added nodes need. These modifications will be applied to
+ * the chain upon its creation and execution.
+ * <p>
+ * Please node: The Decorator in the class name is not the same as the
+ * Decorator/Wrapper in Design Patterns.
  */
-public class ChainExtension {
+public class ChainDecorator {
 
     /**
      * New paths that should be added to the node graph of the chain.
@@ -43,7 +48,7 @@ public class ChainExtension {
      * <p>
      * This method should be used by the developers who extend the chain.
      */
-    public ChainExtension addPath(Path<Class<? extends Node>> path) {
+    public ChainDecorator addPath(Path<Class<? extends Node>> path) {
         if (paths == null) {
             paths = new ArrayList<>();
         }
@@ -56,7 +61,7 @@ public class ChainExtension {
      * <p>
      * This method should be used by the developers who extend the chain.
      */
-    public ChainExtension addArgument(Key key, Object value) {
+    public ChainDecorator addArgument(Key key, Object value) {
         if (argumentsByKey == null) {
             argumentsByKey = new HashMap<>();
         }
@@ -69,7 +74,7 @@ public class ChainExtension {
      * <p>
      * This method should be used by the developers who extend the chain.
      */
-    public ChainExtension addArgument(Object value) {
+    public ChainDecorator addArgument(Object value) {
         if (argumentsByClass == null) {
             argumentsByClass = new HashMap<>();
         }
@@ -83,7 +88,7 @@ public class ChainExtension {
      * <p>
      * This method should be used by the developers who provide the chain.
      */
-    public ChainSpec extend(ChainSpec chainSpec) {
+    public ChainSpec decorate(ChainSpec chainSpec) {
         if (paths == null || paths.isEmpty()) {
             return chainSpec;
         }
@@ -96,7 +101,7 @@ public class ChainExtension {
      * <p>
      * This method should be used by the developers who provide the chain.
      */
-    public <T> Context<T> extend(Context<T> context) {
+    public <T> Context<T> decorate(Context<T> context) {
         if (argumentsByKey != null && !argumentsByKey.isEmpty()) {
             argumentsByKey.forEach(context::setArgument);
         }

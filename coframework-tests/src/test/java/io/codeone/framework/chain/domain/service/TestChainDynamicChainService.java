@@ -9,7 +9,7 @@ import io.codeone.framework.chain.domain.node.Stage2;
 import io.codeone.framework.chain.domain.render.TestChainCountRenderer;
 import io.codeone.framework.chain.domain.render.TestChainExt1Renderer;
 import io.codeone.framework.chain.domain.render.TestChainExt2Renderer;
-import io.codeone.framework.chain.extension.ChainExtension;
+import io.codeone.framework.chain.extension.ChainDecorator;
 import io.codeone.framework.chain.graph.Path;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.spec.ChainSpec;
@@ -30,40 +30,40 @@ public class TestChainDynamicChainService {
     private ChainFactory chainFactory;
 
     public KeyMap getDataExt1() {
-        ChainExtension chainExtension = new ChainExtension();
-        applyExt1(chainExtension);
-        return getData(chainExtension);
+        ChainDecorator chainDecorator = new ChainDecorator();
+        applyExt1(chainDecorator);
+        return getData(chainDecorator);
     }
 
     public KeyMap getDataExt1n2() {
-        ChainExtension chainExtension = new ChainExtension();
-        applyExt1(chainExtension);
-        applyExt2(chainExtension);
-        return getData(chainExtension);
+        ChainDecorator chainDecorator = new ChainDecorator();
+        applyExt1(chainDecorator);
+        applyExt2(chainDecorator);
+        return getData(chainDecorator);
     }
 
-    private KeyMap getData(ChainExtension chainExtension) {
-        Chain<KeyMap> chain = chainFactory.getChain(CHAIN_SPEC, chainExtension);
+    private KeyMap getData(ChainDecorator chainDecorator) {
+        Chain<KeyMap> chain = chainFactory.getChain(CHAIN_SPEC, chainDecorator);
 
         Context<KeyMap> context = Context.of(new KeyMap());
 
-        return chain.execute(context, chainExtension);
+        return chain.execute(context, chainDecorator);
     }
 
     /**
      * This operation could be in an {@link Ability} or an
      * {@link ExtensionPoint}.
      */
-    private void applyExt1(ChainExtension chainExtension) {
-        chainExtension
+    private void applyExt1(ChainDecorator chainDecorator) {
+        chainDecorator
                 // Adds node TestChainExt1Render prior to Stage1,
                 .addPath(Path.of(TestChainExt1Renderer.class, Stage1.class))
                 // and its args.
                 .addArgument(TestKeys.EXT1_PARAM, "foo");
     }
 
-    private void applyExt2(ChainExtension chainExtension) {
-        chainExtension
+    private void applyExt2(ChainDecorator chainDecorator) {
+        chainDecorator
                 // Adds node TestChainExt2Render between Stage1 and Stage2,
                 .addPath(Path.of(Stage1.class, TestChainExt2Renderer.class, Stage2.class))
                 // and its args.

@@ -681,13 +681,13 @@ Package:
 
 There are 5 types of chain nodes:
 
-| Type                 | Summary                                                                                                              |
-|----------------------|----------------------------------------------------------------------------------------------------------------------|
-| `SignNode`           | Non-functional, "signposts/waypoints/anchors" in graph, exposed to extenders of the chain, global re-usability       |
-| `TargetFilter<T>`    | `filter(List<T> target, ...)` method, filters out unwanted elements from a collection, same-target-type re-usability |
-| `TargetRenderer<T>`  | `render(T target, ...)` method, fills information to/updates attributes of the target, same-target-type re-usability |
-| `TargetProcessor<T>` | `process(T target, ...)` method, processes the target, same-target-type re-usability                                 |
-| `ContextProcessor`   | `process(Context, ...)` method, processes the arguments in the context, target-type-independent re-usability         |
+| Type                 | Summary                                                                                                                                   |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| `SignNode`           | Non-functional, "signposts/waypoints/anchors" in graph, exposed to extenders of the chain, global re-usability                            |
+| `ContextProcessor`   | `process(Context, ...)` method, processes the arguments in the context, target-type-independent re-usability                              |
+| `TargetProcessor<T>` | `process(T target, ...)` method, general semantics, processes the target, same-target-type re-usability                                   |
+| `TargetFilter<T>`    | `filter(List<T> target, ...)` method, filtering semantics, filters out unwanted elements from a collection, same-target-type re-usability |
+| `TargetRenderer<T>`  | `render(T target, ...)` method, rendering semantics, fills information to/updates attributes of the target, same-target-type re-usability |
 
 We will discuss and give examples of them later.
 
@@ -840,31 +840,32 @@ What if we extend the spec this way?
 
 It is totally legal, the Chain System supports DAG, which we will discuss later.
 
-#### 4.4.2 Using ChainExtensions
+#### 4.4.2 Using ChainDecorators
 
 It is difficult to use `public static ChainSpec of(ChainSpec source, Path<Class<? extends Node>>... paths)` to extend a
 chain spec, if there are more than one extender. They have to know each other and be coupled in order to give the
 `source` parameter.
 
-The Chain System provided a `ChainExtension` to achieve this task, there is an example:
+The Chain System provided a `ChainDecorator` to achieve this task, which carries the modification information that
+extenders can set, and applies them upon the creation and execution of the chain. There is an example:
 
-In where the chain is being used, apply a `ChainExtension` while using the chain:
+In where the chain is being used, apply a `ChainDecorator` while using the chain:
 
 ```java
 
 @Service
 public class Demo {
 
-    private Data useTheChain(ChainExtension chainExtension) {
-        // Use the chainExtension to extend the chain.
-        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC, chainExtension);
-        // Use the chainExtension to extend the context i.e. arguments.
-        return chain.execute(Context.of(Data.of()), chainExtension);
+    private Data useTheChain(ChainDecorator chainDecorator) {
+        // Use the chainDecorator to extend the chain.
+        Chain<Data> chain = chainFactory.getChain(CHAIN_SPEC, chainDecorator);
+        // Use the chainDecorator to extend the context i.e. arguments.
+        return chain.execute(Context.of(Data.of()), chainDecorator);
     }
 }
 ```
 
-And in somewhere in a business extension package, use the same `ChainExtension` to record any change to the chain and
+And in somewhere in a business extension package, use the same `ChainDecorator` to record any change to the chain and
 the arguments, BEFORE the using of the chain of course:
 
 ```java
@@ -874,8 +875,8 @@ the arguments, BEFORE the using of the chain of course:
 public class GlobalChainExt implements ChainExtPt {
 
     @Override
-    public void extendTheChainAndArgs(ChainExtension chainExtension) {
-        chainExtension
+    public void extendTheChainAndArgs(ChainDecorator chainDecorator) {
+        chainDecorator
                 // Add node NodeE after the NodeD,
                 .addPath(Path.of(NodeD.class, NodeE.class))
                 // and its args.
@@ -890,7 +891,7 @@ Sign (Signpost) nodes are non-functional nodes that assist the formation of the 
 other functional nodes.
 
 Subclasses of sign nodes should be defined by the provider of the chain, and put at somewhere that is visible to the
-extenders of the chain, e.g. an SDK, so that `ChainExtension#addPath(Path)` can use them as "anchors".
+extenders of the chain, e.g. an SDK, so that `ChainDecorator#addPath(Path)` can use them as "anchors".
 
 For example, in the SDK package, define some "stage nodes":
 
@@ -932,8 +933,8 @@ public class GlobalChainExt implements ChainExtPt {
 
     // Record how to change the chain and to supply extra arguments.
     @Override
-    public void extendTheChainAndArgs(ChainExtension chainExtension) {
-        chainExtension
+    public void extendTheChainAndArgs(ChainDecorator chainDecorator) {
+        chainDecorator
                 // Add node ArgumentCSupplier between the StagePreparing and StageComputing.
                 // The exact order, i.e. the order between ArgumentASupplier, ArgumentBSupplier and ArgumentCSupplier
                 // does not matter.

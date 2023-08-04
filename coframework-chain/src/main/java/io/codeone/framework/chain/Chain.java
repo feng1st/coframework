@@ -1,6 +1,6 @@
 package io.codeone.framework.chain;
 
-import io.codeone.framework.chain.extension.ChainExtension;
+import io.codeone.framework.chain.extension.ChainDecorator;
 import io.codeone.framework.chain.graph.Graph;
 import io.codeone.framework.chain.model.Context;
 import io.codeone.framework.chain.node.Node;
@@ -39,12 +39,12 @@ public class Chain<T> {
         return execute(Context.ofEmpty());
     }
 
-    public T execute(ChainExtension chainExtension) {
-        return execute(Context.ofEmpty(), chainExtension);
+    public T execute(ChainDecorator chainDecorator) {
+        return execute(Context.ofEmpty(), chainDecorator);
     }
 
-    public T execute(Context<T> context, ChainExtension chainExtension) {
-        return execute(chainExtension.extend(context));
+    public T execute(Context<T> context, ChainDecorator chainDecorator) {
+        return execute(chainDecorator.decorate(context));
     }
 
     /**
@@ -87,14 +87,14 @@ public class Chain<T> {
         return executeAsync(Context.ofEmpty(), executor);
     }
 
-    public T executeAsync(ChainExtension chainExtension, Executor executor)
+    public T executeAsync(ChainDecorator chainDecorator, Executor executor)
             throws InterruptedException {
-        return executeAsync(Context.ofEmpty(), chainExtension, executor);
+        return executeAsync(Context.ofEmpty(), chainDecorator, executor);
     }
 
-    public T executeAsync(Context<T> context, ChainExtension chainExtension, Executor executor)
+    public T executeAsync(Context<T> context, ChainDecorator chainDecorator, Executor executor)
             throws InterruptedException {
-        return executeAsync(chainExtension.extend(context), executor);
+        return executeAsync(chainDecorator.decorate(context), executor);
     }
 
     /**
@@ -134,7 +134,7 @@ public class Chain<T> {
         Log chainLog = Log.newBuilder()
                 .logger(log)
                 .scene(spec.getName().toString());
-        context.log(chainLog::addArg);
+        context.logChain(chainLog::addArg);
         chainLog.success().log();
     }
 
@@ -145,6 +145,7 @@ public class Chain<T> {
                 .method(node.getClass().getSimpleName());
         long start = System.currentTimeMillis();
         try {
+            context.logNode(nodeLog::addArg);
             if (node.execute(context, nodeLog::addArg)) {
                 nodeLog.success(true);
                 return true;

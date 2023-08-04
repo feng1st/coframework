@@ -12,6 +12,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class BaseLogTests {
 
     private final Appender<ILoggingEvent> appender = Mockito.mock(Appender.class);
@@ -38,5 +40,16 @@ public class BaseLogTests {
                 argument.getValue().getThrowableProxy() == null ? null
                         : argument.getValue().getThrowableProxy().getClassName());
         Assertions.assertEquals(msg, argument.getValue().getMessage().replaceAll("elapsed=>\\d+", "elapsed=>0"));
+    }
+
+    protected void assertLogs(List<String> msgs) {
+        ArgumentCaptor<LoggingEvent> argument = ArgumentCaptor.forClass(LoggingEvent.class);
+        Mockito.verify(appender, Mockito.atLeast(msgs.size())).doAppend(argument.capture());
+
+        Assertions.assertEquals(msgs.size(), argument.getAllValues().size());
+        for (int i = 0; i < msgs.size(); i++) {
+            Assertions.assertEquals(msgs.get(i),
+                    argument.getAllValues().get(i).getMessage().replaceAll("elapsed=>\\d+", "elapsed=>0"));
+        }
     }
 }
