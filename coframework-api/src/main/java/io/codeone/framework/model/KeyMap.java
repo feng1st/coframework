@@ -18,57 +18,183 @@ public class KeyMap {
 
     /**
      * The map that stores the data. It uses {@link Key#getKey()} as the key in
-     * order to include the namespace of the Key.
+     * order to include both namespace and code.
      */
     private final Map<String, Object> data = new ConcurrentHashMap<>();
 
+    /**
+     * Returns {@code true} if this map contains a mapping for the specified
+     * key.
+     *
+     * @param key key whose presence in this map is to be tested
+     * @return {@code true} if this map contains a mapping for the specified
+     * key
+     */
     public boolean contains(Key key) {
         return data.containsKey(key.getKey());
     }
 
-    public <P> P get(Key key) {
-        return key.<P>getClazz().cast(data.get(key.getKey()));
+    /**
+     * Returns the value to which the specified key is mapped, or {@code null}
+     * if this map contains no mapping for the key. Throws an
+     * {@code ClassCastException} if the type of the existing value does not
+     * match with the {@link Key#getClazz()}.
+     *
+     * @param key the key whose associated value is to be returned
+     * @param <T> the type of the value
+     * @return the value to which the specified key is mapped, or {@code null}
+     * if this map contains no mapping for the key
+     * @throws ClassCastException if the type of the existing value does not
+     *                            match with the {@code Key#getClazz()}
+     */
+    public <T> T get(Key key) {
+        return key.<T>getClazz().cast(data.get(key.getKey()));
     }
 
-    public <P> P getOrDefault(Key key, P defaultValue) {
-        return key.<P>getClazz().cast(data.getOrDefault(key.getKey(), defaultValue));
+    /**
+     * Returns the value to which the specified key is mapped, or
+     * {@code defaultValue} if this map contains no mapping for the key. Throws
+     * an {@code ClassCastException} if the type of the existing value or
+     * {@code defaultValue} does not match with the {@link Key#getClazz()}.
+     *
+     * @param key          the key whose associated value is to be returned
+     * @param defaultValue the default mapping of the key
+     * @param <T>          the type of the value
+     * @return the value to which the specified key is mapped, or
+     * {@code defaultValue} if this map contains no mapping for the key
+     * @throws ClassCastException if the type of the existing value or
+     *                            {@code defaultValue} does not match with the
+     *                            {@code Key#getClazz()}
+     */
+    public <T> T getOrDefault(Key key, T defaultValue) {
+        return key.<T>getClazz().cast(data.getOrDefault(key.getKey(), defaultValue));
     }
 
+    /**
+     * Associates the specified value with the specified key in this map. If the
+     * map previously contained a mapping for the key, the old value is replaced
+     * by the specified value. Throws an {@code ClassCastException} if the type
+     * of the specified value does not match with the {@link Key#getClazz()}.
+     *
+     * @param key   key with which the specified value is to be associated
+     * @param value value to be associated with the specified key
+     * @return this {@code KeyMap}
+     * @throws ClassCastException if the type of the specified value does not
+     *                            match with the {@link Key#getClazz()}
+     */
     public KeyMap put(Key key, Object value) {
         data.put(key.getKey(), key.getClazz().cast(value));
         return this;
     }
 
+    /**
+     * If the specified key is not already associated with a value (or is mapped
+     * to {@code null}) associates it with the given value. Throws an
+     * {@code ClassCastException} if the type of the specified value does not
+     * match with the {@link Key#getClazz()}.
+     *
+     * @param key   key with which the specified value is to be associated
+     * @param value value to be associated with the specified key
+     * @return this {@code KeyMap}
+     * @throws ClassCastException if the type of the specified value does not
+     *                            match with the {@link Key#getClazz()}
+     */
     public KeyMap putIfAbsent(Key key, Object value) {
         data.putIfAbsent(key.getKey(), key.getClazz().cast(value));
         return this;
     }
 
+    /**
+     * If the specified key is not already associated with a value (or is mapped
+     * to {@code null}), attempts to supply its value using the given supplier
+     * function and enters it into this map unless {@code null}. Throws an
+     * {@code ClassCastException} if the result type of the supplier function
+     * does not match with the {@link Key#getClazz()}.
+     *
+     * <p>If the supplier function returns {@code null}, no mapping is recorded.
+     * If the supplier function itself throws an (unchecked) exception, the
+     * exception is rethrown, and no mapping is recorded.
+     *
+     * <p>The supplier function should not modify this map during computation.
+     *
+     * @param key           key with which the specified value is to be
+     *                      associated
+     * @param valueSupplier the supplier function to supply a new value
+     * @return this {@code KeyMap}
+     * @throws ClassCastException if the result type of the supplier function
+     *                            does not match with the {@link Key#getClazz()}
+     */
     public KeyMap putIfAbsent(Key key, Supplier<?> valueSupplier) {
         data.computeIfAbsent(key.getKey(), k -> key.getClazz().cast(valueSupplier.get()));
         return this;
     }
 
+    /**
+     * If the value for the specified key is present and non-null, attempts to
+     * update the current mapped value. Throws an {@code ClassCastException} if
+     * the result type of the remapping function does not match with the
+     * {@link Key#getClazz()}.
+     *
+     * <p>If the remapping function returns {@code null}, the mapping is
+     * removed. If the remapping function itself throws an (unchecked)
+     * exception, the exception is rethrown, and the current mapping is left
+     * unchanged.
+     *
+     * <p>The remapping function should not modify this map during computation.
+     *
+     * @param key          key with which the specified value is to be
+     *                     associated
+     * @param valueUpdater the remapping function to take an existing value and
+     *                     return a new one
+     * @param <T>          the type of the value
+     * @return this {@code KeyMap}
+     * @throws ClassCastException if the result type of the remapping function
+     *                            does not match with the {@link Key#getClazz()}
+     */
     @SuppressWarnings("unchecked")
-    public <P> KeyMap updateIfPresent(Key key, Function<P, P> valueUpdater) {
-        data.computeIfPresent(key.getKey(), (k, v) -> key.getClazz().cast(valueUpdater.apply((P) v)));
+    public <T> KeyMap updateIfPresent(Key key, Function<T, T> valueUpdater) {
+        data.computeIfPresent(key.getKey(), (k, v) -> key.getClazz().cast(valueUpdater.apply((T) v)));
         return this;
     }
 
     /**
-     * Sets a new value if there is no existing one, otherwise updates the
-     * existing one.
+     * Attempts to compute a mapping for the specified key and its current
+     * mapped value (or {@code null} if there is no current mapping). Throws an
+     * {@code ClassCastException} if the result type of the remapping function
+     * does not match with the {@link Key#getClazz()}.
      *
-     * @param valueSetter The function that takes the existing value as the
-     *                    input and output a new one. A null input indicates
-     *                    that there was no value associated with this key.
+     * <p>If the remapping function returns {@code null}, the mapping is removed
+     * (or remains absent if initially absent). If the remapping function itself
+     * throws an (unchecked) exception, the exception is rethrown, and the
+     * current mapping is left unchanged.
+     *
+     * <p>The remapping function should not modify this map during computation.
+     *
+     * @param key         key with which the specified value is to be associated
+     * @param valueSetter the remapping function to take an existing value (or
+     *                    {@code null} if there is no current mapping) and
+     *                    return a new one
+     * @param <T>         the type of the value
+     * @return this {@code KeyMap}
+     * @throws ClassCastException if the result type of the remapping function
+     *                            does not match with the {@link Key#getClazz()}
      */
     @SuppressWarnings("unchecked")
-    public <P> KeyMap putOrUpdate(Key key, Function<P, P> valueSetter) {
-        data.compute(key.getKey(), (k, v) -> key.getClazz().cast(valueSetter.apply((P) v)));
+    public <T> KeyMap putOrUpdate(Key key, Function<T, T> valueSetter) {
+        data.compute(key.getKey(), (k, v) -> key.getClazz().cast(valueSetter.apply((T) v)));
         return this;
     }
 
+    /**
+     * Removes the mapping for a key from this map if it is present (optional
+     * operation).
+     *
+     * <p>The map will not contain a mapping for the specified key once the call
+     * returns.
+     *
+     * @param key key whose mapping is to be removed from the map
+     * @return this {@code KeyMap}
+     */
     public KeyMap remove(Key key) {
         data.remove(key.getKey());
         return this;

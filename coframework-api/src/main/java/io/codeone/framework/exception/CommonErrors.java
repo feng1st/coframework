@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Provides some commonly used error enumerations.
+ * Provides some commonly used error enumerations that implemented the
+ * {@link ApiError} interface. You can use them as parameters to construct an
+ * instance of subclasses of the {@link BaseException}.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
