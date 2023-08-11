@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * A particular node that filter out undesired elements from a list.
  *
- * @param <T> The type of the list element.
+ * @param <T> the type of the list element
  */
 public abstract class TargetFilter<T> implements Node {
 
@@ -19,22 +19,24 @@ public abstract class TargetFilter<T> implements Node {
     }
 
     private boolean doExecute(Context<List<T>> context, Logger logger) {
-        if (context.getTarget() == null
-                || context.getTarget().isEmpty()) {
-            return true;
+        if (context.getTarget() != null
+                && !context.getTarget().isEmpty()) {
+            context.setTarget(filter(context.getTarget(), context, logger));
         }
-
-        context.setTarget(filter(context.getTarget(), context, logger));
-
-        return context.getTarget() == null
-                || context.getTarget().isEmpty();
+        return false;
     }
 
     /**
-     * Filters out unwanted elements.
+     * Filters out unwanted elements. This method will not be invoked if current
+     * target is {@code null} or empty. It is permitted to return {@code null}
+     * but an empty list is more recommended in such case.
      *
-     * @param target The list that is being filtered.
-     * @return The list with remaining elements.
+     * @param target  The list that is being filtered
+     * @param context the context that includes the target the chain operates
+     *                on and returns, the initial input arguments of the chain,
+     *                and the input/output arguments of each node
+     * @param logger  the logger that can and should log concise key information
+     * @return The list with remaining elements ({@code null} is permitted.)
      */
     protected abstract List<T> filter(List<T> target, Context<?> context, Logger logger);
 }

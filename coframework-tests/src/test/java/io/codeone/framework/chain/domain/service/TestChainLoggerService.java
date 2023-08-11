@@ -2,8 +2,8 @@ package io.codeone.framework.chain.domain.service;
 
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
+import io.codeone.framework.chain.domain.constants.TestChains;
 import io.codeone.framework.chain.domain.constants.TestKeys;
-import io.codeone.framework.chain.domain.constants.TestNames;
 import io.codeone.framework.chain.domain.model.User;
 import io.codeone.framework.chain.domain.processor.TestChainCounter;
 import io.codeone.framework.chain.domain.processor.TestChainUserExtraInfoLoader;
@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 @Service
 public class TestChainLoggerService {
 
-    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestNames.LOGGER, Path.of(
+    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestChains.LOGGER, Path.of(
             TestChainUserLoader.class,
             TestChainUserExtraInfoLoader.class,
             TestChainCountRenderer.class,

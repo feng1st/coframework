@@ -10,6 +10,7 @@ import org.slf4j.event.Level;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class Log {
@@ -98,6 +99,9 @@ public class Log {
         return this;
     }
 
+    /**
+     * @param arg {@code null} is permitted and will be logged as "null"
+     */
     public Log addArg(String parameterName, Object arg) {
         if (this.args == null) {
             this.args = new LinkedHashMap<>();
@@ -208,9 +212,9 @@ public class Log {
         append(builder, "code", code);
         append(builder, "message", message);
         append(builder, "elapsed", elapsed);
-        appendMap(builder, "arg.", args);
         append(builder, "result", result);
         append(builder, "error", error);
+        appendMap(builder, "arg.", args, "null");
         return builder.toString();
     }
 
@@ -236,11 +240,11 @@ public class Log {
                 .append(mergeLines(value.toString()));
     }
 
-    private void appendMap(StringBuilder builder, String prefix, Map<String, Object> map) {
+    private void appendMap(StringBuilder builder, String prefix, Map<String, Object> map, Object defaultValue) {
         if (map == null || map.isEmpty()) {
             return;
         }
-        map.forEach((k, v) -> append(builder, prefix + k, v));
+        map.forEach((k, v) -> append(builder, prefix + k, Optional.ofNullable(v).orElse(defaultValue)));
     }
 
     private static final Pattern PATTERN_NEW_LINES = Pattern.compile("[\r\n]+");

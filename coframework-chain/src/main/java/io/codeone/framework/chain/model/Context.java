@@ -44,12 +44,7 @@ public class Context<T> {
     /**
      * Input and output arguments of the nodes, mapped by Keys.
      */
-    private final Map<Key, Object> argumentsByKey = new ConcurrentHashMap<>();
-
-    /**
-     * Input and output arguments of the nodes, mapped by their classes.
-     */
-    private final Map<Class<?>, Object> argumentsByClass = new ConcurrentHashMap<>();
+    private final Map<Key, Object> arguments = new ConcurrentHashMap<>();
 
     public static <T> Builder<T> newBuilder() {
         return new Builder<>();
@@ -75,80 +70,40 @@ public class Context<T> {
     }
 
     public void ifArgumentPresent(Key key, Consumer<Object> consumer) {
-        Optional.ofNullable(argumentsByKey.get(key))
-                .ifPresent(consumer);
-    }
-
-    public void ifArgumentPresent(Class<?> clazz, Consumer<Object> consumer) {
-        Optional.ofNullable(argumentsByClass.get(clazz))
+        Optional.ofNullable(arguments.get(key))
                 .ifPresent(consumer);
     }
 
     public boolean hasArgument(Key key) {
-        return argumentsByKey.containsKey(key);
-    }
-
-    public boolean hasArgument(Class<?> clazz) {
-        return argumentsByClass.containsKey(clazz);
+        return arguments.containsKey(key);
     }
 
     public <P> P getArgument(Key key) {
-        return key.<P>getClazz().cast(argumentsByKey.get(key));
-    }
-
-    @SuppressWarnings("unchecked")
-    public <P> P getArgument(Class<?> clazz) {
-        return (P) argumentsByClass.get(clazz);
+        return key.<P>getClazz().cast(arguments.get(key));
     }
 
     public <P> P getArgumentOrDefault(Key key, P defaultValue) {
-        return key.<P>getClazz().cast(argumentsByKey.getOrDefault(key, defaultValue));
-    }
-
-    @SuppressWarnings("unchecked")
-    public <P> P getArgumentOrDefault(Class<?> clazz, P defaultValue) {
-        return (P) argumentsByClass.getOrDefault(clazz, defaultValue);
+        return key.<P>getClazz().cast(arguments.getOrDefault(key, defaultValue));
     }
 
     public Context<T> setArgument(Key key, Object value) {
-        argumentsByKey.put(key, key.getClazz().cast(value));
-        return this;
-    }
-
-    public Context<T> setArgument(Object value) {
-        argumentsByClass.put(value.getClass(), value);
+        arguments.put(key, key.getClazz().cast(value));
         return this;
     }
 
     public Context<T> setArgumentIfAbsent(Key key, Object value) {
-        argumentsByKey.putIfAbsent(key, key.getClazz().cast(value));
-        return this;
-    }
-
-    public Context<T> setArgumentIfAbsent(Object value) {
-        argumentsByClass.putIfAbsent(value.getClass(), value);
+        arguments.putIfAbsent(key, key.getClazz().cast(value));
         return this;
     }
 
     public Context<T> setArgumentIfAbsent(Key key, Supplier<?> valueSupplier) {
-        argumentsByKey.computeIfAbsent(key, k -> key.getClazz().cast(valueSupplier.get()));
-        return this;
-    }
-
-    public <P> Context<T> setArgumentIfAbsent(Class<P> clazz, Supplier<P> valueSupplier) {
-        argumentsByClass.computeIfAbsent(clazz, k -> valueSupplier.get());
+        arguments.computeIfAbsent(key, k -> key.getClazz().cast(valueSupplier.get()));
         return this;
     }
 
     @SuppressWarnings("unchecked")
     public <P> Context<T> updateArgumentIfPresent(Key key, Function<P, P> valueUpdater) {
-        argumentsByKey.computeIfPresent(key, (k, v) -> key.getClazz().cast(valueUpdater.apply((P) v)));
-        return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <P> Context<T> updateArgumentIfPresent(Class<P> clazz, Function<P, P> valueUpdater) {
-        argumentsByClass.computeIfPresent(clazz, (k, v) -> valueUpdater.apply((P) v));
+        arguments.computeIfPresent(key, (k, v) -> key.getClazz().cast(valueUpdater.apply((P) v)));
         return this;
     }
 
@@ -162,31 +117,12 @@ public class Context<T> {
      */
     @SuppressWarnings("unchecked")
     public <P> Context<T> setOrUpdateArgument(Key key, Function<P, P> valueSetter) {
-        argumentsByKey.compute(key, (k, v) -> key.getClazz().cast(valueSetter.apply((P) v)));
-        return this;
-    }
-
-    /**
-     * Sets a new argument if there is no existing one, otherwise updates the
-     * existing one.
-     *
-     * @param valueSetter The function that takes the existing argument as the
-     *                    input and output a new one. A null input indicates
-     *                    that there was no value associated with this class.
-     */
-    @SuppressWarnings("unchecked")
-    public <P> Context<T> setOrUpdateArgument(Class<P> clazz, Function<P, P> valueSetter) {
-        argumentsByClass.compute(clazz, (k, v) -> valueSetter.apply((P) v));
+        arguments.compute(key, (k, v) -> key.getClazz().cast(valueSetter.apply((P) v)));
         return this;
     }
 
     public Context<T> resetArgument(Key key) {
-        argumentsByKey.remove(key);
-        return this;
-    }
-
-    public Context<T> resetArgument(Class<?> clazz) {
-        argumentsByClass.remove(clazz);
+        arguments.remove(key);
         return this;
     }
 
@@ -218,8 +154,7 @@ public class Context<T> {
 
     private void logAll(Logger logger) {
         logger.logTarget(target);
-        argumentsByKey.forEach(logger::log);
-        argumentsByClass.forEach(logger::log);
+        arguments.forEach(logger::log);
     }
 
     @Setter

@@ -2,7 +2,7 @@ package io.codeone.framework.chain.domain.service;
 
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
-import io.codeone.framework.chain.domain.constants.TestNames;
+import io.codeone.framework.chain.domain.constants.TestChains;
 import io.codeone.framework.chain.domain.filter.TestChainNon3NFilter;
 import io.codeone.framework.chain.domain.filter.TestChainNon5NFilter;
 import io.codeone.framework.chain.domain.filter.TestChainOddFilter;
@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class TestChainDerivedChainService {
 
-    private static final ChainSpec DEFAULT_FILTER_CHAIN_SPEC = ChainSpec.of(TestNames.DERIVED,
+    private static final ChainSpec DEFAULT_FILTER_CHAIN_SPEC = ChainSpec.of(TestChains.DERIVED,
             Path.of(TestChainOddFilter.class, TestChainNon5NFilter.class));
 
     /**

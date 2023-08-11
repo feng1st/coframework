@@ -2,8 +2,8 @@ package io.codeone.framework.chain.domain.service;
 
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
+import io.codeone.framework.chain.domain.constants.TestChains;
 import io.codeone.framework.chain.domain.constants.TestKeys;
-import io.codeone.framework.chain.domain.constants.TestNames;
 import io.codeone.framework.chain.domain.node.Stage1;
 import io.codeone.framework.chain.domain.node.Stage2;
 import io.codeone.framework.chain.domain.render.TestChainCountRenderer;
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 @Service
 public class TestChainDynamicChainService {
 
-    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestNames.DYNAMIC,
+    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestChains.DYNAMIC,
             Path.of(Stage1.class, Stage2.class, TestChainCountRenderer.class));
 
     @Resource

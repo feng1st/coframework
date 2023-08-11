@@ -32,13 +32,7 @@ public class ChainDecorator {
     /**
      * Additional input arguments that the new nodes need, mapped by Key.
      */
-    private Map<Key, Object> argumentsByKey;
-
-    /**
-     * Additional input arguments that the new nodes need, mapped by their
-     * classes.
-     */
-    private Map<Class<?>, Object> argumentsByClass;
+    private Map<Key, Object> arguments;
 
     /**
      * Adds a new path to the node graph of the chain.
@@ -62,23 +56,27 @@ public class ChainDecorator {
      * This method should be used by the developers who extend the chain.
      */
     public ChainDecorator addArgument(Key key, Object value) {
-        if (argumentsByKey == null) {
-            argumentsByKey = new HashMap<>();
+        if (arguments == null) {
+            arguments = new HashMap<>();
         }
-        argumentsByKey.put(key, value);
+        arguments.put(key, value);
         return this;
     }
 
     /**
-     * Adds an argument the new nodes need, by its class.
-     * <p>
-     * This method should be used by the developers who extend the chain.
+     * Copies arguments from an existing context.
+     *
+     * @param context an existing context containing the source arguments
+     * @param keys    indicates which arguments should be copied
+     * @return itself (chaining)
      */
-    public ChainDecorator addArgument(Object value) {
-        if (argumentsByClass == null) {
-            argumentsByClass = new HashMap<>();
+    public ChainDecorator copyArgumentsFrom(Context<?> context, Key... keys) {
+        if (arguments == null) {
+            arguments = new HashMap<>();
         }
-        argumentsByClass.put(value.getClass(), value);
+        for (Key key : keys) {
+            arguments.put(key, context.getArgument(key));
+        }
         return this;
     }
 
@@ -102,11 +100,8 @@ public class ChainDecorator {
      * This method should be used by the developers who provide the chain.
      */
     public <T> Context<T> decorate(Context<T> context) {
-        if (argumentsByKey != null && !argumentsByKey.isEmpty()) {
-            argumentsByKey.forEach(context::setArgument);
-        }
-        if (argumentsByClass != null && !argumentsByClass.isEmpty()) {
-            argumentsByClass.values().forEach(context::setArgument);
+        if (arguments != null && !arguments.isEmpty()) {
+            arguments.forEach(context::setArgument);
         }
         return context;
     }

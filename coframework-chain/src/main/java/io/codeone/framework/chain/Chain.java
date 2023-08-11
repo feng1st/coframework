@@ -133,7 +133,7 @@ public class Chain<T> {
     private void logChain(Context<T> context) {
         Log chainLog = Log.newBuilder()
                 .logger(log)
-                .scene(spec.getName().toString());
+                .scene(spec.getName().asString());
         context.logChain(chainLog::addArg);
         chainLog.success().log();
     }
@@ -141,7 +141,7 @@ public class Chain<T> {
     private boolean executeNode(Context<T> context, Node node) {
         Log nodeLog = Log.newBuilder()
                 .logger(log)
-                .scene(spec.getName().toString())
+                .scene(spec.getName().asString())
                 .method(node.getClass().getSimpleName());
         long start = System.currentTimeMillis();
         try {

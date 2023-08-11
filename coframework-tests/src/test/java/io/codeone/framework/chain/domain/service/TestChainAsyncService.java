@@ -2,8 +2,8 @@ package io.codeone.framework.chain.domain.service;
 
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
+import io.codeone.framework.chain.domain.constants.TestChains;
 import io.codeone.framework.chain.domain.constants.TestKeys;
-import io.codeone.framework.chain.domain.constants.TestNames;
 import io.codeone.framework.chain.domain.processor.TestChainAsyncMapper;
 import io.codeone.framework.chain.domain.processor.TestChainAsyncParallelAProcessor;
 import io.codeone.framework.chain.domain.processor.TestChainAsyncParallelBProcessor;
@@ -23,7 +23,7 @@ public class TestChainAsyncService {
 
     private final Executor executor = Executors.newCachedThreadPool();
 
-    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestNames.ASYNC,
+    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestChains.ASYNC,
             // Two paths, with the same starting and ending node:
             // Mapper -> ParallelA -> Reducer
             // Mapper -> ParallelB -> Reducer

@@ -2,8 +2,8 @@ package io.codeone.framework.chain.domain.service;
 
 import io.codeone.framework.chain.Chain;
 import io.codeone.framework.chain.ChainFactory;
+import io.codeone.framework.chain.domain.constants.TestChains;
 import io.codeone.framework.chain.domain.constants.TestKeys;
-import io.codeone.framework.chain.domain.constants.TestNames;
 import io.codeone.framework.chain.domain.processor.TestChainCounter;
 import io.codeone.framework.chain.domain.processor.TestChainUserExtraInfoLoader;
 import io.codeone.framework.chain.domain.processor.TestChainUserLoader;
@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 @Service
 public class TestChainMixedNodeTypesService {
 
-    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestNames.MIXED, Path.of(
+    private static final ChainSpec CHAIN_SPEC = ChainSpec.of(TestChains.MIXED, Path.of(
             // ContextProcessor
             TestChainUserLoader.class,
             // ContextProcessor
