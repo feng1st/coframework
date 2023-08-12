@@ -135,7 +135,7 @@ public class Context<T> {
      * Copies an argument from the KeyMap.
      */
     public Context<T> copyFrom(KeyMap keyMap, Key key) {
-        setOrUpdateArgument(key, v -> keyMap.get(key));
+        setArgument(key, keyMap.get(key));
         return this;
     }
 
@@ -143,7 +143,7 @@ public class Context<T> {
      * Copies an argument to the KeyMap.
      */
     public Context<T> copyTo(KeyMap keyMap, Key key) {
-        keyMap.putOrUpdate(key, v -> getArgument(key));
+        keyMap.put(key, getArgument(key));
         return this;
     }
 
