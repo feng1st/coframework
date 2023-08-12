@@ -3,16 +3,17 @@ package io.codeone.framework.request;
 import io.codeone.framework.util.ArgChecker;
 
 /**
- * ApiParam indicates a parameter of an API call. An API is a service which is
- * exposed to outer system or customers.
+ * Interface of API parameters that the framework can recognize and use in
+ * arguments validating automatically.
  */
 public interface ApiParam {
 
     /**
-     * checkArgs() of an ApiParam will be called before the invocation of its
-     * belonging method of a service if that service is annotated by '@API'.
+     * This method will be called before the invocation of the parameter's
+     * belonging method/service, if that method/service is annotated by
+     * {@code @API} (in {@code coframework-core}).
      * <p>
-     * An IllegalArgumentException should be thrown if any checking failed. The
+     * You can throw an IllegalArgumentException if any validation failed. The
      * framework provided an {@link ArgChecker} util to facilitate these
      * checking.
      * <p>

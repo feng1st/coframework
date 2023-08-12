@@ -100,7 +100,7 @@ public class Log {
     }
 
     /**
-     * @param arg {@code null} is permitted and will be logged as "null"
+     * @param arg null is permitted and will be logged as "null"
      */
     public Log addArg(String parameterName, Object arg) {
         if (this.args == null) {

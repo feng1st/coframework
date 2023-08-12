@@ -25,8 +25,8 @@ public abstract class TargetProcessor<T> implements Node {
 
     /**
      * Manipulates the target of the chain. This method will not be invoked if
-     * current target is {@code null}. Returns {@code true} if you want to break
-     * the execution of the chain earlier.
+     * current target is null. Returns {@code true} if you want to break the
+     * execution of the chain earlier.
      *
      * @param target  the target this node operates on
      * @param context the context that includes the target the chain operates

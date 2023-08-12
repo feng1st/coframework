@@ -5,19 +5,16 @@ import lombok.experimental.Accessors;
 
 /**
  * The result of an API call. For example:
- * <pre>
- * {@code
- * Result<Void> result;        // A result without data, only successfulness,
- *                             // code, etc.
- * Result<Long> result;        // A Long result, and successfulness and other
- *                             // properties.
- * Result<List<Long>> result;  // A result of a list of Long.
- * Result<Page<Long>> result;  // A result of a paged Long, including
- *                             // pageIndex, pageSize and totalCount.
- * }
- * </pre>
+ * <pre>{@code
+ * Result<Void> result;        // a result without data, only successfulness,
+ *                             // error code, and error message
+ * Result<Long> result;        // the same as above, but with a Long data
+ * Result<List<Long>> result;  // a result of a list of Long
+ * Result<Page<Long>> result;  // a result of a paged Long data, including
+ *                             // pageIndex, pageSize and totalCount
+ * }</pre>
  *
- * @param <T> The type of returned data.
+ * @param <T> the type of returned data
  */
 @Data
 @Accessors(chain = true)
@@ -45,6 +42,9 @@ public class Result<T> {
 
     /**
      * Constructs a successful result with no data.
+     *
+     * @param <T> the type of returned data
+     * @return the successful result
      */
     public static <T> Result<T> success() {
         return new Result<T>()
@@ -53,6 +53,10 @@ public class Result<T> {
 
     /**
      * Constructs a successful result with data.
+     *
+     * @param data the returned data
+     * @param <T>  the type of returned data
+     * @return the successful result
      */
     public static <T> Result<T> success(T data) {
         return new Result<T>()
@@ -61,7 +65,13 @@ public class Result<T> {
     }
 
     /**
-     * Constructs a failed result with code and message.
+     * Constructs a failed result with code and message. The result does not
+     * contain any data of course.
+     *
+     * @param errorCode    the code of the error
+     * @param errorMessage the message of the error
+     * @param <T>          the type of returned data
+     * @return the failed result
      */
     public static <T> Result<T> fail(String errorCode, String errorMessage) {
         return new Result<T>()

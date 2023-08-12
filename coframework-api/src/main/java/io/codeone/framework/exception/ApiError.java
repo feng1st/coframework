@@ -1,9 +1,8 @@
 package io.codeone.framework.exception;
 
 /**
- * The recommended interface of all custom exceptions and error enumerations.
- * The framework can recognize {@code ApiError}, and uses its properties in
- * logging and API result wrapping.
+ * Interface of custom exceptions and error enumerations that the framework can
+ * recognize and use in logging and API result wrapping automatically.
  *
  * <p>We suggest that all custom exceptions should extend the
  * {@link BaseException} which is an implementation of this interface. And using

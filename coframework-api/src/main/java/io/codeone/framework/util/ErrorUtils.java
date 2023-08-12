@@ -14,8 +14,15 @@ import java.util.Set;
 public class ErrorUtils {
 
     /**
-     * Returns the top-most user custom exception, or IllegalArgumentException,
-     * as a reasonable cause. Or returns the root cause of the throwable.
+     * Returns the top-most custom exception ({@link ApiError}) or
+     * {@code IllegalArgumentException} in the hierarchy of the
+     * {@code Throwable} as a meaningful cause, which will be used in logging
+     * and result wrapping. Returns the root cause of the {@code Throwable} if
+     * there is no {@code ApiError} or {@code IllegalArgumentException} in the
+     * hierarchy.
+     *
+     * @param t the caught exception
+     * @return a more meaningful cause
      */
     public Throwable getCause(Throwable t) {
         Set<Throwable> set = new HashSet<>();
@@ -35,10 +42,13 @@ public class ErrorUtils {
     }
 
     /**
-     * Interprets the code from a cause. Returns ApiError::getCode() if it was
-     * an ApiError, returns "INVALID_PARAM" if it was a
-     * IllegalArgumentException, otherwise returns the simple name of its
-     * class.
+     * Interprets the code from a cause. Returns {@link ApiError#getCode()} if
+     * it was an {@code ApiError}, returns {@code "INVALID_PARAM"} if it was a
+     * {@code IllegalArgumentException}, otherwise returns the simple name of
+     * its class.
+     *
+     * @param cause the exception being interpreted
+     * @return the string code of the cause
      */
     public String getCode(Throwable cause) {
         if (cause instanceof ApiError) {

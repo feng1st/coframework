@@ -25,8 +25,8 @@ public abstract class TargetRenderer<T> implements Node {
      * Supplies or updates the target of the chain. Returns a new or updated
      * target.
      *
-     * @param target  current target of the chain, {@code null} if the target is
-     *                not existing
+     * @param target  current target of the chain, null if the target is not
+     *                existing
      * @param context the context that includes the target the chain operates
      *                on and returns, the initial input arguments of the chain,
      *                and the input/output arguments of each node
@@ -45,7 +45,7 @@ public abstract class TargetRenderer<T> implements Node {
      * Updates the existing target of the chain. This method will not be invoked
      * if the target is not existing.
      *
-     * @param target  current target of the chain, not {@code null}
+     * @param target  current target of the chain, not null
      * @param context the context that includes the target the chain operates
      *                on and returns, the initial input arguments of the chain,
      *                and the input/output arguments of each node

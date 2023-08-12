@@ -28,15 +28,15 @@ public abstract class TargetFilter<T> implements Node {
 
     /**
      * Filters out unwanted elements. This method will not be invoked if current
-     * target is {@code null} or empty. It is permitted to return {@code null}
-     * but an empty list is more recommended in such case.
+     * target is null or empty. It is permitted to return null but an empty list
+     * is more recommended in such case.
      *
      * @param target  The list that is being filtered
      * @param context the context that includes the target the chain operates
      *                on and returns, the initial input arguments of the chain,
      *                and the input/output arguments of each node
      * @param logger  the logger that can and should log concise key information
-     * @return The list with remaining elements ({@code null} is permitted.)
+     * @return The list with remaining elements (null is permitted.)
      */
     protected abstract List<T> filter(List<T> target, Context<?> context, Logger logger);
 }

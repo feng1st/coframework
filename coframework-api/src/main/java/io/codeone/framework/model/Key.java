@@ -23,6 +23,7 @@ public interface Key {
      * <code>List{@literal <}<em>Long</em>></code> or
      * <code>List{@literal <}<em>String</em>></code>.
      *
+     * @param <T> the class of this key
      * @return the class of the value
      */
     <T> Class<T> getClazz();
