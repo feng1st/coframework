@@ -3,18 +3,17 @@ package io.codeone.framework.ext;
 import java.lang.annotation.*;
 
 /**
- * Ability is a business concept, an abstraction that indicates what tasks a
- * system can complete. The system can be designed to provide services with
- * abilities or Ability as a Service.
- * <p>
- * Ability annotation is used on interfaces, which represent the abilities
- * themselves. The methods of the interface can represent sub-abilities, steps
- * of the ability, extension points of the ability, etc.
- * <p>
- * An ability is an Extensible, please refer to the Extensible annotation for
- * more information.
+ * Use this annotation to mark an Extensible interface which represents an
+ * ability of the system. An ability is a concept that indicates what tasks a
+ * system can complete, and in contrast to extension points (annotated by
+ * {@link ExtensionPoint}), an ability is a higher level of abstraction. A
+ * service can be an ability, or be made up of multiple abilities.
+ *
+ * <p>The methods of the ability interface can represent sub-abilities, steps of
+ * the ability, extension points of the ability, etc.
  *
  * @see Extensible
+ * @see ExtensionPoint
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -23,21 +22,25 @@ import java.lang.annotation.*;
 public @interface Ability {
 
     /**
-     * A human-readable name of the Ability.
+     * A human-readable name of this ability.
+     *
+     * @return name of this ability
      */
     String name() default "";
 
     /**
-     * The description of the Ability.
+     * The description of this ability.
+     *
+     * @return description of this ability
      */
     String description() default "";
 
     /**
-     * Optional annotation to add name, description and order to a method of an
-     * ability.
-     * <p>
-     * All methods in an ability interface are extensible alongside the
-     * interface, no matter have this annotation or not.
+     * Adds name, description and order to a method of an ability. This
+     * annotation is optional.
+     *
+     * <p>All methods in an ability interface are ability methods, no matter
+     * having this annotation or not.
      */
     @Documented
     @Retention(RetentionPolicy.RUNTIME)
@@ -45,17 +48,23 @@ public @interface Ability {
     @interface Method {
 
         /**
-         * The name of the method.
+         * The name of this ability method.
+         *
+         * @return name of this ability method
          */
         String name() default "";
 
         /**
-         * The description of the method.
+         * The description of this ability method.
+         *
+         * @return description of this ability method
          */
         String description() default "";
 
         /**
-         * Logical order of this method, -1 means does not matter.
+         * Virtual order of this ability method.
+         *
+         * @return order of this ability method
          */
         int order() default -1;
     }

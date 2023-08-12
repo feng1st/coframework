@@ -55,6 +55,7 @@ public class ExtensionPointMethod {
      * @param extPtMethod the {@code ExtensionPoint.Method} annotation of the
      *                    method
      * @param method      the extension point method
+     * @return constructed {@code ExtensionPointMethod}
      */
     public static ExtensionPointMethod of(ExtensionPoint.Method extPtMethod, Method method) {
         return new ExtensionPointMethod(extPtMethod, method);

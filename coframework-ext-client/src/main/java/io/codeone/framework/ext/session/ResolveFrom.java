@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 /**
  * Used with {@link BizScenarioResolvePolicy#SPECIFIED} or
  * {@link BizScenarioResolvePolicy#AUTO} to specify a {@link BizScenarioParam}
- * parameter that a {@link BizScenario} object can be resolved from.
+ * parameter that a {@link BizScenario} instance can be resolved from.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

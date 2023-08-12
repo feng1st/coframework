@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 /**
  * Add this annotation to any service/method, to start an extension session
  * whenever that service/method is invoked. In the session, the framework will
- * try to resolve a {@link BizScenario} object from the arguments of that
+ * try to resolve a {@link BizScenario} instance from the arguments of that
  * method call, and push it to the {@code BizScenarioContext} (in
  * {@code coframework-ext}). By doing this, any subsequent invocation of an
  * Extensible (for example an interface annotated by {@link Ability}) does not
@@ -28,10 +28,10 @@ import java.lang.annotation.*;
  * (recommended), or add {@link RouteByContext} to every Extensible interfaces.
  * <li>Add {@code ExtensionSession} annotation to your entrance services, such
  * as facades, rpc services or domain services.
- * <li>Make sure a {@code BizScenario} object can be resolved from the arguments
- * of these services, by providing a {@code BizScenarioParam} parameter
- * (simpler) or by using a custom {@link BizScenarioResolver}, otherwise an
- * exception will be thrown.
+ * <li>Make sure a {@code BizScenario} instance can be resolved from the
+ * arguments of these services, by providing a {@code BizScenarioParam}
+ * parameter (simpler) or by using a custom {@link BizScenarioResolver},
+ * otherwise an exception will be thrown.
  * </ul>
  */
 @Documented
@@ -41,8 +41,8 @@ import java.lang.annotation.*;
 public @interface ExtensionSession {
 
     /**
-     * Specifies how to resolve a {@link BizScenario} object from the arguments.
-     * The default value is {@link BizScenarioResolvePolicy#AUTO}.
+     * Specifies how to resolve a {@link BizScenario} instance from the
+     * arguments. The default value is {@link BizScenarioResolvePolicy#AUTO}.
      *
      * @return the policy of {@code BizScenario} resolving
      * @see BizScenarioResolvePolicy
@@ -53,10 +53,10 @@ public @interface ExtensionSession {
      * If {@link #value()} is {@link BizScenarioResolvePolicy#CUSTOM}, or
      * {@code value()} is {@link BizScenarioResolvePolicy} and this
      * property is a subclass of {@link BizScenarioResolver}, uses the bean of
-     * that subclass to resolve {@link BizScenario} objects.
+     * that subclass to resolve {@link BizScenario} instances.
      *
      * @return a custom {@code BizScenarioResolver} that can resolve
-     * {@code BizScenario} objects from arguments
+     * {@code BizScenario} instances from arguments
      */
     Class<? extends BizScenarioResolver> customResolver() default BizScenarioResolver.class;
 }

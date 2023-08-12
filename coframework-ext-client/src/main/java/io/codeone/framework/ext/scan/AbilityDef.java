@@ -39,6 +39,7 @@ public class AbilityDef {
      *
      * @param ability         the {@code Ability} annotation of the ability
      * @param extensibleClass the ability interface
+     * @return constructed {@code AbilityDef}
      */
     public static AbilityDef of(Ability ability, Class<?> extensibleClass) {
         return new AbilityDef(ability, extensibleClass);

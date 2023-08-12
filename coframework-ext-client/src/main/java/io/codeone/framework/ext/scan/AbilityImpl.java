@@ -39,24 +39,25 @@ public class AbilityImpl {
      * The class name of the actual class that implemented the ability method.
      * The class is the declaring class of the implemented method which the
      * extension class is using. And it could be the extension class itself, or
-     * a superclass of it. For example, {@code BaseAbilityImpl} is the
+     * a superclass of it. For example, {@code BaseSaveAbility} is the
      * {@code implementingClass} here:
      * <pre>{@code
      * @Ability
-     * public interface TheAbility {
-     *     int theMethod();
+     * public interface SaveAbility {
+     *     void save();
      * }
      *
-     * // This is the actual class that implemented the ability method.
-     * public abstract class BaseAbilityImpl implements TheAbility {
-     *     public int theMethod() {
+     * // This is the actual class that implemented the ability method
+     * public abstract class BaseSaveAbility implements SaveAbility {
+     *     @Override
+     *     public void save() {
      *     }
      * }
      *
      * // Did not implemented the ability method but inherited it from
-     * // BaseAbilityImpl.
+     * // BaseSaveAbility
      * @Extension(bizId = "BIZ1")
-     * public class Biz1AbilityImpl extends BaseAbilityImpl {
+     * public class Biz1SaveAbility extends BaseSaveAbility {
      * }
      * }</pre>
      */
@@ -69,24 +70,25 @@ public class AbilityImpl {
      * the {@code bizScenario} here:
      * <pre>{@code
      * @Ability
-     * public interface TheAbility {
-     *     int theMethod();
+     * public interface SaveAbility {
+     *     void save();
      * }
      *
-     * public abstract class BaseAbilityImpl implements TheAbility {
-     *     public int theMethod() {
+     * public abstract class BaseSaveAbility implements SaveAbility {
+     *     @Override
+     *     public void save() {
      *     }
      * }
      *
      * // This is the nearest (and usually broader) bizScenario the implemented
-     * // method is applied for.
+     * // method is applied for
      * @Extension(bizId = "BIZ1")
-     * public class Biz1AbilityImpl extends BaseAbilityImpl {
+     * public class Biz1SaveAbility extends BaseSaveAbility {
      * }
      *
-     * // Not this one, which is shadowed by (bizId = "BIZ1")
-     * @Extension(bizId = "BIZ1.SUB1")
-     * public class Biz1Sub1AbilityImpl extends Biz1AbilityImpl {
+     * // Not this one
+     * @Extension(bizId = "BIZ1.TEAM_A")
+     * public class Biz1TeamASaveAbility extends Biz1SaveAbility {
      * }
      * }</pre>
      */
@@ -100,6 +102,7 @@ public class AbilityImpl {
      * @param method            an implementation of the ability method
      * @param implementingClass the declaring class of the method
      * @param bizScenario       the bizScenario the method is applied for
+     * @return constructed {@code AbilityImpl}
      */
     public static AbilityImpl of(Method method, Class<?> implementingClass, BizScenario bizScenario) {
         return new AbilityImpl(method, implementingClass, bizScenario);

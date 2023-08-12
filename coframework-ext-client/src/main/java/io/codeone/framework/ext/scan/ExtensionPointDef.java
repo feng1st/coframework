@@ -40,6 +40,7 @@ public class ExtensionPointDef {
      * @param extPt           the {@code ExtensionPoint} annotation of the
      *                        extension point
      * @param extensibleClass the extension point interface
+     * @return constructed {@code ExtensionPointDef}
      */
     public static ExtensionPointDef of(ExtensionPoint extPt, Class<?> extensibleClass) {
         return new ExtensionPointDef(extPt, extensibleClass);

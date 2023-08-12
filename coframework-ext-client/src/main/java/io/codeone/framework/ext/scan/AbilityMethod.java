@@ -53,6 +53,7 @@ public class AbilityMethod {
      *
      * @param abilityMethod the {@code Ability.Method} annotation of the method
      * @param method        the ability method
+     * @return constructed {@code AbilityMethod}
      */
     public static AbilityMethod of(Ability.Method abilityMethod, Method method) {
         return new AbilityMethod(abilityMethod, method);

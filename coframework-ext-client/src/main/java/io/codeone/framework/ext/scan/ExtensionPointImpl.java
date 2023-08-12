@@ -62,6 +62,7 @@ public class ExtensionPointImpl {
      * @param method            an implementation of the extension point method
      * @param implementingClass the declaring class of the method
      * @param bizScenario       the bizScenario the method is applied for
+     * @return constructed {@code ExtensionPointImpl}
      */
     public static ExtensionPointImpl of(Method method, Class<?> implementingClass, BizScenario bizScenario) {
         return new ExtensionPointImpl(method, implementingClass, bizScenario);

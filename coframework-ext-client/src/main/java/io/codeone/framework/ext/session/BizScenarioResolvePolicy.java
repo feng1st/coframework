@@ -4,15 +4,15 @@ import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
 
 /**
- * Specifies how to resolve a {@link BizScenario} object for an
- * {@code ExtensionSession}. Please refer to {@code ExtensionSession} for more
+ * Specifies how to resolve a {@link BizScenario} instance for an
+ * {@code ExtensionSession}. Please refer to {@link ExtensionSession} for more
  * information.
  *
  * @see ExtensionSession
  */
 public enum BizScenarioResolvePolicy {
     /**
-     * Resolves a {@code BizScenario} object from the arguments, by trying
+     * Resolves a {@code BizScenario} instance from the arguments, by trying
      * approaches equivalent to {@link #CUSTOM}, {@link #SPECIFIED} and
      * {@link #FIRST} in turn (whichever succeeds first).
      */
@@ -32,7 +32,7 @@ public enum BizScenarioResolvePolicy {
     SPECIFIED,
     /**
      * Uses the bean of {@link ExtensionSession#customResolver()} to resolve a
-     * {@code BizScenario} object from the arguments, if the
+     * {@code BizScenario} instance from the arguments, if the
      * {@code customResolver()} is a subclass of {@link BizScenarioResolver}.
      */
     CUSTOM,
