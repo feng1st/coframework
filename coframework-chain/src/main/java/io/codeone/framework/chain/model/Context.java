@@ -86,6 +86,11 @@ public class Context<T> {
         return key.<P>getClazz().cast(arguments.getOrDefault(key, defaultValue));
     }
 
+    @SuppressWarnings("unchecked")
+    public <P> P computeArgumentIfAbsent(Key key, Supplier<?> valueSupplier) {
+        return (P) arguments.computeIfAbsent(key, k -> key.getClazz().cast(valueSupplier.get()));
+    }
+
     public Context<T> setArgument(Key key, Object value) {
         arguments.put(key, key.getClazz().cast(value));
         return this;
