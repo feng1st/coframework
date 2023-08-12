@@ -6,12 +6,17 @@ import lombok.experimental.Accessors;
 /**
  * The result of an API call. For example:
  * <pre>{@code
- * Result<Void> result;        // a result without data, only successfulness,
- *                             // error code, and error message
- * Result<Long> result;        // the same as above, but with a Long data
- * Result<List<Long>> result;  // a result of a list of Long
- * Result<Page<Long>> result;  // a result of a paged Long data, including
- *                             // pageIndex, pageSize and totalCount
+ * // a result without data, only successfulness, error code, and error message
+ * Result<Void> result;
+ *
+ * // the same as above, but with a Long data
+ * Result<Long> result;
+ *
+ * // a result of a list of Long
+ * Result<List<Long>> result;
+ *
+ * // a result of a paged Long data, including pageIndex, pageSize and totalCount
+ * Result<Page<Long>> result;
  * }</pre>
  *
  * @param <T> the type of returned data

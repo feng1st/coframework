@@ -10,7 +10,7 @@ import java.util.List;
  * A container for paged data.
  *
  * <p>{@code Page} alone does not indicate the successfulness, code and message
- * of a request. To do that, please use {@code Result<Page>} instead.
+ * of a request. To do that, please use {@link Result}{@code <Page>} instead.
  *
  * @param <T> the type of the contained data
  */
