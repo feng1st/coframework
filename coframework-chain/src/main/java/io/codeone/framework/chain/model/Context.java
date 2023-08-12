@@ -132,18 +132,20 @@ public class Context<T> {
     }
 
     /**
-     * Copies an argument from the KeyMap.
+     * Copies an argument from the KeyMap. If the keyMap does not contain such
+     * key, it will be removed from this context as well.
      */
     public Context<T> copyFrom(KeyMap keyMap, Key key) {
-        setArgument(key, keyMap.get(key));
+        setOrUpdateArgument(key, v -> keyMap.get(key));
         return this;
     }
 
     /**
-     * Copies an argument to the KeyMap.
+     * Copies an argument to the KeyMap. If this context does not contain such
+     * key, it will be removed from the keyMap as well.
      */
     public Context<T> copyTo(KeyMap keyMap, Key key) {
-        keyMap.put(key, getArgument(key));
+        keyMap.putOrUpdate(key, v -> getArgument(key));
         return this;
     }
 
