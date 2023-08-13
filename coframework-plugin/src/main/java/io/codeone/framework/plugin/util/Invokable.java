@@ -3,13 +3,16 @@ package io.codeone.framework.plugin.util;
 /**
  * Represents an invokable function.
  *
- * @param <T> The return type of this invokable.
+ * @param <T> the return type of this invokable
  */
 @FunctionalInterface
 public interface Invokable<T> {
 
     /**
-     * Returns a result or throws an exception.
+     * Executes this invokable, and returns a result or throws an exception.
+     *
+     * @return the result of this invokable
+     * @throws Throwable any exception this invokable may throw
      */
     T invoke() throws Throwable;
 }
