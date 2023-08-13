@@ -8,9 +8,9 @@ import io.codeone.framework.ext.session.ExtensionSession;
  *
  * <p>{@link BizScenario} is also a {@code BizScenarioParam}.
  *
- * <p>In {@code coframework-api} there is a {@code BaseRequest} and
- * a {@code PageRequest} which implemented this interface, and you can use them
- * as the base class of all your requests (recommended).
+ * <p>In {@code coframework-api} there is a {@code BaseRequest} and a
+ * {@code PageRequest} which implemented this interface, and you can use them as
+ * the base class of all your requests (recommended).
  *
  * <p>It is recommended to use {@link ExtensionSession} to eliminate code
  * intrusiveness of the {@code BizScenarioParam} parameters to Extensible
