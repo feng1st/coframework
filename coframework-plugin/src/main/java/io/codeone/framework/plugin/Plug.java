@@ -1,11 +1,15 @@
 package io.codeone.framework.plugin;
 
+import io.codeone.framework.plugin.plug.ClassPlugging;
+import io.codeone.framework.plugin.plug.GroupPlugging;
+import io.codeone.framework.plugin.plug.MethodPlugger;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
 /**
- * Applied on 'Plugin', to specify an order and the group it belongs.
+ * Use this annotation on a plugin to specify an order and the group it belongs.
  *
  * @see Plugin
  */
@@ -17,10 +21,13 @@ import java.lang.annotation.*;
 public @interface Plug {
 
     /**
-     * The stage the plugin belongs to. Plugins will be sorted by stage in a
-     * chain.
-     * <p>
-     * You can use the '@Order' annotation to further specify the order of
+     * The stage this plugin belongs to. Plugins will be sorted by stage in a
+     * chain. The default value, as well as the default stage value of a plugin
+     * if you do not use the {@code Plug} annotation, is
+     * {@link Stages#BEFORE_TARGET} which is closest to the target method in
+     * order.
+     *
+     * <p>You can use {@link Order} annotation to further specify the order of
      * plugins that belong to the same stage, if that matters.
      *
      * @see Stages
@@ -28,11 +35,18 @@ public @interface Plug {
     Stages value() default Stages.BEFORE_TARGET;
 
     /**
-     * The group the plugin belongs to. Use group to select multiple plugins at
-     * once.
-     * <p>
-     * Empty value means the plugin does not belong to any group. In that case
-     * you can select them only by specifying the individual classes of them.
+     * The group this plugin belongs to. You can use group to select multiple
+     * plugins at once. Empty value means that this plugin does not belong to
+     * any group. In that case you can only select them by specifying the
+     * individual classes of them.
+     *
+     * <p>You need to concern this attribute only if you want to write custom
+     * pluggers, please refer to {@link GroupPlugging}, {@link ClassPlugging}
+     * and {@link MethodPlugger} for more information.
+     *
+     * @see ClassPlugging
+     * @see GroupPlugging
+     * @see MethodPlugger
      */
     String group() default "";
 }

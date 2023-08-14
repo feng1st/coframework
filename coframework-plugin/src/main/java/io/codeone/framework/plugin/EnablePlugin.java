@@ -1,10 +1,14 @@
 package io.codeone.framework.plugin;
 
+import io.codeone.framework.plugin.plug.impl.DefaultPlugger;
+
 import java.lang.annotation.*;
 
 /**
- * Used on classes or methods to specify what plugins will be executed during
- * the invocation of the target.
+ * Use this annotation on classes/methods to specify what plugins will be
+ * executed during the invocation of the target method.
+ *
+ * <p>This annotation is driven by {@link DefaultPlugger}.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -12,5 +16,12 @@ import java.lang.annotation.*;
 @Inherited
 public @interface EnablePlugin {
 
+    /**
+     * The classes of plugins that will be executed during the invocation of the
+     * target method.
+     *
+     * @return the classes of plugins that will be executed during the
+     * invocation of the target method
+     */
     Class<? extends Plugin>[] value() default {};
 }

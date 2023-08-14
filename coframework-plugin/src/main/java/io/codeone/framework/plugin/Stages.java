@@ -4,85 +4,93 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Stages of interceptions, decide the order of plugins in a chain.
+ * Standard stages of interceptions, which decides the order of plugins in a
+ * chain.
+ *
+ * <p>The order of plugins is not equal to the order of their methods (plus the
+ * target method). Methods of plugins in a chain are executed in a FIFO order:
+ * The {@code before} method of the first plugin will be executed first, and the
+ * {@code after} method of that plugin will be executed last. The target method
+ * will be executed after the {@code before} method of the last plugin in the
+ * chain, and followed by the {@code after} methods of that plugin.
+ *
+ * <p>Because of that, the numerical order of the stage (the order of plugins in
+ * a chain) is a result of the natural order of the stage (the order of this
+ * enumeration) and on what method the interception is focus combined.
+ *
+ * @see Plug#value()
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Stages {
     /**
-     * Initializes or supplies any args that not supposed to be provided by the
-     * caller. For example, the account id of the operator which should be
-     * retrieved only from the logged-in session.
-     * <p>
-     * The interception is mainly on the 'before' part of the plugin.
+     * Initializing or supplying any argument that is not supposed to be
+     * provided by the caller, for example, the operator of a logged-in session.
+     *
+     * <p>The interception should be focus on the BEFORE method of this plugin.
      */
     ARG_INITIALIZATION(false),
     /**
-     * Validates args and aborts the execution of the target if something went
-     * wrong, by for example throwing an IllegalArgumentException.
-     * <p>
-     * The interception is mainly on the 'before' part of the plugin.
+     * Validating arguments and throwing {@code IllegalArgumentException} if
+     * failed.
+     *
+     * <p>The interception should be focus on the BEFORE method of this plugin.
      */
     ARG_VALIDATION(false),
     /**
-     * Modifies any args after they get validated.
-     * <p>
-     * The interception is mainly on the 'before' part of the plugin.
+     * Modifying any argument after argument validation.
+     *
+     * <p>The interception should be focus on the BEFORE method of this plugin.
      */
     ARG_UPDATING(false),
     /**
      * Just before the execution of the target method.
-     * <p>
-     * The interception is mainly on the 'before' part of the plugin.
+     *
+     * <p>The interception should be focus on the BEFORE method of this plugin.
      */
     BEFORE_TARGET(false),
     /**
      * Just after the execution of the target method.
-     * <p>
-     * The interception is mainly on the 'after' part of the plugin.
-     * <p>
-     * This is VERY IMPORTANT: Since the FIFO nature of the chain, in order to
-     * execute its 'after' part in a desired order, the plugin decorated by
-     * this stage is actually put in front of the chain. As the result, you may
-     * get an unexpected outcome if you put the main interception logic in the
-     * 'before' part of the plugin.
+     *
+     * <p>The interception should be focus on the AFTER method of this plugin.
      */
     AFTER_TARGET(true),
     /**
-     * Validates the result before it get returned to the caller. For example,
-     * throws an exception if it contains classified information.
-     * <p>
-     * The interception is mainly on the 'after' part of the plugin.
+     * Validating the result and throwing exception if failed.
+     *
+     * <p>The interception should be focus on the AFTER method of this plugin.
      */
     RESULT_VALIDATION(true),
     /**
-     * Modifies the result, for example, desensitizes some information.
-     * <p>
-     * Or modifies the exception, for example, clarifies the error message.
-     * <p>
-     * The interception is mainly on the 'after' part of the plugin.
+     * Modifying the result or the exception as needed.
+     *
+     * <p>The interception should be focus on the AFTER method of this plugin.
      */
     RESULT_UPDATING(true),
     /**
-     * Handles any exception thrown by the target or during the interception,
-     * and this is the chance to wrap the thrown exception.
-     * <p>
-     * The interception is mainly on the 'after' part of the plugin.
+     * Handling any exception thrown by the target method or during the
+     * interception, and this is the chance to wrap exceptions.
+     *
+     * <p>The interception should be focus on the AFTER method of this plugin.
      */
     EXCEPTION_HANDLING(true),
     ;
 
     /**
-     * Whether the interception logic happened mainly in the 'after' part of
-     * the plugin.
-     * <p>
-     * Since the FIFO nature of the chain, in order to execute the 'after' part
-     * of the plugin in the right order, the plugin need to be put in front of
-     * the chain, as we do in the 'getOrder()'.
+     * Whether the interception is focus on the AFTER method of the plugin.
      *
-     * @see #getOrder()
+     * <p>This property, combined with the enumeration order of the stage,
+     * decides the order of plugins in a chain.
      */
     private final boolean after;
 
+    /**
+     * Returns the numerical order of the stage (the order of plugins in a
+     * chain), which is a result of the natural order of the stage (the order of
+     * this enumeration) and on what method the interception is focus combined.
+     *
+     * @return the numerical order of the stage (the order of plugins in a
+     * chain)
+     */
     public int getOrder() {
         if (after) {
             return -this.ordinal();

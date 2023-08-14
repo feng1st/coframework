@@ -80,17 +80,17 @@ public interface Plugin {
     /**
      * Intercepts after the invocation of the target method, by handling the
      * result returned or the exception thrown by the target method, the
-     * subsequent plugins in the chain, or the {@code before} method of this
-     * plugin (exception only). The result or the exception will be replaced if
-     * you return or throw a new one.
+     * subsequent (please note the FIFO order) plugins in the chain, or the
+     * {@code before} method of this plugin (exception only). The result or the
+     * exception will be replaced if you return or throw a new one.
      *
      * @param targetMethod the signature of the target method
      * @param args         arguments of the target method invocation
-     * @param result       the result returned by the target method or the subsequent
-     *                     plugins in the chain
-     * @param error        the exception thrown by the target method, the subsequent
-     *                     plugins in the chain, or the {@code before} method of this
-     *                     plugin
+     * @param result       the result returned by the target method or the
+     *                     subsequent plugins in the chain
+     * @param error        the exception thrown by the target method, the
+     *                     subsequent plugins in the chain, or the
+     *                     {@code before} method of this plugin
      * @return result of the target method or plugins (including this one)
      * @throws Throwable exception thrown by the target method or plugins
      *                   (including this one)
@@ -104,11 +104,21 @@ public interface Plugin {
     }
 
     /**
-     * Intercepts after the invocation of the target, if an exception has been
-     * thrown.
-     * <p>
-     * The thrown exception will be replaced if you return a new value or throw
-     * a new exception here.
+     * Intercepts after the invocation of the target method, if and only if an
+     * exception has been thrown. The exception may be thrown by the target
+     * method, the subsequent (FIFO) plugins in the chain, or the {@code before}
+     * method of this plugin. You can throw a new or updated exception to
+     * replace the existing exception. And if you return a value instead of
+     * throwing an exception, the existing exception will be discarded.
+     *
+     * @param targetMethod the signature of the target method
+     * @param args         arguments of the target method invocation
+     * @param error        the exception thrown by the target method, the
+     *                     subsequent plugins in the chain, or the
+     *                     {@code before} method of this plugin
+     * @return result of the target method or plugins (including this one)
+     * @throws Throwable exception thrown by the target method or plugins
+     *                   (including this one)
      */
     default Object afterThrowing(TargetMethod targetMethod, Object[] args, Throwable error)
             throws Throwable {
@@ -116,10 +126,18 @@ public interface Plugin {
     }
 
     /**
-     * Intercepts after the invocation of the target, if there is no exception.
-     * <p>
-     * The returned value will be replaced if you return a new value or throw a
-     * new exception here.
+     * Intercepts after the invocation of the target method, if and only if
+     * there was no exception. The result value may be returned by the target
+     * method, or the subsequent (FIFO) plugins in the chain. You can return a
+     * new or updated result, or just throw an exception here.
+     *
+     * @param targetMethod the signature of the target method
+     * @param args         arguments of the target method invocation
+     * @param result       the result returned by the target method or the
+     *                     subsequent plugins in the chain
+     * @return result of the target method or plugins (including this one)
+     * @throws Throwable exception thrown by the target method or plugins
+     *                   (including this one)
      */
     default Object afterReturning(TargetMethod targetMethod, Object[] args, Object result)
             throws Throwable {
