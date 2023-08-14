@@ -30,6 +30,7 @@ public @interface Plug {
      * <p>You can use {@link Order} annotation to further specify the order of
      * plugins that belong to the same stage, if that matters.
      *
+     * @return the stage this plugin belongs to
      * @see Stages
      */
     Stages value() default Stages.BEFORE_TARGET;
@@ -44,6 +45,7 @@ public @interface Plug {
      * pluggers, please refer to {@link GroupPlugging}, {@link ClassPlugging}
      * and {@link MethodPlugger} for more information.
      *
+     * @return the group this plugin belongs to
      * @see ClassPlugging
      * @see GroupPlugging
      * @see MethodPlugger
