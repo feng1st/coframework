@@ -1,11 +1,13 @@
 package io.codeone.framework.ext;
 
+import io.codeone.framework.ext.session.ExtensionSession;
+
 import java.lang.annotation.*;
 
 /**
  * This annotation is used to mark an Extensible interface, indirectly. To be
  * specific, we use {@link Ability} and {@link ExtensionPoint} which are two
- * "direct" {@code Extension} annotations to mark these interfaces.
+ * "direct" {@code Extensible} annotations to mark these interfaces.
  *
  * <p>An Extensible is an interface that can have multiple implementations
  * (which called Extensions) for different business identities and scenarios,
@@ -43,9 +45,15 @@ import java.lang.annotation.*;
  * }
  * }</pre>
  *
+ * <p>It is recommended to use {@code ExtensionSession} to eliminate code
+ * intrusiveness of the {@code BizScenarioParam} parameters (for example, the
+ * parameter in the {@code SaveAbility#save(BizScenarioParam)} method, please
+ * refer to {@link ExtensionSession} for more information.
+ *
  * @see Ability
  * @see Extension
  * @see ExtensionPoint
+ * @see ExtensionSession
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

@@ -8,8 +8,16 @@ import lombok.experimental.Accessors;
 /**
  * Base class of all requests.
  *
- * <p>By default, it implemented {@link ApiParam} and {@link BizScenarioParam}.
- * But they can be safely ignored if not relevant.
+ * <p>This abstract class implemented {@code ApiParam} so it is a candidate of
+ * argument validation, please refer to {@link ApiParam} for more details.
+ *
+ * <p>This abstract class also implemented {@code BizScenarioParam} so it can be
+ * used in Extension routing. But by default the {@code bizScenario} attribute
+ * is null, and can be safely ignored if you do not use the Extension system.
+ * Please refer to {@link BizScenarioParam} for more information.
+ *
+ * @see ApiParam
+ * @see BizScenarioParam
  */
 @Data
 @Accessors(chain = true)

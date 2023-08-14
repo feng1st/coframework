@@ -8,6 +8,8 @@ package io.codeone.framework.exception;
  * {@link BaseException} which is an implementation of this interface. And using
  * enumerations to define custom errors, please refer to the
  * {@link CommonErrors} as an example.
+ *
+ * @see BaseException
  */
 public interface ApiError {
 

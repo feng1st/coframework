@@ -33,6 +33,40 @@ import java.lang.annotation.*;
  * parameter (simpler) or by using a custom {@link BizScenarioResolver},
  * otherwise an exception will be thrown.
  * </ul>
+ *
+ * <p>For example:
+ * <pre>{@code
+ * // The Extensible interface
+ * @Ability
+ * public interface SaveAbility {
+ *     // No intrusive parameter here
+ *     void save();
+ * }
+ *
+ * // The Extension for "BIZ1"
+ * @Extension(bizId = "BIZ1")
+ * public class Biz1SaveAbility implements SaveAbility {
+ *     @Override
+ *     public void save() {
+ *     }
+ * }
+ *
+ * // Starts a extension session whenever its methods are invoked
+ * @ExtensionSession
+ * @Service
+ * public class SaveService {
+ *     // Autowired by the Extensible interface
+ *     @Resource
+ *     private SaveAbility saveAbility;
+ *
+ *     // BizScenario instance will be resolved and pushed to context by
+ *     // ExtensionSession (assuming that SaveParam is BizScenarioParam)
+ *     public void save(SaveParam param) {
+ *         // Will still route even though saveAbility.save() takes no parameter
+ *         saveAbility.save();
+ *     }
+ * }
+ * }</pre>
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -51,7 +85,7 @@ public @interface ExtensionSession {
 
     /**
      * If {@link #value()} is {@link BizScenarioResolvePolicy#CUSTOM}, or
-     * {@code value()} is {@link BizScenarioResolvePolicy} and this
+     * {@code value()} is {@link BizScenarioResolvePolicy#AUTO} and this
      * property is a subclass of {@link BizScenarioResolver}, uses the bean of
      * that subclass to resolve {@link BizScenario} instances.
      *

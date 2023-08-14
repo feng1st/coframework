@@ -5,6 +5,8 @@ import io.codeone.framework.util.ArgChecker;
 /**
  * Interface of API parameters that the framework can recognize and use in
  * arguments validating automatically.
+ *
+ * @see BaseRequest
  */
 public interface ApiParam {
 
