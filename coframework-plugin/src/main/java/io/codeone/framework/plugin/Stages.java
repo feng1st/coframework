@@ -75,12 +75,6 @@ public enum Stages {
     EXCEPTION_HANDLING(true),
     ;
 
-    /**
-     * Whether the interception is focus on the AFTER method of the plugin.
-     *
-     * <p>This property, combined with the enumeration order of the stage,
-     * decides the order of plugins in a chain.
-     */
     private final boolean after;
 
     /**
