@@ -83,13 +83,15 @@ public abstract class BaseException extends RuntimeException
     }
 
     /**
-     * Constructs a new custom runtime exception from an {@code Throwable}, uses
-     * its simple class name as the code, its message as the message, and the
-     * {@code Throwable} as the cause.
+     * Constructs a new custom runtime exception from an {@code Throwable}. If
+     * the throwable is also an {@link ApiError}, uses its code, otherwise uses
+     * its simple class name as the code. And uses its message as the message
+     * and the {@code Throwable} itself as the cause.
      *
      * @param cause the source of the code, message and the cause
      */
     public BaseException(Throwable cause) {
-        this(cause.getClass().getSimpleName(), cause.getMessage(), cause);
+        this(cause instanceof ApiError ? ((ApiError) cause).getCode() : cause.getClass().getSimpleName(),
+                cause.getMessage(), cause);
     }
 }
