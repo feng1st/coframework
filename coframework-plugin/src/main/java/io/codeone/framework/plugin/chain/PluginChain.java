@@ -43,7 +43,7 @@ public class PluginChain {
      * @throws Throwable any exception thrown by the target method invocation or
      *                   by the plugins in the chain
      */
-    public Object invoke(Method method, Object[] args, Invokable<Object> invokable)
+    public Object invoke(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
         if (plugins.isEmpty()) {
             return invokable.invoke();
@@ -52,7 +52,7 @@ public class PluginChain {
                 invoke(plugins.iterator(), TargetMethod.of(method), args, invokable));
     }
 
-    private Object invoke(Iterator<Plugin> iter, TargetMethod targetMethod, Object[] args, Invokable<Object> invokable)
+    private Object invoke(Iterator<Plugin> iter, TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
             throws Throwable {
         if (iter.hasNext()) {
             return iter.next().around(targetMethod, args,

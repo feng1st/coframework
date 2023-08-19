@@ -143,7 +143,7 @@ public class RtPlugin extends BasePlugin {
 
     @Override
     public Object around(TargetMethod targetMethod, Object[] args,
-                         Invokable<Object> invokable) throws Throwable {
+                         Invokable<?> invokable) throws Throwable {
         long start = System.currentTimeMillis();
         try {
             return invokable.invoke();
