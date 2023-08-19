@@ -29,7 +29,7 @@ public class LogPresetTests extends BaseLogTests {
 
         assertLog(TestLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are logged.
-                "||level=>INFO||method=>TestLogPresetService.all||success=>true||elapsed=>0||arg.param=>MyParam(id=1, address=MyParam.Address(city=test))||result=>1");
+                "||level=>INFO||method=>TestLogPresetService.all||success=>true||elapsed=>0||result=>1||arg.param=>MyParam(id=1, address=MyParam.Address(city=test))");
     }
 
     @Test
@@ -57,6 +57,6 @@ public class LogPresetTests extends BaseLogTests {
                 // Stack trace is logged.
                 NullPointerException.class,
                 // arg.param and error are logged.
-                "||level=>ERROR||method=>TestLogPresetService.all||success=>false||code=>NullPointerException||elapsed=>0||arg.param=>MyParam(id=null, address=null)||error=>java.lang.NullPointerException");
+                "||level=>ERROR||method=>TestLogPresetService.all||success=>false||code=>NullPointerException||elapsed=>0||error=>java.lang.NullPointerException||arg.param=>MyParam(id=null, address=null)");
     }
 }

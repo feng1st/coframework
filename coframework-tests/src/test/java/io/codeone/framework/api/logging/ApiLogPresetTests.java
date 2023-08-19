@@ -30,7 +30,7 @@ public class ApiLogPresetTests extends BaseLogTests {
 
         assertLog(TestApiLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are logged.
-                "||level=>INFO||method=>TestApiLogPresetService.all||success=>true||elapsed=>0||arg.param=>MyParam(super=BaseRequest(bizScenario=null), id=1)||result=>1");
+                "||level=>INFO||method=>TestApiLogPresetService.all||success=>true||elapsed=>0||result=>1||arg.param=>MyParam(super=BaseRequest(bizScenario=null), id=1)");
     }
 
     @Test
@@ -52,6 +52,6 @@ public class ApiLogPresetTests extends BaseLogTests {
                 // Stack trace is logged.
                 IllegalArgumentException.class,
                 // arg.param and error are logged.
-                "||level=>ERROR||method=>TestApiLogPresetService.all||success=>false||code=>INVALID_PARAM||message=>id is null||elapsed=>0||arg.param=>MyParam(super=BaseRequest(bizScenario=null), id=null)||error=>java.lang.IllegalArgumentException: id is null");
+                "||level=>ERROR||method=>TestApiLogPresetService.all||success=>false||code=>INVALID_PARAM||message=>id is null||elapsed=>0||error=>java.lang.IllegalArgumentException: id is null||arg.param=>MyParam(super=BaseRequest(bizScenario=null), id=null)");
     }
 }
