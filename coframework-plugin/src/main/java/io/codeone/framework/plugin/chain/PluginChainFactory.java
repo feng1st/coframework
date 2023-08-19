@@ -15,6 +15,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * The factory of the plugin chain.
+ */
 @Component
 public class PluginChainFactory {
 
@@ -28,6 +31,14 @@ public class PluginChainFactory {
 
     private final Map<Set<Class<?>>, PluginChain> pluginClassMap = new ConcurrentHashMap<>();
 
+    /**
+     * Returns a cached plugin chain for the specified method, creates one if
+     * not exist. What plugins should be used for the method is determined by
+     * {@link MethodPluggers}.
+     *
+     * @param method the target method to be intercepted
+     * @return the plugin chain for the specified method
+     */
     public PluginChain getChain(Method method) {
         return chainMap.computeIfAbsent(method, k -> {
             List<Plugging> pluggingList = methodPluggers.getPluggingList(method);

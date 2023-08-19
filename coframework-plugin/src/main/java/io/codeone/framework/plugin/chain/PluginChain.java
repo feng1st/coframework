@@ -11,12 +11,19 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * A chain of sorted plugins.
+ * A chain of plugins which is used to intercept method invocation. Plugins in
+ * the chain are sorted by {@link Plug#value()} then by {@link Order}.
  */
 public class PluginChain {
 
     private final List<Plugin> plugins;
 
+    /**
+     * Constructs a plugin chain by specifying its contained plugins. Plugins
+     * will be sorted by {@link Plug#value()} then by {@link Order} here.
+     *
+     * @param plugins all plugins this chain contains
+     */
     public PluginChain(List<Plugin> plugins) {
         Objects.requireNonNull(plugins);
         this.plugins = plugins;
@@ -24,7 +31,17 @@ public class PluginChain {
     }
 
     /**
-     * Executes the chain on an invokable.
+     * Executes this chain on an invokable, for example, a method invocation or
+     * a lambda expression that wraps the method invocation.
+     *
+     * @param method    the target method
+     * @param args      the arguments of the method invocation
+     * @param invokable the invocation of the target method, or a lambda
+     *                  expression wrapping it
+     * @return the result of the target method invocation, or an intercepted one
+     * by the plugins in the chain
+     * @throws Throwable any exception thrown by the target method invocation or
+     *                   by the plugins in the chain
      */
     public Object invoke(Method method, Object[] args, Invokable<Object> invokable)
             throws Throwable {

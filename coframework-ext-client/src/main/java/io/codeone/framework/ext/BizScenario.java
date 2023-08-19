@@ -246,6 +246,9 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         return bizId + CONNECTOR + scenario;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BizScenario getBizScenario() {
         return this;

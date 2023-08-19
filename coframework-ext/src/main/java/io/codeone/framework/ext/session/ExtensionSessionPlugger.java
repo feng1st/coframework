@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -28,6 +29,6 @@ public class ExtensionSessionPlugger
         // driven by plugging.
         extensionSessionIndexer.index(method, annotation);
 
-        return Plugging.asList(ClassPlugging.of(ExtensionSessionPlugin.class));
+        return Collections.singletonList(ClassPlugging.of(ExtensionSessionPlugin.class));
     }
 }

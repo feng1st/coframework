@@ -27,9 +27,7 @@ public abstract class BatchTargetRenderer<T> extends TargetRenderer<List<T>> {
     };
 
     private Map<String, Context<T>> getIndividualContextMap(Context<?> context) {
-        return context
-                .setArgumentIfAbsent(INDIVIDUAL_CONTEXT_MAP_KEY, HashMap::new)
-                .getArgument(INDIVIDUAL_CONTEXT_MAP_KEY);
+        return context.computeArgumentIfAbsent(INDIVIDUAL_CONTEXT_MAP_KEY, HashMap::new);
     }
 
     /**

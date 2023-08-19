@@ -1,5 +1,8 @@
 package io.codeone.framework.plugin.plug;
 
+import io.codeone.framework.plugin.aop.PluggedMethodInterceptor;
+import io.codeone.framework.plugin.aop.PluggedPointcut;
+import io.codeone.framework.plugin.chain.PluginChainFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +14,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * The composite of all {@link MethodPlugger}s registered in the system. And
+ * this is the {@code MethodPlugger} used by the framework, to be specific, the
+ * {@link PluggedPointcut}, the {@link PluggedMethodInterceptor} and the
+ * {@link PluginChainFactory}, to actually decide should a specific method be
+ * intercepted and what plugins should be used for the interception.
+ */
 @Component
 public class MethodPluggers implements MethodPlugger {
 
@@ -32,6 +42,15 @@ public class MethodPluggers implements MethodPlugger {
         pluggers.add(plugger);
     }
 
+    /**
+     * Combines and returns all {@link Plugging}s returned by composed
+     * {@link MethodPlugger}s, that is, all {@code MethodPlugger}s registered in
+     * the system.
+     *
+     * @param method the target method is being tested
+     * @return list of {@code Plugging} which defines what plugins should be
+     * plugged into the target method
+     */
     @Override
     public List<Plugging> getPluggingList(Method method) {
         return pluggers.stream()

@@ -36,6 +36,9 @@ public enum CommonErrors implements ApiError {
 
     private final String message;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getCode() {
         return name();

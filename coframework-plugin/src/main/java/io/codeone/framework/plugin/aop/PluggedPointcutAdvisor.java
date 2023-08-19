@@ -1,7 +1,6 @@
 package io.codeone.framework.plugin.aop;
 
-import org.aopalliance.aop.Advice;
-import org.springframework.aop.Pointcut;
+import lombok.Getter;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.framework.autoproxy.BeanFactoryAdvisorRetrievalHelper;
 import org.springframework.aop.framework.autoproxy.InfrastructureAdvisorAutoProxyCreator;
@@ -13,43 +12,34 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
- * About the "@Role(BeanDefinition.ROLE_INFRASTRUCTURE)":
- * <p>
- * Whether to activate this advisor, is based on which "AutoProxyCreator" is
- * being used (please refer to the {@link BeanFactoryAdvisorRetrievalHelper}
- * for details).
- * <p>
- * When the "aspectjweaver" dependency is imported, the spring-aop will select
+ * Fuses {@link PluggedPointcut} with {@link PluggedMethodInterceptor}.
+ *
+ * <p>About {@code @Role(BeanDefinition.ROLE_INFRASTRUCTURE)}: Whether to
+ * activate this advisor, is based on which {@code AutoProxyCreator} is being
+ * used (please refer to {@link BeanFactoryAdvisorRetrievalHelper} for details).
+ * When {@code aspectjweaver} package is imported, the spring-aop will select
  * the {@link AnnotationAwareAspectJAutoProxyCreator}, and in which this
- * advisor will be enabled unconditionally.
- * <p>
- * Otherwise, spring-aop will use the
+ * advisor will be enabled unconditionally. Otherwise, spring-aop will use the
  * {@link InfrastructureAdvisorAutoProxyCreator}, and which will check if the
  * candidate advisor has the {@link BeanDefinition#ROLE_INFRASTRUCTURE} role to
- * be enabled.
- * <p>
- * So we added the @Role to be compatible with both situations.
- * <p>
- * Also, we did not import the "aspectjweaver" dependency since there is no
- * performance benefit.
+ * be enabled. So we added {@code @Role(BeanDefinition.ROLE_INFRASTRUCTURE)} to
+ * be compatible with both situations.
  */
 @Component
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class PluggedPointcutAdvisor extends AbstractPointcutAdvisor {
 
+    /**
+     * Decides whether a method should be intercepted by plugins.
+     */
     @Resource
+    @Getter
     private PluggedPointcut pointcut;
 
+    /**
+     * Intercepts method invocation using plugins.
+     */
     @Resource
-    private PluggedMethodInterceptor interceptor;
-
-    @Override
-    public Pointcut getPointcut() {
-        return pointcut;
-    }
-
-    @Override
-    public Advice getAdvice() {
-        return interceptor;
-    }
+    @Getter
+    private PluggedMethodInterceptor advice;
 }

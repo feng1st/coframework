@@ -1,4 +1,4 @@
-package io.codeone.framework.api.plugins;
+package io.codeone.framework.api.plugin;
 
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiConstants;
@@ -10,9 +10,9 @@ import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
 
 /**
- * ExToResultApiPlugin will convert any exception thrown by a method to a
- * failed Result, if the return type of that method is a Result, and the class
- * of that method is annotated by '@API'.
+ * {@code ExToResultApiPlugin} will convert any exception to a failed
+ * {@link Result}, if the return type of the API (service/method annotated by
+ * {@link API}) method is {@code Result}.
  *
  * @see API
  * @see Result
@@ -20,6 +20,14 @@ import io.codeone.framework.util.ErrorUtils;
 @Plug(value = Stages.EXCEPTION_HANDLING, group = ApiConstants.PLUGIN_GROUP)
 public class ExToResultApiPlugin implements Plugin {
 
+    /**
+     * If an exception had been thrown and the return type of the API method is
+     * {@link Result}, the exception will be wrapped as a failed {@code Result}.
+     * And the error message of the wrapped result will be replaced by
+     * {@link API#errorMessage()} if which is not empty.
+     *
+     * <p>{@inheritDoc}
+     */
     @Override
     public Object afterThrowing(TargetMethod targetMethod, Object[] args, Throwable error)
             throws Throwable {
@@ -34,23 +42,16 @@ public class ExToResultApiPlugin implements Plugin {
         }
         try {
             API api = targetMethod.getAnnotation(API.class);
-            return buildResult(t, returnType, api);
+            return buildResult(t, api);
         } catch (Exception e) {
             throw t;
         }
     }
 
-    private Result<?> buildResult(Throwable t, Class<?> returnType, API api)
-            throws InstantiationException, IllegalAccessException {
+    private Result<?> buildResult(Throwable t, API api) {
         Throwable cause = ErrorUtils.getCause(t);
-        Result<?> result = (Result<?>) returnType.newInstance();
-        result.setSuccess(false);
-        result.setErrorCode(ErrorUtils.getCode(cause));
-        if (!api.errorMessage().isEmpty()) {
-            result.setErrorMessage(api.errorMessage());
-        } else {
-            result.setErrorMessage(cause.getMessage());
-        }
-        return result;
+        String code = ErrorUtils.getCode(cause);
+        String message = !api.errorMessage().isEmpty() ? api.errorMessage() : cause.getMessage();
+        return Result.fail(code, message);
     }
 }

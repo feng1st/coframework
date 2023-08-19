@@ -1,4 +1,4 @@
-package io.codeone.framework.api.plugins;
+package io.codeone.framework.api.plugin;
 
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiConstants;
@@ -9,9 +9,9 @@ import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.request.ApiParam;
 
 /**
- * ArgCheckingApiPlugin will execute the checkArgs() method of 'ApiParam' type
- * args, upon the invocation of a method of a service, which is annotated by
- * '@API'.
+ * {@code ArgCheckingApiPlugin} will execute {@link ApiParam#checkArgs()} on all
+ * arguments of an API (service/method annotated by {@link API}) call if the
+ * type of those parameters is {@link ApiParam}.
  *
  * @see API
  * @see ApiParam
@@ -19,6 +19,13 @@ import io.codeone.framework.request.ApiParam;
 @Plug(value = Stages.ARG_VALIDATION, group = ApiConstants.PLUGIN_GROUP)
 public class ArgCheckingApiPlugin implements Plugin {
 
+    /**
+     * Executes {@link ApiParam#checkArgs()} on all arguments. If any exception
+     * is thrown, the execution of the plugin chain as well as the target method
+     * will be aborted earlier.
+     *
+     * <p>{@inheritDoc}
+     */
     @Override
     public void before(TargetMethod targetMethod, Object[] args) {
         for (Object arg : args) {

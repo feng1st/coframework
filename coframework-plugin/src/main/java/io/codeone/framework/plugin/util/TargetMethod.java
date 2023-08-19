@@ -1,5 +1,7 @@
 package io.codeone.framework.plugin.util;
 
+import lombok.Getter;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -13,14 +15,15 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * A snapshot of a method and its commonly used properties.
- * <p>
- * Please do not modify any of these properties since they are globally cached.
+ * A wrap of {@code java.lang.reflect.Method}, and its commonly used properties.
+ * All properties provided by this class are lazily instantiated and globally
+ * cached.
  */
 public class TargetMethod {
 
     private static final Map<Method, TargetMethod> CACHE = new ConcurrentHashMap<>();
 
+    @Getter
     private final Method method;
 
     private Class<?>[] parameterTypes;
@@ -35,6 +38,13 @@ public class TargetMethod {
 
     private Map<Class<? extends Annotation>, Annotation> classAnnotations;
 
+    /**
+     * Returns a cached {@code TargetMethod}, or constructs one from the
+     * {@code method}.
+     *
+     * @param method the source {@code Method}
+     * @return a cached or new created {@code TargetMethod}
+     */
     public static TargetMethod of(Method method) {
         return CACHE.computeIfAbsent(method, TargetMethod::new);
     }
@@ -43,53 +53,129 @@ public class TargetMethod {
         this.method = method;
     }
 
-    public Method getMethod() {
-        return method;
-    }
-
+    /**
+     * Returns the declaring class of the wrapped method.
+     *
+     * @return the declaring class of the wrapped method
+     */
     public Class<?> getDeclaringClass() {
         return method.getDeclaringClass();
     }
 
+    /**
+     * Returns the types of its parameters in their declaration order. Returns
+     * an array of length 0 if the wrapped method takes no parameter.
+     *
+     * @return the types of its parameters
+     */
     public Class<?>[] getParameterTypes() {
         return cacheAndReturn(() -> parameterTypes, o -> parameterTypes = o, method::getParameterTypes);
     }
 
+    /**
+     * Returns the names of its parameters in their declaration order. Returns
+     * an array of length 0 if the wrapped method takes no parameter.
+     *
+     * @return the names of its parameters
+     */
     public String[] getParameterNames() {
         return cacheAndReturn(() -> parameterNames, o -> parameterNames = o, () ->
                 Arrays.stream(method.getParameters()).map(Parameter::getName).toArray(String[]::new));
     }
 
+    /**
+     * Returns the return type of the wrapped method.
+     *
+     * @return the return type of the wrapped method
+     */
     public Class<?> getReturnType() {
         return method.getReturnType();
     }
 
+    /**
+     * Returns the types of exceptions declared by the wrapped method. Returns
+     * an array of length 0 if the method declares no exceptions in its
+     * {@code throws} clause.
+     *
+     * @return the exception types declared as being thrown by the wrapped
+     * method
+     */
     public Class<?>[] getExceptionTypes() {
         return cacheAndReturn(() -> exceptionTypes, o -> exceptionTypes = o, method::getExceptionTypes);
     }
 
+    /**
+     * Returns {@code true} if the specified annotation class is present on the
+     * wrapped method, or its declaring class, otherwise {@code false}.
+     *
+     * @param annotationClass the annotation class is to be tested
+     * @return {@code true} if the specified annotation class is present on the
+     * wrapped method, or its declaring class, otherwise {@code false}
+     */
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getAnnotation(annotationClass) != null;
     }
 
+    /**
+     * Returns the annotation instance of the given type on the wrapped method
+     * or its declaring class. If both the method and the class have this type
+     * of annotation, returns the one on method.
+     *
+     * @param annotationClass the class of annotation is to be acquired
+     * @param <T>             type of the annotation
+     * @return the annotation instance of the given type on the wrapped method
+     * or its declaring class, method's comes first.
+     */
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
         Objects.requireNonNull(annotationClass);
         return annotationClass.cast(getAnnotations().get(annotationClass));
     }
 
+    /**
+     * Returns {@code true} if the specified annotation class is present on the
+     * wrapped method, otherwise {@code false}.
+     *
+     * @param annotationClass the annotation class is to be tested
+     * @return {@code true} if the specified annotation class is present on the
+     * wrapped method, otherwise {@code false}
+     */
     public boolean isMethodAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getMethodAnnotation(annotationClass) != null;
     }
 
+    /**
+     * Returns the annotation instance of the given type on the wrapped method.
+     *
+     * @param annotationClass the class of annotation is to be acquired
+     * @param <T>             type of the annotation
+     * @return the annotation instance of the given type on the wrapped method
+     */
     public <T extends Annotation> T getMethodAnnotation(Class<T> annotationClass) {
         Objects.requireNonNull(annotationClass);
         return annotationClass.cast(getMethodAnnotations().get(annotationClass));
     }
 
+    /**
+     * Returns {@code true} if the specified annotation class is present on the
+     * declaring class of the wrapped method, otherwise {@code false}.
+     *
+     * @param annotationClass the annotation class is to be tested
+     * @return {@code true} if the specified annotation class is present on the
+     * declaring class of the wrapped method, otherwise {@code false}
+     */
     public boolean isClassAnnotationPresent(Class<? extends Annotation> annotationClass) {
         return getClassAnnotation(annotationClass) != null;
     }
 
+    /**
+     * Returns the annotation instance of the given type on the declaring class
+     * of the wrapped method.
+     *
+     * @param annotationClass the class of annotation is to be acquired
+     * @param <T>             type of the annotation
+     * @return the annotation instance of the given type on the declaring class
+     * of the wrapped method.
+     */
     public <T extends Annotation> T getClassAnnotation(Class<T> annotationClass) {
         Objects.requireNonNull(annotationClass);
         return annotationClass.cast(getClassAnnotations().get(annotationClass));

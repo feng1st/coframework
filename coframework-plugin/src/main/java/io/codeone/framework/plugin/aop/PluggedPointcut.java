@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
+/**
+ * Uses {@link MethodPluggers} to decide whether a method should be intercepted
+ * by plugins. All methods of {@code Object} are excluded.
+ */
 @Component
 public class PluggedPointcut extends StaticMethodMatcherPointcut {
 

@@ -7,6 +7,7 @@ import io.codeone.framework.plugin.plug.Plugging;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -19,6 +20,6 @@ public class LoggingPlugger extends AnnotationMethodPlugger<Logging> {
 
     @Override
     protected List<Plugging> getPluggingList(Method method, Logging annotation) {
-        return Plugging.asList(ClassPlugging.of(LoggingPlugin.class));
+        return Collections.singletonList(ClassPlugging.of(LoggingPlugin.class));
     }
 }
