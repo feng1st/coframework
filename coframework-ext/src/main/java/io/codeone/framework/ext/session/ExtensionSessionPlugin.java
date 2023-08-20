@@ -11,12 +11,28 @@ import io.codeone.framework.plugin.util.TargetMethod;
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
+/**
+ * {@code ExtensionSessionPlugin} will try to resolve a {@link BizScenario}
+ * instance from the parameters of the target method according to
+ * {@link ExtensionSession} annotation, and push it to
+ * {@link BizScenarioContext} for future Extension routing.
+ */
 @Plug(Stages.BEFORE_TARGET)
 public class ExtensionSessionPlugin implements Plugin {
 
     @Resource
     private ExtensionSessionIndexer extensionSessionIndexer;
 
+    /**
+     * Uses {@link ExtensionSessionIndexer} to resolve the {@link BizScenario}
+     * instance from the parameters of the target method according to
+     * {@link ExtensionSession} annotation, and push it to
+     * {@link BizScenarioContext} for future Extension routing by invoking the
+     * target method with the resolved {@code BizScenario} instance in that
+     * context.
+     *
+     * <p>{@inheritDoc}
+     */
     @Override
     public Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
             throws Throwable {

@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
 
@@ -23,11 +26,17 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
     private final Map<Class<? extends BizScenarioResolver>, BizScenarioResolver> resolverMap
             = new ConcurrentHashMap<>();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void computeParamIndexIfAbsent(Method method, Supplier<Integer> supplier) {
         paramIndexMap.computeIfAbsent(method, k -> supplier.get());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getParamIndex(Method method) {
         Integer index = paramIndexMap.get(method);
@@ -37,6 +46,9 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
         return index;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BizScenarioResolver getResolver(Class<? extends BizScenarioResolver> clazz) {
         try {

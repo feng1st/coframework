@@ -8,16 +8,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class BizScenarioParamRepoImpl implements BizScenarioParamRepo {
 
     private final Map<Method, Integer> map = new HashMap<>();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void computeParamIndexIfAbsent(Method method, Supplier<Integer> supplier) {
         map.computeIfAbsent(method, k -> supplier.get());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getParamIndex(Method method) {
         Integer index = map.get(method);

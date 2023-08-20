@@ -17,17 +17,17 @@ import java.lang.annotation.*;
  * <p>With this annotation on, the service implementation will be intercepted by
  * the following {@link Plugin}s at runtime by default:
  *
- * <ul>
- * <li>1. {@link ArgCheckingApiPlugin} which will execute
+ * <ol>
+ * <li>{@link ArgCheckingApiPlugin} which will execute
  * {@link ApiParam#checkArgs()} on all arguments of the API call if the type of
  * those parameters is {@link ApiParam}.
- * <li>2. {@link LoggingPlugin} which by default will log the succesfulness,
- * code and message of an API call. You can use {@link Logging} annotation
- * alongside this annotation to further control the logging behavior.
- * <li>3. {@link ExToResultApiPlugin} which will convert any exception to a
- * failed {@link Result} and return that result, if the return type of the
- * service method is {@code Result}.
- * </ul>
+ * <li>{@link LoggingPlugin} which by default will log the succesfulness, code
+ * and message of an API call. You can use {@link Logging} annotation alongside
+ * this annotation to further control the logging behavior.
+ * <li>{@link ExToResultApiPlugin} which will convert any exception to a failed
+ * {@link Result} and return that result, if the return type of the service
+ * method is {@code Result}.
+ * </ol>
  *
  * <p>And the service implementation will also be intercepted by any custom
  * plugin, which is:

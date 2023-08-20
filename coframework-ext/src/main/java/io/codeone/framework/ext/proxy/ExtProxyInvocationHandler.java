@@ -19,6 +19,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+/**
+ * This is an Extension-routing-and-executing proxy for a specific Extensible
+ * interface.
+ *
+ * <p>Whenever this proxy is called, it will try to find a {@link BizScenario}
+ * instance from a pre-scanned parameter of the delegated method or the
+ * {@link BizScenarioContext}, and then use the {@code BizScenario} instance to
+ * route and invoke the particular Extension implementation of the Extensible
+ * interface this proxy represents. An exception will be thrown if no
+ * {@code BizScenario} instance can be found.
+ *
+ * @param <T> the type of the Extensible interface
+ */
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class ExtProxyInvocationHandler<T> implements InvocationHandler {
@@ -34,6 +47,12 @@ public class ExtProxyInvocationHandler<T> implements InvocationHandler {
     @Resource
     private Optional<ExtInvocationMonitor> extInvocationMonitor;
 
+    /**
+     * Constructs an Extension-routing-and-executing proxy for the specified
+     * Extensible interface.
+     *
+     * @param extensibleClass the Extensible interface this proxy represents
+     */
     public ExtProxyInvocationHandler(Class<T> extensibleClass) {
         this.extensibleClass = extensibleClass;
     }

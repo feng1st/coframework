@@ -15,6 +15,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 public abstract class BaseExtScanner implements ExtScanner {
 
     @Resource

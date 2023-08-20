@@ -16,9 +16,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Creates and registers the bean definitions of the
+ * Extension-routing-and-executing proxies. The created definitions use
+ * {@link ExtProxyFactory} to create bean instances.
+ *
+ * <p>This class makes all non-proxy Extension beans not primary autowire
+ * candidates, and makes the proxies primary ones. By doing this, you can use
+ * Extensible interfaces for autowiring and the framework will do the rest of
+ * the work.
+ */
 @Component
 public class ExtProxyRegistrar implements BeanFactoryPostProcessor {
 
+    /**
+     * The name prefix of the created proxy spring bean.
+     */
     public static final String PROXY_PREFIX = "extProxy$";
 
     private final Set<Class<?>> registered = new HashSet<>();

@@ -11,6 +11,9 @@ import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
+/**
+ * {@inheritDoc}
+ */
 @Component
 public class ExtensionSessionIndexerImpl implements ExtensionSessionIndexer {
 
@@ -20,12 +23,18 @@ public class ExtensionSessionIndexerImpl implements ExtensionSessionIndexer {
     @Resource
     private ExtensionSessionRepo extensionSessionRepo;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void index(Method method, ExtensionSession annotation) {
         extensionSessionRepo.computeParamIndexIfAbsent(method,
                 () -> getParamIndex(method, annotation));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BizScenario resolve(Method method, Object[] args, ExtensionSession session) {
         int index = extensionSessionRepo.getParamIndex(method);

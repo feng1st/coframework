@@ -591,7 +591,7 @@ object in the stack of the `BizScenarioContext` upon the calling of an **Extensi
 The `@ExtensionSession` annotation set up a plugin, which will try to resolve a `BizScenario` object from the arguments,
 put it in the stack, and then call the actual method.
 
-There is an example that adds `@ExtensionSession` on the main entrance service:
+There is an example that adds `@ExtensionSession` on the main entry service:
 
 ```java
 

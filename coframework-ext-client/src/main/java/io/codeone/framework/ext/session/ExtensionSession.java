@@ -26,8 +26,8 @@ import java.lang.annotation.*;
  * <li>Set application property
  * {@code coframework.ext.route-by-context-by-default} to {@code true}
  * (recommended), or add {@link RouteByContext} to every Extensible interfaces.
- * <li>Add {@code ExtensionSession} annotation to your entrance services, such
- * as facades, rpc services or domain services.
+ * <li>Add {@code ExtensionSession} annotation to your entry services, such as
+ * facades, rpc services or domain services.
  * <li>Make sure a {@code BizScenario} instance can be resolved from the
  * arguments of these services, by providing a {@code BizScenarioParam}
  * parameter (simpler) or by using a custom {@link BizScenarioResolver},

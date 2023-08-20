@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Scans and registers all Extension implementation mappings. The mapping key is
+ * {@link ExtensionCoordinate} and the value is an Extension instance.
+ */
 @Component
 public class ExtensionRegister {
 

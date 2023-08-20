@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class ExtensionRepoImpl implements ExtensionRepo {
 
@@ -29,6 +32,9 @@ public class ExtensionRepoImpl implements ExtensionRepo {
                 return BizScenarioExtension.ofEmpty();
             });
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void putExtension(ExtensionCoordinate coordinate, Object ext) {
         Object former = map.put(coordinate, ext);
@@ -37,6 +43,9 @@ public class ExtensionRepoImpl implements ExtensionRepo {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BizScenarioExtension getExtension(ExtensionCoordinate coordinate) {
         BizScenarioExtension bizExt = cache.get(coordinate);
