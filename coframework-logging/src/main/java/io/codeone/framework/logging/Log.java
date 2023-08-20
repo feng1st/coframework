@@ -3,6 +3,7 @@ package io.codeone.framework.logging;
 import io.codeone.framework.exception.CommonErrors;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+@NoArgsConstructor(staticName = "newBuilder")
 public class Log {
 
     private static final String DEFAULT_LOGGER_NAME = "logging";
@@ -46,13 +48,6 @@ public class Log {
     private Throwable error;
 
     private LogDelimiters delimiter = LogDelimiters.DEFAULT;
-
-    public static Log newBuilder() {
-        return new Log();
-    }
-
-    private Log() {
-    }
 
     public Log logger(Logger logger) {
         this.logger = logger;

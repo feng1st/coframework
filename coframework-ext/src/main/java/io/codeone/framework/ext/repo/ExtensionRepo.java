@@ -31,7 +31,7 @@ public interface ExtensionRepo {
      * of the argument since a {@code BizScenario} looking up may occur.
      *
      * <p>A {@link BizScenario} looking up will occur in this method if the
-     * exact {@link ExtensionCoordinate#getBizScenario()} did not have an
+     * exact {@code ExtensionCoordinate#getBizScenario()} did not have an
      * associated Extension instance. The framework will iterate next broader
      * {@code BizScenario}s and try to find a match, and throw an exception if
      * no match was found.
