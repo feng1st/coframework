@@ -1,16 +1,14 @@
 package io.codeone.framework.chain.state;
 
+import io.codeone.framework.chain.Node;
 import io.codeone.framework.chain.graph.Graph;
-import io.codeone.framework.chain.node.Node;
+import io.codeone.framework.chain.node.ExitCode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * The execution state of a chain, in a synchronous manner.
- */
 public class SyncChainState implements ChainState {
 
     private final Graph<Node> nodeGraph;
@@ -26,20 +24,23 @@ public class SyncChainState implements ChainState {
     private SyncChainState(Graph<Node> nodeGraph) {
         this.nodeGraph = nodeGraph;
 
-        this.queued.addAll(nodeGraph.getStartingVertices());
+        this.queued.addAll(nodeGraph.getHeadVertices());
     }
 
+    @Override
     public boolean isRunning() {
         return !queued.isEmpty();
     }
 
+    @Override
     public List<Node> pullNodes() {
         final List<Node> nodes = new ArrayList<>(queued);
         queued.clear();
         return nodes;
     }
 
-    public void finishNode(Node node, boolean broken) {
+    @Override
+    public void finishNode(Node node, ExitCode exitCode) {
         finished.add(node);
 
         Set<Node> nodes = nodeGraph.getNextVertices(node);
@@ -50,6 +51,7 @@ public class SyncChainState implements ChainState {
         }
     }
 
+    @Override
     public void waitNodes() {
     }
 }

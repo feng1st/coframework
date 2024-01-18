@@ -4,90 +4,130 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.*;
+import java.util.function.Function;
 
-/**
- * This is an implementation of a graph.
- *
- * @param <T> The type of its vertices.
- */
 @EqualsAndHashCode
 public class Graph<T> {
 
-    /**
-     * The staring to ending vertices map.
-     */
-    private final Map<T, Set<T>> nextMap = new HashMap<>();
+    private final Map<T, Set<T>> forwardEdges = new HashMap<>();
 
-    /**
-     * The ending to starting vertices map.
-     */
-    private final Map<T, Set<T>> previousMap = new HashMap<>();
+    private final Map<T, Set<T>> backwardEdges = new HashMap<>();
 
-    /**
-     * Starting vertices of the graph.
-     */
     @Getter
-    private final Set<T> startingVertices = new HashSet<>();
+    private final Set<T> headVertices = new HashSet<>();
 
-    /**
-     * Constructs an empty graph.
-     */
-    public Graph() {
-    }
+    @Getter
+    private final Set<T> tailVertices = new HashSet<>();
 
-    /**
-     * Constructs a graph with only one vertex.
-     */
-    public Graph(T isolatedVertex) {
-        startingVertices.add(isolatedVertex);
-    }
-
-    /**
-     * Constructs a graph from edges.
-     */
-    public Graph(List<Edge<T>> edges) {
-        for (Edge<T> edge : edges) {
-            nextMap.computeIfAbsent(edge.getStarting(), k -> new HashSet<>())
-                    .add(edge.getEnding());
-            previousMap.computeIfAbsent(edge.getEnding(), k -> new HashSet<>())
-                    .add(edge.getStarting());
+    public void addVertex(T vertex) {
+        if (forwardEdges.containsKey(vertex)
+                || backwardEdges.containsKey(vertex)) {
+            return;
         }
-        startingVertices.addAll(nextMap.keySet());
-        startingVertices.removeAll(previousMap.keySet());
+
+        headVertices.add(vertex);
+        tailVertices.add(vertex);
     }
 
-    /**
-     * Constructs a graph from edges and isolated vertices.
-     */
-    public Graph(List<Edge<T>> edges, List<T> isolatedVertices) {
-        if (isolatedVertices != null && !isolatedVertices.isEmpty()) {
-            startingVertices.addAll(isolatedVertices);
+    public void addEdge(Edge<T> edge) {
+        forwardEdges.computeIfAbsent(edge.getStarting(), k -> new HashSet<>())
+                .add(edge.getEnding());
+
+        backwardEdges.computeIfAbsent(edge.getEnding(), k -> new HashSet<>())
+                .add(edge.getStarting());
+
+        if (!backwardEdges.containsKey(edge.getStarting())) {
+            headVertices.add(edge.getStarting());
         }
-        if (edges != null && !edges.isEmpty()) {
-            for (Edge<T> edge : edges) {
-                nextMap.computeIfAbsent(edge.getStarting(), k -> new HashSet<>())
-                        .add(edge.getEnding());
-                previousMap.computeIfAbsent(edge.getEnding(), k -> new HashSet<>())
-                        .add(edge.getStarting());
+        headVertices.remove(edge.getEnding());
+
+        if (!forwardEdges.containsKey(edge.getEnding())) {
+            tailVertices.add(edge.getEnding());
+        }
+        tailVertices.remove(edge.getStarting());
+    }
+
+    public Set<T> getNextVertices(T startingVertex) {
+        return forwardEdges.getOrDefault(startingVertex, Collections.emptySet());
+    }
+
+    public Set<T> getPreviousVertices(T endingVertex) {
+        return backwardEdges.getOrDefault(endingVertex, Collections.emptySet());
+    }
+
+    public <R> Graph<R> transform(Function<T, R> function) {
+        Graph<R> graph = new Graph<>();
+        forwardEdges.forEach((startingVertex, endingVertices)
+                -> endingVertices.forEach(endingVertex
+                -> graph.addEdge(Edge.of(
+                function.apply(startingVertex),
+                function.apply(endingVertex)))));
+        headVertices.forEach(vertex
+                -> graph.addVertex(function.apply(vertex)));
+        return graph;
+    }
+
+    public void merge(Graph<T> graph) {
+        graph.forwardEdges.forEach((startingVertex, endingVertices)
+                -> endingVertices.forEach(endingVertex
+                -> addEdge(Edge.of(startingVertex, endingVertex))));
+        graph.headVertices.forEach(this::addVertex);
+    }
+
+    public void concat(Graph<T> graph) {
+        Set<T> tailVertices = new HashSet<>(getTailVertices());
+        Set<T> headVertices = new HashSet<>(graph.getHeadVertices());
+        tailVertices.forEach(startingVertex
+                -> headVertices.forEach(endingVertex
+                -> addEdge(Edge.of(startingVertex, endingVertex))));
+        merge(graph);
+    }
+
+    public Optional<List<T>> detectCycle() {
+        Set<T> visited = new HashSet<>();
+        Set<T> recStack = new HashSet<>();
+        Map<T, T> parentMap = new HashMap<>();
+
+        for (T vertex : forwardEdges.keySet()) {
+            if (detectCycleUtil(vertex, visited, recStack, parentMap)) {
+                return Optional.of(constructCycle(vertex, parentMap));
             }
-            startingVertices.addAll(nextMap.keySet());
-            startingVertices.removeAll(previousMap.keySet());
         }
+        return Optional.empty();
     }
 
-    /**
-     * Returns all ending vertices of the edges that starting with the given
-     * vertex, i.e. all 'v's of the given 'u' in every pair of vertices(u, v).
-     */
-    public Set<T> getNextVertices(T from) {
-        return nextMap.getOrDefault(from, Collections.emptySet());
+    private boolean detectCycleUtil(T current,
+                                    Set<T> visited,
+                                    Set<T> recStack,
+                                    Map<T, T> parentMap) {
+        if (recStack.contains(current)) {
+            return true;
+        }
+        if (visited.contains(current)) {
+            return false;
+        }
+        visited.add(current);
+        recStack.add(current);
+
+        for (T neighbor : getNextVertices(current)) {
+            parentMap.put(neighbor, current);
+            if (detectCycleUtil(neighbor, visited, recStack, parentMap)) {
+                return true;
+            }
+        }
+        recStack.remove(current);
+        return false;
     }
 
-    /**
-     * Returns all starting vertices of the edges that ending with the given
-     * vertex, i.e. all 'u's of the given 'v' in every pair of vertices(u, v).
-     */
-    public Set<T> getPreviousVertices(T to) {
-        return previousMap.getOrDefault(to, Collections.emptySet());
+    private List<T> constructCycle(T startVertex, Map<T, T> parentMap) {
+        List<T> cycle = new ArrayList<>();
+        T current = startVertex;
+        while (!cycle.contains(current)) {
+            cycle.add(current);
+            current = parentMap.get(current);
+        }
+        cycle.add(current);
+        Collections.reverse(cycle);
+        return cycle;
     }
 }

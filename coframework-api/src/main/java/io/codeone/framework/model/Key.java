@@ -8,15 +8,6 @@ package io.codeone.framework.model;
 public interface Key {
 
     /**
-     * Returns the key, which comprises a namespace and a code.
-     *
-     * @return the key, which comprises a namespace and a code
-     */
-    default String getKey() {
-        return getNamespace() + "." + getCode();
-    }
-
-    /**
      * Returns the class of the value, which is used for type validation.
      *
      * <p>Please note that it does not support parameterized type, such as
@@ -28,23 +19,7 @@ public interface Key {
      */
     <T> Class<T> getClazz();
 
-    /**
-     * Returns the namespace that differentiates key sets. The default
-     * implementation is using the simple name of its class.
-     *
-     * @return the namespace that differentiates key sets
-     */
-    default String getNamespace() {
-        return getClass().getSimpleName();
-    }
-
-    /**
-     * Returns the code of the key. The default implementation is using
-     * {@code toString()}.
-     *
-     * @return the code of the key
-     */
-    default String getCode() {
-        return toString();
+    default <T> T cast(Object value) {
+        return this.<T>getClazz().cast(value);
     }
 }
