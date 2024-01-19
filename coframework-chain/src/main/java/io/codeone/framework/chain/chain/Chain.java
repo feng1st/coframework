@@ -11,13 +11,11 @@ import io.codeone.framework.chain.state.SyncChainState;
 import io.codeone.framework.logging.Log;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 
 @RequiredArgsConstructor(staticName = "of")
-@Slf4j
 public final class Chain {
 
     private final Graph<Node> graph;
@@ -63,7 +61,7 @@ public final class Chain {
 
     private void enterChain(Context context) {
         Log logger = Log.newBuilder()
-                .logger(log)
+                .logger(context.getName())
                 .scene(context.getName());
         context.onEnterChain(logger::addArg);
         logger.log();
@@ -71,7 +69,7 @@ public final class Chain {
 
     private ExitCode executeNode(Context context, Node node) {
         Log logger = Log.newBuilder()
-                .logger(log)
+                .logger(context.getName())
                 .scene(context.getName())
                 .method(node.getClass().getSimpleName());
         long start = System.currentTimeMillis();
