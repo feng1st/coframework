@@ -11,6 +11,7 @@ import org.slf4j.event.Level;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -31,15 +32,15 @@ public class Log {
 
     private String method;
 
-    private boolean success;
+    private Boolean success;
 
-    private boolean hasError;
+    private Boolean hasError;
 
     private String code;
 
     private String message;
 
-    private long elapsed;
+    private Long elapsed;
 
     private Map<String, Object> args;
 
@@ -188,12 +189,12 @@ public class Log {
 
     private void initLevel() {
         if (level == null) {
-            if (success) {
-                level = Level.INFO;
-            } else if (hasError) {
+            if (Objects.equals(hasError, true)) {
                 level = Level.ERROR;
-            } else {
+            } else if (Objects.equals(success, false)) {
                 level = Level.WARN;
+            } else {
+                level = Level.INFO;
             }
         }
     }
