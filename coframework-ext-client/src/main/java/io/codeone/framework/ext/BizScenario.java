@@ -197,6 +197,40 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         return of(this.bizId, joinValues(scenario));
     }
 
+    public BizScenario withRootScenario(String... scenario) {
+        if (scenario.length == 0) {
+            return this;
+        }
+        if (scenario.length == 1
+                && ANY.equals(scenario[0])) {
+            return this;
+        }
+        if (ANY.equals(this.scenario)) {
+            return withScenario(scenario);
+        }
+        String[] newScenario = new String[scenario.length + 1];
+        System.arraycopy(scenario, 0, newScenario, 0, scenario.length);
+        newScenario[scenario.length] = this.scenario;
+        return of(this.bizId, joinValues(newScenario));
+    }
+
+    public BizScenario withLeafScenario(String... scenario) {
+        if (scenario.length == 0) {
+            return this;
+        }
+        if (scenario.length == 1
+                && ANY.equals(scenario[0])) {
+            return this;
+        }
+        if (ANY.equals(this.scenario)) {
+            return withScenario(scenario);
+        }
+        String[] newScenario = new String[scenario.length + 1];
+        newScenario[0] = this.scenario;
+        System.arraycopy(scenario, 0, newScenario, 1, scenario.length);
+        return of(this.bizId, joinValues(newScenario));
+    }
+
     /**
      * Sets the business identity hierarchy. Null or empty string is permitted
      * and will be regarded as {@link #ANY}. Please refer to {@link #bizId} for
