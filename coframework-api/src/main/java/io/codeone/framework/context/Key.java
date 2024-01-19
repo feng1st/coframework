@@ -1,4 +1,4 @@
-package io.codeone.framework.model;
+package io.codeone.framework.context;
 
 /**
  * Represents a type-specified key of a map, and has a namespace to achieve key
