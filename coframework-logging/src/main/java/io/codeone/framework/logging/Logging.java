@@ -18,6 +18,8 @@ public @interface Logging {
      */
     String name() default "";
 
+    String scene() default "";
+
     /**
      * Set a list of name/SpEL expression pairs of 'key' information to be logged, e.g.
      * {"id", "#arg0?.id", "type", "#arg0?.type", ...}.

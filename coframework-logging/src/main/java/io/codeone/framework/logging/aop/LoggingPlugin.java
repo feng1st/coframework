@@ -55,6 +55,9 @@ public class LoggingPlugin implements Plugin {
             if (!logging.name().isEmpty()) {
                 log.logger(logging.name());
             }
+            if (!logging.scene().isEmpty()) {
+                log.scene(logging.scene());
+            }
         }
 
         log.method(method);
@@ -84,8 +87,8 @@ public class LoggingPlugin implements Plugin {
                 log.hasError(true);
             }
         } else {
-            Object resultBody = getResultBody(result);
             if (logging != null && logging.value().logResult()) {
+                Object resultBody = getResultBody(result);
                 log.resultBody(resultBody);
             }
         }
