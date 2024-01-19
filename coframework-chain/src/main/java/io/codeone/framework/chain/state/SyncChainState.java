@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SyncChainState implements ChainState {
+public final class SyncChainState implements ChainState {
 
     private final Graph<Node> nodeGraph;
 

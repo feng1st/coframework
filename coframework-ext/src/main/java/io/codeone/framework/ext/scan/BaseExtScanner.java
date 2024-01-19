@@ -35,7 +35,11 @@ public abstract class BaseExtScanner implements ExtScanner {
         for (Class<?> extensibleClass : extensibleClasses) {
             scanExtensible(extensibleClass);
 
-            for (Method method : extensibleClass.getDeclaredMethods()) {
+            for (Method method : extensibleClass.getMethods()) {
+                if (method.getDeclaringClass() == Object.class) {
+                    continue;
+                }
+
                 scanExtensibleMethod(extensibleClass, method);
 
                 Class<?> implementingClass = findImplementingClass(method, extClass);

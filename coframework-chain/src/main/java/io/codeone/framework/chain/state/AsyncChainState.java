@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AsyncChainState implements ChainState {
+public final class AsyncChainState implements ChainState {
 
     private final Graph<Node> nodeGraph;
 

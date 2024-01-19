@@ -99,14 +99,14 @@ public class BizScenarioParamScanner extends BaseExtScanner {
             }
         }
 
+        if (index != null) {
+            return index;
+        }
+
         if (routeByContextByDefault) {
             return -1;
         }
 
-        if (index == null) {
-            throw new IllegalStateException("Could not find consistent BizScenarioParam on '" + method + "'");
-        }
-
-        return index;
+        throw new IllegalStateException("Could not find consistent BizScenarioParam on '" + method + "'");
     }
 }

@@ -68,15 +68,17 @@ public class ExtProxyInvocationHandler<T> implements InvocationHandler {
     }
 
     private BizScenario getBizScenario(Object[] args, Method method) {
-        BizScenario bizScenario;
+        BizScenario bizScenario = null;
         int paramIndex = bizScenarioParamRepo.getParamIndex(method);
-        if (paramIndex == -1) {
-            bizScenario = BizScenarioContext.getBizScenario();
-        } else {
+        if (paramIndex != -1) {
             bizScenario = ((BizScenarioParam) args[paramIndex]).getBizScenario();
         }
         if (bizScenario == null) {
-            throw new IllegalStateException("Could not get BizScenario from context or args");
+            bizScenario = BizScenarioContext.getBizScenario();
+
+            if (bizScenario == null) {
+                throw new IllegalStateException("Could not get BizScenario from context or args");
+            }
         }
         return bizScenario;
     }
