@@ -26,7 +26,7 @@ public class PluginChain {
      */
     public PluginChain(List<Plugin> plugins) {
         Objects.requireNonNull(plugins);
-        this.plugins = plugins;
+        this.plugins = new LinkedList<>(plugins);
         sortPlugins();
     }
 
@@ -48,8 +48,7 @@ public class PluginChain {
         if (plugins.isEmpty()) {
             return invokable.invoke();
         }
-        return PluginChainContext.invoke(() ->
-                invoke(plugins.iterator(), TargetMethod.of(method), args, invokable));
+        return invoke(plugins.iterator(), TargetMethod.of(method), args, invokable);
     }
 
     private Object invoke(Iterator<Plugin> iter, TargetMethod targetMethod, Object[] args, Invokable<?> invokable)

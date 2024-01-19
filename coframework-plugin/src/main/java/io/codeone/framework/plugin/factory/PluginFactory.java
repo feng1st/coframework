@@ -4,11 +4,13 @@ import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.plug.Plugging;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -25,10 +27,14 @@ public class PluginFactory {
 
     private final Map<String, List<Plugin>> groupMap = new HashMap<>();
 
-    @PostConstruct
-    private void postConstruct() {
-        applicationContext.getBeansOfType(Plugin.class).values()
-                .forEach(this::addPlugin);
+    private final AtomicBoolean initialized = new AtomicBoolean(false);
+
+    @EventListener
+    public void onApplicationContextInitialized(ContextRefreshedEvent event) {
+        if (initialized.compareAndSet(false, true)) {
+            applicationContext.getBeansOfType(Plugin.class).values()
+                    .forEach(this::addPlugin);
+        }
     }
 
     private void addPlugin(Plugin plugin) {
@@ -72,7 +78,8 @@ public class PluginFactory {
      * @param pluginClasses classes of plugins that are being acquired
      * @return list of plugins of the specified classes
      */
-    public List<Plugin> getPlugins(Class<? extends Plugin>[] pluginClasses) {
+    @SafeVarargs
+    public final List<Plugin> getPlugins(Class<? extends Plugin>... pluginClasses) {
         return Arrays.stream(pluginClasses)
                 .map(pluginMap::get)
                 .filter(Objects::nonNull)

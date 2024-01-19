@@ -29,7 +29,7 @@ public class PluginChainContext {
      * @throws Throwable any exception thrown by the plugin chain or the target
      *                   method
      */
-    Object invoke(Invokable<?> invokable) throws Throwable {
+    public Object invoke(Invokable<?> invokable) throws Throwable {
         try {
             return invokable.invoke();
         } finally {

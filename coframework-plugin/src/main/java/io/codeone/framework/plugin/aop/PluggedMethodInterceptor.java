@@ -1,6 +1,7 @@
 package io.codeone.framework.plugin.aop;
 
 import io.codeone.framework.plugin.chain.PluginChain;
+import io.codeone.framework.plugin.chain.PluginChainContext;
 import io.codeone.framework.plugin.chain.PluginChainFactory;
 import io.codeone.framework.plugin.plug.MethodPluggers;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -31,6 +32,7 @@ public class PluggedMethodInterceptor implements MethodInterceptor {
         if (pluginChain == null) {
             return invocation.proceed();
         }
-        return pluginChain.invoke(method, invocation.getArguments(), invocation::proceed);
+        return PluginChainContext.invoke(() ->
+                pluginChain.invoke(method, invocation.getArguments(), invocation::proceed));
     }
 }
