@@ -7,17 +7,22 @@ import io.codeone.framework.logging.util.LoggingSpelParser;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.util.ConversionServiceUtil;
 import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
 @Plug(Stages.AFTER_TARGET)
 @Slf4j(topic = "logging")
 public class LoggingPlugin implements Plugin {
+
+    @Resource
+    private ConversionServiceUtil conversionServiceUtil;
 
     @Override
     public Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
@@ -70,13 +75,15 @@ public class LoggingPlugin implements Plugin {
             }
         }
 
+        Result<?> apiResult = conversionServiceUtil.convert(result, Result.class)
+                .orElse(null);
         Throwable cause = null;
         if (error != null) {
             cause = ErrorUtils.getCause(error);
         }
-        boolean success = getSuccess(logging, result, cause, spelParser);
-        String code = getCode(logging, result, cause, spelParser);
-        String message = getMessage(logging, result, cause, spelParser);
+        boolean success = getSuccess(logging, apiResult, cause, spelParser);
+        String code = getCode(logging, apiResult, cause, spelParser);
+        String message = getMessage(logging, apiResult, cause, spelParser);
         log.code(success, code, message);
         if (error != null) {
             if (logging != null && logging.value().logError()) {
@@ -86,7 +93,7 @@ public class LoggingPlugin implements Plugin {
             }
         } else {
             if (logging != null && logging.value().logResult()) {
-                Object resultBody = getResultBody(result);
+                Object resultBody = getResultBody(apiResult, result);
                 log.resultBody(resultBody);
             }
         }
@@ -96,12 +103,12 @@ public class LoggingPlugin implements Plugin {
         log.log();
     }
 
-    private boolean getSuccess(Logging logging, Object result, Throwable cause, LoggingSpelParser spelParser) {
+    private boolean getSuccess(Logging logging, Result<?> apiResult, Throwable cause, LoggingSpelParser spelParser) {
         if (cause != null) {
             return false;
         }
-        if (result instanceof Result) {
-            return ((Result<?>) result).isSuccess();
+        if (apiResult != null) {
+            return apiResult.isSuccess();
         }
         if (logging != null && !logging.expSuccess().isEmpty()) {
             return spelParser.evalBoolean(logging.expSuccess());
@@ -109,12 +116,12 @@ public class LoggingPlugin implements Plugin {
         return true;
     }
 
-    private String getCode(Logging logging, Object result, Throwable cause, LoggingSpelParser spelParser) {
+    private String getCode(Logging logging, Result<?> apiResult, Throwable cause, LoggingSpelParser spelParser) {
         if (cause != null) {
             return ErrorUtils.getCode(cause);
         }
-        if (result instanceof Result) {
-            return ((Result<?>) result).getErrorCode();
+        if (apiResult != null) {
+            return apiResult.getErrorCode();
         }
         if (logging != null && !logging.expCode().isEmpty()) {
             return spelParser.evalString(logging.expCode());
@@ -122,12 +129,12 @@ public class LoggingPlugin implements Plugin {
         return CommonErrors.SUCCESS.getCode();
     }
 
-    private String getMessage(Logging logging, Object result, Throwable cause, LoggingSpelParser spelParser) {
+    private String getMessage(Logging logging, Result<?> apiResult, Throwable cause, LoggingSpelParser spelParser) {
         if (cause != null) {
             return cause.getMessage();
         }
-        if (result instanceof Result) {
-            return ((Result<?>) result).getErrorMessage();
+        if (apiResult != null) {
+            return apiResult.getErrorMessage();
         }
         if (logging != null && !logging.expMessage().isEmpty()) {
             return spelParser.evalString(logging.expMessage());
@@ -135,9 +142,9 @@ public class LoggingPlugin implements Plugin {
         return null;
     }
 
-    private Object getResultBody(Object result) {
-        if (result instanceof Result) {
-            return ((Result<?>) result).getData();
+    private Object getResultBody(Result<?> apiResult, Object result) {
+        if (apiResult != null) {
+            return apiResult.getData();
         }
         return result;
     }
