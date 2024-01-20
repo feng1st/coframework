@@ -48,7 +48,8 @@ public class ExToResultApiPlugin implements Plugin {
         }
         try {
             API api = targetMethod.getAnnotation(API.class);
-            return conversionServiceUtil.convert(buildResult(t, api), returnType);
+            return conversionServiceUtil.convert(buildResult(t, api), returnType)
+                    .orElseThrow(() -> t);
         } catch (Exception e) {
             throw t;
         }
