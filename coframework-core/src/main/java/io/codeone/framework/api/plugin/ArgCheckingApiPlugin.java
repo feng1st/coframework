@@ -5,8 +5,11 @@ import io.codeone.framework.api.ApiConstants;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.util.ConversionServiceUtil;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.request.ApiParam;
+
+import javax.annotation.Resource;
 
 /**
  * {@code ArgCheckingApiPlugin} will execute {@link ApiParam#checkArgs()} on all
@@ -19,6 +22,9 @@ import io.codeone.framework.request.ApiParam;
 @Plug(value = Stages.ARG_INTERCEPTING, group = ApiConstants.PLUGIN_GROUP)
 public class ArgCheckingApiPlugin implements Plugin {
 
+    @Resource
+    private ConversionServiceUtil conversionServiceUtil;
+
     /**
      * Executes {@link ApiParam#checkArgs()} on all arguments. If any exception
      * is thrown, the execution of the plugin chain as well as the target method
@@ -29,9 +35,8 @@ public class ArgCheckingApiPlugin implements Plugin {
     @Override
     public void before(TargetMethod targetMethod, Object[] args) {
         for (Object arg : args) {
-            if (arg instanceof ApiParam) {
-                ((ApiParam) arg).checkArgs();
-            }
+            conversionServiceUtil.convert(arg, ApiParam.class)
+                    .ifPresent(ApiParam::checkArgs);
         }
     }
 }

@@ -5,9 +5,12 @@ import io.codeone.framework.api.ApiConstants;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.util.ConversionServiceUtil;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
+
+import javax.annotation.Resource;
 
 /**
  * {@code ExToResultApiPlugin} will convert any exception to a failed
@@ -19,6 +22,9 @@ import io.codeone.framework.util.ErrorUtils;
  */
 @Plug(value = Stages.POST_RESULT_INTERCEPTING, group = ApiConstants.PLUGIN_GROUP)
 public class ExToResultApiPlugin implements Plugin {
+
+    @Resource
+    private ConversionServiceUtil conversionServiceUtil;
 
     /**
      * If an exception had been thrown and the return type of the API method is
@@ -34,15 +40,15 @@ public class ExToResultApiPlugin implements Plugin {
         return exToResult(targetMethod, error);
     }
 
-    private Result<?> exToResult(TargetMethod targetMethod, Throwable t)
+    private Object exToResult(TargetMethod targetMethod, Throwable t)
             throws Throwable {
         Class<?> returnType = targetMethod.getReturnType();
-        if (!Result.class.isAssignableFrom(returnType)) {
+        if (!conversionServiceUtil.canConvert(Result.class, returnType)) {
             throw t;
         }
         try {
             API api = targetMethod.getAnnotation(API.class);
-            return buildResult(t, api);
+            return conversionServiceUtil.convert(buildResult(t, api), returnType);
         } catch (Exception e) {
             throw t;
         }
