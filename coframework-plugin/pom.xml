@@ -13,6 +13,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
             <optional>true</optional>

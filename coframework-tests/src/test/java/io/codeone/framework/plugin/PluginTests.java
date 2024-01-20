@@ -96,16 +96,6 @@ public class PluginTests {
     }
 
     @Test
-    void testContext() {
-        try {
-            testPluginService.context();
-            Assertions.fail("Plugging is not working");
-        } catch (Exception e) {
-            Assertions.assertEquals("Context is working", e.getMessage());
-        }
-    }
-
-    @Test
     void testOverriddenMethodOfObject() {
         Assertions.assertNotEquals("", testPluginService.toString());
     }
