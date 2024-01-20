@@ -1,5 +1,6 @@
 package io.codeone.framework.logging.aop;
 
+import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.exception.CommonErrors;
 import io.codeone.framework.logging.Log;
 import io.codeone.framework.logging.Logging;
@@ -7,11 +8,11 @@ import io.codeone.framework.logging.util.LoggingSpelParser;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.util.ConversionServiceUtil;
+import io.codeone.framework.plugin.util.ConversionUtilService;
+import io.codeone.framework.plugin.util.ErrorUtilService;
 import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
-import io.codeone.framework.util.ErrorUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -22,7 +23,10 @@ import java.lang.reflect.Method;
 public class LoggingPlugin implements Plugin {
 
     @Resource
-    private ConversionServiceUtil conversionServiceUtil;
+    private ConversionUtilService conversionUtilService;
+
+    @Resource
+    private ErrorUtilService errorUtilService;
 
     @Override
     public Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
@@ -75,11 +79,11 @@ public class LoggingPlugin implements Plugin {
             }
         }
 
-        Result<?> apiResult = conversionServiceUtil.convert(result, Result.class)
+        Result<?> apiResult = conversionUtilService.convert(result, Result.class)
                 .orElse(null);
-        Throwable cause = null;
+        ApiError cause = null;
         if (error != null) {
-            cause = ErrorUtils.getCause(error);
+            cause = errorUtilService.getCause(error);
         }
         boolean success = getSuccess(logging, apiResult, cause, spelParser);
         String code = getCode(logging, apiResult, cause, spelParser);
@@ -103,7 +107,7 @@ public class LoggingPlugin implements Plugin {
         log.log();
     }
 
-    private boolean getSuccess(Logging logging, Result<?> apiResult, Throwable cause, LoggingSpelParser spelParser) {
+    private boolean getSuccess(Logging logging, Result<?> apiResult, ApiError cause, LoggingSpelParser spelParser) {
         if (cause != null) {
             return false;
         }
@@ -116,9 +120,9 @@ public class LoggingPlugin implements Plugin {
         return true;
     }
 
-    private String getCode(Logging logging, Result<?> apiResult, Throwable cause, LoggingSpelParser spelParser) {
+    private String getCode(Logging logging, Result<?> apiResult, ApiError cause, LoggingSpelParser spelParser) {
         if (cause != null) {
-            return ErrorUtils.getCode(cause);
+            return cause.getCode();
         }
         if (apiResult != null) {
             return apiResult.getErrorCode();
@@ -129,7 +133,7 @@ public class LoggingPlugin implements Plugin {
         return CommonErrors.SUCCESS.getCode();
     }
 
-    private String getMessage(Logging logging, Result<?> apiResult, Throwable cause, LoggingSpelParser spelParser) {
+    private String getMessage(Logging logging, Result<?> apiResult, ApiError cause, LoggingSpelParser spelParser) {
         if (cause != null) {
             return cause.getMessage();
         }

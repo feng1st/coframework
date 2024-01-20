@@ -2,13 +2,14 @@ package io.codeone.framework.api.plugin;
 
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiConstants;
+import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.util.ConversionServiceUtil;
+import io.codeone.framework.plugin.util.ConversionUtilService;
+import io.codeone.framework.plugin.util.ErrorUtilService;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
-import io.codeone.framework.util.ErrorUtils;
 
 import javax.annotation.Resource;
 
@@ -24,7 +25,10 @@ import javax.annotation.Resource;
 public class ExToResultApiPlugin implements Plugin {
 
     @Resource
-    private ConversionServiceUtil conversionServiceUtil;
+    private ConversionUtilService conversionUtilService;
+
+    @Resource
+    private ErrorUtilService errorUtilService;
 
     /**
      * If an exception had been thrown and the return type of the API method is
@@ -43,12 +47,12 @@ public class ExToResultApiPlugin implements Plugin {
     private Object exToResult(TargetMethod targetMethod, Throwable t)
             throws Throwable {
         Class<?> returnType = targetMethod.getReturnType();
-        if (!conversionServiceUtil.canConvert(Result.class, returnType)) {
+        if (!conversionUtilService.canConvert(Result.class, returnType)) {
             throw t;
         }
         try {
             API api = targetMethod.getAnnotation(API.class);
-            return conversionServiceUtil.convert(buildResult(t, api), returnType)
+            return conversionUtilService.convert(buildResult(t, api), returnType)
                     .orElseThrow(() -> t);
         } catch (Exception e) {
             throw t;
@@ -56,8 +60,8 @@ public class ExToResultApiPlugin implements Plugin {
     }
 
     private Result<?> buildResult(Throwable t, API api) {
-        Throwable cause = ErrorUtils.getCause(t);
-        String code = ErrorUtils.getCode(cause);
+        ApiError cause = errorUtilService.getCause(t);
+        String code = cause.getCode();
         String message = !api.errorMessage().isEmpty() ? api.errorMessage() : cause.getMessage();
         return Result.fail(code, message);
     }

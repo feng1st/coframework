@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import java.util.Optional;
 
 @Component
-public class ConversionServiceUtil {
+public class ConversionUtilService {
 
     @Resource
     private Optional<ConversionService> conversionService;
