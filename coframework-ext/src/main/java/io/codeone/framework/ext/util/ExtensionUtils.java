@@ -54,9 +54,6 @@ public class ExtensionUtils {
      * @throws Throwable any exception the invokable may throw
      */
     public void invoke(BizScenario bizScenario, VoidInvokable invokable) throws Throwable {
-        BizScenarioContext.invoke(bizScenario, () -> {
-            invokable.invoke();
-            return null;
-        });
+        BizScenarioContext.invoke(bizScenario, invokable);
     }
 }

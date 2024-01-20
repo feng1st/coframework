@@ -4,6 +4,8 @@ import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.RouteByContext;
 import io.codeone.framework.ext.session.ExtensionSession;
 import io.codeone.framework.plugin.util.Invokable;
+import io.codeone.framework.plugin.util.VoidInvokable;
+import lombok.experimental.UtilityClass;
 
 import java.util.LinkedList;
 
@@ -20,9 +22,10 @@ import java.util.LinkedList;
  * <p>The stack inside is {@code ThreadLocal} and can not be used in
  * multi-threads situation directly.
  */
+@UtilityClass
 public class BizScenarioContext {
 
-    private static final ThreadLocal<LinkedList<BizScenario>> stack = ThreadLocal.withInitial(LinkedList::new);
+    private final ThreadLocal<LinkedList<BizScenario>> stack = ThreadLocal.withInitial(LinkedList::new);
 
     /**
      * Returns the most recent {@link BizScenario} instance used in Extension
@@ -31,7 +34,7 @@ public class BizScenarioContext {
      * @return the most recent {@code BizScenario} instance used in Extension
      * routing
      */
-    public static BizScenario getBizScenario() {
+    public BizScenario getBizScenario() {
         return stack.get().peek();
     }
 
@@ -46,12 +49,19 @@ public class BizScenarioContext {
      * @return the result of the invokable
      * @throws Throwable any exception the invokable may throw
      */
-    public static <T> T invoke(BizScenario bizScenario, Invokable<T> invokable) throws Throwable {
+    public <T> T invoke(BizScenario bizScenario, Invokable<T> invokable) throws Throwable {
         stack.get().push(bizScenario);
         try {
             return invokable.invoke();
         } finally {
             stack.get().pop();
         }
+    }
+
+    public void invoke(BizScenario bizScenario, VoidInvokable invokable) throws Throwable {
+        invoke(bizScenario, () -> {
+            invokable.invoke();
+            return null;
+        });
     }
 }
