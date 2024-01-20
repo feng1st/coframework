@@ -23,7 +23,7 @@ public class PluginFactory {
     @Resource
     private ApplicationContext applicationContext;
 
-    private final Map<Class<?>, Plugin> pluginMap = new HashMap<>();
+    private final Map<Class<?>, Plugin> classMap = new HashMap<>();
 
     private final Map<String, List<Plugin>> groupMap = new HashMap<>();
 
@@ -33,13 +33,14 @@ public class PluginFactory {
     public void onApplicationContextInitialized(ContextRefreshedEvent event) {
         if (initialized.compareAndSet(false, true)) {
             applicationContext.getBeansOfType(Plugin.class).values()
-                    .forEach(this::addPlugin);
+                    .forEach(this::registerPlugin);
         }
     }
 
-    private void addPlugin(Plugin plugin) {
+    private void registerPlugin(Plugin plugin) {
         Class<?> clazz = plugin.getClass();
-        pluginMap.put(clazz, plugin);
+
+        classMap.put(clazz, plugin);
 
         Plug plug = clazz.getAnnotation(Plug.class);
         if (plug != null
@@ -81,7 +82,7 @@ public class PluginFactory {
     @SafeVarargs
     public final List<Plugin> getPlugins(Class<? extends Plugin>... pluginClasses) {
         return Arrays.stream(pluginClasses)
-                .map(pluginMap::get)
+                .map(classMap::get)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }

@@ -15,6 +15,8 @@ public enum Stages {
     POST_RESULT_INTERCEPTING(true),
     ;
 
+    public static final Stages DEFAULT = BEFORE_TARGET;
+
     private final boolean after;
 
     public int getOrder() {

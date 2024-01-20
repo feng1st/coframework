@@ -18,16 +18,9 @@ public class PluginChain {
 
     private final List<Plugin> plugins;
 
-    /**
-     * Constructs a plugin chain by specifying its contained plugins. Plugins
-     * will be sorted by {@link Plug#value()} then by {@link Order} here.
-     *
-     * @param plugins all plugins this chain contains
-     */
     public PluginChain(List<Plugin> plugins) {
         Objects.requireNonNull(plugins);
-        this.plugins = new LinkedList<>(plugins);
-        sortPlugins();
+        this.plugins = sortPlugins(plugins);
     }
 
     /**
@@ -61,14 +54,16 @@ public class PluginChain {
         }
     }
 
-    private void sortPlugins() {
-        plugins.sort(Comparator.comparing(o
+    private List<Plugin> sortPlugins(List<Plugin> plugins) {
+        List<Plugin> result = new LinkedList<>(plugins);
+        result.sort(Comparator.comparing(o
                 -> Optional.ofNullable(o.getClass().getAnnotation(Plug.class))
                 .map(Plug::value)
-                .map(Stages::getOrder)
-                .orElse(0)).thenComparing(o
+                .orElse(Stages.DEFAULT)
+                .getOrder()).thenComparing(o
                 -> Optional.ofNullable(o.getClass().getAnnotation(Order.class))
                 .map(Order::value)
                 .orElse(0)));
+        return result;
     }
 }

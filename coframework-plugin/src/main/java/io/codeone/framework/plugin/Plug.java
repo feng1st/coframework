@@ -3,7 +3,6 @@ package io.codeone.framework.plugin;
 import io.codeone.framework.plugin.plug.ClassPlugging;
 import io.codeone.framework.plugin.plug.GroupPlugging;
 import io.codeone.framework.plugin.plug.MethodPlugger;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
@@ -20,20 +19,7 @@ import java.lang.annotation.*;
 @Component
 public @interface Plug {
 
-    /**
-     * The stage this plugin belongs to. Plugins will be sorted by stage in a
-     * chain. The default value, as well as the default stage value of a plugin
-     * if you do not use the {@code Plug} annotation, is
-     * {@link Stages#BEFORE_TARGET} which is closest to the target method in
-     * order.
-     *
-     * <p>You can use {@link Order} annotation to further specify the order of
-     * plugins that belong to the same stage, if that matters.
-     *
-     * @return the stage this plugin belongs to
-     * @see Stages
-     */
-    Stages value() default Stages.BEFORE_TARGET;
+    Stages value();
 
     /**
      * The group this plugin belongs to. You can use group to select multiple
