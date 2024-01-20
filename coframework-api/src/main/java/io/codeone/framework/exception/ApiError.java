@@ -30,4 +30,18 @@ public interface ApiError {
      * @return the message of this custom exception
      */
     String getMessage();
+
+    static ApiError of(String code, String message) {
+        return new ApiError() {
+            @Override
+            public String getCode() {
+                return code;
+            }
+
+            @Override
+            public String getMessage() {
+                return message;
+            }
+        };
+    }
 }

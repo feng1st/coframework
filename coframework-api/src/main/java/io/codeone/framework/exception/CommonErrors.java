@@ -17,21 +17,17 @@ public enum CommonErrors implements ApiError {
      */
     SUCCESS("Success"),
     /**
-     * Invalid param
+     * Invalid parameters
      */
-    INVALID_PARAM("Invalid param"),
+    INVALID_PARAM("Invalid parameters"),
     /**
      * System error
      */
     SYS_ERROR("System error"),
     /**
-     * Outer system error
+     * External system error
      */
-    OUTER_SYS_ERROR("Outer system error"),
-    /**
-     * Middleware error
-     */
-    MW_ERROR("Middleware error"),
+    EXT_SYS_ERROR("External system error"),
     ;
 
     private final String message;
