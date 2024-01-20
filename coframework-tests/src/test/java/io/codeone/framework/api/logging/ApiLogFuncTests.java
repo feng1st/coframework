@@ -21,7 +21,7 @@ public class ApiLogFuncTests extends BaseLogTests {
 
         assertLog(TestApiLogFuncService.class.getName(), Level.ERROR, null,
                 // Logged message is not from API.errorMessage.
-                "||level=>ERROR||method=>TestApiLogFuncService.customMessage||success=>false||code=>INVALID_PARAM||message=>Invalid param||elapsed=>0");
+                "||level=>ERROR||method=>TestApiLogFuncService.customMessage||success=>false||code=>INVALID_PARAM||message=>Invalid parameters||elapsed=>0");
     }
 
     @Test
@@ -31,6 +31,6 @@ public class ApiLogFuncTests extends BaseLogTests {
         assertLog(TestApiLogFuncService.class.getName(), Level.ERROR,
                 // Has no stack trace since it's not a SysError.
                 MyException.class,
-                "||level=>ERROR||method=>TestApiLogFuncService.stackTrace||success=>false||code=>INVALID_PARAM||message=>Invalid param||elapsed=>0||error=>io.codeone.framework.api.logging.domain.exception.MyException: Invalid param");
+                "||level=>ERROR||method=>TestApiLogFuncService.stackTrace||success=>false||code=>INVALID_PARAM||message=>Invalid parameters||elapsed=>0||error=>io.codeone.framework.api.logging.domain.exception.MyException: Invalid parameters");
     }
 }

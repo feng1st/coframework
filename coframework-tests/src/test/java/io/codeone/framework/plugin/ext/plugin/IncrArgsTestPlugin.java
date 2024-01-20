@@ -5,7 +5,7 @@ import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.TargetMethod;
 
-@Plug(Stages.ARG_UPDATING)
+@Plug(Stages.ARG_INTERCEPTING)
 public class IncrArgsTestPlugin implements Plugin {
 
     @Override

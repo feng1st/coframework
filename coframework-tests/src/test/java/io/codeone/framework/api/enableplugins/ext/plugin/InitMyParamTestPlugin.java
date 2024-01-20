@@ -6,7 +6,7 @@ import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.TargetMethod;
 
-@Plug(Stages.ARG_INITIALIZATION)
+@Plug(Stages.PRE_ARG_INTERCEPTING)
 public class InitMyParamTestPlugin implements Plugin {
 
     @Override

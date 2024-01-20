@@ -5,7 +5,7 @@ import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.TargetMethod;
 
-@Plug(Stages.RESULT_UPDATING)
+@Plug(Stages.RESULT_INTERCEPTING)
 public class DecrResultTestPlugin implements Plugin {
 
     @Override

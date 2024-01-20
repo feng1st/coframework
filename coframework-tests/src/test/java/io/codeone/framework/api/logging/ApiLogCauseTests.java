@@ -20,7 +20,7 @@ public class ApiLogCauseTests extends BaseLogTests {
 
         assertLog(TestApiLogCauseService.class.getName(), Level.ERROR, null,
                 // Cause found is MyException(CommonErrors.INVALID_PARAM, ...).
-                "||level=>ERROR||method=>TestApiLogCauseService.apiError||success=>false||code=>INVALID_PARAM||message=>Invalid param||elapsed=>0");
+                "||level=>ERROR||method=>TestApiLogCauseService.apiError||success=>false||code=>INVALID_PARAM||message=>Invalid parameters||elapsed=>0");
     }
 
     @Test

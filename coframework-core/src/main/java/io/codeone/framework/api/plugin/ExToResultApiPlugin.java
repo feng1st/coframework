@@ -17,7 +17,7 @@ import io.codeone.framework.util.ErrorUtils;
  * @see API
  * @see Result
  */
-@Plug(value = Stages.EXCEPTION_HANDLING, group = ApiConstants.PLUGIN_GROUP)
+@Plug(value = Stages.POST_RESULT_INTERCEPTING, group = ApiConstants.PLUGIN_GROUP)
 public class ExToResultApiPlugin implements Plugin {
 
     /**

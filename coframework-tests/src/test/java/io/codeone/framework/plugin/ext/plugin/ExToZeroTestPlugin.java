@@ -5,7 +5,7 @@ import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.TargetMethod;
 
-@Plug(Stages.EXCEPTION_HANDLING)
+@Plug(Stages.POST_RESULT_INTERCEPTING)
 public class ExToZeroTestPlugin implements Plugin {
 
     @Override

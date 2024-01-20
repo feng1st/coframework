@@ -23,7 +23,7 @@ public class LogCauseTests extends BaseLogTests {
         assertLog(TestLogCauseService.class.getName(), Level.ERROR,
                 RuntimeException.class,
                 // Cause found is MyException(CommonErrors.INVALID_PARAM, ...).
-                "||level=>ERROR||method=>TestLogCauseService.apiError||success=>false||code=>INVALID_PARAM||message=>Invalid param||elapsed=>0||error=>java.lang.RuntimeException: io.codeone.framework.logging.domain.exception.MyException: Invalid param");
+                "||level=>ERROR||method=>TestLogCauseService.apiError||success=>false||code=>INVALID_PARAM||message=>Invalid parameters||elapsed=>0||error=>java.lang.RuntimeException: io.codeone.framework.logging.domain.exception.MyException: Invalid parameters");
     }
 
     @Test
