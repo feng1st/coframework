@@ -11,15 +11,13 @@ import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
 import io.codeone.framework.util.ErrorUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 
 @Plug(Stages.AFTER_TARGET)
+@Slf4j(topic = "logging")
 public class LoggingPlugin implements Plugin {
-
-    private final Logger logger = LoggerFactory.getLogger("coframework.logging");
 
     @Override
     public Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
@@ -36,7 +34,7 @@ public class LoggingPlugin implements Plugin {
             try {
                 log(targetMethod, args, result, error, elapsed);
             } catch (Throwable t) {
-                logger.error("Error logging invocation of '" + targetMethod.getMethod() + "'", t);
+                log.error("Error logging invocation of '" + targetMethod.getMethod() + "'", t);
             }
         }
     }
