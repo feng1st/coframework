@@ -5,7 +5,7 @@ import io.codeone.framework.api.ApiConstants;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.util.ConversionUtilService;
+import io.codeone.framework.plugin.util.ConversionServiceUtil;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.request.ApiParam;
 
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 public class ArgCheckingApiPlugin implements Plugin {
 
     @Resource
-    private ConversionUtilService conversionUtilService;
+    private ConversionServiceUtil conversionServiceUtil;
 
     /**
      * Executes {@link ApiParam#checkArgs()} on all arguments. If any exception
@@ -35,7 +35,7 @@ public class ArgCheckingApiPlugin implements Plugin {
     @Override
     public void before(TargetMethod targetMethod, Object[] args) {
         for (Object arg : args) {
-            conversionUtilService.convert(arg, ApiParam.class)
+            conversionServiceUtil.convert(arg, ApiParam.class)
                     .ifPresent(ApiParam::checkArgs);
         }
     }

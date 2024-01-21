@@ -10,16 +10,16 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component
-public class ErrorUtilService {
+public class ErrorServiceUtil {
 
     @Resource
-    private ConversionUtilService conversionUtilService;
+    private ConversionServiceUtil conversionServiceUtil;
 
     public ApiError getCause(Throwable t) {
         Set<Throwable> set = new HashSet<>();
         set.add(t);
         while (true) {
-            Optional<ApiError> apiError = conversionUtilService.convert(t, ApiError.class);
+            Optional<ApiError> apiError = conversionServiceUtil.convert(t, ApiError.class);
             if (apiError.isPresent()) {
                 return apiError.get();
             }
