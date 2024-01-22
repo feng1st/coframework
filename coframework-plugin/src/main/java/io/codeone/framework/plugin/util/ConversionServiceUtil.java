@@ -1,6 +1,7 @@
 package io.codeone.framework.plugin.util;
 
 import org.springframework.core.convert.ConversionService;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -18,19 +19,20 @@ public class ConversionServiceUtil {
                 .orElseGet(() -> targetType.isAssignableFrom(sourceType));
     }
 
-    public <T> Optional<T> convert(Object source, Class<T> targetType) {
+    @Nullable
+    public <T> T convert(@Nullable Object source, Class<T> targetType) {
         if (source == null) {
-            return Optional.empty();
+            return null;
         }
         if (conversionService.isPresent()) {
-            return conversionService
-                    .filter(o -> o.canConvert(source.getClass(), targetType))
-                    .map(o -> o.convert(source, targetType));
+            if (conversionService.get().canConvert(source.getClass(), targetType)) {
+                return conversionService.get().convert(source, targetType);
+            }
         } else {
-            if (targetType.isAssignableFrom(source.getClass())) {
-                return Optional.of(targetType.cast(source));
+            if (targetType.isInstance(source)) {
+                return targetType.cast(source);
             }
         }
-        return Optional.empty();
+        return null;
     }
 }

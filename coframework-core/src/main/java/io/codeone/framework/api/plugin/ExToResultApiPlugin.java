@@ -10,8 +10,10 @@ import io.codeone.framework.plugin.util.ConversionServiceUtil;
 import io.codeone.framework.plugin.util.ErrorServiceUtil;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * {@code ExToResultApiPlugin} will convert any exception to a failed
@@ -46,23 +48,24 @@ public class ExToResultApiPlugin implements Plugin {
 
     private Object exToResult(TargetMethod targetMethod, Throwable t)
             throws Throwable {
-        Class<?> returnType = targetMethod.getReturnType();
-        if (!conversionServiceUtil.canConvert(Result.class, returnType)) {
-            throw t;
-        }
         try {
-            API api = targetMethod.getAnnotation(API.class);
-            return conversionServiceUtil.convert(buildResult(t, api), returnType)
-                    .orElseThrow(() -> t);
-        } catch (Exception e) {
-            throw t;
+            Result<?> apiResult = buildApiResult(targetMethod, t);
+            Object result = conversionServiceUtil.convert(apiResult, targetMethod.getReturnType());
+            if (result != null) {
+                return result;
+            }
+        } catch (Exception ignored) {
         }
+        throw t;
     }
 
-    private Result<?> buildResult(Throwable t, API api) {
+    private Result<?> buildApiResult(TargetMethod targetMethod, Throwable t) {
         ApiError cause = errorServiceUtil.getCause(t);
         String code = cause.getCode();
-        String message = !api.errorMessage().isEmpty() ? api.errorMessage() : cause.getMessage();
+        String message = Optional.ofNullable(targetMethod.getAnnotation(API.class))
+                .map(API::errorMessage)
+                .filter(StringUtils::hasText)
+                .orElse(cause.getMessage());
         return Result.fail(code, message);
     }
 }

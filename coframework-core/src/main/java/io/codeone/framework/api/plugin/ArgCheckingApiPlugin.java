@@ -35,8 +35,10 @@ public class ArgCheckingApiPlugin implements Plugin {
     @Override
     public void before(TargetMethod targetMethod, Object[] args) {
         for (Object arg : args) {
-            conversionServiceUtil.convert(arg, ApiParam.class)
-                    .ifPresent(ApiParam::checkArgs);
+            ApiParam apiParam = conversionServiceUtil.convert(arg, ApiParam.class);
+            if (apiParam != null) {
+                apiParam.checkArgs();
+            }
         }
     }
 }

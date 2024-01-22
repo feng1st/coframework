@@ -79,12 +79,8 @@ public class LoggingPlugin implements Plugin {
             }
         }
 
-        Result<?> apiResult = conversionServiceUtil.convert(result, Result.class)
-                .orElse(null);
-        ApiError cause = null;
-        if (error != null) {
-            cause = errorServiceUtil.getCause(error);
-        }
+        Result<?> apiResult = conversionServiceUtil.convert(result, Result.class);
+        ApiError cause = errorServiceUtil.getCause(error);
         boolean success = getSuccess(logging, apiResult, cause, spelParser);
         String code = getCode(logging, apiResult, cause, spelParser);
         String message = getMessage(logging, apiResult, cause, spelParser);
