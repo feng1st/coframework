@@ -1,5 +1,7 @@
 package io.codeone.framework.logging.aop;
 
+import io.codeone.framework.api.util.ApiConversionService;
+import io.codeone.framework.api.util.ApiErrorConversionService;
 import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.exception.CommonErrors;
 import io.codeone.framework.logging.Log;
@@ -8,8 +10,6 @@ import io.codeone.framework.logging.util.LoggingSpelParser;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.util.ConversionServiceUtil;
-import io.codeone.framework.plugin.util.ErrorServiceUtil;
 import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
@@ -23,10 +23,10 @@ import java.lang.reflect.Method;
 public class LoggingPlugin implements Plugin {
 
     @Resource
-    private ConversionServiceUtil conversionServiceUtil;
+    private ApiConversionService apiConversionService;
 
     @Resource
-    private ErrorServiceUtil errorServiceUtil;
+    private ApiErrorConversionService apiErrorConversionService;
 
     @Override
     public Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
@@ -79,8 +79,8 @@ public class LoggingPlugin implements Plugin {
             }
         }
 
-        Result<?> apiResult = conversionServiceUtil.convert(result, Result.class);
-        ApiError cause = errorServiceUtil.getCause(error);
+        Result<?> apiResult = apiConversionService.convert(result, Result.class);
+        ApiError cause = apiErrorConversionService.getCause(error);
         boolean success = getSuccess(logging, apiResult, cause, spelParser);
         String code = getCode(logging, apiResult, cause, spelParser);
         String message = getMessage(logging, apiResult, cause, spelParser);

@@ -2,12 +2,12 @@ package io.codeone.framework.api.plugin;
 
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiConstants;
+import io.codeone.framework.api.util.ApiConversionService;
+import io.codeone.framework.api.util.ApiErrorConversionService;
 import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.util.ConversionServiceUtil;
-import io.codeone.framework.plugin.util.ErrorServiceUtil;
 import io.codeone.framework.plugin.util.TargetMethod;
 import io.codeone.framework.response.Result;
 import org.springframework.util.StringUtils;
@@ -27,10 +27,10 @@ import java.util.Optional;
 public class ExToResultApiPlugin implements Plugin {
 
     @Resource
-    private ConversionServiceUtil conversionServiceUtil;
+    private ApiConversionService apiConversionService;
 
     @Resource
-    private ErrorServiceUtil errorServiceUtil;
+    private ApiErrorConversionService apiErrorConversionService;
 
     /**
      * If an exception had been thrown and the return type of the API method is
@@ -48,19 +48,20 @@ public class ExToResultApiPlugin implements Plugin {
 
     private Object exToResult(TargetMethod targetMethod, Throwable t)
             throws Throwable {
-        try {
-            Result<?> apiResult = buildApiResult(targetMethod, t);
-            Object result = conversionServiceUtil.convert(apiResult, targetMethod.getReturnType());
-            if (result != null) {
-                return result;
-            }
-        } catch (Exception ignored) {
+        Class<?> returnType = targetMethod.getReturnType();
+        if (!apiConversionService.canConvert(Result.class, returnType)) {
+            throw t;
+        }
+        ApiError cause = apiErrorConversionService.getCause(t);
+        Result<?> apiResult = buildApiResult(targetMethod, cause);
+        Object result = apiConversionService.convert(apiResult, returnType);
+        if (result != null) {
+            return result;
         }
         throw t;
     }
 
-    private Result<?> buildApiResult(TargetMethod targetMethod, Throwable t) {
-        ApiError cause = errorServiceUtil.getCause(t);
+    private Result<?> buildApiResult(TargetMethod targetMethod, ApiError cause) {
         String code = cause.getCode();
         String message = Optional.ofNullable(targetMethod.getAnnotation(API.class))
                 .map(API::errorMessage)

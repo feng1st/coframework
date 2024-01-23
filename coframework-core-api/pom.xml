@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>coframework-logging</artifactId>
+    <artifactId>coframework-core-api</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -18,27 +18,21 @@
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
+            <artifactId>coframework-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
             <artifactId>coframework-plugin</artifactId>
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-core</artifactId>
+            <artifactId>coframework-logging</artifactId>
         </dependency>
 
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

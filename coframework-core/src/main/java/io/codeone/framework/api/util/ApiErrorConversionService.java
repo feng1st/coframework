@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.util;
+package io.codeone.framework.api.util;
 
 import io.codeone.framework.exception.ApiError;
 import io.codeone.framework.exception.CommonErrors;
@@ -9,10 +9,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class ErrorServiceUtil {
+public class ApiErrorConversionService {
 
     @Resource
-    private ConversionServiceUtil conversionServiceUtil;
+    private ApiConversionService apiConversionService;
 
     public ApiError getCause(Throwable t) {
         if (t == null) {
@@ -21,7 +21,7 @@ public class ErrorServiceUtil {
         Set<Throwable> set = new HashSet<>();
         set.add(t);
         while (true) {
-            ApiError apiError = conversionServiceUtil.convert(t, ApiError.class);
+            ApiError apiError = apiConversionService.convert(t, ApiError.class);
             if (apiError != null) {
                 return apiError;
             }

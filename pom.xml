@@ -22,10 +22,11 @@
         <!-- ORDER IS IMPORTANT -->
         <module>coframework-ext-client</module>
         <module>coframework-api</module>
+        <module>coframework-core</module>
         <module>coframework-plugin</module>
         <module>coframework-ext</module>
         <module>coframework-logging</module>
-        <module>coframework-core</module>
+        <module>coframework-core-api</module>
         <module>coframework-chain</module>
         <module>coframework-autoconfigure</module>
         <module>coframework-starter</module>
@@ -46,6 +47,11 @@
             </dependency>
             <dependency>
                 <groupId>io.codeone</groupId>
+                <artifactId>coframework-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.codeone</groupId>
                 <artifactId>coframework-plugin</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -61,7 +67,7 @@
             </dependency>
             <dependency>
                 <groupId>io.codeone</groupId>
-                <artifactId>coframework-core</artifactId>
+                <artifactId>coframework-core-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
