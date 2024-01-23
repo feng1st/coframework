@@ -303,13 +303,13 @@ public class SystemAGatewayImpl extends SystemAGateway {
 Using the `@API` annotation to introduce automatically the abilities of **argument-checking**, **logging**,
 **exception-wrapping** and much more to your API services.
 
-You need to import the `coframework-core-api` in your project to make it work automatically.
+You need to import the `coframework-core-plugin` in your project to make it work automatically.
 
 ```xml
 
 <dependency>
     <groupId>io.codeone</groupId>
-    <artifactId>coframework-core-api</artifactId>
+    <artifactId>coframework-core-plugin</artifactId>
     <version>...</version>
 </dependency>
 ```
