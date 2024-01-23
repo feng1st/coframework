@@ -1,7 +1,7 @@
 package io.codeone.framework.api.util;
 
-import io.codeone.framework.exception.ApiError;
-import io.codeone.framework.exception.CommonErrors;
+import io.codeone.framework.api.exception.ApiError;
+import io.codeone.framework.api.exception.CommonErrors;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

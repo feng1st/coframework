@@ -1,6 +1,6 @@
 package io.codeone.framework.chain.logging;
 
-import io.codeone.framework.context.Key;
+import io.codeone.framework.api.context.Key;
 
 @FunctionalInterface
 public interface KvLogger {

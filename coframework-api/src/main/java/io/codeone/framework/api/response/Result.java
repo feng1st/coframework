@@ -1,4 +1,4 @@
-package io.codeone.framework.response;
+package io.codeone.framework.api.response;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

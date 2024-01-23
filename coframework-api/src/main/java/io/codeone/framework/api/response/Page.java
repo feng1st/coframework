@@ -1,6 +1,6 @@
-package io.codeone.framework.response;
+package io.codeone.framework.api.response;
 
-import io.codeone.framework.util.PageConstants;
+import io.codeone.framework.api.util.PageConstants;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

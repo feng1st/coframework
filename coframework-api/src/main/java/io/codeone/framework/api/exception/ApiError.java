@@ -1,4 +1,4 @@
-package io.codeone.framework.exception;
+package io.codeone.framework.api.exception;
 
 /**
  * Interface of custom exceptions and error enumerations that the framework can

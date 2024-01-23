@@ -1,4 +1,4 @@
-package io.codeone.framework.exception;
+package io.codeone.framework.api.exception;
 
 import lombok.Getter;
 import lombok.Setter;

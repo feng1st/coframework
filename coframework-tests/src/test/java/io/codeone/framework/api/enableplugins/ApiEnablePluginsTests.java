@@ -2,8 +2,8 @@ package io.codeone.framework.api.enableplugins;
 
 import io.codeone.framework.api.enableplugins.domain.param.MyParam;
 import io.codeone.framework.api.enableplugins.domain.service.TestApiEnablePluginsService;
-import io.codeone.framework.exception.CommonErrors;
-import io.codeone.framework.response.Result;
+import io.codeone.framework.api.exception.CommonErrors;
+import io.codeone.framework.api.response.Result;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

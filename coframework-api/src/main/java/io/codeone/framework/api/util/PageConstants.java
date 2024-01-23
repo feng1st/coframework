@@ -1,7 +1,7 @@
-package io.codeone.framework.util;
+package io.codeone.framework.api.util;
 
-import io.codeone.framework.request.PageRequest;
-import io.codeone.framework.response.Page;
+import io.codeone.framework.api.request.PageRequest;
+import io.codeone.framework.api.response.Page;
 
 /**
  * Constants used by {@link PageRequest} and {@link Page}.

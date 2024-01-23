@@ -1,8 +1,8 @@
 package io.codeone.framework.logging;
 
-import io.codeone.framework.exception.CommonErrors;
-import io.codeone.framework.response.Result;
-import io.codeone.framework.util.ErrorUtils;
+import io.codeone.framework.api.exception.CommonErrors;
+import io.codeone.framework.api.response.Result;
+import io.codeone.framework.api.util.ErrorUtils;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

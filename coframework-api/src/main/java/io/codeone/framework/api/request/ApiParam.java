@@ -1,6 +1,6 @@
-package io.codeone.framework.request;
+package io.codeone.framework.api.request;
 
-import io.codeone.framework.util.ArgChecker;
+import io.codeone.framework.api.util.ArgChecker;
 
 /**
  * Interface of API parameters that the framework can recognize and use in

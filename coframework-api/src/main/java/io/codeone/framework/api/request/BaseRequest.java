@@ -1,4 +1,4 @@
-package io.codeone.framework.request;
+package io.codeone.framework.api.request;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;

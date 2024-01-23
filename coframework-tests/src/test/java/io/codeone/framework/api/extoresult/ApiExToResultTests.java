@@ -1,9 +1,9 @@
 package io.codeone.framework.api.extoresult;
 
+import io.codeone.framework.api.exception.CommonErrors;
 import io.codeone.framework.api.extoresult.domain.param.MyParam;
 import io.codeone.framework.api.extoresult.domain.service.TestApiExToResultService;
-import io.codeone.framework.exception.CommonErrors;
-import io.codeone.framework.response.Result;
+import io.codeone.framework.api.response.Result;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

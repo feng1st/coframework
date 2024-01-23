@@ -1,6 +1,6 @@
-package io.codeone.framework.util;
+package io.codeone.framework.api.util;
 
-import io.codeone.framework.request.ApiParam;
+import io.codeone.framework.api.request.ApiParam;
 import lombok.experimental.UtilityClass;
 
 import java.util.Collection;

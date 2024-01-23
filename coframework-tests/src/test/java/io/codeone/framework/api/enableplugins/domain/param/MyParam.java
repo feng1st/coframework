@@ -1,7 +1,7 @@
 package io.codeone.framework.api.enableplugins.domain.param;
 
-import io.codeone.framework.request.BaseRequest;
-import io.codeone.framework.util.ArgChecker;
+import io.codeone.framework.api.request.BaseRequest;
+import io.codeone.framework.api.util.ArgChecker;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

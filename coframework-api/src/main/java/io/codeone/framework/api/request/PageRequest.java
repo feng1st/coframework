@@ -1,6 +1,6 @@
-package io.codeone.framework.request;
+package io.codeone.framework.api.request;
 
-import io.codeone.framework.util.PageConstants;
+import io.codeone.framework.api.util.PageConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
