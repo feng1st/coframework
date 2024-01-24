@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * <li>A subclass of {@code ApiPlugin}. Subclasses of {@code Plugin} are also
  * permitted but not recommended.
  * <li>Annotated by {@code Plug} with its {@code group} attribute set as
- * {@link ApiConstants#PLUGIN_GROUP}.
+ * {@code ApiConstants#PLUGIN_GROUP}.
  * </ul>
  */
 @Documented

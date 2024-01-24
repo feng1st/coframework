@@ -27,7 +27,7 @@ public enum CommonErrors implements ApiError {
     /**
      * External system error
      */
-    EXT_SYS_ERROR("External system error"),
+    EXTERNAL_SYS_ERROR("External system error"),
     ;
 
     private final String message;
