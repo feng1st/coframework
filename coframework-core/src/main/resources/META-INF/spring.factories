@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.codeone.framework.core.autoconfigure.CoFrameworkCoreAutoConfiguration
+  io.codeone.framework.api.autoconfigure.CoFrameworkCoreAutoConfiguration

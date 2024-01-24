@@ -318,7 +318,7 @@ You need to import the `coframework-core` in your project to make it work automa
 
 API plugins are special plugins which are:
 
-1. In the group "API" (io.codeone.framework.core.ApiConstants.PLUGIN_GROUP).
+1. In the group "API" (io.codeone.framework.api.ApiConstants.PLUGIN_GROUP).
 2. Enabled by the `@API` annotation. Please make sure the target class has an API semantics, i.e. is a service of the
    API layer.
 

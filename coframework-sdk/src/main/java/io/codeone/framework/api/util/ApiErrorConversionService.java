@@ -1,4 +1,4 @@
-package io.codeone.framework.sdk.util;
+package io.codeone.framework.api.util;
 
 import io.codeone.framework.api.exception.ApiError;
 import io.codeone.framework.api.exception.CommonErrors;

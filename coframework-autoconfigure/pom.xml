@@ -14,11 +14,11 @@
     <dependencies>
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-plugin</artifactId>
+            <artifactId>coframework-sdk</artifactId>
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-sdk</artifactId>
+            <artifactId>coframework-plugin</artifactId>
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>

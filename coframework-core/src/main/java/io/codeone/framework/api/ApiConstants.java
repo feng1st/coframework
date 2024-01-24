@@ -1,4 +1,4 @@
-package io.codeone.framework.core;
+package io.codeone.framework.api;
 
 /**
  * Constants used by the API layer.

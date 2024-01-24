@@ -1,11 +1,11 @@
 package io.codeone.framework.api.extoresult.domain.service;
 
+import io.codeone.framework.api.API;
+import io.codeone.framework.api.CustomErrorMessage;
 import io.codeone.framework.api.exception.CommonErrors;
 import io.codeone.framework.api.extoresult.domain.exception.MyException;
 import io.codeone.framework.api.extoresult.domain.param.MyParam;
 import io.codeone.framework.api.response.Result;
-import io.codeone.framework.core.API;
-import io.codeone.framework.core.CustomErrorMessage;
 import org.springframework.stereotype.Service;
 
 @API

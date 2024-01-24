@@ -1,9 +1,9 @@
 package io.codeone.framework.api.enableplugins.domain.service;
 
+import io.codeone.framework.api.API;
 import io.codeone.framework.api.enableplugins.domain.param.MyParam;
 import io.codeone.framework.api.enableplugins.ext.plugin.InitMyParamTestPlugin;
 import io.codeone.framework.api.response.Result;
-import io.codeone.framework.core.API;
 import io.codeone.framework.plugin.EnablePlugin;
 import org.springframework.stereotype.Service;
 
