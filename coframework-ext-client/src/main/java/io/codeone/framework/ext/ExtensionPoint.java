@@ -17,4 +17,18 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Extensible
 public @interface ExtensionPoint {
+
+    /**
+     * A human-readable name of this extension point.
+     *
+     * @return name of this extension point
+     */
+    String name() default "";
+
+    /**
+     * The description of this extension point.
+     *
+     * @return description of this extension point
+     */
+    String description() default "";
 }

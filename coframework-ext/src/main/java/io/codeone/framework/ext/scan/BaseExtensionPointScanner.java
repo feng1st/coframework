@@ -1,9 +1,8 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.Description;
+import io.codeone.framework.ext.ExtMethod;
 import io.codeone.framework.ext.ExtensionPoint;
-import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 
@@ -21,8 +20,8 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
         if (!extensibleClass.isAnnotationPresent(ExtensionPoint.class)) {
             return;
         }
-        scanExtensionPoint(ExtensionPointDef.of(
-                extensibleClass.getAnnotation(Description.class), extensibleClass));
+        ExtensionPoint extPt = extensibleClass.getAnnotation(ExtensionPoint.class);
+        scanExtensionPoint(ExtensionPointDef.of(extPt, extensibleClass));
     }
 
     /**
@@ -33,8 +32,8 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
         if (!extensibleClass.isAnnotationPresent(ExtensionPoint.class)) {
             return;
         }
-        scanExtensionPointMethod(ExtensionPointMethod.of(
-                method.getAnnotation(Description.class), method.getAnnotation(Order.class), method));
+        ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
+        scanExtensionPointMethod(ExtensionPointMethod.of(extMethod, method));
     }
 
     /**

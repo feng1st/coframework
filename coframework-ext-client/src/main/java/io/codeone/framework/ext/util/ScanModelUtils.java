@@ -1,8 +1,9 @@
 package io.codeone.framework.ext.util;
 
-import io.codeone.framework.ext.Description;
+import io.codeone.framework.ext.Ability;
+import io.codeone.framework.ext.ExtMethod;
+import io.codeone.framework.ext.ExtensionPoint;
 import lombok.experimental.UtilityClass;
-import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -47,20 +48,57 @@ public class ScanModelUtils {
                 .collect(Collectors.joining(",", "(", ")"));
     }
 
-    public String getName(Description description, Class<?> extensibleClass) {
-        return description.name().isEmpty() ? extensibleClass.getSimpleName() : description.name();
+    /**
+     * Returns the name of an ability interface.
+     *
+     * @param ability         the annotation of that ability interface
+     * @param extensibleClass the ability interface
+     * @return the name of the ability interface
+     */
+    public String getName(Ability ability, Class<?> extensibleClass) {
+        return ability.name().isEmpty() ? extensibleClass.getSimpleName() : ability.name();
     }
 
-    public String getName(Description description, Method method) {
-        return (description == null || description.name().isEmpty())
-                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : description.name();
+    /**
+     * Returns the name of an extension point interface.
+     *
+     * @param extPt           the annotation of that extension point interface
+     * @param extensibleClass the extension point interface
+     * @return the name of the extension point interface
+     */
+    public String getName(ExtensionPoint extPt, Class<?> extensibleClass) {
+        return extPt.name().isEmpty() ? extensibleClass.getSimpleName() : extPt.name();
     }
 
-    public String getDescription(Description description) {
-        return description == null ? "" : description.description();
+    /**
+     * Returns the name of an Extensible method.
+     *
+     * @param extMethod the annotation of that Extensible method
+     * @param method    the Extensible method
+     * @return the name of the Extensible method
+     */
+    public String getName(ExtMethod extMethod, Method method) {
+        return (extMethod == null || extMethod.name().isEmpty())
+                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : extMethod.name();
     }
 
-    public int getOrder(Order order) {
-        return order == null ? -1 : order.value();
+    /**
+     * Returns the description of an Extensible method.
+     *
+     * @param extMethod the annotation of that Extensible method
+     * @return the description of the Extensible method
+     */
+    public String getDescription(ExtMethod extMethod) {
+        return extMethod == null ? "" : extMethod.description();
+    }
+
+    /**
+     * Returns the virtual order of an Extensible method.
+     *
+     * @param extMethod the annotation of that Extensible method
+     * @return the virtual order of the Extensible method
+     */
+    public int getOrder(ExtMethod extMethod) {
+        return extMethod == null ? -1 : extMethod.order();
     }
 }

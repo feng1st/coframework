@@ -20,4 +20,18 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Extensible
 public @interface Ability {
+
+    /**
+     * A human-readable name of this ability.
+     *
+     * @return name of this ability
+     */
+    String name() default "";
+
+    /**
+     * The description of this ability.
+     *
+     * @return description of this ability
+     */
+    String description() default "";
 }

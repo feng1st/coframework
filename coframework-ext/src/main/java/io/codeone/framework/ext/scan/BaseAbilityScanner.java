@@ -2,8 +2,7 @@ package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.Description;
-import org.springframework.core.annotation.Order;
+import io.codeone.framework.ext.ExtMethod;
 
 import java.lang.reflect.Method;
 
@@ -21,8 +20,8 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
         if (!extensibleClass.isAnnotationPresent(Ability.class)) {
             return;
         }
-        scanAbility(AbilityDef.of(
-                extensibleClass.getAnnotation(Description.class), extensibleClass));
+        Ability ability = extensibleClass.getAnnotation(Ability.class);
+        scanAbility(AbilityDef.of(ability, extensibleClass));
     }
 
     /**
@@ -33,8 +32,8 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
         if (!extensibleClass.isAnnotationPresent(Ability.class)) {
             return;
         }
-        scanAbilityMethod(AbilityMethod.of(
-                method.getAnnotation(Description.class), method.getAnnotation(Order.class), method));
+        ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
+        scanAbilityMethod(AbilityMethod.of(extMethod, method));
     }
 
     /**

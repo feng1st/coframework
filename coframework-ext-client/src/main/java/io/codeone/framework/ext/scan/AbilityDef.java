@@ -1,6 +1,6 @@
 package io.codeone.framework.ext.scan;
 
-import io.codeone.framework.ext.Description;
+import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,18 +21,41 @@ public class AbilityDef {
      */
     private final String code;
 
+    /**
+     * The name of this ability, which is {@link Ability#name()} if not null, or
+     * the simple class name of the ability interface.
+     */
     private final String name;
 
+    /**
+     * The description of this ability, which is given in
+     * {@link Ability#description()}.
+     */
     private final String description;
 
-    public static AbilityDef of(Description description, Class<?> extensibleClass) {
-        return new AbilityDef(description, extensibleClass);
+    /**
+     * Constructs an {@code AbilityDef} from the ability interface and its
+     * {@link Ability} annotation.
+     *
+     * @param ability         the {@code Ability} annotation of the ability
+     * @param extensibleClass the ability interface
+     * @return constructed {@code AbilityDef}
+     */
+    public static AbilityDef of(Ability ability, Class<?> extensibleClass) {
+        return new AbilityDef(ability, extensibleClass);
     }
 
-    public AbilityDef(Description description, Class<?> extensibleClass) {
+    /**
+     * Constructs an {@code AbilityDef} from the ability interface and its
+     * {@link Ability} annotation.
+     *
+     * @param ability         the {@code Ability} annotation of the ability
+     * @param extensibleClass the ability interface
+     */
+    public AbilityDef(Ability ability, Class<?> extensibleClass) {
         this.code = ScanModelUtils.getClassKey(extensibleClass);
-        this.name = ScanModelUtils.getName(description, extensibleClass);
-        this.description = description.description();
+        this.name = ScanModelUtils.getName(ability, extensibleClass);
+        this.description = ability.description();
     }
 
     @Override

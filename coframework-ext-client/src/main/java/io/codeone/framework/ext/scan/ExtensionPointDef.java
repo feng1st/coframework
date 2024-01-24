@@ -1,6 +1,6 @@
 package io.codeone.framework.ext.scan;
 
-import io.codeone.framework.ext.Description;
+import io.codeone.framework.ext.ExtensionPoint;
 import io.codeone.framework.ext.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,18 +21,43 @@ public class ExtensionPointDef {
      */
     private final String code;
 
+    /**
+     * The name of this extension point, which is {@link ExtensionPoint#name()}
+     * if not null, or the simple class name of the extension point interface.
+     */
     private final String name;
 
+    /**
+     * The description of this extension point, which is given in
+     * {@link ExtensionPoint#description()}.
+     */
     private final String description;
 
-    public static ExtensionPointDef of(Description description, Class<?> extensibleClass) {
-        return new ExtensionPointDef(description, extensibleClass);
+    /**
+     * Constructs an {@code ExtensionPointDef} from the extension point
+     * interface and its {@link ExtensionPoint} annotation.
+     *
+     * @param extPt           the {@code ExtensionPoint} annotation of the
+     *                        extension point
+     * @param extensibleClass the extension point interface
+     * @return constructed {@code ExtensionPointDef}
+     */
+    public static ExtensionPointDef of(ExtensionPoint extPt, Class<?> extensibleClass) {
+        return new ExtensionPointDef(extPt, extensibleClass);
     }
 
-    public ExtensionPointDef(Description description, Class<?> extensibleClass) {
+    /**
+     * Constructs an {@code ExtensionPointDef} from the extension point
+     * interface and its {@link ExtensionPoint} annotation.
+     *
+     * @param extPt           the {@code ExtensionPoint} annotation of the
+     *                        extension point
+     * @param extensibleClass the extension point interface
+     */
+    public ExtensionPointDef(ExtensionPoint extPt, Class<?> extensibleClass) {
         this.code = ScanModelUtils.getClassKey(extensibleClass);
-        this.name = ScanModelUtils.getName(description, extensibleClass);
-        this.description = description.description();
+        this.name = ScanModelUtils.getName(extPt, extensibleClass);
+        this.description = extPt.description();
     }
 
     @Override
