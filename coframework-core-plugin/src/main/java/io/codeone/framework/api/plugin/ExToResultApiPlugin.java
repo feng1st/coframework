@@ -1,7 +1,7 @@
 package io.codeone.framework.api.plugin;
 
-import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiConstants;
+import io.codeone.framework.api.CustomErrorMessage;
 import io.codeone.framework.api.exception.ApiError;
 import io.codeone.framework.api.response.Result;
 import io.codeone.framework.api.util.ApiConversionService;
@@ -15,14 +15,6 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.Optional;
 
-/**
- * {@code ExToResultApiPlugin} will convert any exception to a failed
- * {@link Result}, if the return type of the API (service/method annotated by
- * {@link API}) method is {@code Result}.
- *
- * @see API
- * @see Result
- */
 @Plug(value = Stages.POST_RESULT_INTERCEPTING, group = ApiConstants.PLUGIN_GROUP)
 public class ExToResultApiPlugin implements Plugin {
 
@@ -32,14 +24,6 @@ public class ExToResultApiPlugin implements Plugin {
     @Resource
     private ApiErrorConversionService apiErrorConversionService;
 
-    /**
-     * If an exception had been thrown and the return type of the API method is
-     * {@link Result}, the exception will be wrapped as a failed {@code Result}.
-     * And the error message of the wrapped result will be replaced by
-     * {@link API#errorMessage()} if which is not empty.
-     *
-     * <p>{@inheritDoc}
-     */
     @Override
     public Object afterThrowing(TargetMethod targetMethod, Object[] args, Throwable error)
             throws Throwable {
@@ -63,8 +47,8 @@ public class ExToResultApiPlugin implements Plugin {
 
     private Result<?> buildApiResult(TargetMethod targetMethod, ApiError cause) {
         String code = cause.getCode();
-        String message = Optional.ofNullable(targetMethod.getAnnotation(API.class))
-                .map(API::errorMessage)
+        String message = Optional.ofNullable(targetMethod.getAnnotation(CustomErrorMessage.class))
+                .map(CustomErrorMessage::value)
                 .filter(StringUtils::hasText)
                 .orElse(cause.getMessage());
         return Result.fail(code, message);

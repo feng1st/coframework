@@ -35,17 +35,4 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Inherited
 public @interface API {
-
-    /**
-     * Custom error message wrapped and returned to the end users. If the
-     * default exception wrapping ({@code ExToResultApiPlugin}) happened, that
-     * is, an exception had been thrown and the return type of the API method is
-     * {@code Result}, instead of the original verbose technical error message,
-     * the value of this attribute (if not empty) will be wrapped as the message
-     * of the result, for example, "System is busy, please try again later".
-     *
-     * <p>This attribute does not affect the original exception and the logging
-     * of that exception.
-     */
-    String errorMessage() default "";
 }
