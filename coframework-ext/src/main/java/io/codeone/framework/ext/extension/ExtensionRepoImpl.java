@@ -3,8 +3,6 @@ package io.codeone.framework.ext.extension;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.extension.model.BizScenarioExtension;
-import io.codeone.framework.ext.extension.model.ExtensionCoordinate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

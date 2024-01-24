@@ -2,8 +2,8 @@ package io.codeone.framework.ext.monitor;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.Extension;
-import io.codeone.framework.ext.extension.model.BizScenarioExtension;
-import io.codeone.framework.ext.extension.model.ExtensionCoordinate;
+import io.codeone.framework.ext.extension.BizScenarioExtension;
+import io.codeone.framework.ext.extension.ExtensionCoordinate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
