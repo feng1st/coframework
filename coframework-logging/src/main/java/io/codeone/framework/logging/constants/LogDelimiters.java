@@ -1,4 +1,4 @@
-package io.codeone.framework.logging;
+package io.codeone.framework.logging.constants;
 
 import lombok.AccessLevel;
 import lombok.Getter;

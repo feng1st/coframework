@@ -1,4 +1,4 @@
-package io.codeone.framework.logging.aop;
+package io.codeone.framework.logging.plugin;
 
 import io.codeone.framework.logging.Logging;
 import io.codeone.framework.plugin.plug.AnnotationMethodPlugger;

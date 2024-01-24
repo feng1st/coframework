@@ -1,4 +1,4 @@
-package io.codeone.framework.logging.aop;
+package io.codeone.framework.logging.plugin;
 
 import io.codeone.framework.api.exception.ApiError;
 import io.codeone.framework.api.exception.CommonErrors;
@@ -7,7 +7,7 @@ import io.codeone.framework.api.util.ApiConversionService;
 import io.codeone.framework.api.util.ApiErrorConversionService;
 import io.codeone.framework.logging.Log;
 import io.codeone.framework.logging.Logging;
-import io.codeone.framework.logging.util.LoggingSpelParser;
+import io.codeone.framework.logging.spel.LoggingSpelParser;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;

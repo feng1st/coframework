@@ -1,4 +1,4 @@
-package io.codeone.framework.logging.util;
+package io.codeone.framework.logging.spel;
 
 import org.springframework.expression.Expression;
 import org.springframework.expression.ParseException;

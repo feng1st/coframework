@@ -2,7 +2,7 @@ package io.codeone.framework.plugin.plug;
 
 import io.codeone.framework.plugin.aop.PluggedMethodInterceptor;
 import io.codeone.framework.plugin.aop.PluggedPointcut;
-import io.codeone.framework.plugin.chain.PluginChainFactory;
+import io.codeone.framework.plugin.plugin.PluginChainFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 

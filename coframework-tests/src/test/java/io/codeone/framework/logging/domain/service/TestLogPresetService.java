@@ -2,7 +2,7 @@ package io.codeone.framework.logging.domain.service;
 
 import io.codeone.framework.api.response.Result;
 import io.codeone.framework.logging.Logging;
-import io.codeone.framework.logging.LoggingPresets;
+import io.codeone.framework.logging.constants.LoggingPresets;
 import io.codeone.framework.logging.domain.param.MyParam;
 import org.springframework.stereotype.Service;
 

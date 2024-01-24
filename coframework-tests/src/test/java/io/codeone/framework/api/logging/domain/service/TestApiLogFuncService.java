@@ -6,7 +6,7 @@ import io.codeone.framework.api.exception.CommonErrors;
 import io.codeone.framework.api.logging.domain.exception.MyException;
 import io.codeone.framework.api.response.Result;
 import io.codeone.framework.logging.Logging;
-import io.codeone.framework.logging.LoggingPresets;
+import io.codeone.framework.logging.constants.LoggingPresets;
 import org.springframework.stereotype.Service;
 
 @API

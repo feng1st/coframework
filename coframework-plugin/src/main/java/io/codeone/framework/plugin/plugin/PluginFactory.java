@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.factory;
+package io.codeone.framework.plugin.plugin;
 
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;

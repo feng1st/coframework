@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.chain;
+package io.codeone.framework.plugin.plugin;
 
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;

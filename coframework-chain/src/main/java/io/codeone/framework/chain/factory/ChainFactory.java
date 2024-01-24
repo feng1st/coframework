@@ -1,4 +1,4 @@
-package io.codeone.framework.chain.util;
+package io.codeone.framework.chain.factory;
 
 import io.codeone.framework.chain.ChainExecutor;
 import io.codeone.framework.chain.ChainSpec;

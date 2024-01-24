@@ -2,7 +2,7 @@ package io.codeone.framework.chain;
 
 import io.codeone.framework.api.context.Key;
 import io.codeone.framework.chain.chain.Chain;
-import io.codeone.framework.chain.util.ChainFactory;
+import io.codeone.framework.chain.factory.ChainFactory;
 import lombok.experimental.UtilityClass;
 
 import java.util.concurrent.Executor;

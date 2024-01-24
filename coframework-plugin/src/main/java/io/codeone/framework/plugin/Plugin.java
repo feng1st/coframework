@@ -1,7 +1,7 @@
 package io.codeone.framework.plugin;
 
+import io.codeone.framework.plugin.plug.DefaultPlugger;
 import io.codeone.framework.plugin.plug.MethodPlugger;
-import io.codeone.framework.plugin.plug.impl.DefaultPlugger;
 import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.TargetMethod;
 import org.springframework.core.annotation.Order;
