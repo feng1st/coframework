@@ -1,9 +1,8 @@
-package io.codeone.framework.ext.register;
+package io.codeone.framework.ext.extension;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.Extension;
-import io.codeone.framework.ext.model.ExtensionCoordinate;
-import io.codeone.framework.ext.repo.ExtensionRepo;
+import io.codeone.framework.ext.extension.model.ExtensionCoordinate;
 import io.codeone.framework.ext.util.ClassUtils;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.context.ApplicationContext;

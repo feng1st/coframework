@@ -1,7 +1,6 @@
-package io.codeone.framework.ext.scan.impl;
+package io.codeone.framework.ext.bizscenarioparam;
 
 import io.codeone.framework.ext.*;
-import io.codeone.framework.ext.repo.BizScenarioParamRepo;
 import io.codeone.framework.ext.scan.BaseExtScanner;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.beans.factory.annotation.Value;

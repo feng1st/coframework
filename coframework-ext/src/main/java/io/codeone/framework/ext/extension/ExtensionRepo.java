@@ -1,9 +1,8 @@
-package io.codeone.framework.ext.repo;
+package io.codeone.framework.ext.extension;
 
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.model.BizScenarioExtension;
-import io.codeone.framework.ext.model.ExtensionCoordinate;
-import io.codeone.framework.ext.register.ExtensionRegister;
+import io.codeone.framework.ext.extension.model.BizScenarioExtension;
+import io.codeone.framework.ext.extension.model.ExtensionCoordinate;
 
 /**
  * Repository to store and access the Extension implementation mapping. The

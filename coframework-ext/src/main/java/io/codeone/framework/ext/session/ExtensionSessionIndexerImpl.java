@@ -2,7 +2,6 @@ package io.codeone.framework.ext.session;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
-import io.codeone.framework.ext.repo.ExtensionSessionRepo;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;

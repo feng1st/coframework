@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.model;
+package io.codeone.framework.ext.extension.model;
 
 import io.codeone.framework.ext.BizScenario;
 import lombok.Getter;

@@ -1,10 +1,7 @@
-package io.codeone.framework.ext.repo;
+package io.codeone.framework.ext.session;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
-import io.codeone.framework.ext.session.BizScenarioResolver;
-import io.codeone.framework.ext.session.ExtensionSession;
-import io.codeone.framework.ext.session.ExtensionSessionIndexer;
 
 import java.lang.reflect.Method;
 import java.util.function.Supplier;

@@ -1,6 +1,5 @@
-package io.codeone.framework.ext.repo.impl;
+package io.codeone.framework.ext.bizscenarioparam;
 
-import io.codeone.framework.ext.repo.BizScenarioParamRepo;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Method;

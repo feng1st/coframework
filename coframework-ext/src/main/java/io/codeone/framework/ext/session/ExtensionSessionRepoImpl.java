@@ -1,7 +1,5 @@
-package io.codeone.framework.ext.repo.impl;
+package io.codeone.framework.ext.session;
 
-import io.codeone.framework.ext.repo.ExtensionSessionRepo;
-import io.codeone.framework.ext.session.BizScenarioResolver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 
