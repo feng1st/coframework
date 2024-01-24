@@ -1,7 +1,7 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
-import io.codeone.framework.ext.util.ScanModelUtils;
+import io.codeone.framework.ext.scan.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 

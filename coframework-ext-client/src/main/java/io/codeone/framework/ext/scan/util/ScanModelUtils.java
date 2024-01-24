@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.util;
+package io.codeone.framework.ext.scan.util;
 
 import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.ExtMethod;
