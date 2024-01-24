@@ -1,8 +1,8 @@
 package io.codeone.framework.ext.repo;
 
 import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.ext.BizScenarioContext;
 import io.codeone.framework.ext.BizScenarioParam;
-import io.codeone.framework.ext.context.BizScenarioContext;
 import io.codeone.framework.ext.scan.impl.BizScenarioParamScanner;
 
 import java.lang.reflect.Method;

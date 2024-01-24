@@ -1,8 +1,8 @@
 package io.codeone.framework.ext.util;
 
-import io.codeone.framework.ext.Ability;
-import io.codeone.framework.ext.ExtensionPoint;
+import io.codeone.framework.ext.Description;
 import lombok.experimental.UtilityClass;
+import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -47,89 +47,20 @@ public class ScanModelUtils {
                 .collect(Collectors.joining(",", "(", ")"));
     }
 
-    /**
-     * Returns the name of an ability interface.
-     *
-     * @param ability         the annotation of that ability interface
-     * @param extensibleClass the ability interface
-     * @return the name of the ability interface
-     */
-    public String getName(Ability ability, Class<?> extensibleClass) {
-        return ability.name().isEmpty() ? extensibleClass.getSimpleName() : ability.name();
+    public String getName(Description description, Class<?> extensibleClass) {
+        return description.name().isEmpty() ? extensibleClass.getSimpleName() : description.name();
     }
 
-    /**
-     * Returns the name of an ability method.
-     *
-     * @param abilityMethod the annotation of that ability method
-     * @param method        the ability method
-     * @return the name of the ability method
-     */
-    public String getName(Ability.Method abilityMethod, Method method) {
-        return (abilityMethod == null || abilityMethod.name().isEmpty())
-                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : abilityMethod.name();
+    public String getName(Description description, Method method) {
+        return (description == null || description.name().isEmpty())
+                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : description.name();
     }
 
-    /**
-     * Returns the description of an ability method.
-     *
-     * @param abilityMethod the annotation of that ability method
-     * @return the description of the ability method
-     */
-    public String getDescription(Ability.Method abilityMethod) {
-        return abilityMethod == null ? "" : abilityMethod.description();
+    public String getDescription(Description description) {
+        return description == null ? "" : description.description();
     }
 
-    /**
-     * Returns the virtual order of an ability method.
-     *
-     * @param abilityMethod the annotation of that ability method
-     * @return the virtual order of the ability method
-     */
-    public int getOrder(Ability.Method abilityMethod) {
-        return abilityMethod == null ? -1 : abilityMethod.order();
-    }
-
-    /**
-     * Returns the name of an extension point interface.
-     *
-     * @param extPt           the annotation of that extension point interface
-     * @param extensibleClass the extension point interface
-     * @return the name of the extension point interface
-     */
-    public String getName(ExtensionPoint extPt, Class<?> extensibleClass) {
-        return extPt.name().isEmpty() ? extensibleClass.getSimpleName() : extPt.name();
-    }
-
-    /**
-     * Returns the name of an extension point method.
-     *
-     * @param extPtMethod the annotation of that extension point method
-     * @param method      the extension point method
-     * @return the name of the extension point method
-     */
-    public String getName(ExtensionPoint.Method extPtMethod, Method method) {
-        return (extPtMethod == null || extPtMethod.name().isEmpty())
-                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : extPtMethod.name();
-    }
-
-    /**
-     * Returns the description of an extension point method.
-     *
-     * @param extPtMethod the annotation of that extension point method
-     * @return the description of the extension point method
-     */
-    public String getDescription(ExtensionPoint.Method extPtMethod) {
-        return extPtMethod == null ? "" : extPtMethod.description();
-    }
-
-    /**
-     * Returns the virtual order of an extension point method.
-     *
-     * @param extPtMethod the annotation of that extension point method
-     * @return the virtual order of the extension point method
-     */
-    public int getOrder(ExtensionPoint.Method extPtMethod) {
-        return extPtMethod == null ? -1 : extPtMethod.order();
+    public int getOrder(Order order) {
+        return order == null ? -1 : order.value();
     }
 }

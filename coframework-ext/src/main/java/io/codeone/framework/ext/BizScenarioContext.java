@@ -1,7 +1,5 @@
-package io.codeone.framework.ext.context;
+package io.codeone.framework.ext;
 
-import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.RouteByContext;
 import io.codeone.framework.ext.session.ExtensionSession;
 import io.codeone.framework.plugin.util.Invokable;
 import io.codeone.framework.plugin.util.VoidInvokable;

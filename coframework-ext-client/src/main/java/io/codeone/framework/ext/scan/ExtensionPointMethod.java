@@ -1,9 +1,10 @@
 package io.codeone.framework.ext.scan;
 
-import io.codeone.framework.ext.ExtensionPoint;
+import io.codeone.framework.ext.Description;
 import io.codeone.framework.ext.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 
@@ -29,53 +30,23 @@ public class ExtensionPointMethod {
      */
     private final String code;
 
-    /**
-     * The name of this extension point method, which is
-     * {@link ExtensionPoint.Method#name()} if not null, or
-     * {@code {simpleClassNameOfExtPtInterface}.{methodName}}.
-     */
     private final String name;
 
-    /**
-     * The description of this extension point method, which is given in
-     * {@link ExtensionPoint.Method#description()}.
-     */
     private final String description;
 
-    /**
-     * The virtual order of this extension point method, which is given in
-     * {@link ExtensionPoint.Method#order()}.
-     */
     private final int order;
 
-    /**
-     * Constructs an {@code ExtensionPointMethod} from the extension point
-     * method and its {@link ExtensionPoint.Method} annotation.
-     *
-     * @param extPtMethod the {@code ExtensionPoint.Method} annotation of the
-     *                    method
-     * @param method      the extension point method
-     * @return constructed {@code ExtensionPointMethod}
-     */
-    public static ExtensionPointMethod of(ExtensionPoint.Method extPtMethod, Method method) {
-        return new ExtensionPointMethod(extPtMethod, method);
+    public static ExtensionPointMethod of(Description description, Order order, Method method) {
+        return new ExtensionPointMethod(description, order, method);
     }
 
-    /**
-     * Constructs an {@code ExtensionPointMethod} from the extension point
-     * method and its {@link ExtensionPoint.Method} annotation.
-     *
-     * @param extPtMethod the {@code ExtensionPoint.Method} annotation of the
-     *                    method
-     * @param method      the extension point method
-     */
-    public ExtensionPointMethod(ExtensionPoint.Method extPtMethod, Method method) {
+    public ExtensionPointMethod(Description description, Order order, Method method) {
         String classCode = ScanModelUtils.getClassKey(method);
         this.classCode = classCode;
         this.code = classCode + "." + ScanModelUtils.getMethodKey(method);
-        this.name = ScanModelUtils.getName(extPtMethod, method);
-        this.description = ScanModelUtils.getDescription(extPtMethod);
-        this.order = ScanModelUtils.getOrder(extPtMethod);
+        this.name = ScanModelUtils.getName(description, method);
+        this.description = ScanModelUtils.getDescription(description);
+        this.order = ScanModelUtils.getOrder(order);
     }
 
     @Override

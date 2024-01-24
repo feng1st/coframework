@@ -1,8 +1,8 @@
 package io.codeone.framework.ext.proxy;
 
 import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.ext.BizScenarioContext;
 import io.codeone.framework.ext.BizScenarioParam;
-import io.codeone.framework.ext.context.BizScenarioContext;
 import io.codeone.framework.ext.model.BizScenarioExtension;
 import io.codeone.framework.ext.model.ExtensionCoordinate;
 import io.codeone.framework.ext.monitor.ExtInvocation;

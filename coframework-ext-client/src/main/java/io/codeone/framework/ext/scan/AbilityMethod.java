@@ -1,9 +1,10 @@
 package io.codeone.framework.ext.scan;
 
-import io.codeone.framework.ext.Ability;
+import io.codeone.framework.ext.Description;
 import io.codeone.framework.ext.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 
@@ -29,50 +30,23 @@ public class AbilityMethod {
      */
     private final String code;
 
-    /**
-     * The name of this ability method, which is {@link Ability.Method#name()}
-     * if not null, or {@code {simpleClassNameOfAbilityInterface}.{methodName}}.
-     */
     private final String name;
 
-    /**
-     * The description of this ability method, which is given in
-     * {@link Ability.Method#description()}.
-     */
     private final String description;
 
-    /**
-     * The virtual order of this ability method, which is given in
-     * {@link Ability.Method#order()}.
-     */
     private final int order;
 
-    /**
-     * Constructs an {@code AbilityMethod} from the ability method and its
-     * {@link Ability.Method} annotation.
-     *
-     * @param abilityMethod the {@code Ability.Method} annotation of the method
-     * @param method        the ability method
-     * @return constructed {@code AbilityMethod}
-     */
-    public static AbilityMethod of(Ability.Method abilityMethod, Method method) {
-        return new AbilityMethod(abilityMethod, method);
+    public static AbilityMethod of(Description description, Order order, Method method) {
+        return new AbilityMethod(description, order, method);
     }
 
-    /**
-     * Constructs an {@code AbilityMethod} from the ability method and its
-     * {@link Ability.Method} annotation.
-     *
-     * @param abilityMethod the {@code Ability.Method} annotation of the method
-     * @param method        the ability method
-     */
-    public AbilityMethod(Ability.Method abilityMethod, Method method) {
+    public AbilityMethod(Description description, Order order, Method method) {
         String classCode = ScanModelUtils.getClassKey(method);
         this.classCode = classCode;
         this.code = classCode + "." + ScanModelUtils.getMethodKey(method);
-        this.name = ScanModelUtils.getName(abilityMethod, method);
-        this.description = ScanModelUtils.getDescription(abilityMethod);
-        this.order = ScanModelUtils.getOrder(abilityMethod);
+        this.name = ScanModelUtils.getName(description, method);
+        this.description = ScanModelUtils.getDescription(description);
+        this.order = ScanModelUtils.getOrder(order);
     }
 
     @Override
