@@ -1,7 +1,7 @@
-package io.codeone.framework.api.plug.impl;
+package io.codeone.framework.core.plug.impl;
 
-import io.codeone.framework.api.API;
-import io.codeone.framework.api.ApiConstants;
+import io.codeone.framework.core.API;
+import io.codeone.framework.core.ApiConstants;
 import io.codeone.framework.logging.aop.LoggingPlugin;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.plug.AnnotationMethodPlugger;

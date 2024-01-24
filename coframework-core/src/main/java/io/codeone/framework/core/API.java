@@ -1,4 +1,4 @@
-package io.codeone.framework.api;
+package io.codeone.framework.core;
 
 import java.lang.annotation.*;
 
