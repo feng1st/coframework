@@ -16,6 +16,18 @@
             <groupId>io.codeone</groupId>
             <artifactId>coframework-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-plugin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-logging</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>javax.annotation</groupId>
