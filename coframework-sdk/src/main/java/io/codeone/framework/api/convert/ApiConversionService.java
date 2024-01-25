@@ -1,4 +1,4 @@
-package io.codeone.framework.api.util;
+package io.codeone.framework.api.convert;
 
 import io.codeone.framework.api.converter.ApiErrorConverter;
 import io.codeone.framework.api.converter.ApiParamConverter;

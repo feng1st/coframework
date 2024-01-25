@@ -1,6 +1,9 @@
-package io.codeone.framework.plugin.plug;
+package io.codeone.framework.plugin.plugin;
 
 import io.codeone.framework.plugin.EnablePlugin;
+import io.codeone.framework.plugin.plug.AnnotationMethodPlugger;
+import io.codeone.framework.plugin.plug.ClassPlugging;
+import io.codeone.framework.plugin.plug.Plugging;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;

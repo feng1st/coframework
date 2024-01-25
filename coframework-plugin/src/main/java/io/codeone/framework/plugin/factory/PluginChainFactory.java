@@ -1,8 +1,9 @@
-package io.codeone.framework.plugin.plugin;
+package io.codeone.framework.plugin.factory;
 
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.plug.MethodPluggers;
 import io.codeone.framework.plugin.plug.Plugging;
+import io.codeone.framework.plugin.pluginchain.PluginChain;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
