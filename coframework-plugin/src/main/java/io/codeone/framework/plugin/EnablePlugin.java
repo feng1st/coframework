@@ -1,6 +1,6 @@
 package io.codeone.framework.plugin;
 
-import io.codeone.framework.plugin.plugin.DefaultPlugger;
+import io.codeone.framework.plugin.plug.DefaultPlugger;
 
 import java.lang.annotation.*;
 

@@ -1,7 +1,6 @@
 package io.codeone.framework.plugin.plug;
 
 import io.codeone.framework.plugin.EnablePlugin;
-import io.codeone.framework.plugin.plugin.DefaultPlugger;
 
 import java.lang.reflect.Method;
 import java.util.List;
