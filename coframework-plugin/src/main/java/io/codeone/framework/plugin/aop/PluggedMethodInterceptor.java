@@ -1,8 +1,8 @@
 package io.codeone.framework.plugin.aop;
 
+import io.codeone.framework.plugin.chain.PluginChain;
 import io.codeone.framework.plugin.factory.PluginChainFactory;
 import io.codeone.framework.plugin.plug.MethodPluggers;
-import io.codeone.framework.plugin.pluginchain.PluginChain;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.stereotype.Component;
