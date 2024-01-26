@@ -35,4 +35,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Inherited
 public @interface API {
+
+    String errorMessage() default "";
 }

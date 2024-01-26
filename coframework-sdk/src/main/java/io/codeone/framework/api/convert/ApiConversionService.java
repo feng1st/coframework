@@ -3,7 +3,7 @@ package io.codeone.framework.api.convert;
 import io.codeone.framework.api.converter.ApiErrorConverter;
 import io.codeone.framework.api.converter.ApiParamConverter;
 import io.codeone.framework.api.converter.ApiResultConverter;
-import io.codeone.framework.api.converter.ResultConverter;
+import io.codeone.framework.api.converter.FailedResultConverter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.lang.Nullable;
@@ -28,7 +28,7 @@ public class ApiConversionService {
                 .forEach(conversionService::addConverter);
         applicationContext.getBeansOfType(ApiResultConverter.class).values()
                 .forEach(conversionService::addConverter);
-        applicationContext.getBeansOfType(ResultConverter.class).values()
+        applicationContext.getBeansOfType(FailedResultConverter.class).values()
                 .forEach(conversionService::addConverter);
     }
 

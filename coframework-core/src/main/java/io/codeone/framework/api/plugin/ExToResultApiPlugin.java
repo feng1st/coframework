@@ -1,11 +1,10 @@
 package io.codeone.framework.api.plugin;
 
+import io.codeone.framework.api.API;
 import io.codeone.framework.api.ApiConstants;
-import io.codeone.framework.api.CustomErrorMessage;
 import io.codeone.framework.api.convert.ApiConversionService;
 import io.codeone.framework.api.convert.ApiErrorConversionService;
 import io.codeone.framework.api.exception.ApiError;
-import io.codeone.framework.api.response.Result;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
@@ -33,24 +32,23 @@ public class ExToResultApiPlugin implements Plugin {
     private Object exToResult(TargetMethod targetMethod, Throwable t)
             throws Throwable {
         Class<?> returnType = targetMethod.getReturnType();
-        if (!apiConversionService.canConvert(Result.class, returnType)) {
+        if (!apiConversionService.canConvert(ApiError.class, returnType)) {
             throw t;
         }
         ApiError cause = apiErrorConversionService.getCause(t);
-        Result<?> apiResult = buildApiResult(targetMethod, cause);
-        Object result = apiConversionService.convert(apiResult, returnType);
+        ApiError apiError = buildApiError(targetMethod, cause);
+        Object result = apiConversionService.convert(apiError, returnType);
         if (result != null) {
             return result;
         }
         throw t;
     }
 
-    private Result<?> buildApiResult(TargetMethod targetMethod, ApiError cause) {
-        String code = cause.getCode();
-        String message = Optional.ofNullable(targetMethod.getAnnotation(CustomErrorMessage.class))
-                .map(CustomErrorMessage::value)
+    private ApiError buildApiError(TargetMethod targetMethod, ApiError cause) {
+        return Optional.ofNullable(targetMethod.getAnnotation(API.class))
+                .map(API::errorMessage)
                 .filter(StringUtils::hasText)
-                .orElse(cause.getMessage());
-        return Result.fail(code, message);
+                .map(o -> ApiError.of(cause.getCode(), o))
+                .orElse(cause);
     }
 }

@@ -1,7 +1,6 @@
 package io.codeone.framework.api.extoresult.domain.service;
 
 import io.codeone.framework.api.API;
-import io.codeone.framework.api.CustomErrorMessage;
 import io.codeone.framework.api.exception.CommonErrors;
 import io.codeone.framework.api.extoresult.domain.exception.MyException;
 import io.codeone.framework.api.extoresult.domain.param.MyParam;
@@ -16,7 +15,7 @@ public class TestApiExToResultService {
         return Result.success();
     }
 
-    @CustomErrorMessage("What's wrong")
+    @API(errorMessage = "What's wrong")
     public Result<Void> withCustomMessage() {
         throw new RuntimeException("BE CONFUSED AND PANIC!");
     }
