@@ -1,7 +1,6 @@
 package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.ExtMethod;
 import io.codeone.framework.ext.ExtensionPoint;
 
 import java.lang.reflect.Method;
@@ -32,7 +31,7 @@ public abstract class BaseExtensionPointScanner extends BaseExtScanner {
         if (!extensibleClass.isAnnotationPresent(ExtensionPoint.class)) {
             return;
         }
-        ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
+        ExtensionPoint.Method extMethod = method.getAnnotation(ExtensionPoint.Method.class);
         scanExtensionPointMethod(ExtensionPointMethod.of(extMethod, method));
     }
 

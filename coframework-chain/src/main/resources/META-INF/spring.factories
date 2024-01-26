@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.codeone.framework.chain.autoconfigure.CoFrameworkChainAutoConfiguration

@@ -2,7 +2,6 @@ package io.codeone.framework.ext.scan;
 
 import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.ExtMethod;
 
 import java.lang.reflect.Method;
 
@@ -32,7 +31,7 @@ public abstract class BaseAbilityScanner extends BaseExtScanner {
         if (!extensibleClass.isAnnotationPresent(Ability.class)) {
             return;
         }
-        ExtMethod extMethod = method.getAnnotation(ExtMethod.class);
+        Ability.Method extMethod = method.getAnnotation(Ability.Method.class);
         scanAbilityMethod(AbilityMethod.of(extMethod, method));
     }
 

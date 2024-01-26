@@ -1,7 +1,6 @@
 package io.codeone.framework.ext.scan.util;
 
 import io.codeone.framework.ext.Ability;
-import io.codeone.framework.ext.ExtMethod;
 import io.codeone.framework.ext.ExtensionPoint;
 import lombok.experimental.UtilityClass;
 
@@ -60,6 +59,38 @@ public class ScanModelUtils {
     }
 
     /**
+     * Returns the name of an Extensible method.
+     *
+     * @param extMethod the annotation of that Extensible method
+     * @param method    the Extensible method
+     * @return the name of the Extensible method
+     */
+    public String getName(Ability.Method extMethod, Method method) {
+        return (extMethod == null || extMethod.name().isEmpty())
+                ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : extMethod.name();
+    }
+
+    /**
+     * Returns the description of an Extensible method.
+     *
+     * @param extMethod the annotation of that Extensible method
+     * @return the description of the Extensible method
+     */
+    public String getDescription(Ability.Method extMethod) {
+        return extMethod == null ? "" : extMethod.description();
+    }
+
+    /**
+     * Returns the virtual order of an Extensible method.
+     *
+     * @param extMethod the annotation of that Extensible method
+     * @return the virtual order of the Extensible method
+     */
+    public int getOrder(Ability.Method extMethod) {
+        return extMethod == null ? -1 : extMethod.order();
+    }
+
+    /**
      * Returns the name of an extension point interface.
      *
      * @param extPt           the annotation of that extension point interface
@@ -77,7 +108,7 @@ public class ScanModelUtils {
      * @param method    the Extensible method
      * @return the name of the Extensible method
      */
-    public String getName(ExtMethod extMethod, Method method) {
+    public String getName(ExtensionPoint.Method extMethod, Method method) {
         return (extMethod == null || extMethod.name().isEmpty())
                 ? method.getDeclaringClass().getSimpleName() + "." + method.getName() : extMethod.name();
     }
@@ -88,17 +119,7 @@ public class ScanModelUtils {
      * @param extMethod the annotation of that Extensible method
      * @return the description of the Extensible method
      */
-    public String getDescription(ExtMethod extMethod) {
+    public String getDescription(ExtensionPoint.Method extMethod) {
         return extMethod == null ? "" : extMethod.description();
-    }
-
-    /**
-     * Returns the virtual order of an Extensible method.
-     *
-     * @param extMethod the annotation of that Extensible method
-     * @return the virtual order of the Extensible method
-     */
-    public int getOrder(ExtMethod extMethod) {
-        return extMethod == null ? -1 : extMethod.order();
     }
 }

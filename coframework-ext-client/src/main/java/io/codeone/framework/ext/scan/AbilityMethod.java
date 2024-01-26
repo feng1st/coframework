@@ -1,6 +1,6 @@
 package io.codeone.framework.ext.scan;
 
-import io.codeone.framework.ext.ExtMethod;
+import io.codeone.framework.ext.Ability;
 import io.codeone.framework.ext.scan.util.ScanModelUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,43 +30,43 @@ public class AbilityMethod {
     private final String code;
 
     /**
-     * The name of this ability method, which is {@link ExtMethod#name()} if not
+     * The name of this ability method, which is {@link Ability.Method#name()} if not
      * null, or {@code {simpleClassNameOfAbilityInterface}.{methodName}}.
      */
     private final String name;
 
     /**
      * The description of this ability method, which is given in
-     * {@link ExtMethod#description()}.
+     * {@link Ability.Method#description()}.
      */
     private final String description;
 
     /**
      * The virtual order of this ability method, which is given in
-     * {@link ExtMethod#order()}.
+     * {@link Ability.Method#order()}.
      */
     private final int order;
 
     /**
      * Constructs an {@code AbilityMethod} from the ability method and its
-     * {@link ExtMethod} annotation.
+     * {@link Ability.Method} annotation.
      *
      * @param extMethod the {@code ExtMethod} annotation of the method
      * @param method    the ability method
      * @return constructed {@code AbilityMethod}
      */
-    public static AbilityMethod of(ExtMethod extMethod, Method method) {
+    public static AbilityMethod of(Ability.Method extMethod, Method method) {
         return new AbilityMethod(extMethod, method);
     }
 
     /**
      * Constructs an {@code AbilityMethod} from the ability method and its
-     * {@link ExtMethod} annotation.
+     * {@link Ability.Method} annotation.
      *
      * @param extMethod the {@code ExtMethod} annotation of the method
      * @param method    the ability method
      */
-    public AbilityMethod(ExtMethod extMethod, Method method) {
+    public AbilityMethod(Ability.Method extMethod, Method method) {
         String classCode = ScanModelUtils.getClassKey(method);
         this.classCode = classCode;
         this.code = classCode + "." + ScanModelUtils.getMethodKey(method);
