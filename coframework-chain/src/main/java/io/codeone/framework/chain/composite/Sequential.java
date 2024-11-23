@@ -2,12 +2,12 @@ package io.codeone.framework.chain.composite;
 
 import io.codeone.framework.chain.Chainable;
 import io.codeone.framework.chain.context.Context;
-import io.codeone.framework.chain.log.Silent;
+import io.codeone.framework.chain.log.Quiet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-public interface Sequential extends Chainable, Composite, Silent {
+public interface Sequential extends Chainable, Composite, Quiet {
 
     static Sequential of(Chainable... components) {
         return new PlainSequential(components);

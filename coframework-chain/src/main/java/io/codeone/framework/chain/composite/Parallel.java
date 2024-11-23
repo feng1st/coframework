@@ -2,7 +2,7 @@ package io.codeone.framework.chain.composite;
 
 import io.codeone.framework.chain.Chainable;
 import io.codeone.framework.chain.context.Context;
-import io.codeone.framework.chain.log.Silent;
+import io.codeone.framework.chain.log.Quiet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-public interface Parallel extends Chainable, Composite, Silent {
+public interface Parallel extends Chainable, Composite, Quiet {
 
     static Parallel of(Chainable... components) {
         return new PlainParallel(components);

@@ -2,7 +2,7 @@ package io.codeone.framework.chain.flow;
 
 import io.codeone.framework.chain.Chainable;
 import io.codeone.framework.chain.context.Context;
-import io.codeone.framework.chain.log.Silent;
+import io.codeone.framework.chain.log.Quiet;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Predicate;
@@ -45,7 +45,7 @@ public interface Conditional extends Chainable, Predicate<Context> {
     }
 
     @RequiredArgsConstructor
-    class PlainConditional implements Conditional, Silent {
+    class PlainConditional implements Conditional, Quiet {
 
         private final Predicate<Context> predicate;
 

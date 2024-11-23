@@ -1,7 +1,7 @@
 package io.codeone.framework.chain.context;
 
 import io.codeone.framework.chain.Chainable;
-import io.codeone.framework.chain.log.Silent;
+import io.codeone.framework.chain.log.Quiet;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
 import lombok.Getter;
@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.util.CollectionUtils;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -189,11 +190,11 @@ public class Context implements BizScenarioParam {
     public void postExecute(Chainable chainable, Object resultOrException, long elapsed) {
         Map<Object, Object> paramMap = mdc.stackPop();
 
-        if (chainable instanceof Silent) {
+        if (chainable instanceof Quiet) {
             return;
         }
 
-        Map<Object, Object> map = mdc.stackPop();
+        Map<Object, Object> map = new LinkedHashMap<>();
         map.put("chain", chainName);
         map.put("node", getTargetClass(chainable).getSimpleName());
         if (bizScenario != null) {

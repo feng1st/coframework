@@ -1,4 +1,4 @@
 package io.codeone.framework.chain.log;
 
-public interface Silent {
+public interface Quiet {
 }
