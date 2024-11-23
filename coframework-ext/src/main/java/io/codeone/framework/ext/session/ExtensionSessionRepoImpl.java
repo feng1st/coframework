@@ -45,14 +45,20 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
 
         if (index >= 0) {
             BizScenarioParam bizScenarioParam = (BizScenarioParam) args[index];
-            if (bizScenarioParam == null
-                    || bizScenarioParam.getBizScenario() == null) {
+            if (bizScenarioParam != null
+                    && bizScenarioParam.getBizScenario() != null) {
+                return bizScenarioParam.getBizScenario();
+            }
+            if (session != null) {
                 throw new IllegalStateException(String.format(
                         "BizScenario of Parameter %d of method '%s' is null",
                         index,
                         method));
             }
-            return bizScenarioParam.getBizScenario();
+        }
+
+        if (session == null) {
+            return null;
         }
 
         BizScenarioResolver resolver;
