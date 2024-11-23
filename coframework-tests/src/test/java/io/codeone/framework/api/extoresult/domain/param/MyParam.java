@@ -1,7 +1,7 @@
 package io.codeone.framework.api.extoresult.domain.param;
 
 import io.codeone.framework.api.parameter.BaseParam;
-import io.codeone.framework.api.util.ArgValidator;
+import io.codeone.framework.api.util.Validator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -15,6 +15,6 @@ public class MyParam extends BaseParam {
 
     @Override
     public void validate() {
-        ArgValidator.requireTrue(false, "None accepted");
+        Validator.requireTrue(false, "None accepted");
     }
 }

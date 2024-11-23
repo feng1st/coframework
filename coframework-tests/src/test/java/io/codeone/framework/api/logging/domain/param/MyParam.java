@@ -1,7 +1,7 @@
 package io.codeone.framework.api.logging.domain.param;
 
 import io.codeone.framework.api.parameter.BaseParam;
-import io.codeone.framework.api.util.ArgValidator;
+import io.codeone.framework.api.util.Validator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,6 +17,6 @@ public class MyParam extends BaseParam {
 
     @Override
     public void validate() {
-        ArgValidator.requireNonNull(id, "id is null");
+        Validator.requireNonNull(id, "id is null");
     }
 }
