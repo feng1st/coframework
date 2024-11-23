@@ -89,19 +89,19 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             if (session.value() == BizScenarioResolvePolicy.FIRST) {
                 return Optional.ofNullable(parseFirst(method))
                         .orElseThrow(() -> new IllegalStateException(String.format(
-                                "No BizScenarioParam parameter found in method '%s'",
+                                "No BizScenarioParam found in method '%s'",
                                 method)));
             }
             if (session.value() == BizScenarioResolvePolicy.LAST) {
                 return Optional.ofNullable(parseLast(method))
                         .orElseThrow(() -> new IllegalStateException(String.format(
-                                "No BizScenarioParam parameter found in method '%s'",
+                                "No BizScenarioParam found in method '%s'",
                                 method)));
             }
             if (session.value() == BizScenarioResolvePolicy.SPECIFIED) {
                 return Optional.ofNullable(parseSpecified(method))
                         .orElseThrow(() -> new IllegalStateException(String.format(
-                                "No BizScenarioParam parameter with @RouteBy found in method '%s'",
+                                "No @RouteBy BizScenarioParam found in method '%s'",
                                 method)));
             }
             if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
@@ -156,12 +156,12 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             if (param.isAnnotationPresent(RouteBy.class)) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Duplicate @RouteBy annotation found in method '%s'",
+                            "Duplicate @RouteBy found in method '%s'",
                             method));
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
                     throw new IllegalStateException(String.format(
-                            "Parameter annotated with @RouteBy in method '%s' is not a BizScenarioParam",
+                            "Parameter with @RouteBy in method '%s' is not BizScenarioParam",
                             method));
                 }
                 index = i;
@@ -177,7 +177,7 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
         if (session.customResolver() == BizScenarioResolver.class) {
             if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
                 throw new IllegalStateException(String.format(
-                        "BizScenarioResolver not specified for method '%s'",
+                        "No BizScenarioResolver specified for method '%s'",
                         method));
             }
             return null;
@@ -186,7 +186,7 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             applicationContext.getBean(session.customResolver());
         } catch (Exception e) {
             throw new IllegalStateException(String.format(
-                    "Could not find BizScenarioResolver for method '%s'",
+                    "BizScenarioResolver not found for method '%s'",
                     method));
         }
         return INDEX_CUSTOM_RESOLVER;
