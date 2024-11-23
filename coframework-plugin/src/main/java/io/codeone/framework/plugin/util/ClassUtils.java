@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.util;
+package io.codeone.framework.plugin.util;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.aop.support.AopUtils;

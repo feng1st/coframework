@@ -9,6 +9,7 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -40,7 +41,7 @@ public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, Anno
             String pluginClassName = pluginDefinition.getBeanClassName();
             Class<? extends Plugin> pluginClass;
             try {
-                pluginClass = (Class<? extends Plugin>) Class.forName(pluginClassName);
+                pluginClass = (Class<? extends Plugin>) ClassUtils.forName(pluginClassName, getClass().getClassLoader());
             } catch (ClassNotFoundException e) {
                 throw new IllegalStateException(e);
             }
