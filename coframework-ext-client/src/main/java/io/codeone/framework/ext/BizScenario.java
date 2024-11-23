@@ -97,7 +97,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         }
         if (!isValueValid(bizId)) {
             throw new IllegalArgumentException("Invalid bizId '" + bizId
-                    + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'.");
+                    + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'");
         }
         this.bizId = bizId;
     }
@@ -108,7 +108,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         }
         if (!isValueValid(scenario)) {
             throw new IllegalArgumentException("Invalid scenario '" + scenario
-                    + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'.");
+                    + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'");
         }
         this.scenario = scenario;
     }

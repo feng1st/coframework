@@ -55,12 +55,12 @@ public class ExtensibleInvocationHandler<T> implements InvocationHandler {
         if (bizScenario == null) {
             if (paramIndex >= 0) {
                 throw new IllegalStateException(String.format(
-                        "Failed to retrieve BizScenario from parameter %d of method '%s' or the current context.",
+                        "Failed to retrieve BizScenario from parameter %d of method '%s' or the current context",
                         paramIndex,
                         method));
             } else {
                 throw new IllegalStateException(String.format(
-                        "Failed to retrieve BizScenario from the context for method '%s'.",
+                        "Failed to retrieve BizScenario from the context for method '%s'",
                         method));
             }
         }

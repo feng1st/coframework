@@ -87,7 +87,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
 
     private int parseParamIndex(Class<?> extensibleInterface, Method method) {
         if (method.getParameters().length == 0) {
-            return INDEX_BY_CONTEXT;
+            return INDEX_ROUTE_BY_CONTEXT;
         }
 
         Integer index = null;
@@ -96,7 +96,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             if (param.isAnnotationPresent(RouteBy.class)) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Found duplicate @RouteBy on '%s'",
+                            "Found duplicate @RouteBy parameters on '%s'",
                             method));
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
@@ -118,7 +118,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
 
         if (method.isAnnotationPresent(RouteByContext.class)
                 || extensibleInterface.isAnnotationPresent(RouteByContext.class)) {
-            return INDEX_BY_CONTEXT;
+            return INDEX_ROUTE_BY_CONTEXT;
         }
 
         for (int i = 0; i < method.getParameters().length; i++) {
@@ -126,7 +126,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             if (ExtUtils.isBizScenarioParam(param.getType())) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Found duplicate BizScenarioParams on '%s'",
+                            "Found duplicate BizScenarioParam parameters on '%s'",
                             method));
                 }
                 index = i;
@@ -136,9 +136,9 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             return index;
         }
 
-        // FIXME
-        log.warn("Could not parse BizScenarioParam from parameters or annotations for method '{}'", method);
+        log.warn("Could not parse BizScenario source for method '{}'",
+                method);
 
-        return INDEX_BY_CONTEXT;
+        return INDEX_ROUTE_BY_CONTEXT;
     }
 }
