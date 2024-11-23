@@ -20,14 +20,14 @@
 
     <modules>
         <!-- ORDER IS IMPORTANT -->
-        <module>coframework-ext-client</module><!-- FIXME -->
-        <module>coframework-api</module><!-- FIXME: argChecker -->
+        <module>coframework-ext-client</module>
+        <module>coframework-api</module>
         <module>coframework-sdk</module>
         <module>coframework-plugin</module>
-        <module>coframework-ext</module><!-- FIXME -->
+        <module>coframework-ext</module>
         <module>coframework-logging</module>
         <module>coframework-core</module>
-        <module>coframework-chain</module><!-- FIXME: log -->
+        <module>coframework-chain</module>
         <module>coframework-autoconfigure</module>
         <module>coframework-starter</module>
         <module>coframework-tests</module>

@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.beans.Transient;
 import java.util.Iterator;
 
+// FIXME
 @Getter
 @EqualsAndHashCode
 public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {

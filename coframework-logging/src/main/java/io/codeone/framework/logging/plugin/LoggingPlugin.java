@@ -42,7 +42,7 @@ public class LoggingPlugin implements Plugin {
             try {
                 log(method, args, result, throwable, elapsed);
             } catch (Throwable t) {
-                log.error("Error logging invocation of '" + method + "'", t);
+                log.error("Error logging invocation of '{}'", method, t);
             }
         }
     }
