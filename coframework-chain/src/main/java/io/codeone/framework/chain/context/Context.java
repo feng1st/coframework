@@ -202,7 +202,7 @@ public class Context implements BizScenarioParam {
         }
         map.put("elapsed", elapsed);
         if (resultOrException instanceof Throwable) {
-            map.put("exception", resultOrException);
+            map.put("exception", resultOrException.toString());
         } else if (Objects.equals(resultOrException, false)) {
             map.put("break", true);
         }
