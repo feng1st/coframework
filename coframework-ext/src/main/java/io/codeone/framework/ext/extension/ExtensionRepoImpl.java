@@ -54,10 +54,10 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         if (extension == null
                 || !extension.isPresent()) {
             throw new IllegalArgumentException(String.format(
-                    "Could not find Extension for '%s'",
+                    "No Extension found for '%s'",
                     cacheKey));
         }
-        return extension.orElse(null);
+        return extension.get();
     }
 
     private void register(Object extension) {
@@ -66,7 +66,7 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         List<Class<?>> extensibleInterfaces = ExtUtils.getAllExtensibleInterfaces(extensionClass);
         if (extensibleInterfaces.isEmpty()) {
             throw new IllegalStateException(String.format(
-                    "'%s' did not extend any Extensible interface (which annotated by @Ability or @ExtensionPoint)",
+                    "'%s' does not implement any Extensible interface (annotated with @Ability or @ExtensionPoint)",
                     extensionClass.getSimpleName()));
         }
 
@@ -91,10 +91,10 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
                 .put(bizScenario, extension);
         if (existing != null) {
             throw new IllegalStateException(String.format(
-                    "Found duplicate Extension for '%s': ['%s', '%s']",
+                    "Duplicate Extension found for '%s': existing '%s' vs new '%s'",
                     extensibleInterface.getSimpleName(),
                     existing.getClass().getSimpleName(),
-                    existing.getClass().getSimpleName()));
+                    extension.getClass().getSimpleName()));
         }
     }
 

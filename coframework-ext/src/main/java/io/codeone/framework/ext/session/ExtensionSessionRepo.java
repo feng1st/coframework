@@ -6,13 +6,11 @@ import java.lang.reflect.Method;
 
 public interface ExtensionSessionRepo {
 
-    // FIXME
-    int INDEX_CUSTOM = -1;
+    int INDEX_CUSTOM_RESOLVER = -1;
 
-    // FIXME
     int INDEX_IGNORE = -2;
 
-    void index(Method method, ExtensionSession annotation);
+    void buildParamIndex(Method method, ExtensionSession annotation);
 
-    BizScenario resolve(Method method, Object[] args, ExtensionSession session);
+    BizScenario resolveBizScenario(Method method, Object[] args, ExtensionSession session);
 }

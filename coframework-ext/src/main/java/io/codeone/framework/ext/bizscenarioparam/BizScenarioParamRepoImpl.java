@@ -37,7 +37,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
         Integer index = map.get(method);
         if (index == null) {
             throw new IllegalStateException(String.format(
-                    "Looking for BizScenarioParam on an unregistered method '%s'",
+                    "No BizScenario source registered for method: %s",
                     method));
         }
         return index;
@@ -96,12 +96,12 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             if (param.isAnnotationPresent(RouteBy.class)) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Found duplicate @RouteBy parameters on '%s'",
+                            "Duplicate @RouteBy parameters found on method: %s",
                             method));
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
                     throw new IllegalStateException(String.format(
-                            "The parameter of '%s' annotated by @RouteBy is not a BizScenarioParam",
+                            "Parameter annotated with @RouteBy is not BizScenarioParam on method: %s",
                             method));
                 }
                 index = i;
@@ -110,7 +110,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
         if (index != null) {
             if (method.isAnnotationPresent(RouteByContext.class)) {
                 throw new IllegalStateException(String.format(
-                        "Found both @RouteBy and @RouteByContext on '%s'",
+                        "Conflicting annotations @RouteBy and @RouteByContext on method: %s",
                         method));
             }
             return index;
@@ -126,7 +126,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             if (ExtUtils.isBizScenarioParam(param.getType())) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Found duplicate BizScenarioParam parameters on '%s'",
+                            "Duplicate BizScenarioParam parameters found on method: %s",
                             method));
                 }
                 index = i;
@@ -136,8 +136,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             return index;
         }
 
-        log.warn("Could not parse BizScenario source for method '{}'",
-                method);
+        log.warn("Unable to determine BizScenario source for method: {}", method);
 
         return INDEX_ROUTE_BY_CONTEXT;
     }

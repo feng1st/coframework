@@ -28,15 +28,17 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             = new ConcurrentHashMap<>();
 
     @Override
-    public void index(Method method, ExtensionSession annotation) {
+    public void buildParamIndex(Method method, ExtensionSession annotation) {
         paramIndexMap.computeIfAbsent(method, k -> parseParamIndex(method, annotation));
     }
 
     @Override
-    public BizScenario resolve(Method method, Object[] args, ExtensionSession session) {
+    public BizScenario resolveBizScenario(Method method, Object[] args, ExtensionSession session) {
         Integer index = paramIndexMap.get(method);
         if (index == null) {
-            throw new IllegalStateException("Looking for BizScenarioParam on an unregistered method '" + method + "'");
+            throw new IllegalStateException(String.format(
+                    "No BizScenario found for method '%s'",
+                    method));
         }
 
         if (index == INDEX_IGNORE) {
@@ -45,13 +47,12 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
 
         if (index >= 0) {
             BizScenarioParam bizScenarioParam = (BizScenarioParam) args[index];
-            if (bizScenarioParam != null
-                    && bizScenarioParam.getBizScenario() != null) {
+            if (bizScenarioParam != null && bizScenarioParam.getBizScenario() != null) {
                 return bizScenarioParam.getBizScenario();
             }
             if (session != null) {
                 throw new IllegalStateException(String.format(
-                        "BizScenario of Parameter %d of method '%s' is null",
+                        "BizScenario is null for parameter %d in method '%s'",
                         index,
                         method));
             }
@@ -65,12 +66,15 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
         try {
             resolver = resolverMap.computeIfAbsent(session.customResolver(), k -> applicationContext.getBean(k));
         } catch (Exception e) {
-            throw new IllegalStateException("Could not load BizScenarioResolver '" + session.customResolver().getSimpleName() + "'");
+            throw new IllegalStateException(String.format(
+                    "Cannot load BizScenarioResolver '%s'",
+                    session.customResolver().getSimpleName()));
         }
+
         BizScenario bizScenario = resolver.resolve(args);
         if (bizScenario == null) {
             throw new IllegalStateException(String.format(
-                    "Failed to resolve BizScenario via resolver '%s' for method '%s'",
+                    "BizScenario could not be resolved using resolver '%s' for method '%s'",
                     session.customResolver().getSimpleName(),
                     method));
         }
@@ -84,23 +88,28 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             }
             if (session.value() == BizScenarioResolvePolicy.FIRST) {
                 return Optional.ofNullable(parseFirst(method))
-                        .orElseThrow(() -> new IllegalStateException("Could not find BizScenarioParam on '" + method + "'"));
+                        .orElseThrow(() -> new IllegalStateException(String.format(
+                                "No BizScenarioParam parameter found in method '%s'",
+                                method)));
             }
             if (session.value() == BizScenarioResolvePolicy.LAST) {
                 return Optional.ofNullable(parseLast(method))
-                        .orElseThrow(() -> new IllegalStateException("Could not find BizScenarioParam on '" + method + "'"));
+                        .orElseThrow(() -> new IllegalStateException(String.format(
+                                "No BizScenarioParam parameter found in method '%s'",
+                                method)));
             }
             if (session.value() == BizScenarioResolvePolicy.SPECIFIED) {
                 return Optional.ofNullable(parseSpecified(method))
-                        .orElseThrow(() -> new IllegalStateException("Could not find BizScenarioParam annotated by @ResolveFrom on '" + method + "'"));
+                        .orElseThrow(() -> new IllegalStateException(String.format(
+                                "No BizScenarioParam parameter with @RouteBy found in method '%s'",
+                                method)));
             }
             if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
                 return Objects.requireNonNull(parseCustomResolver(method, session));
             }
         }
 
-        Integer paramIndex;
-        paramIndex = parseCustomResolver(method, session);
+        Integer paramIndex = parseCustomResolver(method, session);
         if (paramIndex != null) {
             return paramIndex;
         }
@@ -112,9 +121,12 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
         if (paramIndex != null) {
             return paramIndex;
         }
+
         // session.value() == BizScenarioResolvePolicy.AUTO
         if (session != null) {
-            throw new IllegalStateException("Could not find BizScenarioParam on '" + method + "'");
+            throw new IllegalStateException(String.format(
+                    "No BizScenarioParam found in method '%s'",
+                    method));
         }
         return INDEX_IGNORE;
     }
@@ -143,11 +155,14 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             Parameter param = method.getParameters()[i];
             if (param.isAnnotationPresent(RouteBy.class)) {
                 if (index != null) {
-                    throw new IllegalStateException("Found duplicate @RouteBy on '" + method + "'");
+                    throw new IllegalStateException(String.format(
+                            "Duplicate @RouteBy annotation found in method '%s'",
+                            method));
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
-                    throw new IllegalStateException(
-                            "The parameter of '" + method + "' annotated by @RouteBy is not a BizScenarioParam");
+                    throw new IllegalStateException(String.format(
+                            "Parameter annotated with @RouteBy in method '%s' is not a BizScenarioParam",
+                            method));
                 }
                 index = i;
             }
@@ -161,15 +176,19 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
         }
         if (session.customResolver() == BizScenarioResolver.class) {
             if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
-                throw new IllegalStateException("Did not specify BizScenarioResolver for '" + method + "'");
+                throw new IllegalStateException(String.format(
+                        "BizScenarioResolver not specified for method '%s'",
+                        method));
             }
             return null;
         }
         try {
-            BizScenarioResolver ignored = applicationContext.getBean(session.customResolver());
+            applicationContext.getBean(session.customResolver());
         } catch (Exception e) {
-            throw new IllegalStateException("Could not find consistent BizScenarioResolver on '" + method + "'");
+            throw new IllegalStateException(String.format(
+                    "Could not find BizScenarioResolver for method '%s'",
+                    method));
         }
-        return INDEX_CUSTOM;
+        return INDEX_CUSTOM_RESOLVER;
     }
 }

@@ -21,14 +21,14 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
     @Override
     public void processAfterBinding(Method method, Class<?> targetClass) {
         ExtensionSession session = AnnotationUtils.getAnnotation(method, ExtensionSession.class);
-        extensionSessionRepo.index(method, session);
+        extensionSessionRepo.buildParamIndex(method, session);
     }
 
     @Override
     public Object around(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
         ExtensionSession session = AnnotationUtils.getAnnotation(method, ExtensionSession.class);
-        BizScenario bizScenario = extensionSessionRepo.resolve(method, args, session);
+        BizScenario bizScenario = extensionSessionRepo.resolveBizScenario(method, args, session);
         if (bizScenario == null) {
             return invokable.invoke();
         }
