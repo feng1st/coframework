@@ -1,9 +1,9 @@
 package io.codeone.framework.ext.session.domain.service;
 
 import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.ext.RouteBy;
 import io.codeone.framework.ext.session.BizScenarioResolvePolicy;
 import io.codeone.framework.ext.session.ExtensionSession;
-import io.codeone.framework.ext.session.ResolveFrom;
 import io.codeone.framework.ext.session.ext.shared.resolve.AdminNameBizScenarioResolver;
 import io.codeone.framework.ext.session.sdk.ability.TestExtSessionAbility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class TestExtSessionService {
         return testExtSessionAbility.genCode();
     }
 
-    public String genCodeClassAutoSpecified(BizScenario param1, @ResolveFrom BizScenario param2) {
+    public String genCodeClassAutoSpecified(BizScenario param1, @RouteBy BizScenario param2) {
         return testExtSessionAbility.genCode();
     }
 
@@ -30,7 +30,7 @@ public class TestExtSessionService {
     }
 
     @ExtensionSession
-    public String genCodeAutoSpecified(BizScenario param1, @ResolveFrom BizScenario param2, BizScenario param3) {
+    public String genCodeAutoSpecified(BizScenario param1, @RouteBy BizScenario param2, BizScenario param3) {
         return testExtSessionAbility.genCode();
     }
 
@@ -50,7 +50,7 @@ public class TestExtSessionService {
     }
 
     @ExtensionSession(BizScenarioResolvePolicy.SPECIFIED)
-    public String genCodeSpecified(BizScenario param1, @ResolveFrom BizScenario param2, BizScenario param3) {
+    public String genCodeSpecified(BizScenario param1, @RouteBy BizScenario param2, BizScenario param3) {
         return testExtSessionAbility.genCode();
     }
 

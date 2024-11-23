@@ -1,10 +1,10 @@
 package io.codeone.framework.ext.bizscenarioparam;
 
-import io.codeone.framework.ext.BizScenarioParam;
 import io.codeone.framework.ext.Extension;
 import io.codeone.framework.ext.RouteBy;
 import io.codeone.framework.ext.RouteByContext;
 import io.codeone.framework.ext.util.ExtUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -18,6 +18,7 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 
 @Component
+@Slf4j(topic = "extension")
 public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizScenarioParamRepo {
 
     private final Set<Class<?>> processedExtensibleInterfaces = new HashSet<>();
@@ -80,13 +81,13 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             if (method.getDeclaringClass() == Object.class) {
                 continue;
             }
-            map.computeIfAbsent(method, k -> parseBizScenarioParamIndex(extensibleInterface, method));
+            map.computeIfAbsent(method, k -> parseParamIndex(extensibleInterface, method));
         }
     }
 
-    private int parseBizScenarioParamIndex(Class<?> extensibleInterface, Method method) {
+    private int parseParamIndex(Class<?> extensibleInterface, Method method) {
         if (method.getParameters().length == 0) {
-            return -1;
+            return INDEX_BY_CONTEXT;
         }
 
         Integer index = null;
@@ -98,7 +99,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
                             "Found duplicate @RouteBy on '%s'",
                             method));
                 }
-                if (!BizScenarioParam.class.isAssignableFrom(param.getType())) {
+                if (!ExtUtils.isBizScenarioParam(param.getType())) {
                     throw new IllegalStateException(String.format(
                             "The parameter of '%s' annotated by @RouteBy is not a BizScenarioParam",
                             method));
@@ -117,12 +118,12 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
 
         if (method.isAnnotationPresent(RouteByContext.class)
                 || extensibleInterface.isAnnotationPresent(RouteByContext.class)) {
-            return -1;
+            return INDEX_BY_CONTEXT;
         }
 
         for (int i = 0; i < method.getParameters().length; i++) {
             Parameter param = method.getParameters()[i];
-            if (BizScenarioParam.class.isAssignableFrom(param.getType())) {
+            if (ExtUtils.isBizScenarioParam(param.getType())) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
                             "Found duplicate BizScenarioParams on '%s'",
@@ -135,6 +136,9 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             return index;
         }
 
-        return -1;
+        // FIXME
+        log.warn("Could not parse BizScenarioParam from parameters or annotations for method '{}'", method);
+
+        return INDEX_BY_CONTEXT;
     }
 }

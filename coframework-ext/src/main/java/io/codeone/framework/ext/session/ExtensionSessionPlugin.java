@@ -1,5 +1,6 @@
 package io.codeone.framework.ext.session;
 
+import io.codeone.framework.api.API;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioContext;
 import io.codeone.framework.plugin.Plug;
@@ -12,25 +13,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
 
-@Plug(value = Stages.BEFORE_TARGET, targetAnnotations = ExtensionSession.class)
+@Plug(value = Stages.BEFORE_TARGET, targetAnnotations = {ExtensionSession.class, API.class})
 public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
 
     @Autowired
-    private ExtensionSessionIndexer extensionSessionIndexer;
+    private ExtensionSessionRepo extensionSessionRepo;
 
     @Override
     public void processAfterBinding(Method method, Class<?> targetClass) {
         ExtensionSession session = AnnotationUtils.getAnnotation(method, ExtensionSession.class);
-        extensionSessionIndexer.index(method, session);
+        extensionSessionRepo.index(method, session);
     }
 
     @Override
     public Object around(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
         ExtensionSession session = AnnotationUtils.getAnnotation(method, ExtensionSession.class);
-        BizScenario bizScenario = extensionSessionIndexer.resolve(method, args, session);
+        BizScenario bizScenario = extensionSessionRepo.resolve(method, args, session);
         if (bizScenario == null) {
-            throw new IllegalArgumentException("Could not resolve BizScenario from args of '" + method + "'");
+            return invokable.invoke();
         }
         return BizScenarioContext.invoke(bizScenario, invokable);
     }

@@ -1,13 +1,18 @@
 package io.codeone.framework.ext.session;
 
+import io.codeone.framework.ext.BizScenario;
+
 import java.lang.reflect.Method;
-import java.util.function.Supplier;
 
 public interface ExtensionSessionRepo {
 
-    void computeParamIndexIfAbsent(Method method, Supplier<Integer> supplier);
+    // FIXME
+    int INDEX_CUSTOM = -1;
 
-    int getParamIndex(Method method);
+    // FIXME
+    int INDEX_IGNORE = -2;
 
-    BizScenarioResolver getResolver(Class<? extends BizScenarioResolver> clazz);
+    void index(Method method, ExtensionSession annotation);
+
+    BizScenario resolve(Method method, Object[] args, ExtensionSession session);
 }

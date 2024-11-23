@@ -6,4 +6,5 @@ public enum BizScenarioResolvePolicy {
     LAST,
     SPECIFIED,
     CUSTOM,
+    IGNORE,
 }
