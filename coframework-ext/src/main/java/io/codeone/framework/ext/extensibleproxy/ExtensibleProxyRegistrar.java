@@ -23,35 +23,41 @@ public class ExtensibleProxyRegistrar implements BeanFactoryPostProcessor {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        if (!(beanFactory instanceof DefaultListableBeanFactory)) {
-            return;
-        }
-
-        String[] extensionBeanNames = beanFactory.getBeanNamesForAnnotation(Extension.class);
-        for (String extensionBeanName : extensionBeanNames) {
-            BeanDefinition extensionBeanDefinition = beanFactory.getBeanDefinition(extensionBeanName);
-            extensionBeanDefinition.setPrimary(false);
-
-            String extensionClassName = extensionBeanDefinition.getBeanClassName();
-            if (extensionClassName == null) {
-                continue;
-            }
-
-            Class<?> extensionClass;
-            try {
-                extensionClass = ClassUtils.forName(extensionClassName, getClass().getClassLoader());
-            } catch (ClassNotFoundException ignored) {
-                continue;
-            }
-
-            List<Class<?>> extensibleInterfaces = ExtUtils.getAllExtensibleInterfaces(extensionClass);
-            for (Class<?> extensibleInterface : extensibleInterfaces) {
-                registerProxy((DefaultListableBeanFactory) beanFactory, extensibleInterface);
-            }
+        if (beanFactory instanceof DefaultListableBeanFactory) {
+            process((DefaultListableBeanFactory) beanFactory);
         }
     }
 
-    private <T> void registerProxy(DefaultListableBeanFactory beanFactory, Class<T> extensibleInterface) {
+    private void process(DefaultListableBeanFactory beanFactory) {
+        String[] extensionBeanNames = beanFactory.getBeanNamesForAnnotation(Extension.class);
+        for (String extensionBeanName : extensionBeanNames) {
+            processExtension(extensionBeanName, beanFactory);
+        }
+    }
+
+    private void processExtension(String extensionBeanName, DefaultListableBeanFactory beanFactory) {
+        BeanDefinition extensionBeanDefinition = beanFactory.getBeanDefinition(extensionBeanName);
+        extensionBeanDefinition.setPrimary(false);
+
+        String extensionClassName = extensionBeanDefinition.getBeanClassName();
+        if (extensionClassName == null) {
+            return;
+        }
+
+        Class<?> extensionClass;
+        try {
+            extensionClass = ClassUtils.forName(extensionClassName, getClass().getClassLoader());
+        } catch (ClassNotFoundException ignored) {
+            return;
+        }
+
+        List<Class<?>> extensibleInterfaces = ExtUtils.getAllExtensibleInterfaces(extensionClass);
+        for (Class<?> extensibleInterface : extensibleInterfaces) {
+            registerExtensibleProxy(extensibleInterface, beanFactory);
+        }
+    }
+
+    private <T> void registerExtensibleProxy(Class<T> extensibleInterface, DefaultListableBeanFactory beanFactory) {
         if (!registered.add(extensibleInterface)) {
             return;
         }

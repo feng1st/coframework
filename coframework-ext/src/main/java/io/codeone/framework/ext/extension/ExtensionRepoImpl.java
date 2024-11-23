@@ -44,7 +44,7 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
     @Override
     public void afterPropertiesSet() throws Exception {
         applicationContext.getBeansWithAnnotation(Extension.class).values()
-                .forEach(this::registerExtension);
+                .forEach(this::register);
     }
 
     @Override
@@ -60,14 +60,14 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         return extension.orElse(null);
     }
 
-    private void registerExtension(Object extension) {
+    private void register(Object extension) {
         Class<?> extensionClass = ClassUtils.getTargetClass(extension);
 
         List<Class<?>> extensibleInterfaces = ExtUtils.getAllExtensibleInterfaces(extensionClass);
         if (extensibleInterfaces.isEmpty()) {
             throw new IllegalStateException(String.format(
                     "'%s' did not extend any Extensible interface (which annotated by @Ability or @ExtensionPoint)",
-                    extensionClass));
+                    extensionClass.getSimpleName()));
         }
 
         Extension extensionAnno = extensionClass.getAnnotation(Extension.class);
@@ -92,7 +92,7 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         if (existing != null) {
             throw new IllegalStateException(String.format(
                     "Found duplicate Extension for '%s': ['%s', '%s']",
-                    extensibleInterface,
+                    extensibleInterface.getSimpleName(),
                     existing.getClass().getSimpleName(),
                     existing.getClass().getSimpleName()));
         }

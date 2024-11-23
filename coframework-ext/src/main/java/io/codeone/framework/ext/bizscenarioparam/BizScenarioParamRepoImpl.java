@@ -45,11 +45,11 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
     private void process(DefaultListableBeanFactory beanFactory) {
         String[] extensionBeanNames = beanFactory.getBeanNamesForAnnotation(Extension.class);
         for (String extensionBeanName : extensionBeanNames) {
-            processExtensionBeanName(extensionBeanName, beanFactory);
+            processExtension(extensionBeanName, beanFactory);
         }
     }
 
-    private void processExtensionBeanName(String extensionBeanName, DefaultListableBeanFactory beanFactory) {
+    private void processExtension(String extensionBeanName, DefaultListableBeanFactory beanFactory) {
         BeanDefinition extensionBeanDefinition = beanFactory.getBeanDefinition(extensionBeanName);
         extensionBeanDefinition.setPrimary(false);
 
@@ -67,11 +67,11 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
 
         List<Class<?>> extensibleInterfaces = ExtUtils.getAllExtensibleInterfaces(extensionClass);
         for (Class<?> extensibleInterface : extensibleInterfaces) {
-            processExtensibleInterface(extensibleInterface);
+            processExtensible(extensibleInterface);
         }
     }
 
-    private void processExtensibleInterface(Class<?> extensibleInterface) {
+    private void processExtensible(Class<?> extensibleInterface) {
         if (!processedExtensibleInterfaces.add(extensibleInterface)) {
             return;
         }
