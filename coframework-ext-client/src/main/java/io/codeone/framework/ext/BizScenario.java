@@ -6,7 +6,6 @@ import lombok.Getter;
 import java.beans.Transient;
 import java.util.Iterator;
 
-// FIXME
 @Getter
 @EqualsAndHashCode
 public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
@@ -45,7 +44,9 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     public static BizScenario parse(String code) {
         String[] array = code.split(CONNECTOR);
         if (array.length != 2) {
-            throw new IllegalArgumentException("Invalid bizScenario '" + code + "'");
+            throw new IllegalArgumentException(String.format(
+                    "Invalid bizScenario '%s'",
+                    code));
         }
         return of(array[0], array[1]);
     }
@@ -97,8 +98,9 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
             bizId = ANY;
         }
         if (!isValueValid(bizId)) {
-            throw new IllegalArgumentException("Invalid bizId '" + bizId
-                    + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'");
+            throw new IllegalArgumentException(String.format(
+                    "Invalid bizId '%s', should be '*', or '.' separated alphabets, numbers, '-' and '_'",
+                    bizId));
         }
         this.bizId = bizId;
     }
@@ -108,14 +110,11 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
             scenario = ANY;
         }
         if (!isValueValid(scenario)) {
-            throw new IllegalArgumentException("Invalid scenario '" + scenario
-                    + "', should be '*', or '.' separated alphabets, numbers, '-' and '_'");
+            throw new IllegalArgumentException(String.format(
+                    "Invalid scenario '%s', should be '*', or '.' separated alphabets, numbers, '-' and '_'",
+                    scenario));
         }
         this.scenario = scenario;
-    }
-
-    public String getCode() {
-        return bizId + CONNECTOR + scenario;
     }
 
     @Override
@@ -131,7 +130,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     @Override
     public String toString() {
-        return getCode();
+        return bizId + CONNECTOR + scenario;
     }
 
     private class Itr implements Iterator<BizScenario> {
