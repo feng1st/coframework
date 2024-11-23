@@ -2,8 +2,10 @@ package io.codeone.framework.api.autoconfigure;
 
 import io.codeone.framework.api.converter.ApiExceptionConverter;
 import io.codeone.framework.api.converter.ApiResultConverter;
+import io.codeone.framework.api.formatter.LogFormatter;
 import io.codeone.framework.api.util.ApiExceptionUtils;
 import io.codeone.framework.api.util.ApiResultUtils;
+import io.codeone.framework.api.util.LogUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -23,5 +25,10 @@ public class CoFrameworkApiAutoConfiguration implements InitializingBean {
                 .forEach(ApiResultUtils.CONVERSION_SERVICE::addConverter);
         applicationContext.getBeansOfType(ApiExceptionConverter.class).values()
                 .forEach(ApiExceptionUtils.CONVERSION_SERVICE::addConverter);
+
+        applicationContext.getBeansOfType(LogFormatter.class).values()
+                .stream()
+                .findFirst()
+                .ifPresent(o -> LogUtils.logFormatter = o);
     }
 }
