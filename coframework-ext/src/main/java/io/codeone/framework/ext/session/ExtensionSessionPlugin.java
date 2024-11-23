@@ -4,40 +4,30 @@ import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioContext;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
+import io.codeone.framework.plugin.PluginBindingProcessor;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.util.AnnotationUtils;
 import io.codeone.framework.plugin.util.Invokable;
-import io.codeone.framework.plugin.util.TargetMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
-/**
- * {@code ExtensionSessionPlugin} will try to resolve a {@link BizScenario}
- * instance from the parameters of the target method according to
- * {@link ExtensionSession} annotation, and push it to
- * {@link BizScenarioContext} for future Extension routing.
- */
-@Plug(Stages.BEFORE_TARGET)
-public class ExtensionSessionPlugin implements Plugin {
+@Plug(value = Stages.BEFORE_TARGET, targetAnnotations = ExtensionSession.class)
+public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
 
-    @Resource
+    @Autowired
     private ExtensionSessionIndexer extensionSessionIndexer;
 
-    /**
-     * Uses {@link ExtensionSessionIndexer} to resolve the {@link BizScenario}
-     * instance from the parameters of the target method according to
-     * {@link ExtensionSession} annotation, and push it to
-     * {@link BizScenarioContext} for future Extension routing by invoking the
-     * target method with the resolved {@code BizScenario} instance in that
-     * context.
-     *
-     * <p>{@inheritDoc}
-     */
     @Override
-    public Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
+    public void processAfterBinding(Method method, Class<?> targetClass) {
+        ExtensionSession session = AnnotationUtils.getAnnotation(method, ExtensionSession.class);
+        extensionSessionIndexer.index(method, session);
+    }
+
+    @Override
+    public Object around(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
-        Method method = targetMethod.getMethod();
-        ExtensionSession session = targetMethod.getAnnotation(ExtensionSession.class);
+        ExtensionSession session = AnnotationUtils.getAnnotation(method, ExtensionSession.class);
         BizScenario bizScenario = extensionSessionIndexer.resolve(method, args, session);
         if (bizScenario == null) {
             throw new IllegalArgumentException("Could not resolve BizScenario from args of '" + method + "'");

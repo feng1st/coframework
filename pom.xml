@@ -20,14 +20,14 @@
 
     <modules>
         <!-- ORDER IS IMPORTANT -->
-        <module>coframework-ext-client</module>
-        <module>coframework-api</module>
+        <module>coframework-ext-client</module><!-- FIXME -->
+        <module>coframework-api</module><!-- FIXME: argChecker -->
         <module>coframework-sdk</module>
         <module>coframework-plugin</module>
-        <module>coframework-ext</module>
+        <module>coframework-ext</module><!-- FIXME -->
         <module>coframework-logging</module>
         <module>coframework-core</module>
-        <module>coframework-chain</module>
+        <module>coframework-chain</module><!-- FIXME: log -->
         <module>coframework-autoconfigure</module>
         <module>coframework-starter</module>
         <module>coframework-tests</module>
@@ -90,11 +90,6 @@
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>
                 <version>2.9.3</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.annotation</groupId>
-                <artifactId>javax.annotation-api</artifactId>
-                <version>1.3.2</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>

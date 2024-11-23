@@ -4,16 +4,11 @@ import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
 import io.codeone.framework.plugin.util.Invokable;
-import io.codeone.framework.plugin.util.TargetMethod;
 import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 import java.util.*;
 
-/**
- * A chain of plugins which is used to intercept method invocation. Plugins in
- * the chain are sorted by {@link Plug#value()} then by {@link Order}.
- */
 public class PluginChain {
 
     private final List<Plugin> plugins;
@@ -23,35 +18,20 @@ public class PluginChain {
         this.plugins = sortPlugins(plugins);
     }
 
-    /**
-     * Executes this chain on an invokable, for example, a method invocation or
-     * a lambda expression that wraps the method invocation.
-     *
-     * @param method    the target method
-     * @param args      the arguments of the method invocation
-     * @param invokable the invocation of the target method, or a lambda
-     *                  expression wrapping it
-     * @return the result of the target method invocation, or an intercepted one
-     * by the plugins in the chain
-     * @throws Throwable any exception thrown by the target method invocation or
-     *                   by the plugins in the chain
-     */
     public Object invoke(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
         if (plugins.isEmpty()) {
             return invokable.invoke();
         }
-        return invoke(plugins.iterator(), TargetMethod.of(method), args, invokable);
+        return invoke(plugins.iterator(), method, args, invokable);
     }
 
-    private Object invoke(Iterator<Plugin> iter, TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
+    private Object invoke(Iterator<Plugin> iter, Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
-        if (iter.hasNext()) {
-            return iter.next().around(targetMethod, args,
-                    () -> invoke(iter, targetMethod, args, invokable));
-        } else {
+        if (!iter.hasNext()) {
             return invokable.invoke();
         }
+        return iter.next().around(method, args, () -> invoke(iter, method, args, invokable));
     }
 
     private List<Plugin> sortPlugins(List<Plugin> plugins) {

@@ -6,15 +6,14 @@ import io.codeone.framework.ext.session.ExtensionSession;
 import io.codeone.framework.ext.session.ResolveFrom;
 import io.codeone.framework.ext.session.ext.shared.resolve.AdminNameBizScenarioResolver;
 import io.codeone.framework.ext.session.sdk.ability.TestExtSessionAbility;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 @Service
 @ExtensionSession
 public class TestExtSessionService {
 
-    @Resource
+    @Autowired
     private TestExtSessionAbility testExtSessionAbility;
 
     public String genCodeClassAutoFirst(BizScenario param1, BizScenario param2) {

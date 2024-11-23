@@ -1,109 +1,117 @@
 package io.codeone.framework.logging.plugin;
 
-import io.codeone.framework.api.convert.ApiConversionService;
-import io.codeone.framework.api.convert.ApiErrorConversionService;
-import io.codeone.framework.api.exception.ApiError;
-import io.codeone.framework.api.exception.CommonErrors;
-import io.codeone.framework.api.response.Result;
-import io.codeone.framework.logging.Log;
+import io.codeone.framework.api.response.ApiResult;
+import io.codeone.framework.api.response.Page;
+import io.codeone.framework.api.response.PageData;
+import io.codeone.framework.api.util.ApiExceptionUtils;
+import io.codeone.framework.api.util.ApiResultUtils;
 import io.codeone.framework.logging.Logging;
-import io.codeone.framework.logging.spel.LoggingSpelParser;
+import io.codeone.framework.logging.spel.LoggingExpressionParser;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.util.AnnotationUtils;
 import io.codeone.framework.plugin.util.Invokable;
-import io.codeone.framework.plugin.util.TargetMethod;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
-@Plug(Stages.AFTER_TARGET)
+@Plug(value = Stages.AFTER_TARGET, targetAnnotations = Logging.class)
 @Slf4j(topic = "logging")
 public class LoggingPlugin implements Plugin {
 
-    @Resource
-    private ApiConversionService apiConversionService;
-
-    @Resource
-    private ApiErrorConversionService apiErrorConversionService;
-
     @Override
-    public Object around(TargetMethod targetMethod, Object[] args, Invokable<?> invokable)
+    public Object around(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
         long start = System.currentTimeMillis();
         Object result = null;
-        Throwable error = null;
+        Throwable throwable = null;
         try {
             return (result = invokable.invoke());
         } catch (Throwable t) {
-            throw (error = t);
+            throw (throwable = t);
         } finally {
             long elapsed = System.currentTimeMillis() - start;
             try {
-                log(targetMethod, args, result, error, elapsed);
+                log(method, args, result, throwable, elapsed);
             } catch (Throwable t) {
-                log.error("Error logging invocation of '" + targetMethod.getMethod() + "'", t);
+                log.error("Error logging invocation of '" + method + "'", t);
             }
         }
     }
 
-    private void log(TargetMethod targetMethod, Object[] args, Object result, Throwable error, long elapsed) {
-        Method method = targetMethod.getMethod();
-        Logging logging = targetMethod.getAnnotation(Logging.class);
+    private void log(Method method, Object[] args, Object result, Throwable throwable, long elapsed) {
 
-        LoggingSpelParser spelParser = new LoggingSpelParser(method, args, result, error);
+        Logging logging = AnnotationUtils.getAnnotation(method, Logging.class);
 
-        Log log = Log.newBuilder();
+        LoggingExpressionParser expParser = new LoggingExpressionParser(args, result, throwable);
 
-        if (logging != null) {
-            log.delimiter(logging.delimiter());
+        ApiResult<?> apiResult = ApiResultUtils.toApiResult(result);
+        Throwable cause = ApiExceptionUtils.getCause(throwable);
 
-            if (!logging.name().isEmpty()) {
-                log.logger(logging.name());
-            }
-            if (!logging.scene().isEmpty()) {
-                log.scene(logging.scene());
-            }
+        Boolean success = getSuccess(apiResult, cause, logging, expParser);
+        String code = getCode(apiResult, cause, logging, expParser);
+        String message = getMessage(apiResult, cause, logging, expParser);
+        Map<String, Object> argMap = getArgMap(method, args, logging, expParser);
+        Object resultData = getResultData(result, apiResult, logging);
+        Level level = getLevel(throwable, success);
+
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("level", level);
+        map.put("method", method.getDeclaringClass().getSimpleName() + "." + method.getName());
+        if (success != null) {
+            map.put("success", success);
+        }
+        if (code != null) {
+            map.put("code", code);
+        }
+        if (message != null) {
+            map.put("message", message);
+        }
+        map.put("elapsed", elapsed);
+        if (argMap != null) {
+            map.put("args", argMap);
+        }
+        if (resultData != null) {
+            map.put("result", resultData);
+        }
+        if (throwable != null) {
+            map.put("exception", throwable);
         }
 
-        log.method(method);
-
-        if (logging != null) {
-            if (logging.keyPairs().length > 1) {
-                for (int i = 0; i < logging.keyPairs().length - 1; i += 2) {
-                    log.addArg(logging.keyPairs()[i], spelParser.evalString(logging.keyPairs()[i + 1]));
-                }
-            } else if (logging.value().logArgs()) {
-                log.args(targetMethod.getParameterNames(), args);
-            }
-        }
-
-        Result<?> apiResult = apiConversionService.convert(result, Result.class);
-        ApiError cause = apiErrorConversionService.getCause(error);
-        boolean success = getSuccess(logging, apiResult, cause, spelParser);
-        String code = getCode(logging, apiResult, cause, spelParser);
-        String message = getMessage(logging, apiResult, cause, spelParser);
-        log.code(success, code, message);
-        if (error != null) {
-            if (logging != null && logging.value().logError()) {
-                log.errorBody(error);
+        Logger logger = getLogger(method, logging);
+        if (level == Level.ERROR) {
+            if (logging == null
+                    || logging.logException()) {
+                logger.error("{}", map, throwable);
             } else {
-                log.hasError(true);
+                logger.error("{}", map);
             }
+        } else if (level == Level.WARN) {
+            logger.warn("{}", map);
         } else {
-            if (logging != null && logging.value().logResult()) {
-                Object resultBody = getResultBody(apiResult, result);
-                log.resultBody(resultBody);
-            }
+            logger.info("{}", map);
         }
-
-        log.elapsed(elapsed);
-
-        log.log();
     }
 
-    private boolean getSuccess(Logging logging, Result<?> apiResult, ApiError cause, LoggingSpelParser spelParser) {
+    private Level getLevel(Throwable throwable, Boolean success) {
+        if (throwable != null) {
+            return Level.ERROR;
+        }
+        if (Objects.equals(success, false)) {
+            return Level.WARN;
+        }
+        return Level.INFO;
+    }
+
+    private Boolean getSuccess(ApiResult<?> apiResult, Throwable cause, Logging logging, LoggingExpressionParser expParser) {
         if (cause != null) {
             return false;
         }
@@ -111,25 +119,25 @@ public class LoggingPlugin implements Plugin {
             return apiResult.isSuccess();
         }
         if (logging != null && !logging.expSuccess().isEmpty()) {
-            return spelParser.evalBoolean(logging.expSuccess());
+            return Objects.equals(expParser.evaluate(logging.expSuccess()), true);
         }
-        return true;
+        return null;
     }
 
-    private String getCode(Logging logging, Result<?> apiResult, ApiError cause, LoggingSpelParser spelParser) {
+    private String getCode(ApiResult<?> apiResult, Throwable cause, Logging logging, LoggingExpressionParser expParser) {
         if (cause != null) {
-            return cause.getCode();
+            return ApiExceptionUtils.getCode(cause);
         }
         if (apiResult != null) {
             return apiResult.getErrorCode();
         }
         if (logging != null && !logging.expCode().isEmpty()) {
-            return spelParser.evalString(logging.expCode());
+            return String.valueOf(expParser.evaluate(logging.expCode()));
         }
-        return CommonErrors.SUCCESS.getCode();
+        return null;
     }
 
-    private String getMessage(Logging logging, Result<?> apiResult, ApiError cause, LoggingSpelParser spelParser) {
+    private String getMessage(ApiResult<?> apiResult, Throwable cause, Logging logging, LoggingExpressionParser expParser) {
         if (cause != null) {
             return cause.getMessage();
         }
@@ -137,15 +145,54 @@ public class LoggingPlugin implements Plugin {
             return apiResult.getErrorMessage();
         }
         if (logging != null && !logging.expMessage().isEmpty()) {
-            return spelParser.evalString(logging.expMessage());
+            return String.valueOf(expParser.evaluate(logging.expMessage()));
         }
         return null;
     }
 
-    private Object getResultBody(Result<?> apiResult, Object result) {
-        if (apiResult != null) {
-            return apiResult.getData();
+    private Map<String, Object> getArgMap(Method method, Object[] args, Logging logging, LoggingExpressionParser expParser) {
+        if (logging != null && logging.argKvs().length > 1) {
+            Map<String, Object> argMap = new LinkedHashMap<>();
+            for (int i = 0; i < logging.argKvs().length - 1; i += 2) {
+                argMap.put(logging.argKvs()[i], expParser.evaluate(logging.argKvs()[i + 1]));
+            }
+            return argMap;
+        } else if (logging == null
+                || logging.logArgs()) {
+            Parameter[] parameters = method.getParameters();
+            if (parameters.length > 0) {
+                Map<String, Object> argMap = new LinkedHashMap<>();
+                for (int i = 0; i < parameters.length; i++) {
+                    argMap.put(parameters[i].getName(), args[i]);
+                }
+                return argMap;
+            }
         }
-        return result;
+        return null;
+    }
+
+    private Object getResultData(Object result, ApiResult<?> apiResult, Logging logging) {
+        if (logging == null
+                || logging.logResult()) {
+            if (result instanceof Page) {
+                return result;
+            }
+            if (result instanceof PageData) {
+                return Page.of((PageData<?>) result);
+            }
+            if (apiResult != null) {
+                return apiResult.getData();
+            }
+            return result;
+        }
+        return null;
+    }
+
+    private Logger getLogger(Method method, Logging logging) {
+        if (logging != null && !logging.name().isEmpty()) {
+            return LoggerFactory.getLogger(logging.name());
+        } else {
+            return LoggerFactory.getLogger(method.getDeclaringClass());
+        }
     }
 }

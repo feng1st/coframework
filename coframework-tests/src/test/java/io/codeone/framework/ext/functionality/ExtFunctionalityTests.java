@@ -6,14 +6,13 @@ import io.codeone.framework.ext.functionality.sdk.ability.Ability1;
 import io.codeone.framework.ext.shared.constants.ExtConstants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.annotation.Resource;
 
 @SpringBootTest
 public class ExtFunctionalityTests {
 
-    @Resource
+    @Autowired
     private Ability1 ability1;
 
     @Test

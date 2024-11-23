@@ -5,25 +5,25 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Stages {
-    PRE_ARG_INTERCEPTING(false),
-    ARG_INTERCEPTING(false),
-    POST_ARG_INTERCEPTING(false),
-    BEFORE_TARGET(false),
-    AFTER_TARGET(true),
-    PRE_RESULT_INTERCEPTING(true),
-    RESULT_INTERCEPTING(true),
-    POST_RESULT_INTERCEPTING(true),
+    PRE_ARG_INTERCEPTING(true),
+    ARG_INTERCEPTING(true),
+    POST_ARG_INTERCEPTING(true),
+    BEFORE_TARGET(true),
+    AFTER_TARGET(false),
+    PRE_RESULT_INTERCEPTING(false),
+    RESULT_INTERCEPTING(false),
+    POST_RESULT_INTERCEPTING(false),
     ;
 
     public static final Stages DEFAULT = BEFORE_TARGET;
 
-    private final boolean after;
+    private final boolean beforeTarget;
 
     public int getOrder() {
-        if (after) {
-            return -this.ordinal();
-        } else {
+        if (beforeTarget) {
             return this.ordinal();
+        } else {
+            return -this.ordinal();
         }
     }
 }

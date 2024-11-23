@@ -1,7 +1,8 @@
 package io.codeone.framework.api.extoresult.domain.service;
 
 import io.codeone.framework.api.API;
-import io.codeone.framework.api.exception.CommonErrors;
+import io.codeone.framework.api.exception.CommonCodes;
+import io.codeone.framework.api.exception.CustomErrorMessage;
 import io.codeone.framework.api.extoresult.domain.exception.MyException;
 import io.codeone.framework.api.extoresult.domain.param.MyParam;
 import io.codeone.framework.api.response.Result;
@@ -15,13 +16,13 @@ public class TestApiExToResultService {
         return Result.success();
     }
 
-    @API(errorMessage = "What's wrong")
+    @CustomErrorMessage("What's wrong")
     public Result<Void> withCustomMessage() {
         throw new RuntimeException("BE CONFUSED AND PANIC!");
     }
 
     public Result<Void> apiError() {
-        throw new RuntimeException(new MyException(CommonErrors.INVALID_PARAM, new Exception("not the cause")));
+        throw new RuntimeException(new MyException(CommonCodes.INVALID_ARGS, "Invalid arguments", new Exception("not the cause")));
     }
 
     public Result<Void> invalidParam() {

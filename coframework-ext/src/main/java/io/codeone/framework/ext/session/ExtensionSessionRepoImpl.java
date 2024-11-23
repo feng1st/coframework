@@ -1,22 +1,19 @@
 package io.codeone.framework.ext.session;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-/**
- * {@inheritDoc}
- */
 @Repository
 public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
 
-    @Resource
+    @Autowired
     private ApplicationContext applicationContext;
 
     private final Map<Method, Integer> paramIndexMap = new HashMap<>();
@@ -24,17 +21,11 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
     private final Map<Class<? extends BizScenarioResolver>, BizScenarioResolver> resolverMap
             = new ConcurrentHashMap<>();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void computeParamIndexIfAbsent(Method method, Supplier<Integer> supplier) {
         paramIndexMap.computeIfAbsent(method, k -> supplier.get());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getParamIndex(Method method) {
         Integer index = paramIndexMap.get(method);
@@ -44,9 +35,6 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
         return index;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public BizScenarioResolver getResolver(Class<? extends BizScenarioResolver> clazz) {
         try {

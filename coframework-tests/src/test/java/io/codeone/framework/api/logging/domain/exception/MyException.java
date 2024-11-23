@@ -1,15 +1,14 @@
 package io.codeone.framework.api.logging.domain.exception;
 
-import io.codeone.framework.api.exception.ApiError;
 import io.codeone.framework.api.exception.BaseException;
 
 public class MyException extends BaseException {
 
-    public MyException(ApiError error) {
-        super(error);
+    public MyException(String code, String message) {
+        super(code, message);
     }
 
-    public MyException(ApiError error, Throwable cause) {
-        super(error, cause);
+    public MyException(String code, String message, Throwable cause) {
+        super(code, message, cause);
     }
 }

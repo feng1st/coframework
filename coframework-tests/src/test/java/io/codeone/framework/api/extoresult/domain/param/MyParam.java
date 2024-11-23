@@ -1,6 +1,6 @@
 package io.codeone.framework.api.extoresult.domain.param;
 
-import io.codeone.framework.api.request.BaseRequest;
+import io.codeone.framework.api.parameter.BaseParam;
 import io.codeone.framework.api.util.ArgChecker;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,10 +11,10 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Accessors(chain = true)
-public class MyParam extends BaseRequest {
+public class MyParam extends BaseParam {
 
     @Override
-    public void checkArgs() {
+    public void validate() {
         ArgChecker.check(false, "None accepted");
     }
 }

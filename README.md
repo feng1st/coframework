@@ -92,7 +92,7 @@ the `ApiError`.
 `CommonErrors` are the constants that represent commonly seen `ApiError`s, including two special ones:
 
 1. `CommonErrors#SUCCESS` which indicates there is no error.
-2. `CommonErrors#INVALID_PARAM` which is recommended to use when there is an `IllegalArgumentException`.
+2. `CommonErrors#INVALID_ARGS` which is recommended to use when there is an `IllegalArgumentException`.
 
 ### 1.4 Specifications and Standards
 
@@ -385,7 +385,7 @@ There is an example:
    @Service
    public class ActivityDomainServiceImpl implements ActivityDomainService {
    
-       @Resource
+       @Autowired
        // Uses the interface to refer to the ability.
        private ActivityAbility activityAbility;
    
@@ -599,7 +599,7 @@ There is an example that adds `@ExtensionSession` on the main entry service:
 @ExtensionSession(/* BizScenarioResolvePolicy.AUTO */)
 public class MyFacadeServiceImpl implements MyFacadeService {
 
-    @Resource
+    @Autowired
     private MyAbility myAbility;
 
     public void operates(MyParam param) {
@@ -789,7 +789,7 @@ public class Demo {
     private static final ChainSpec CHAIN_SPEC = ChainSpec.of(ChainNames.CHAIN_A,
             Path.of(NodeA.class, NodeB.class, NodeC.class, NodeD.class));
 
-    @Resource
+    @Autowired
     private ChainFactory chainFactory;
 
     public Data demo() {

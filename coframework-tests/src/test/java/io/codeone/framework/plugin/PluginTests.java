@@ -3,16 +3,15 @@ package io.codeone.framework.plugin;
 import io.codeone.framework.plugin.domain.service.TestPluginService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.annotation.Resource;
 
 @SpringBootTest
 public class PluginTests {
 
     private static final long RESULT_IF_ERROR = 0L;
 
-    @Resource
+    @Autowired
     private TestPluginService testPluginService;
 
     @Test

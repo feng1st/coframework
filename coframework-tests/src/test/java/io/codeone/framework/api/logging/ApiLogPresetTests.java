@@ -5,14 +5,13 @@ import io.codeone.framework.api.logging.domain.param.MyParam;
 import io.codeone.framework.api.logging.domain.service.TestApiLogPresetService;
 import io.codeone.framework.logging.BaseLogTests;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.annotation.Resource;
 
 @SpringBootTest
 public class ApiLogPresetTests extends BaseLogTests {
 
-    @Resource
+    @Autowired
     private TestApiLogPresetService testApiLogPresetService;
 
     @Test
@@ -21,7 +20,7 @@ public class ApiLogPresetTests extends BaseLogTests {
 
         assertLog(TestApiLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are not logged.
-                "||level=>INFO||method=>TestApiLogPresetService.none||success=>true||elapsed=>0");
+                "{level=INFO, method=TestApiLogPresetService.none, success=true, elapsed=0}");
     }
 
     @Test
@@ -30,7 +29,7 @@ public class ApiLogPresetTests extends BaseLogTests {
 
         assertLog(TestApiLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are logged.
-                "||level=>INFO||method=>TestApiLogPresetService.all||success=>true||elapsed=>0||result=>1||arg.param=>MyParam(super=BaseRequest(bizScenario=null), id=1)");
+                "{level=INFO, method=TestApiLogPresetService.all, success=true, elapsed=0, args={param=MyParam(super=BaseParam(bizScenario=null), id=1)}, result=1}");
     }
 
     @Test
@@ -41,7 +40,7 @@ public class ApiLogPresetTests extends BaseLogTests {
                 // Stack trace is not logged.
                 null,
                 // arg.param and error are not logged.
-                "||level=>ERROR||method=>TestApiLogPresetService.none||success=>false||code=>INVALID_PARAM||message=>id is null||elapsed=>0");
+                "{level=ERROR, method=TestApiLogPresetService.none, success=false, code=INVALID_ARGS, message=id is null, elapsed=0, exception=java.lang.IllegalArgumentException: id is null}");
     }
 
     @Test
@@ -52,6 +51,6 @@ public class ApiLogPresetTests extends BaseLogTests {
                 // Stack trace is logged.
                 IllegalArgumentException.class,
                 // arg.param and error are logged.
-                "||level=>ERROR||method=>TestApiLogPresetService.all||success=>false||code=>INVALID_PARAM||message=>id is null||elapsed=>0||error=>java.lang.IllegalArgumentException: id is null||arg.param=>MyParam(super=BaseRequest(bizScenario=null), id=null)");
+                "{level=ERROR, method=TestApiLogPresetService.all, success=false, code=INVALID_ARGS, message=id is null, elapsed=0, args={param=MyParam(super=BaseParam(bizScenario=null), id=null)}, exception=java.lang.IllegalArgumentException: id is null}");
     }
 }

@@ -1,136 +1,47 @@
 package io.codeone.framework.api.response;
 
+import io.codeone.framework.api.constant.PageConstants;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 
-/**
- * A container for paged data.
- *
- * <p>{@code Page} alone does not indicate the successfulness, code and message
- * of a request. To do that, please use {@link Result}{@code <Page>} instead.
- *
- * @param <T> the type of the contained data
- */
 @Data
-@Accessors(chain = true)
-public class Page<T> {
+public class Page<T> implements PageData<T> {
 
-    private static final int MIN_PAGE_INDEX = 1;
-
-    private static final int MIN_PAGE_SIZE = 1;
-
-    private static final long DEFAULT_TOTAL_COUNT = 0L;
-
-    /**
-     * The contained data.
-     */
     private List<T> data;
 
-    /**
-     * Current page of the returned data. It should start from 1. Normally it
-     * should be the same as the request.
-     */
-    private int pageIndex = MIN_PAGE_INDEX;
+    private int pageIndex = PageConstants.START_PAGE_INDEX;
 
-    /**
-     * The number of records one page has. It must be a positive integer.
-     * Normally it should be the same as the request.
-     */
-    private int pageSize = MIN_PAGE_SIZE;
+    private int pageSize = PageConstants.DEFAULT_PAGE_SIZE;
 
-    /**
-     * The total number of all records. It may be zero if the total number is
-     * impossible or expensive to be calculated, for example, an endless feeds.
-     */
-    private long totalCount = DEFAULT_TOTAL_COUNT;
+    private Long totalCount;
 
-    /**
-     * Constructs an empty page (containing no data).
-     *
-     * @param pageIndex current page of the returned data
-     * @param pageSize  the number of records one page has
-     * @param <T>       the type of the contained data
-     * @return the empty page
-     */
-    public static <T> Page<T> empty(int pageIndex, int pageSize) {
-        return page(null, pageIndex, pageSize);
+    public static <T> Page<T> of(PageData<T> pageData) {
+        return of(pageData.getData(), pageData.getPageIndex(), pageData.getPageSize(), pageData.getTotalCount());
     }
 
-    /**
-     * Constructs a page with data and paging information, but does not give the
-     * total number of records.
-     *
-     * @param data      the contained data, should be a list
-     * @param pageIndex current page of the returned data
-     * @param pageSize  the number of records one page has
-     * @param <T>       the type of the contained data
-     * @return the constructed page
-     */
-    public static <T> Page<T> page(List<T> data, int pageIndex, int pageSize) {
-        return page(data, pageIndex, pageSize, DEFAULT_TOTAL_COUNT);
+    public static <T> Page<T> of(int pageIndex, int pageSize) {
+        return of(null, pageIndex, pageSize, null);
     }
 
-    /**
-     * Constructs a page with data, paging information, and the total number of
-     * all records.
-     *
-     * @param data       the contained data, should be a list
-     * @param pageIndex  current page of the returned data
-     * @param pageSize   the number of records one page has
-     * @param totalCount the total number of all records
-     * @param <T>        the type of the contained data
-     * @return the constructed page
-     */
-    public static <T> Page<T> page(List<T> data, int pageIndex, int pageSize, long totalCount) {
-        return new Page<T>()
-                .setData(data)
-                .setPageIndex(pageIndex)
-                .setPageSize(pageSize)
-                .setTotalCount(totalCount);
+    public static <T> Page<T> of(List<T> data, int pageIndex, int pageSize) {
+        return of(data, pageIndex, pageSize, null);
     }
 
-    /**
-     * Sets current page of the returned data. It should start from 1.
-     *
-     * @param pageIndex current page of the returned data
-     * @return itself (chaining)
-     */
-    public Page<T> setPageIndex(int pageIndex) {
-        this.pageIndex = Math.max(pageIndex, MIN_PAGE_INDEX);
-        return this;
+    public static <T> Page<T> of(List<T> data, int pageIndex, int pageSize, Long totalCount) {
+        Page<T> page = new Page<>();
+        page.setData(data);
+        page.setPageIndex(pageIndex);
+        page.setPageSize(pageSize);
+        page.setTotalCount(totalCount);
+        return page;
     }
 
-    /**
-     * Sets the number of records in one page. It must be a positive integer.
-     *
-     * @param pageSize the number of records in one page
-     * @return itself (chaining)
-     */
-    public Page<T> setPageSize(int pageSize) {
-        this.pageSize = Math.max(pageSize, MIN_PAGE_SIZE);
-        return this;
+    public void setPageIndex(int pageIndex) {
+        this.pageIndex = Math.max(pageIndex, PageConstants.START_PAGE_INDEX);
     }
 
-    /**
-     * Returns {@code true} if it contains no data, otherwise {@code false}.
-     *
-     * @return {@code true} if it contains no data, otherwise {@code false}
-     */
-    public boolean isEmpty() {
-        return data == null || data.isEmpty();
-    }
-
-    /**
-     * Returns {@code true} if there is more page, otherwise {@code false}.
-     *
-     * <p>Please note that this result is incorrect if the {@code totalCount} is
-     * omitted and has the default value 0.
-     *
-     * @return {@code true} if there is more page, otherwise {@code false}
-     */
-    public boolean getHasMore() {
-        return (long) pageSize * pageIndex < totalCount;
+    public void setPageSize(int pageSize) {
+        this.pageSize = Math.max(pageSize, PageConstants.MIN_PAGE_SIZE);
     }
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
 import java.util.Objects;
@@ -178,7 +179,7 @@ public class Context implements BizScenarioParam {
     }
 
     public void preExecute() {
-        mdc.pushMdc();
+        mdc.stackPush();
 
         if (onEnterNode != null) {
             onEnterNode.accept(this);
@@ -186,25 +187,28 @@ public class Context implements BizScenarioParam {
     }
 
     public void postExecute(Chainable chainable, Object resultOrException, long elapsed) {
-        Map<Object, Object> map = mdc.popMdc();
+        Map<Object, Object> paramMap = mdc.stackPop();
 
         if (chainable instanceof Silent) {
             return;
         }
 
-        map.put("_chain_", chainName);
-        map.put("_node_", getTargetClass(chainable).getSimpleName());
+        Map<Object, Object> map = mdc.stackPop();
+        map.put("chain", chainName);
+        map.put("node", getTargetClass(chainable).getSimpleName());
         if (bizScenario != null) {
-            map.put("_bizScenario_", bizScenario);
+            map.put("bizId", bizScenario.getBizId());
+            map.put("scenario", bizScenario.getScenario());
         }
+        map.put("elapsed", elapsed);
         if (resultOrException instanceof Throwable) {
-            Throwable throwable = (Throwable) resultOrException;
-            map.put("_exception_", throwable.getClass().getSimpleName());
-            map.put("_message_", throwable.getMessage());
+            map.put("exception", resultOrException);
         } else if (Objects.equals(resultOrException, false)) {
-            map.put("_break_", true);
+            map.put("break", true);
         }
-        map.put("_elapsed_", elapsed);
+        if (!CollectionUtils.isEmpty(paramMap)) {
+            map.put("params", paramMap);
+        }
 
         if (resultOrException instanceof Throwable) {
             log.error("{}", map);

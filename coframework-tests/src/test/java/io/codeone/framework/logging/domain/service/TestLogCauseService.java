@@ -1,6 +1,6 @@
 package io.codeone.framework.logging.domain.service;
 
-import io.codeone.framework.api.exception.CommonErrors;
+import io.codeone.framework.api.exception.CommonCodes;
 import io.codeone.framework.api.response.Result;
 import io.codeone.framework.logging.Logging;
 import io.codeone.framework.logging.domain.exception.MyException;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class TestLogCauseService {
 
     public Result<Void> apiError() {
-        throw new RuntimeException(new MyException(CommonErrors.INVALID_PARAM, new Exception("not the cause")));
+        throw new RuntimeException(new MyException(CommonCodes.INVALID_ARGS, "Invalid arguments", new Exception("not the cause")));
     }
 
     public Result<Void> invalidParam() {

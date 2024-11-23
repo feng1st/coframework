@@ -4,14 +4,13 @@ import ch.qos.logback.classic.Level;
 import io.codeone.framework.logging.domain.param.MyParam;
 import io.codeone.framework.logging.domain.service.TestLogPresetService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.annotation.Resource;
 
 @SpringBootTest
 public class LogPresetTests extends BaseLogTests {
 
-    @Resource
+    @Autowired
     private TestLogPresetService testLogPresetService;
 
     @Test
@@ -20,7 +19,7 @@ public class LogPresetTests extends BaseLogTests {
 
         assertLog(TestLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are not logged.
-                "||level=>INFO||method=>TestLogPresetService.none||success=>true||elapsed=>0");
+                "{level=INFO, method=TestLogPresetService.none, success=true, elapsed=0}");
     }
 
     @Test
@@ -29,7 +28,7 @@ public class LogPresetTests extends BaseLogTests {
 
         assertLog(TestLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are logged.
-                "||level=>INFO||method=>TestLogPresetService.all||success=>true||elapsed=>0||result=>1||arg.param=>MyParam(id=1, address=MyParam.Address(city=test))");
+                "{level=INFO, method=TestLogPresetService.all, success=true, elapsed=0, args={param=MyParam(id=1, address=MyParam.Address(city=test))}, result=1}");
     }
 
     @Test
@@ -43,7 +42,7 @@ public class LogPresetTests extends BaseLogTests {
                 // Stack trace is not logged.
                 null,
                 // arg.param and error are not logged.
-                "||level=>ERROR||method=>TestLogPresetService.none||success=>false||code=>NullPointerException||elapsed=>0");
+                "{level=ERROR, method=TestLogPresetService.none, success=false, code=NullPointerException, elapsed=0, exception=java.lang.NullPointerException}");
     }
 
     @Test
@@ -57,6 +56,6 @@ public class LogPresetTests extends BaseLogTests {
                 // Stack trace is logged.
                 NullPointerException.class,
                 // arg.param and error are logged.
-                "||level=>ERROR||method=>TestLogPresetService.all||success=>false||code=>NullPointerException||elapsed=>0||error=>java.lang.NullPointerException||arg.param=>MyParam(id=null, address=null)");
+                "{level=ERROR, method=TestLogPresetService.all, success=false, code=NullPointerException, elapsed=0, args={param=MyParam(id=null, address=null)}, exception=java.lang.NullPointerException}");
     }
 }

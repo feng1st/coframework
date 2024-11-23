@@ -6,14 +6,13 @@ import io.codeone.framework.ext.session.domain.service.TestExtSessionService;
 import io.codeone.framework.ext.shared.constants.ExtConstants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.annotation.Resource;
 
 @SpringBootTest
 public class ExtSessionTests {
 
-    @Resource
+    @Autowired
     private TestExtSessionService testExtSessionService;
 
     @Test

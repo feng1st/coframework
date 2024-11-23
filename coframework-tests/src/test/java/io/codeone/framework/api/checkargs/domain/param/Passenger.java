@@ -1,7 +1,7 @@
 package io.codeone.framework.api.checkargs.domain.param;
 
 import io.codeone.framework.api.checkargs.domain.constants.GandalfsQuotes;
-import io.codeone.framework.api.request.BaseRequest;
+import io.codeone.framework.api.parameter.BaseParam;
 import io.codeone.framework.api.util.ArgChecker;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Accessors(chain = true)
-public class Passenger extends BaseRequest {
+public class Passenger extends BaseParam {
 
     private static final Set<String> DEMONS;
 
@@ -28,7 +28,7 @@ public class Passenger extends BaseRequest {
     private String name;
 
     @Override
-    public void checkArgs() {
+    public void validate() {
         ArgChecker.checkNotIn(name.toLowerCase(), DEMONS,
                 GandalfsQuotes.YOU_SHALL_NOT_PASS);
     }

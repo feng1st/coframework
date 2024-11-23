@@ -4,14 +4,13 @@ import ch.qos.logback.classic.Level;
 import io.codeone.framework.logging.domain.param.MyParam;
 import io.codeone.framework.logging.domain.service.TestLogSpelService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.annotation.Resource;
 
 @SpringBootTest
 public class LogSpelTests extends BaseLogTests {
 
-    @Resource
+    @Autowired
     private TestLogSpelService testLogSpelService;
 
     @Test
@@ -20,7 +19,7 @@ public class LogSpelTests extends BaseLogTests {
 
         assertLog(TestLogSpelService.class.getName(), Level.INFO, null,
                 // arg.bizId, arg.id and arg.ret have values.
-                "||level=>INFO||method=>TestLogSpelService.keyPairs||success=>true||elapsed=>0||result=>MyParam(id=1, address=MyParam.Address(city=test))||arg.city=>test||arg.id=>1||arg.ret=>1");
+                "{level=INFO, method=TestLogSpelService.keyPairs, success=true, elapsed=0, args={city=test, id=1, ret=1}, result=MyParam(id=1, address=MyParam.Address(city=test))}");
     }
 
     @Test
@@ -29,7 +28,7 @@ public class LogSpelTests extends BaseLogTests {
 
         assertLog(TestLogSpelService.class.getName(), Level.INFO, null,
                 // '#arg0?.bizScenario?.bizId' doesn't throw when bizScenario is null.
-                "||level=>INFO||method=>TestLogSpelService.keyPairs||success=>true||elapsed=>0||result=>MyParam(id=1, address=null)||arg.city=>null||arg.id=>1||arg.ret=>1");
+                "{level=INFO, method=TestLogSpelService.keyPairs, success=true, elapsed=0, args={city=null, id=1, ret=1}, result=MyParam(id=1, address=null)}");
     }
 
     @Test
@@ -38,7 +37,7 @@ public class LogSpelTests extends BaseLogTests {
 
         assertLog(TestLogSpelService.class.getName(), Level.INFO, null,
                 // success=>true by evaluation.
-                "||level=>INFO||method=>TestLogSpelService.code||success=>true||code=>1||message=>1||elapsed=>0||result=>MyParam(id=1, address=null)||arg.param=>MyParam(id=1, address=null)");
+                "{level=INFO, method=TestLogSpelService.code, success=true, code=1, message=1, elapsed=0, args={param=MyParam(id=1, address=null)}, result=MyParam(id=1, address=null)}");
     }
 
     @Test
@@ -47,6 +46,6 @@ public class LogSpelTests extends BaseLogTests {
 
         assertLog(TestLogSpelService.class.getName(), Level.WARN, null,
                 // success=>false by evaluation.
-                "||level=>WARN||method=>TestLogSpelService.code||success=>false||code=>2||message=>2||elapsed=>0||result=>MyParam(id=2, address=null)||arg.param=>MyParam(id=2, address=null)");
+                "{level=WARN, method=TestLogSpelService.code, success=false, code=2, message=2, elapsed=0, args={param=MyParam(id=2, address=null)}, result=MyParam(id=2, address=null)}");
     }
 }

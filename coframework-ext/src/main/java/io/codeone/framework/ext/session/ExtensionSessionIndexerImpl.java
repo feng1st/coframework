@@ -3,37 +3,28 @@ package io.codeone.framework.ext.session;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
 import io.codeone.framework.ext.util.ExtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-/**
- * {@inheritDoc}
- */
 @Component
 public class ExtensionSessionIndexerImpl implements ExtensionSessionIndexer {
 
-    @Resource
+    @Autowired
     private ApplicationContext applicationContext;
 
-    @Resource
+    @Autowired
     private ExtensionSessionRepo extensionSessionRepo;
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void index(Method method, ExtensionSession annotation) {
         extensionSessionRepo.computeParamIndexIfAbsent(method,
                 () -> getParamIndex(method, annotation));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public BizScenario resolve(Method method, Object[] args, ExtensionSession session) {
         int index = extensionSessionRepo.getParamIndex(method);

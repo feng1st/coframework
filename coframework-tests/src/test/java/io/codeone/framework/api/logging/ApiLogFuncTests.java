@@ -5,23 +5,22 @@ import io.codeone.framework.api.logging.domain.exception.MyException;
 import io.codeone.framework.api.logging.domain.service.TestApiLogFuncService;
 import io.codeone.framework.logging.BaseLogTests;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.annotation.Resource;
 
 @SpringBootTest
 public class ApiLogFuncTests extends BaseLogTests {
 
-    @Resource
+    @Autowired
     private TestApiLogFuncService testApiLogFuncService;
 
     @Test
     void testCustomMessage() {
         testApiLogFuncService.customMessage();
 
-        assertLog(TestApiLogFuncService.class.getName(), Level.ERROR, null,
+        assertLog(TestApiLogFuncService.class.getName(), Level.ERROR, MyException.class,
                 // Logged message is not from API.errorMessage.
-                "||level=>ERROR||method=>TestApiLogFuncService.customMessage||success=>false||code=>INVALID_PARAM||message=>Invalid parameters||elapsed=>0");
+                "{level=ERROR, method=TestApiLogFuncService.customMessage, success=false, code=INVALID_ARGS, message=Invalid arguments, elapsed=0, exception=io.codeone.framework.api.logging.domain.exception.MyException: Invalid arguments}");
     }
 
     @Test
@@ -31,6 +30,6 @@ public class ApiLogFuncTests extends BaseLogTests {
         assertLog(TestApiLogFuncService.class.getName(), Level.ERROR,
                 // Has no stack trace since it's not a SysError.
                 MyException.class,
-                "||level=>ERROR||method=>TestApiLogFuncService.stackTrace||success=>false||code=>INVALID_PARAM||message=>Invalid parameters||elapsed=>0||error=>io.codeone.framework.api.logging.domain.exception.MyException: Invalid parameters");
+                "{level=ERROR, method=TestApiLogFuncService.stackTrace, success=false, code=INVALID_ARGS, message=Invalid arguments, elapsed=0, exception=io.codeone.framework.api.logging.domain.exception.MyException: Invalid arguments}");
     }
 }

@@ -1,9 +1,6 @@
 package io.codeone.framework.chain.context;
 
-import java.util.Deque;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class MDC {
 
@@ -11,13 +8,13 @@ public class MDC {
 
     public void put(Object key, Object value) {
         Deque<Map<Object, Object>> stack = threadLocal.get();
-        assert stack != null;
-        Map<Object, Object> mdc = stack.peek();
-        assert mdc != null;
-        mdc.put(key, value);
+        Objects.requireNonNull(stack);
+        Map<Object, Object> map = stack.peek();
+        Objects.requireNonNull(map);
+        map.put(key, value);
     }
 
-    public void pushMdc() {
+    public void stackPush() {
         Deque<Map<Object, Object>> stack = threadLocal.get();
         if (stack == null) {
             stack = new LinkedList<>();
@@ -26,13 +23,13 @@ public class MDC {
         stack.push(new LinkedHashMap<>());
     }
 
-    public Map<Object, Object> popMdc() {
+    public Map<Object, Object> stackPop() {
         Deque<Map<Object, Object>> stack = threadLocal.get();
-        assert stack != null;
-        Map<Object, Object> mdc = stack.pop();
+        Objects.requireNonNull(stack);
+        Map<Object, Object> map = stack.pop();
         if (stack.isEmpty()) {
             threadLocal.remove();
         }
-        return mdc;
+        return map;
     }
 }

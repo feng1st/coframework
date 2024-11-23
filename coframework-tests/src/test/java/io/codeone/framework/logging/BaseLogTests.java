@@ -39,7 +39,9 @@ public class BaseLogTests {
         Assertions.assertEquals(errClass == null ? null : errClass.getName(),
                 argument.getValue().getThrowableProxy() == null ? null
                         : argument.getValue().getThrowableProxy().getClassName());
-        Assertions.assertEquals(msg, argument.getValue().getMessage().replaceAll("elapsed=>\\d+", "elapsed=>0"));
+        Assertions.assertEquals(msg, argument.getValue().getFormattedMessage()
+                .replaceAll("elapsed=>\\d+", "elapsed=>0")
+                .replaceAll("elapsed=\\d+", "elapsed=0"));
     }
 
     protected void assertLogs(List<String> msgs) {
@@ -49,7 +51,9 @@ public class BaseLogTests {
         Assertions.assertEquals(msgs.size(), argument.getAllValues().size());
         for (int i = 0; i < msgs.size(); i++) {
             Assertions.assertEquals(msgs.get(i),
-                    argument.getAllValues().get(i).getMessage().replaceAll("elapsed=>\\d+", "elapsed=>0"));
+                    argument.getAllValues().get(i).getFormattedMessage()
+                            .replaceAll("elapsed=>\\d+", "elapsed=>0")
+                            .replaceAll("elapsed=\\d+", "elapsed=0"));
         }
     }
 }
