@@ -1,6 +1,5 @@
 package io.codeone.framework.ext.session;
 
-import io.codeone.framework.api.API;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioContext;
 import io.codeone.framework.plugin.Plug;
@@ -13,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
 
-@Plug(value = Stages.BEFORE_TARGET, targetAnnotations = {ExtensionSession.class, API.class})
+@Plug(value = Stages.BEFORE_TARGET, targetAnnotations = ExtensionSession.class)
 public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
 
     @Autowired

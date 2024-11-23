@@ -18,10 +18,6 @@
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-sdk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.codeone</groupId>
             <artifactId>coframework-plugin</artifactId>
         </dependency>
 

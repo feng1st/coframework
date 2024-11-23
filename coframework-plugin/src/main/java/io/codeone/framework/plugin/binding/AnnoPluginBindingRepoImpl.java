@@ -1,5 +1,6 @@
 package io.codeone.framework.plugin.binding;
 
+import io.codeone.framework.plugin.AnnoPluginBinding;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import org.springframework.beans.BeansException;
@@ -22,15 +23,20 @@ public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, Anno
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        if (!(beanFactory instanceof DefaultListableBeanFactory)) {
-            return;
+        if (beanFactory instanceof DefaultListableBeanFactory) {
+            process((DefaultListableBeanFactory) beanFactory);
         }
+    }
 
-        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
+    @Override
+    public Set<Class<? extends Plugin>> getPluginClasses(Class<? extends Annotation> annoType) {
+        return map.get(annoType);
+    }
 
-        String[] pluginBeanNames = defaultListableBeanFactory.getBeanNamesForType(Plugin.class);
+    private void process(DefaultListableBeanFactory beanFactory) {
+        String[] pluginBeanNames = beanFactory.getBeanNamesForType(Plugin.class);
         for (String pluginBeanName : pluginBeanNames) {
-            BeanDefinition pluginDefinition = defaultListableBeanFactory.getBeanDefinition(pluginBeanName);
+            BeanDefinition pluginDefinition = beanFactory.getBeanDefinition(pluginBeanName);
             String pluginClassName = pluginDefinition.getBeanClassName();
             Class<? extends Plugin> pluginClass;
             try {
@@ -49,12 +55,10 @@ public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, Anno
             }
         }
 
-        STATIC_BINDINGS.forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
-    }
-
-    @Override
-    public Set<Class<? extends Plugin>> getPluginClasses(Class<? extends Annotation> annoType) {
-        return map.get(annoType);
+        STATIC_BINDINGS
+                .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
+        beanFactory.getBeansOfType(AnnoPluginBinding.class).values()
+                .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
     }
 
     private void bind(Class<? extends Annotation> annoType, Class<? extends Plugin> pluginClass) {

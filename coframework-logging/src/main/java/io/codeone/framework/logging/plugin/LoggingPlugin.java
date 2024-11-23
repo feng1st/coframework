@@ -1,6 +1,5 @@
 package io.codeone.framework.logging.plugin;
 
-import io.codeone.framework.api.API;
 import io.codeone.framework.api.response.ApiResult;
 import io.codeone.framework.api.response.Page;
 import io.codeone.framework.api.response.PageData;
@@ -24,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@Plug(value = Stages.AFTER_TARGET, targetAnnotations = {Logging.class, API.class})
+@Plug(value = Stages.AFTER_TARGET, targetAnnotations = Logging.class)
 @Slf4j(topic = "logging")
 public class LoggingPlugin implements Plugin {
 
