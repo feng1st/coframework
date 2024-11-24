@@ -41,32 +41,31 @@ public class ExtensibleInvocationHandler<T> implements InvocationHandler {
     }
 
     private BizScenario retrieveBizScenario(Object[] args, Method method) {
-        BizScenario bizScenario = null;
+        BizScenario bizScenario;
+
         int paramIndex = bizScenarioParamRepo.getParamIndex(method);
         if (paramIndex >= 0) {
             BizScenarioParam bizScenarioParam = (BizScenarioParam) args[paramIndex];
-            if (bizScenarioParam != null) {
-                bizScenario = bizScenarioParam.getBizScenario();
+            if (bizScenarioParam != null
+                    && (bizScenario = bizScenarioParam.getBizScenario()) != null) {
+                return bizScenario;
             }
         }
 
-        if (bizScenario == null) {
-            bizScenario = BizScenarioContext.getBizScenario();
+        if ((bizScenario = BizScenarioContext.getBizScenario()) != null) {
+            return bizScenario;
         }
 
-        if (bizScenario == null) {
-            if (paramIndex >= 0) {
-                throw new IllegalStateException(String.format(
-                        "Failed to retrieve BizScenario from parameter %d of method '%s' or current context",
-                        paramIndex,
-                        method));
-            } else {
-                throw new IllegalStateException(String.format(
-                        "Failed to retrieve BizScenario from current context for method '%s'",
-                        method));
-            }
+        if (paramIndex >= 0) {
+            throw new IllegalStateException(String.format(
+                    "Failed to retrieve BizScenario from parameter %d of method '%s' or current context",
+                    paramIndex,
+                    method));
+        } else {
+            throw new IllegalStateException(String.format(
+                    "Failed to retrieve BizScenario from current context for method '%s'",
+                    method));
         }
-        return bizScenario;
     }
 
     private Object invoke(Method method, Object[] args, BizScenario bizScenario) throws Throwable {
