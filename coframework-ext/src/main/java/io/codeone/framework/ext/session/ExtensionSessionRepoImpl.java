@@ -45,10 +45,12 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             return null;
         }
 
+        BizScenario bizScenario;
         if (index >= 0) {
             BizScenarioParam bizScenarioParam = (BizScenarioParam) args[index];
-            if (bizScenarioParam != null && bizScenarioParam.getBizScenario() != null) {
-                return bizScenarioParam.getBizScenario();
+            if (bizScenarioParam != null
+                    && (bizScenario = bizScenarioParam.getBizScenario()) != null) {
+                return bizScenario;
             }
             if (session != null) {
                 throw new IllegalStateException(String.format(
@@ -70,22 +72,17 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
                     "Cannot load BizScenarioResolver '%s'",
                     session.customResolver().getSimpleName()));
         }
-
-        BizScenario bizScenario = resolver.resolve(args);
-        if (bizScenario == null) {
-            throw new IllegalStateException(String.format(
-                    "BizScenario could not be resolved using resolver '%s' for method '%s'",
-                    session.customResolver().getSimpleName(),
-                    method));
+        if ((bizScenario = resolver.resolve(args)) != null) {
+            return bizScenario;
         }
-        return bizScenario;
+        throw new IllegalStateException(String.format(
+                "BizScenario could not be resolved using resolver '%s' for method '%s'",
+                session.customResolver().getSimpleName(),
+                method));
     }
 
     private int parseParamIndex(Method method, ExtensionSession session) {
         if (session != null) {
-            if (session.value() == BizScenarioResolvePolicy.IGNORE) {
-                return INDEX_IGNORE;
-            }
             if (session.value() == BizScenarioResolvePolicy.FIRST) {
                 return Optional.ofNullable(parseFirst(method))
                         .orElseThrow(() -> new IllegalStateException(String.format(
@@ -107,25 +104,25 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
             if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
                 return Objects.requireNonNull(parseCustomResolver(method, session));
             }
+            if (session.value() != BizScenarioResolvePolicy.AUTO) {
+                return INDEX_IGNORE;
+            }
         }
 
-        Integer paramIndex = parseCustomResolver(method, session);
-        if (paramIndex != null) {
+        Integer paramIndex;
+        if ((paramIndex = parseCustomResolver(method, session)) != null) {
             return paramIndex;
         }
-        paramIndex = parseSpecified(method);
-        if (paramIndex != null) {
+        if ((paramIndex = parseSpecified(method)) != null) {
             return paramIndex;
         }
-        paramIndex = parseFirst(method);
-        if (paramIndex != null) {
+        if ((paramIndex = parseFirst(method)) != null) {
             return paramIndex;
         }
 
-        // session.value() == BizScenarioResolvePolicy.AUTO
         if (session != null) {
             throw new IllegalStateException(String.format(
-                    "No BizScenarioParam found in method '%s'",
+                    "No BizScenario source found in method '%s'",
                     method));
         }
         return INDEX_IGNORE;
@@ -174,13 +171,17 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
         if (session == null) {
             return null;
         }
-        if (session.customResolver() == BizScenarioResolver.class) {
-            if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
-                throw new IllegalStateException(String.format(
-                        "No BizScenarioResolver specified for method '%s'",
-                        method));
-            }
+        if (session.value() != BizScenarioResolvePolicy.CUSTOM
+                && session.value() != BizScenarioResolvePolicy.AUTO) {
             return null;
+        }
+        if (session.customResolver() == BizScenarioResolver.class) {
+            if (session.value() == BizScenarioResolvePolicy.AUTO) {
+                return null;
+            }
+            throw new IllegalStateException(String.format(
+                    "No BizScenarioResolver specified for method '%s'",
+                    method));
         }
         try {
             applicationContext.getBean(session.customResolver());
