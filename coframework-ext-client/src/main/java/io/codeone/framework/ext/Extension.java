@@ -1,5 +1,6 @@
 package io.codeone.framework.ext;
 
+import io.codeone.framework.ext.util.BizScenarioUtils;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
@@ -11,9 +12,9 @@ import java.lang.annotation.*;
 @Component
 public @interface Extension {
 
-    String[] bizId() default {BizScenario.ANY};
+    String[] bizId() default {BizScenarioUtils.ANY};
 
-    String[] scenario() default {BizScenario.ANY};
+    String[] scenario() default {BizScenarioUtils.ANY};
 
     String[] scenarios() default {};
 }
