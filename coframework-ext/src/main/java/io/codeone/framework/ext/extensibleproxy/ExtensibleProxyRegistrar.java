@@ -1,6 +1,6 @@
 package io.codeone.framework.ext.extensibleproxy;
 
-import io.codeone.framework.ext.Extension;
+import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;

@@ -1,4 +1,7 @@
-package io.codeone.framework.ext.session;
+package io.codeone.framework.ext.annotation;
+
+import io.codeone.framework.ext.BizScenarioResolver;
+import io.codeone.framework.ext.constant.BizScenarioResolvePolicy;
 
 import java.lang.annotation.*;
 

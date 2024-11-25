@@ -1,9 +1,9 @@
 package io.codeone.framework.ext.session.domain.service;
 
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.RouteBy;
-import io.codeone.framework.ext.session.BizScenarioResolvePolicy;
-import io.codeone.framework.ext.session.ExtensionSession;
+import io.codeone.framework.ext.annotation.ExtensionSession;
+import io.codeone.framework.ext.annotation.RouteBy;
+import io.codeone.framework.ext.constant.BizScenarioResolvePolicy;
 import io.codeone.framework.ext.session.ext.shared.resolve.AdminNameBizScenarioResolver;
 import io.codeone.framework.ext.session.sdk.ability.TestExtSessionAbility;
 import org.springframework.beans.factory.annotation.Autowired;

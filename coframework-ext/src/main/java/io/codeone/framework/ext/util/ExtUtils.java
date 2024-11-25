@@ -1,7 +1,7 @@
 package io.codeone.framework.ext.util;
 
 import io.codeone.framework.ext.BizScenarioParam;
-import io.codeone.framework.ext.Extensible;
+import io.codeone.framework.ext.annotation.Extensible;
 import lombok.experimental.UtilityClass;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;

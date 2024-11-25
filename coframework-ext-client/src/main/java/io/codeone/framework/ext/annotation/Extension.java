@@ -1,4 +1,4 @@
-package io.codeone.framework.ext;
+package io.codeone.framework.ext.annotation;
 
 import io.codeone.framework.ext.util.BizScenarioUtils;
 import org.springframework.stereotype.Component;

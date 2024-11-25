@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.session;
+package io.codeone.framework.ext.constant;
 
 public enum BizScenarioResolvePolicy {
     AUTO,

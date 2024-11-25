@@ -1,4 +1,4 @@
-package io.codeone.framework.ext;
+package io.codeone.framework.ext.annotation;
 
 import java.lang.annotation.*;
 
@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Extensible
-public @interface Ability {
+public @interface ExtensionPoint {
 
     String name() default "";
 

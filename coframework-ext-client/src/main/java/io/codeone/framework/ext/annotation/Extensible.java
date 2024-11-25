@@ -1,4 +1,4 @@
-package io.codeone.framework.ext;
+package io.codeone.framework.ext.annotation;
 
 import java.lang.annotation.*;
 

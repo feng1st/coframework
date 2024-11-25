@@ -1,8 +1,8 @@
 package io.codeone.framework.ext.bizscenarioparam;
 
-import io.codeone.framework.ext.Extension;
-import io.codeone.framework.ext.RouteBy;
-import io.codeone.framework.ext.RouteByContext;
+import io.codeone.framework.ext.annotation.Extension;
+import io.codeone.framework.ext.annotation.RouteBy;
+import io.codeone.framework.ext.annotation.RouteByContext;
 import io.codeone.framework.ext.util.ExtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;

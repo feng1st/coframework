@@ -2,6 +2,7 @@ package io.codeone.framework.ext.session;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioContext;
+import io.codeone.framework.ext.annotation.ExtensionSession;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.PluginBindingProcessor;

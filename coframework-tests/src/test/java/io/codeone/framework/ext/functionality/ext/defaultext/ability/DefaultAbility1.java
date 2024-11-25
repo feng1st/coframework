@@ -1,7 +1,7 @@
 package io.codeone.framework.ext.functionality.ext.defaultext.ability;
 
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.Extension;
+import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.functionality.sdk.ability.Ability1;
 
 @Extension

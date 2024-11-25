@@ -2,7 +2,10 @@ package io.codeone.framework.ext.session;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
-import io.codeone.framework.ext.RouteBy;
+import io.codeone.framework.ext.BizScenarioResolver;
+import io.codeone.framework.ext.annotation.ExtensionSession;
+import io.codeone.framework.ext.annotation.RouteBy;
+import io.codeone.framework.ext.constant.BizScenarioResolvePolicy;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
