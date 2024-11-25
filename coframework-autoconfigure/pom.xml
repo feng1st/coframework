@@ -18,10 +18,6 @@
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-ext</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.codeone</groupId>
             <artifactId>coframework-logging</artifactId>
         </dependency>
         <dependency>
@@ -31,6 +27,10 @@
         <dependency>
             <groupId>io.codeone</groupId>
             <artifactId>coframework-chain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-ext</artifactId>
         </dependency>
     </dependencies>
 

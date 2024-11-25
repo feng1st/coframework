@@ -5,6 +5,7 @@ import io.codeone.framework.api.response.Page;
 import io.codeone.framework.api.response.PageData;
 import io.codeone.framework.api.util.ApiExceptionUtils;
 import io.codeone.framework.api.util.ApiResultUtils;
+import io.codeone.framework.log.util.LogUtils;
 import io.codeone.framework.logging.Logging;
 import io.codeone.framework.logging.spel.LoggingExpressionParser;
 import io.codeone.framework.plugin.Plug;
@@ -90,14 +91,14 @@ public class LoggingPlugin implements Plugin {
         if (level == Level.ERROR) {
             if (logging == null
                     || logging.logException()) {
-                logger.error("{}", map, throwable);
+                logger.error("{}", LogUtils.format(map), throwable);
             } else {
-                logger.error("{}", map);
+                logger.error("{}", LogUtils.format(map));
             }
         } else if (level == Level.WARN) {
-            logger.warn("{}", map);
+            logger.warn("{}", LogUtils.format(map));
         } else {
-            logger.info("{}", map);
+            logger.info("{}", LogUtils.format(map));
         }
     }
 

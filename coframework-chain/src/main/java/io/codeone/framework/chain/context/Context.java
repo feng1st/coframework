@@ -4,6 +4,7 @@ import io.codeone.framework.chain.Chainable;
 import io.codeone.framework.chain.log.Quiet;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
+import io.codeone.framework.log.util.LogUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -212,9 +213,9 @@ public class Context implements BizScenarioParam {
         }
 
         if (resultOrException instanceof Throwable) {
-            log.error("{}", map);
+            log.error("{}", LogUtils.format(map));
         } else {
-            log.info("{}", map);
+            log.info("{}", LogUtils.format(map));
         }
     }
 
