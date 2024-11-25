@@ -1,8 +1,8 @@
 package io.codeone.framework.plugin.aop;
 
 import io.codeone.framework.plugin.Plugin;
-import io.codeone.framework.plugin.PluginBindingProcessor;
-import io.codeone.framework.plugin.binding.MethodPluginBindingRepo;
+import io.codeone.framework.plugin.binding.PluginBindingProcessor;
+import io.codeone.framework.plugin.binding.repo.MethodPluginBindingRepo;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;

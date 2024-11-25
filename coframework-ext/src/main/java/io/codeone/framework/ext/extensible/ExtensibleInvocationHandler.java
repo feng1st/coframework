@@ -1,9 +1,9 @@
-package io.codeone.framework.ext.extensibleproxy;
+package io.codeone.framework.ext.extensible;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioContext;
 import io.codeone.framework.ext.BizScenarioParam;
-import io.codeone.framework.ext.bizscenarioparam.BizScenarioParamRepo;
+import io.codeone.framework.ext.bizscenario.BizScenarioParamRepo;
 import io.codeone.framework.ext.extension.ExtensionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;

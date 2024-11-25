@@ -1,6 +1,6 @@
 package io.codeone.framework.plugin;
 
-import io.codeone.framework.plugin.util.Invokable;
+import io.codeone.framework.plugin.function.Invokable;
 
 import java.lang.reflect.Method;
 

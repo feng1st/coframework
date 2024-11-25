@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.util;
+package io.codeone.framework.plugin.function;
 
 @FunctionalInterface
 public interface Invokable<T> {

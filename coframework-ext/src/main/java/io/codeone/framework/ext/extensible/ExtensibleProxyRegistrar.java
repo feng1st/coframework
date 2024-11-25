@@ -1,7 +1,8 @@
-package io.codeone.framework.ext.extensibleproxy;
+package io.codeone.framework.ext.extensible;
 
 import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.util.ExtUtils;
+import io.codeone.framework.plugin.util.ClassUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
 
 import java.beans.Introspector;
 import java.util.HashSet;
@@ -43,13 +43,7 @@ public class ExtensibleProxyRegistrar implements BeanFactoryPostProcessor {
         if (extensionClassName == null) {
             return;
         }
-
-        Class<?> extensionClass;
-        try {
-            extensionClass = ClassUtils.forName(extensionClassName, getClass().getClassLoader());
-        } catch (ClassNotFoundException ignored) {
-            return;
-        }
+        Class<?> extensionClass = ClassUtils.forName(extensionClassName, getClass().getClassLoader());
 
         List<Class<?>> extensibleInterfaces = ExtUtils.getAllExtensibleInterfaces(extensionClass);
         for (Class<?> extensibleInterface : extensibleInterfaces) {

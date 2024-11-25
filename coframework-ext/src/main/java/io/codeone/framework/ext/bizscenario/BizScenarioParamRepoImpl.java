@@ -1,9 +1,10 @@
-package io.codeone.framework.ext.bizscenarioparam;
+package io.codeone.framework.ext.bizscenario;
 
 import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.annotation.RouteBy;
 import io.codeone.framework.ext.annotation.RouteByContext;
 import io.codeone.framework.ext.util.ExtUtils;
+import io.codeone.framework.plugin.util.ClassUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -37,7 +37,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
         Integer index = map.get(method);
         if (index == null) {
             throw new IllegalStateException(String.format(
-                    "No BizScenario source registered for method: %s",
+                    "No BizScenario source registered for method '%s'",
                     method));
         }
         return index;
@@ -58,13 +58,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
         if (extensionClassName == null) {
             return;
         }
-
-        Class<?> extensionClass;
-        try {
-            extensionClass = ClassUtils.forName(extensionClassName, getClass().getClassLoader());
-        } catch (ClassNotFoundException ignored) {
-            return;
-        }
+        Class<?> extensionClass = ClassUtils.forName(extensionClassName, getClass().getClassLoader());
 
         List<Class<?>> extensibleInterfaces = ExtUtils.getAllExtensibleInterfaces(extensionClass);
         for (Class<?> extensibleInterface : extensibleInterfaces) {
@@ -96,12 +90,12 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             if (param.isAnnotationPresent(RouteBy.class)) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Duplicate @RouteBy parameters found on method: %s",
+                            "Duplicate @RouteBy parameters found on method '%s'",
                             method));
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
                     throw new IllegalStateException(String.format(
-                            "Parameter annotated with @RouteBy is not BizScenarioParam on method: %s",
+                            "Parameter annotated with @RouteBy is not BizScenarioParam on method '%s'",
                             method));
                 }
                 index = i;
@@ -110,7 +104,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
         if (index != null) {
             if (method.isAnnotationPresent(RouteByContext.class)) {
                 throw new IllegalStateException(String.format(
-                        "Conflicting annotations @RouteBy and @RouteByContext on method: %s",
+                        "Conflicting annotations @RouteBy and @RouteByContext on method '%s'",
                         method));
             }
             return index;
@@ -126,7 +120,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
             if (ExtUtils.isBizScenarioParam(param.getType())) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Duplicate BizScenarioParam parameters found on method: %s",
+                            "Duplicate BizScenarioParam parameters found on method '%s'",
                             method));
                 }
                 index = i;

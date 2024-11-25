@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.binding;
+package io.codeone.framework.plugin.binding.repo;
 
 import io.codeone.framework.plugin.Plugin;
 

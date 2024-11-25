@@ -1,7 +1,7 @@
 package io.codeone.framework.ext.session.ext.shared.resolve;
 
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.BizScenarioResolver;
+import io.codeone.framework.ext.session.BizScenarioResolver;
 import io.codeone.framework.ext.shared.constants.ExtConstants;
 import org.springframework.stereotype.Component;
 

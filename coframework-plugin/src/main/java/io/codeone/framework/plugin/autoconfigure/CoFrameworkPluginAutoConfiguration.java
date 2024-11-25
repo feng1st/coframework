@@ -1,7 +1,7 @@
 package io.codeone.framework.plugin.autoconfigure;
 
-import io.codeone.framework.plugin.AnnoPluginBindingFactory;
-import io.codeone.framework.plugin.binding.AnnoPluginBindingRepo;
+import io.codeone.framework.plugin.binding.AnnoPluginBindingFactory;
+import io.codeone.framework.plugin.binding.repo.AnnoPluginBindingRepo;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.SpringFactoriesLoader;

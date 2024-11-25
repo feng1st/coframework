@@ -1,7 +1,7 @@
-package io.codeone.framework.plugin.binding;
+package io.codeone.framework.plugin.binding.repo;
 
-import io.codeone.framework.plugin.AnnoPluginBinding;
 import io.codeone.framework.plugin.Plugin;
+import io.codeone.framework.plugin.binding.AnnoPluginBinding;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

@@ -4,7 +4,7 @@ import io.codeone.framework.api.API;
 import io.codeone.framework.api.enableplugins.domain.param.MyParam;
 import io.codeone.framework.api.enableplugins.ext.plugin.InitMyParamTestPlugin;
 import io.codeone.framework.api.response.Result;
-import io.codeone.framework.plugin.EnablePlugin;
+import io.codeone.framework.plugin.binding.EnablePlugin;
 import org.springframework.stereotype.Service;
 
 @API

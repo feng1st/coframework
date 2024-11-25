@@ -1,6 +1,6 @@
 package io.codeone.framework.plugin.aop;
 
-import io.codeone.framework.plugin.binding.MethodPluginBindingRepo;
+import io.codeone.framework.plugin.binding.repo.MethodPluginBindingRepo;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

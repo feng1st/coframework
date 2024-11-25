@@ -1,5 +1,6 @@
-package io.codeone.framework.plugin;
+package io.codeone.framework.plugin.binding;
 
+import io.codeone.framework.plugin.Plugin;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

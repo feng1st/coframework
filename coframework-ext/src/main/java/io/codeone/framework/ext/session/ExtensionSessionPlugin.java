@@ -2,13 +2,12 @@ package io.codeone.framework.ext.session;
 
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioContext;
-import io.codeone.framework.ext.annotation.ExtensionSession;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
-import io.codeone.framework.plugin.PluginBindingProcessor;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.binding.PluginBindingProcessor;
+import io.codeone.framework.plugin.function.Invokable;
 import io.codeone.framework.plugin.util.AnnotationUtils;
-import io.codeone.framework.plugin.util.Invokable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;

@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.extensibleproxy;
+package io.codeone.framework.ext.extensible;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.FactoryBean;

@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin;
+package io.codeone.framework.plugin.binding;
 
 import java.lang.reflect.Method;
 

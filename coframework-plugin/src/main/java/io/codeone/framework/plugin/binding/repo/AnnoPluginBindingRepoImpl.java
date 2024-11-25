@@ -1,15 +1,15 @@
-package io.codeone.framework.plugin.binding;
+package io.codeone.framework.plugin.binding.repo;
 
-import io.codeone.framework.plugin.AnnoPluginBinding;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
+import io.codeone.framework.plugin.binding.AnnoPluginBinding;
+import io.codeone.framework.plugin.util.ClassUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -39,12 +39,7 @@ public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, Anno
         for (String pluginBeanName : pluginBeanNames) {
             BeanDefinition pluginDefinition = beanFactory.getBeanDefinition(pluginBeanName);
             String pluginClassName = pluginDefinition.getBeanClassName();
-            Class<? extends Plugin> pluginClass;
-            try {
-                pluginClass = (Class<? extends Plugin>) ClassUtils.forName(pluginClassName, getClass().getClassLoader());
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException(e);
-            }
+            Class<? extends Plugin> pluginClass = ClassUtils.forName(pluginClassName, getClass().getClassLoader());
 
             Plug plug = pluginClass.getAnnotation(Plug.class);
             if (plug == null) {

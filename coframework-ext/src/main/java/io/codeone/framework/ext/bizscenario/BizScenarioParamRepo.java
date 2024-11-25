@@ -1,4 +1,4 @@
-package io.codeone.framework.ext.bizscenarioparam;
+package io.codeone.framework.ext.bizscenario;
 
 import java.lang.reflect.Method;
 

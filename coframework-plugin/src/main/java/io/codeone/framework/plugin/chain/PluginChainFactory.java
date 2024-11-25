@@ -1,7 +1,7 @@
 package io.codeone.framework.plugin.chain;
 
 import io.codeone.framework.plugin.Plugin;
-import io.codeone.framework.plugin.binding.MethodPluginBindingRepo;
+import io.codeone.framework.plugin.binding.repo.MethodPluginBindingRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
