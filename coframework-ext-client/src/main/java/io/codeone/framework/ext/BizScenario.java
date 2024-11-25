@@ -51,6 +51,14 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         return of(this.bizId, BizScenarioUtils.join(scenario));
     }
 
+    public BizScenario prependScenario(String scenario) {
+        return withScenario(scenario, this.scenario);
+    }
+
+    public BizScenario appendScenario(String scenario) {
+        return of(this.scenario, scenario);
+    }
+
     public void setBizId(String bizId) {
         BizScenarioUtils.validate(bizId);
         this.bizId = BizScenarioUtils.emptyToAny(bizId);

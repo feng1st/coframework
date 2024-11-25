@@ -34,18 +34,18 @@ public class BizScenarioIterator implements Iterator<BizScenario> {
         return next;
     }
 
-    private boolean hasNext(String value) {
-        return value != null;
+    private boolean hasNext(String code) {
+        return code != null;
     }
 
-    private String next(String value) {
-        if (BizScenarioUtils.ANY.equals(value)) {
+    private String next(String code) {
+        if (BizScenarioUtils.ANY.equals(code)) {
             return null;
         }
-        int i = value.lastIndexOf(BizScenarioUtils.SEPARATOR);
+        int i = code.lastIndexOf(BizScenarioUtils.SEPARATOR);
         if (i == -1) {
             return BizScenarioUtils.ANY;
         }
-        return value.substring(0, i);
+        return code.substring(0, i);
     }
 }
