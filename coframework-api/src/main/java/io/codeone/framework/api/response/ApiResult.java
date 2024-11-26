@@ -3,9 +3,9 @@ package io.codeone.framework.api.response;
 /**
  * Represents the result of a service operation.
  *
- * <p>Service operation results will be automatically logged by the framework if
- * the type is {@code ApiResult} or can be converted to {@code ApiResult} using
- * {@code ApiResultConverter}.
+ * <p>Service operation results, including success status, data, error code, and
+ * error message, will be recognized and logged by the framework if the type is
+ * {@code ApiResult} or can be converted to {@code ApiResult} using {@code ApiResultConverter}.
  *
  * @param <T> the type of data returned by the operation
  */

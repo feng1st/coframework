@@ -5,6 +5,10 @@ import lombok.Data;
 /**
  * Represents a general result of a service operation.
  *
+ * <p>When a service or method is annotated with {@code API} and returns a {@code Result}
+ * type, any exception thrown during the operation will be automatically transformed
+ * by the framework into a failed {@code Result} instance.
+ *
  * @param <T> the type of data returned by the operation
  */
 @Data
