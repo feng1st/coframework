@@ -7,10 +7,10 @@ import lombok.Data;
 /**
  * Base class for parameters that:
  * <ul>
- *   <li>Implements {@link ApiParam}, allowing automatic validation by the framework.</li>
+ *   <li>Implements {@link ApiParam}, allowing automatic validation by the framework.
  *   <li>Implements {@link BizScenarioParam}, which can be used to route to a specific
  *   implementation of an {@code Extensible} interface when the {@code bizScenario}
- *   is present.</li>
+ *   is present.
  * </ul>
  */
 @Data
