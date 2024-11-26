@@ -3,9 +3,12 @@ package io.codeone.framework.api.exception;
 /**
  * Represents an exception with an error code for service operations.
  *
- * <p>Service operation exceptions will be recognized and logged by the framework
- * if the type is {@code ApiException} or can be converted to {@code ApiException}
- * using {@code ApiExceptionConverter}.
+ * <p>If a service or method is annotated with {@code API}, any exception that is
+ * {@code ApiException} or can be converted into {@code ApiException} using {@code ApiExceptionConverter}
+ * will be transformed by the framework into a failed result with a specified code.
+ *
+ * <p>Additionally, if the service or method is annotated with {@code API} or {@code Logging},
+ * any such exception's code will be recognized and logged by the framework.
  */
 public interface ApiException {
 
