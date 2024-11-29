@@ -8,11 +8,26 @@ import org.springframework.core.convert.support.GenericConversionService;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Utility class for handling {@link ApiException} operations.
+ *
+ * <p>Provides methods to extract and convert exceptions to {@link ApiException},
+ * and retrieve error codes for service operations.
+ */
 @UtilityClass
 public class ApiExceptionUtils {
 
+    /**
+     * Conversion service for converting exceptions to {@link ApiException}.
+     */
     public final GenericConversionService CONVERSION_SERVICE = new GenericConversionService();
 
+    /**
+     * Extracts the underlying cause of the given throwable.
+     *
+     * @param throwable the throwable to analyze
+     * @return the root cause throwable or null if none is found
+     */
     public Throwable getCause(Throwable throwable) {
         if (throwable == null) {
             return null;
@@ -35,6 +50,12 @@ public class ApiExceptionUtils {
         return throwable;
     }
 
+    /**
+     * Retrieves the error code for the given throwable.
+     *
+     * @param cause the throwable to analyze
+     * @return the corresponding error code
+     */
     public String getCode(Throwable cause) {
         if (cause instanceof ApiException) {
             return ((ApiException) cause).getCode();
