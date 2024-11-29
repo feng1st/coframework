@@ -24,6 +24,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Plugin for logging method invocations and results.
+ *
+ * <p>Intercepts method calls annotated with {@link Logging} to log details such
+ * as method arguments, result, and any exceptions thrown. Supports custom logging
+ * behavior through configurable expressions.
+ */
 @Plug(value = Stages.AFTER_TARGET, targetAnnotations = Logging.class)
 @Slf4j(topic = "logging")
 public class LoggingPlugin implements Plugin {
@@ -48,6 +55,15 @@ public class LoggingPlugin implements Plugin {
         }
     }
 
+    /**
+     * Logs the details of the method invocation.
+     *
+     * @param method    the method being logged
+     * @param args      the arguments of the method
+     * @param result    the result of the method execution
+     * @param throwable the throwable thrown during method execution, if any
+     * @param elapsed   the elapsed time of the method invocation in milliseconds
+     */
     private void log(Method method, Object[] args, Object result, Throwable throwable, long elapsed) {
 
         Logging logging = AnnotationUtils.getAnnotation(method, Logging.class);
