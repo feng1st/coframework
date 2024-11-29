@@ -5,8 +5,7 @@ import java.lang.annotation.*;
 /**
  * Annotation to configure logging on methods or classes.
  *
- * <p>Allows detailed logging of method arguments, results, exceptions, and custom
- * expressions.
+ * <p>Allows detailed logging of method arguments, results, exceptions, and custom expressions.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -15,14 +14,14 @@ import java.lang.annotation.*;
 public @interface Logging {
 
     /**
-     * The name of the logger to use.
+     * Specifies the name of the logger to use.
      *
-     * <p>Defaults to the class name where this annotation is applied.
+     * <p>Defaults to the name of the class where this annotation is applied.
      */
     String name() default "";
 
     /**
-     * Whether to log method arguments.
+     * Indicates whether to log method arguments.
      *
      * <p>If {@code argKvs} is empty and this is set to {@code true}, all arguments
      * will be logged.
@@ -30,48 +29,48 @@ public @interface Logging {
     boolean logArgs() default true;
 
     /**
-     * Whether to log the method result.
+     * Indicates whether to log the method result.
      *
      * <p>If set to {@code true}, logs the return value. If the return value is
-     * compatible with {@code ApiResult}, the framework will extract and log the
-     * data within it.
+     * compatible with {@code ApiResult}, the framework extracts and logs the data
+     * within it.
      */
     boolean logResult() default true;
 
     /**
-     * Whether to log exceptions thrown by the method.
+     * Indicates whether to log exceptions thrown by the method.
      *
-     * <p>If {@code true}, logs the stack trace of thrown exceptions.
+     * <p>If {@code true}, logs the stack trace of any thrown exception.
      */
     boolean logException() default true;
 
     /**
-     * SpEL expression to determine if the invocation was successful.
+     * SpEL expression to determine if the method invocation was successful.
      *
-     * <p>Defaults to determining success based on {@code ApiResult} compatible
-     * results or exceptions.
+     * <p>By default, the framework determines success based on the success of {@code
+     * ApiResult} compatible results or the absence of exceptions.
      *
-     * <p>Use {@code r}, e.g., {@code "#r?.success"}.
+     * <p>Use {@code r} to reference the return value, e.g., {@code "#r?.success"}.
      */
     String expSuccess() default "";
 
     /**
-     * SpEL expression for determining the error code.
+     * SpEL expression to determine the error code.
      *
-     * <p>Defaults to extracting the code from {@code ApiResult} compatible results
-     * or exceptions.
+     * <p>By default, the framework extracts the error code from {@code ApiResult}
+     * compatible results or exceptions.
      *
-     * <p>Use {@code r}, e.g., {@code "#r?.errorCode"}.
+     * <p>Use {@code r} to reference the return value, e.g., {@code "#r?.errorCode"}.
      */
     String expCode() default "";
 
     /**
-     * SpEL expression for determining the error message.
+     * SpEL expression to determine the error message.
      *
-     * <p>Defaults to extracting the message from {@code ApiResult} compatible results
-     * or exceptions.
+     * <p>By default, the framework extracts the error message from {@code ApiResult}
+     * compatible results or exceptions.
      *
-     * <p>Use {@code r}, e.g., {@code "#r?.errorMessage"}.
+     * <p>Use {@code r} to reference the return value, e.g., {@code "#r?.errorMessage"}.
      */
     String expMessage() default "";
 
