@@ -3,6 +3,11 @@ package io.codeone.framework.log.formatter.support;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.codeone.framework.log.formatter.LogFormatter;
 
+/**
+ * Log formatter using Jackson for JSON conversion.
+ *
+ * <p>Formats log content as a JSON string using Jackson's {@link ObjectMapper}.
+ */
 public class JacksonLogFormatter implements LogFormatter {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
