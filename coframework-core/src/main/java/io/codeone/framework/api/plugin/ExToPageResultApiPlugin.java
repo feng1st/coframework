@@ -11,6 +11,13 @@ import io.codeone.framework.plugin.util.AnnotationUtils;
 
 import java.lang.reflect.Method;
 
+/**
+ * Plugin for transforming exceptions into {@link PageResult} for methods annotated
+ * with {@link API}.
+ *
+ * <p>Intercepts thrown exceptions and transforms them into a failed {@link PageResult}
+ * if the return type is {@link PageResult}.
+ */
 @Plug(value = Stages.POST_RESULT_INTERCEPTING, targetAnnotations = API.class)
 public class ExToPageResultApiPlugin implements Plugin {
 

@@ -8,6 +8,12 @@ import io.codeone.framework.plugin.Stages;
 
 import java.lang.reflect.Method;
 
+/**
+ * Plugin for argument validation of methods annotated with {@link API}.
+ *
+ * <p>Intercepts method arguments before execution to validate any {@link ApiParam}
+ * parameters.
+ */
 @Plug(value = Stages.ARG_INTERCEPTING, targetAnnotations = API.class)
 public class ArgCheckingApiPlugin implements Plugin {
 
