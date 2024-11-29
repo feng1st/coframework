@@ -8,9 +8,9 @@ import java.util.List;
 /**
  * Represents a paginated result that includes metadata for pagination.
  *
- * <p>When a service or method is annotated with {@code API} and returns a {@code PageResult}
- * type, any exception thrown during the operation will be automatically transformed
- * by the framework into a failed {@code PageResult} instance.
+ * <p>When a service or method is annotated with {@code API} and returns a {@code
+ * PageResult} type, any exception thrown during the operation will be automatically
+ * transformed by the framework into a failed {@code PageResult} instance.
  *
  * @param <T> the type of data in the paginated result
  */
@@ -43,7 +43,8 @@ public class PageResult<T> implements ApiResult<List<T>>, PageData<T> {
     }
 
     /**
-     * Creates an empty successful paginated result with the specified page index and size.
+     * Creates an empty successful paginated result with the specified page index
+     * and size.
      *
      * @param pageIndex the page index
      * @param pageSize  the page size
@@ -55,7 +56,8 @@ public class PageResult<T> implements ApiResult<List<T>>, PageData<T> {
     }
 
     /**
-     * Creates a successful paginated result with the specified data, page index, and size.
+     * Creates a successful paginated result with the specified data, page index,
+     * and size.
      *
      * @param data      the list of data items
      * @param pageIndex the page index
@@ -68,7 +70,8 @@ public class PageResult<T> implements ApiResult<List<T>>, PageData<T> {
     }
 
     /**
-     * Creates a successful paginated result with the specified data, page index, size, and total count.
+     * Creates a successful paginated result with the specified data, page index,
+     * size, and total count.
      *
      * @param data       the list of data items
      * @param pageIndex  the page index

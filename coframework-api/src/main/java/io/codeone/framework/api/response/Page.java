@@ -36,7 +36,8 @@ public class Page<T> implements PageData<T> {
     }
 
     /**
-     * Creates an empty {@code Page} instance with the specified page index and size.
+     * Creates an empty {@code Page} instance with the specified page index and
+     * size.
      *
      * @param pageIndex the page index
      * @param pageSize  the page size
@@ -48,7 +49,8 @@ public class Page<T> implements PageData<T> {
     }
 
     /**
-     * Creates a {@code Page} instance with the specified data, page index, and size.
+     * Creates a {@code Page} instance with the specified data, page index, and
+     * size.
      *
      * @param data      the list of data items
      * @param pageIndex the page index
@@ -61,7 +63,8 @@ public class Page<T> implements PageData<T> {
     }
 
     /**
-     * Creates a {@code Page} instance with the specified data, page index, size, and total count.
+     * Creates a {@code Page} instance with the specified data, page index, size,
+     * and total count.
      *
      * @param data       the list of data items
      * @param pageIndex  the page index

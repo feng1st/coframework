@@ -1,7 +1,7 @@
 package io.codeone.framework.api.exception;
 
 /**
- * Common error codes used in the application.
+ * Common error codes used in a service.
  */
 public interface CommonCodes {
     /**
