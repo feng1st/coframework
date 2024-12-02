@@ -82,48 +82,51 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     }
 
     /**
-     * FIXME
-     * Creates a new {@code BizScenario} with multiple business identities and scenarios.
+     * Creates a new {@code BizScenario} with hierarchical levels of business identity
+     * and scenario.
      *
-     * @param bizId    an array of business identities
-     * @param scenario an array of scenarios
-     * @return a new {@code BizScenario} representing the business identity and scenario
+     * @param bizId    an array representing hierarchical levels of business identity
+     * @param scenario an array representing hierarchical levels of scenario
+     * @return a new {@code BizScenario} representing the business identity and
+     * scenario
      */
     public static BizScenario of(String[] bizId, String[] scenario) {
         return of(BizScenarioUtils.join(bizId), BizScenarioUtils.join(scenario));
     }
 
     /**
-     * FIXME
-     * Creates a new {@code BizScenario} with multiple business identities and a single scenario.
+     * Creates a new {@code BizScenario} with hierarchical levels of business identity
+     * and a scenario.
      *
-     * @param bizId    an array of business identities
-     * @param scenario a single scenario
-     * @return a new {@code BizScenario} representing the business identity and scenario
+     * @param bizId    an array representing hierarchical levels of business identity
+     * @param scenario a scenario
+     * @return a new {@code BizScenario} representing the business identity and
+     * scenario
      */
     public static BizScenario of(String[] bizId, String scenario) {
         return of(BizScenarioUtils.join(bizId), scenario);
     }
 
     /**
-     * FIXME
-     * Creates a new {@code BizScenario} with a single business identity and multiple scenarios.
+     * Creates a new {@code BizScenario} with a business identity and hierarchical
+     * levels of scenario.
      *
-     * @param bizId    a single business identity
-     * @param scenario an array of scenarios
-     * @return a new {@code BizScenario} representing the business identity and scenario
+     * @param bizId    a business identity
+     * @param scenario an array representing hierarchical levels of scenario
+     * @return a new {@code BizScenario} representing the business identity and
+     * scenario
      */
     public static BizScenario of(String bizId, String[] scenario) {
         return of(bizId, BizScenarioUtils.join(scenario));
     }
 
     /**
-     * FIXME
-     * Creates a new {@code BizScenario} with a single business identity and scenario.
+     * Creates a new {@code BizScenario} with a business identity and a scenario.
      *
-     * @param bizId    a single business identity
-     * @param scenario a single scenario
-     * @return a new {@code BizScenario} representing the business identity and scenario
+     * @param bizId    a business identity
+     * @param scenario a scenario
+     * @return a new {@code BizScenario} representing the business identity and
+     * scenario
      */
     public static BizScenario of(String bizId, String scenario) {
         BizScenario bizScenario = new BizScenario();
