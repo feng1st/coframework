@@ -9,15 +9,34 @@ import org.springframework.core.annotation.Order;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * Represents a chain of plugins that can intercept and process method invocations.
+ */
 public class PluginChain {
 
     private final List<Plugin> plugins;
 
+    /**
+     * Constructs a new {@code PluginChain}, sorting the provided plugins based on
+     * their {@link Plug} stage and {@link org.springframework.core.annotation.Order}.
+     *
+     * @param plugins the list of plugins to include in the chain
+     * @throws NullPointerException if the provided list is {@code null}
+     */
     public PluginChain(List<Plugin> plugins) {
         Objects.requireNonNull(plugins);
         this.plugins = sortPlugins(plugins);
     }
 
+    /**
+     * Invokes the plugin chain for the given method and arguments.
+     *
+     * @param method    the method being intercepted
+     * @param args      the arguments passed to the method
+     * @param invokable the original method invocation
+     * @return the result of the invocation
+     * @throws Throwable if any plugin or the method itself throws an error
+     */
     public Object invoke(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
         if (plugins.isEmpty()) {

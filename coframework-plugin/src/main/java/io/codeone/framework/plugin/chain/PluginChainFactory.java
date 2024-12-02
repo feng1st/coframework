@@ -13,6 +13,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * Factory for creating and managing {@link PluginChain} instances.
+ */
 @Component
 public class PluginChainFactory {
 
@@ -26,6 +29,12 @@ public class PluginChainFactory {
 
     private final Map<Set<Class<? extends Plugin>>, PluginChain> pluginClassMap = new ConcurrentHashMap<>();
 
+    /**
+     * Retrieves a {@link PluginChain} for the given method.
+     *
+     * @param method the method to inspect
+     * @return the plugin chain for the method, or {@code null} if no plugins are associated
+     */
     public PluginChain getChain(Method method) {
         Set<Class<? extends Plugin>> pluginClasses = methodPluginBindingRepo.getPluginClasses(method);
         if (CollectionUtils.isEmpty(pluginClasses)) {
