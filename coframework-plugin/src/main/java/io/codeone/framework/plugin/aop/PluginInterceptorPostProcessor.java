@@ -26,6 +26,14 @@ public class PluginInterceptorPostProcessor implements BeanPostProcessor {
     @Autowired
     private MethodPluginBindingRepo methodPluginBindingRepo;
 
+    /**
+     * Processes proxy beans after initialization to apply plugin bindings.
+     *
+     * @param bean     the bean being processed
+     * @param beanName the name of the bean
+     * @return the processed bean
+     * @throws BeansException if any errors occur during processing
+     */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof PluginInterceptorPostProcessor) {

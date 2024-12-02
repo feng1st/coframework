@@ -17,7 +17,11 @@ public class PluginPointcut extends StaticMethodMatcherPointcut {
     private MethodPluginBindingRepo methodPluginBindingRepo;
 
     /**
-     * {@inheritDoc}
+     * Determines if a method matches the plugin interception criteria.
+     *
+     * @param method      the method to evaluate
+     * @param targetClass the class of the target object
+     * @return {@code true} if the method should be intercepted, {@code false} otherwise
      */
     @Override
     public boolean matches(Method method, Class<?> targetClass) {

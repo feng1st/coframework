@@ -19,7 +19,13 @@ public class PluginInterceptor implements MethodInterceptor {
     private PluginChainFactory pluginChainFactory;
 
     /**
-     * {@inheritDoc}
+     * Intercepts a method invocation and applies the associated plugin chain, if
+     * available.
+     *
+     * @param invocation the method invocation being intercepted
+     * @return the result of the method invocation, possibly modified by plugins
+     * @throws Throwable if any plugin or the method invocation itself throws an
+     *                   exception
      */
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {

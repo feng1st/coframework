@@ -27,7 +27,11 @@ public class MethodPluginBindingRepoImpl implements MethodPluginBindingRepo {
     private final Map<Method, Set<Class<? extends Plugin>>> map = new ConcurrentHashMap<>();
 
     /**
-     * {@inheritDoc}
+     * Dynamically binds plugins to a method based on its annotations and explicitly
+     * enabled plugins.
+     *
+     * @param method the method to bind plugins to
+     * @return {@code true} if plugins were bound, {@code false} otherwise
      */
     @Override
     public boolean dynamicBind(Method method) {
