@@ -52,14 +52,11 @@ public class BizScenarioUtils {
             return array[0];
         }
         StringBuilder builder = new StringBuilder();
-        boolean first = true;
         for (String code : array) {
             if (isAny(code)) {
                 continue;
             }
-            if (first) {
-                first = false;
-            } else {
+            if (builder.length() > 0) {
                 builder.append(SEPARATOR);
             }
             builder.append(code);
