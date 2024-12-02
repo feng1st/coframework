@@ -8,8 +8,9 @@ import lombok.RequiredArgsConstructor;
  *
  * <p>Each stage indicates whether it occurs before or after the target method invocation
  * and defines the appropriate point for execution within the interception lifecycle.
- * <p>
- * FIXME: Order annotation
+ *
+ * <p>If multiple plugins are assigned to the same stage, their execution order
+ * can be further controlled using {@link org.springframework.core.annotation.Order}.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Stages {

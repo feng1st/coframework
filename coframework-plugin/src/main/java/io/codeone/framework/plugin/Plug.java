@@ -27,8 +27,8 @@ public @interface Plug {
 
     /**
      * Specifies the annotations that the plugin will target.
-     * FIXME: annotations can be ...
-     * If not explicitly defined, annotations can be determined using
+     *
+     * <p>If not explicitly specified, the plugin can determine its targets through
      * {@code EnablePlugin} or {@code AnnoPluginBinding}.
      *
      * @return an array of annotation classes to target
