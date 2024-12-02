@@ -135,22 +135,48 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         return bizScenario;
     }
 
-    // FIXME
+    /**
+     * Creates a new {@code BizScenario} by replacing the business identity.
+     *
+     * @param bizId new business identity
+     * @return a new {@code BizScenario} with the updated business identity and
+     * the existing scenario
+     */
     public BizScenario withBizId(String... bizId) {
         return of(BizScenarioUtils.join(bizId), this.scenario);
     }
 
-    // FIXME
+    /**
+     * Creates a new {@code BizScenario} by replacing the scenario.
+     *
+     * @param scenario new scenario
+     * @return a new {@code BizScenario} with the existing business identity and
+     * the updated scenario
+     */
     public BizScenario withScenario(String... scenario) {
         return of(this.bizId, BizScenarioUtils.join(scenario));
     }
 
-    // FIXME
+    /**
+     * Creates a new {@code BizScenario} by prepending a new scenario level to the
+     * existing scenario hierarchy.
+     *
+     * @param scenario the scenario level to prepend
+     * @return a new {@code BizScenario} with the prepended scenario and the existing
+     * business identity
+     */
     public BizScenario prependScenario(String scenario) {
         return withScenario(scenario, this.scenario);
     }
 
-    // FIXME
+    /**
+     * Creates a new {@code BizScenario} by appending a new scenario level to the
+     * existing scenario hierarchy.
+     *
+     * @param scenario the scenario level to append
+     * @return a new {@code BizScenario} with the appended scenario and the existing
+     * business identity
+     */
     public BizScenario appendScenario(String scenario) {
         return of(this.scenario, scenario);
     }
