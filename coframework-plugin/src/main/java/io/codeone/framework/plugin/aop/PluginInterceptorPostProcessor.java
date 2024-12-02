@@ -16,6 +16,15 @@ import java.util.Set;
 
 /**
  * Post-processor for handling plugin bindings after method binding resolution.
+ *
+ * <p>This is the final step in the plugin lifecycle. After annotation-to-plugin
+ * mappings are established by {@code AnnoPluginBindingRepoImpl#process} and methods
+ * are matched via {@code PluginPointcut#matches}, this post-processor ensures any
+ * post-binding logic for plugins is executed.
+ *
+ * <p>By processing proxy beans after initialization, it guarantees that plugins
+ * are correctly applied to their respective methods and any additional post-binding
+ * logic is triggered.
  */
 @Component
 public class PluginInterceptorPostProcessor implements BeanPostProcessor {

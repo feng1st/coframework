@@ -9,6 +9,13 @@ import java.lang.reflect.Method;
 
 /**
  * Pointcut for identifying methods that should be intercepted by plugins.
+ *
+ * <p>This class relies on the mappings established by {@code AnnoPluginBindingRepoImpl#process}.
+ * It evaluates each method against the repository to dynamically determine if plugins
+ * should be applied.
+ *
+ * <p>This step occurs after annotation-to-plugin mappings are built but before
+ * the post-initialization logic in {@code PluginInterceptorPostProcessor}.
  */
 @Component
 public class PluginPointcut extends StaticMethodMatcherPointcut {

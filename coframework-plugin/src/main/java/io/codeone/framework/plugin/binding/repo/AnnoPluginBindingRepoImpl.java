@@ -21,8 +21,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * Implementation of {@link AnnoPluginBindingRepo} that dynamically processes and
  * binds annotations to plugins.
  *
- * <p>This implementation discovers plugins using Spring's {@link BeanFactoryPostProcessor}
- * mechanism and builds mappings between annotations and plugins.
+ * <p>This class is the first step in the bean lifecycle related to plugin bindings.
+ * It ensures that annotation-to-plugin mappings are established before the pointcut
+ * matching and post-processing logic execute. This guarantees that {@code PluginPointcut#matches}
+ * and {@code PluginInterceptorPostProcessor#postProcessAfterInitialization} can
+ * work as expected.
+ *
+ * <p>Uses the Spring {@link BeanFactoryPostProcessor} mechanism to perform its
+ * initialization.
  */
 @Component
 public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, AnnoPluginBindingRepo {
