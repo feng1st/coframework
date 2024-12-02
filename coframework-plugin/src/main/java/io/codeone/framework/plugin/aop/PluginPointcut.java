@@ -7,13 +7,18 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
-
+/**
+ * Pointcut for identifying methods that should be intercepted by plugins.
+ */
 @Component
 public class PluginPointcut extends StaticMethodMatcherPointcut {
 
     @Autowired
     private MethodPluginBindingRepo methodPluginBindingRepo;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean matches(Method method, Class<?> targetClass) {
         try {

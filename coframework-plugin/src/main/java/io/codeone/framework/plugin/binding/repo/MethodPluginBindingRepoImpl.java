@@ -14,6 +14,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Implementation of {@link MethodPluginBindingRepo} for dynamically managing
+ * method-to-plugin bindings.
+ */
 @Component
 public class MethodPluginBindingRepoImpl implements MethodPluginBindingRepo {
 
@@ -22,6 +26,9 @@ public class MethodPluginBindingRepoImpl implements MethodPluginBindingRepo {
 
     private final Map<Method, Set<Class<? extends Plugin>>> map = new ConcurrentHashMap<>();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean dynamicBind(Method method) {
         Map<Class<? extends Annotation>, Annotation> annoMap = AnnotationUtils.getAnnotationMap(method);
@@ -43,6 +50,9 @@ public class MethodPluginBindingRepoImpl implements MethodPluginBindingRepo {
         return map.containsKey(method);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<Class<? extends Plugin>> getPluginClasses(Method method) {
         return map.get(method);

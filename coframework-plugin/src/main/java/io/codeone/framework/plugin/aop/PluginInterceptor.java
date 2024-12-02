@@ -9,13 +9,18 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
-
+/**
+ * Method interceptor that applies plugin chains to intercepted method invocations.
+ */
 @Component
 public class PluginInterceptor implements MethodInterceptor {
 
     @Autowired
     private PluginChainFactory pluginChainFactory;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         if (invocation.getThis() == null) {

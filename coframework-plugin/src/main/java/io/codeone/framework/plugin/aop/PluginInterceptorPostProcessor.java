@@ -14,6 +14,9 @@ import org.springframework.util.CollectionUtils;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+/**
+ * Post-processor for handling plugin bindings after method binding resolution.
+ */
 @Component
 public class PluginInterceptorPostProcessor implements BeanPostProcessor {
 
@@ -23,7 +26,6 @@ public class PluginInterceptorPostProcessor implements BeanPostProcessor {
     @Autowired
     private MethodPluginBindingRepo methodPluginBindingRepo;
 
-    // After {@link MethodPluginBindingRepo#dynamicBind(Method)} in {@link PluginPointcut#matches(Method, Class)}
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof PluginInterceptorPostProcessor) {
@@ -36,7 +38,6 @@ public class PluginInterceptorPostProcessor implements BeanPostProcessor {
         Class<?> targetClass = AopUtils.getTargetClass(bean);
 
         for (Method method : targetClass.getMethods()) {
-            // Bound in PluginPointcut#matches(Method, Class)
             Set<Class<? extends Plugin>> pluginClasses = methodPluginBindingRepo.getPluginClasses(method);
             if (CollectionUtils.isEmpty(pluginClasses)) {
                 continue;

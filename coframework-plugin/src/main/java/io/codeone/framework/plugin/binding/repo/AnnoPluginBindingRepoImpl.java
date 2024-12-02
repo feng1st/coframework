@@ -17,11 +17,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Implementation of {@link AnnoPluginBindingRepo} that dynamically processes and
+ * binds annotations to plugins.
+ *
+ * <p>This implementation discovers plugins using Spring's {@link BeanFactoryPostProcessor}
+ * mechanism and builds mappings between annotations and plugins.
+ */
 @Component
 public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, AnnoPluginBindingRepo {
 
     private final Map<Class<? extends Annotation>, Set<Class<? extends Plugin>>> map = new ConcurrentHashMap<>();
 
+    /**
+     * Processes the bean factory to discover plugins and build annotation-to-plugin
+     * bindings.
+     *
+     * @param beanFactory the Spring bean factory
+     * @throws BeansException if any bean-related error occurs
+     */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         if (beanFactory instanceof DefaultListableBeanFactory) {
@@ -29,6 +43,12 @@ public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, Anno
         }
     }
 
+    /**
+     * Retrieves the set of plugin classes bound to a specific annotation type.
+     *
+     * @param annoType the annotation type to query
+     * @return a set of plugin classes associated with the annotation type
+     */
     @Override
     public Set<Class<? extends Plugin>> getPluginClasses(Class<? extends Annotation> annoType) {
         return map.get(annoType);

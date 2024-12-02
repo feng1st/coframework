@@ -7,6 +7,9 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Component;
 
+/**
+ * Infrastructure advisor for applying plugins to methods based on pointcuts.
+ */
 @Component
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 @Getter
