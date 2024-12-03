@@ -18,6 +18,13 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of {@link ExtensionRepo} that manages and resolves {@link Extension}
+ * instances.
+ *
+ * <p>This implementation uses an internal cache for efficient lookup and supports
+ * hierarchical resolution of {@link BizScenario} levels.
+ */
 @Component
 public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
 
@@ -42,12 +49,27 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
                 return Optional.empty();
             });
 
+    /**
+     * Registers all {@link Extension} beans found in the application context.
+     *
+     * <p>This method is invoked during the initialization phase to populate the
+     * repository with all available extensions.
+     *
+     * @throws Exception if an error occurs during registration
+     */
     @Override
     public void afterPropertiesSet() throws Exception {
         applicationContext.getBeansWithAnnotation(Extension.class).values()
                 .forEach(this::register);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Retrieves the {@link Extension} by consulting the internal cache. If no
+     * extension is found for the specified {@link BizScenario}, an exception is
+     * thrown.
+     */
     @Override
     public Object getExtension(Class<?> extensibleInterface, BizScenario bizScenario) {
         CacheKey cacheKey = CacheKey.of(extensibleInterface, bizScenario);
@@ -61,6 +83,14 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         return extension.get();
     }
 
+    /**
+     * Registers a single {@link Extension} instance with the repository.
+     *
+     * @param extension the extension instance to register
+     * @throws IllegalStateException if the extension does not implement an {@code
+     *                               Extensible} interface or if there is a conflict
+     *                               with an existing extension
+     */
     private void register(Object extension) {
         Class<?> extensionClass = ClassUtils.getTargetClass(extension);
 
@@ -83,6 +113,17 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         }
     }
 
+    /**
+     * Registers an extension for a specific {@code Extensible} interface and {@link
+     * BizScenario}.
+     *
+     * @param extensibleInterface the {@code Extensible} interface
+     * @param bizScenario         the {@link BizScenario} to associate with the
+     *                            extension
+     * @param extension           the extension instance
+     * @throws IllegalStateException if a duplicate extension is found for the same
+     *                               {@link BizScenario}
+     */
     private void registerExtension(Class<?> extensibleInterface, BizScenario bizScenario, Object extension) {
         Object existing = map.computeIfAbsent(extensibleInterface, k -> new HashMap<>())
                 .put(bizScenario, extension);
@@ -95,6 +136,9 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         }
     }
 
+    /**
+     * Represents a unique key for caching {@link Extension} instances.
+     */
     @Data
     @RequiredArgsConstructor(staticName = "of")
     private static class CacheKey {
