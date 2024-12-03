@@ -8,9 +8,9 @@ import java.lang.annotation.*;
 /**
  * Marks a class as an implementation of an {@link Extensible} interface.
  *
- * <p>Classes annotated with this provide specific functionality dynamically routed
- * based on a {@code BizScenario}. These implementations define their scope using
- * business identity segments ({@code bizId}) and scenarios.
+ * <p>Defines functionality dynamically routed based on a {@code BizScenario}. The
+ * applicability of the extension is determined by its business identity ({@code
+ * bizId}) and scenarios ({@code scenarios}).
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -20,33 +20,21 @@ import java.lang.annotation.*;
 public @interface Extension {
 
     /**
-     * Defines the business identity that this extension applies to.
+     * The business identity this extension targets.
      *
-     * <p>Using an array allows specification of hierarchical levels, such as {@code
-     * {"region", "branch"}}.
+     * <p>Use {@code "*"} to apply to all business identities.
      *
-     * @return an array of business identity segments
+     * @return the business identity
      */
-    String[] bizId() default {BizScenarioUtils.ANY};
+    String bizId() default BizScenarioUtils.ANY;
 
     /**
-     * Defines the specific scenario this extension applies to.
+     * The scenarios this extension targets.
      *
-     * <p>Using an array allows specification of hierarchical levels, such as {@code
-     * {"weekday", "monday"}}. Specify either this or {@code scenarios}, but not
-     * both.
+     * <p>Defines one or more scenarios for applicability. Use {@code "*"} to apply
+     * to all scenarios.
      *
-     * @return an array of scenario segments
+     * @return an array of scenarios
      */
-    String[] scenario() default {BizScenarioUtils.ANY};
-
-    /**
-     * Defines multiple specific scenarios this extension applies to.
-     *
-     * <p>For example: {@code {"weekday.monday", "weekday.friday"}}. Specify either
-     * this or {@code scenario}, but not both.
-     *
-     * @return an array of specific scenarios
-     */
-    String[] scenarios() default {};
+    String[] scenarios() default {BizScenarioUtils.ANY};
 }
