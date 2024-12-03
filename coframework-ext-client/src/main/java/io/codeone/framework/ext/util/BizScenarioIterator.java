@@ -4,6 +4,13 @@ import io.codeone.framework.ext.BizScenario;
 
 import java.util.Iterator;
 
+/**
+ * Iterator for traversing hierarchical levels of a {@code BizScenario}.
+ *
+ * <p>This iterator starts with the most specific level of the {@code BizScenario}
+ * (e.g., {@code "region.branch"}) and moves to broader levels (e.g., {@code "region"}),
+ * eventually reaching the wildcard {@code "*"}.
+ */
 public class BizScenarioIterator implements Iterator<BizScenario> {
 
     private final BizScenario bizScenario;
@@ -12,17 +19,28 @@ public class BizScenarioIterator implements Iterator<BizScenario> {
 
     private String scenario;
 
+    /**
+     * Constructs an iterator for the given {@code BizScenario}.
+     *
+     * @param bizScenario the {@code BizScenario} to iterate
+     */
     public BizScenarioIterator(BizScenario bizScenario) {
         this.bizScenario = bizScenario;
         this.bizId = bizScenario.getBizId();
         this.scenario = bizScenario.getScenario();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasNext() {
         return hasNext(bizId) && hasNext(scenario);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BizScenario next() {
         BizScenario next = BizScenario.of(bizId, scenario);

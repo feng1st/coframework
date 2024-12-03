@@ -2,6 +2,12 @@ package io.codeone.framework.ext.util;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utility class for handling business identity and scenario logic.
+ *
+ * <p>This class provides methods for validating, normalizing, and constructing
+ * hierarchical business identity and scenario strings, along with wildcard handling.
+ */
 @UtilityClass
 public class BizScenarioUtils {
 
@@ -25,10 +31,22 @@ public class BizScenarioUtils {
         IS_VALID['_'] = true;
     }
 
+    /**
+     * Checks whether the given code represents a wildcard or is empty.
+     *
+     * @param code the code to check
+     * @return {@code true} if the code is null, empty, or {@code "*"}
+     */
     public boolean isAny(String code) {
         return code == null || code.isEmpty() || ANY.equals(code);
     }
 
+    /**
+     * Normalizes an empty or null code to the wildcard {@code "*"}.
+     *
+     * @param code the code to normalize
+     * @return the normalized code or {@code "*"} if the input is empty or null
+     */
     public String emptyToAny(String code) {
         if (code == null || code.isEmpty()) {
             return ANY;
@@ -36,6 +54,15 @@ public class BizScenarioUtils {
         return code;
     }
 
+    /**
+     * Validates whether the given code adheres to the expected format.
+     *
+     * <p>The code must consist of alphanumeric characters, hyphens, underscores,
+     * and periods as separators.
+     *
+     * @param code the code to validate
+     * @throws IllegalArgumentException if the code is invalid
+     */
     public void validate(String code) {
         if (!isValid(code)) {
             throw new IllegalArgumentException(String.format(
@@ -44,6 +71,13 @@ public class BizScenarioUtils {
         }
     }
 
+    /**
+     * Joins an array of strings into a single hierarchical string using the separator
+     * {@code '.'}.
+     *
+     * @param array the array to join
+     * @return the joined hierarchical string
+     */
     public String join(String[] array) {
         if (array == null || array.length == 0) {
             return null;
