@@ -12,52 +12,48 @@ import java.util.Optional;
 public class ExtensionSessionParamParser {
 
     public int parseParamIndex(Method method, ExtensionSession session) {
-        if (session != null) {
-            if (session.value() == BizScenarioResolvePolicy.FIRST) {
-                return Optional.ofNullable(parseFirst(method))
-                        .orElseThrow(() -> new IllegalStateException(String.format(
-                                "No BizScenarioParam found in method '%s'",
-                                method)));
+        if (session == null
+                || session.value() == BizScenarioResolvePolicy.AUTO) {
+            Integer paramIndex;
+            if ((paramIndex = parseCustomResolver(session)) != null) {
+                return paramIndex;
             }
-            if (session.value() == BizScenarioResolvePolicy.LAST) {
-                return Optional.ofNullable(parseLast(method))
-                        .orElseThrow(() -> new IllegalStateException(String.format(
-                                "No BizScenarioParam found in method '%s'",
-                                method)));
+            if ((paramIndex = parseSpecified(method)) != null) {
+                return paramIndex;
             }
-            if (session.value() == BizScenarioResolvePolicy.SPECIFIED) {
-                return Optional.ofNullable(parseSpecified(method))
-                        .orElseThrow(() -> new IllegalStateException(String.format(
-                                "No @RouteBy BizScenarioParam found in method '%s'",
-                                method)));
+            if ((paramIndex = parseFirst(method)) != null) {
+                return paramIndex;
             }
-            if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
-                return Optional.ofNullable(parseCustomResolver(session))
-                        .orElseThrow(() -> new IllegalStateException(String.format(
-                                "No BizScenarioResolver specified for method '%s'",
-                                method)));
-            }
-            if (session.value() != BizScenarioResolvePolicy.AUTO) {
-                return ExtensionSessionRepo.INDEX_IGNORE;
-            }
+
+            return ExtensionSessionRepo.INDEX_IGNORE;
         }
 
-        Integer paramIndex;
-        if ((paramIndex = parseCustomResolver(session)) != null) {
-            return paramIndex;
+        if (session.value() == BizScenarioResolvePolicy.FIRST) {
+            return Optional.ofNullable(parseFirst(method))
+                    .orElseThrow(() -> new IllegalStateException(String.format(
+                            "No BizScenarioParam found in method '%s'",
+                            method)));
         }
-        if ((paramIndex = parseSpecified(method)) != null) {
-            return paramIndex;
+        if (session.value() == BizScenarioResolvePolicy.LAST) {
+            return Optional.ofNullable(parseLast(method))
+                    .orElseThrow(() -> new IllegalStateException(String.format(
+                            "No BizScenarioParam found in method '%s'",
+                            method)));
         }
-        if ((paramIndex = parseFirst(method)) != null) {
-            return paramIndex;
+        if (session.value() == BizScenarioResolvePolicy.SPECIFIED) {
+            return Optional.ofNullable(parseSpecified(method))
+                    .orElseThrow(() -> new IllegalStateException(String.format(
+                            "No @RouteBy BizScenarioParam found in method '%s'",
+                            method)));
+        }
+        if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
+            return Optional.ofNullable(parseCustomResolver(session))
+                    .orElseThrow(() -> new IllegalStateException(String.format(
+                            "No BizScenarioResolver specified for method '%s'",
+                            method)));
         }
 
-        if (session != null) {
-            throw new IllegalStateException(String.format(
-                    "No BizScenario source found in method '%s'",
-                    method));
-        }
+        // session.value() == BizScenarioResolvePolicy.IGNORE
         return ExtensionSessionRepo.INDEX_IGNORE;
     }
 
