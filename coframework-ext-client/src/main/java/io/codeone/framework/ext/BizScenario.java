@@ -82,46 +82,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     }
 
     /**
-     * Creates a new {@code BizScenario} with hierarchical levels of business identity
-     * and scenario.
-     *
-     * @param bizId    an array representing hierarchical levels of business identity
-     * @param scenario an array representing hierarchical levels of scenario
-     * @return a new {@code BizScenario} representing the business identity and
-     * scenario
-     */
-    public static BizScenario of(String[] bizId, String[] scenario) {
-        return of(BizScenarioUtils.join(bizId), BizScenarioUtils.join(scenario));
-    }
-
-    /**
-     * Creates a new {@code BizScenario} with hierarchical levels of business identity
-     * and a scenario.
-     *
-     * @param bizId    an array representing hierarchical levels of business identity
-     * @param scenario a scenario
-     * @return a new {@code BizScenario} representing the business identity and
-     * scenario
-     */
-    public static BizScenario of(String[] bizId, String scenario) {
-        return of(BizScenarioUtils.join(bizId), scenario);
-    }
-
-    /**
-     * Creates a new {@code BizScenario} with a business identity and hierarchical
-     * levels of scenario.
-     *
-     * @param bizId    a business identity
-     * @param scenario an array representing hierarchical levels of scenario
-     * @return a new {@code BizScenario} representing the business identity and
-     * scenario
-     */
-    public static BizScenario of(String bizId, String[] scenario) {
-        return of(bizId, BizScenarioUtils.join(scenario));
-    }
-
-    /**
-     * Creates a new {@code BizScenario} with a business identity and a scenario.
+     * Creates a new {@code BizScenario} with a business identity and scenario.
      *
      * @param bizId    a business identity
      * @param scenario a scenario

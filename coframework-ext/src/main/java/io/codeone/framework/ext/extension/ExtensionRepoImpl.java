@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Component
 public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
@@ -71,13 +72,9 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         }
 
         Extension extensionAnno = extensionClass.getAnnotation(Extension.class);
-        List<BizScenario> bizScenarios = new ArrayList<>();
-        if (extensionAnno.scenarios().length > 0) {
-            Arrays.stream(extensionAnno.scenarios())
-                    .forEach(o -> bizScenarios.add(BizScenario.of(extensionAnno.bizId(), o)));
-        } else {
-            bizScenarios.add(BizScenario.of(extensionAnno.bizId(), extensionAnno.scenario()));
-        }
+        List<BizScenario> bizScenarios = Arrays.stream(extensionAnno.scenarios())
+                .map(o -> BizScenario.of(extensionAnno.bizId(), o))
+                .collect(Collectors.toList());
 
         for (Class<?> extensibleInterface : extensibleInterfaces) {
             for (BizScenario bizScenario : bizScenarios) {
