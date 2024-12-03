@@ -11,8 +11,15 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class BizScenarioUtils {
 
+    /**
+     * Represents a wildcard value used to denote any business identity or scenario.
+     */
     public final String ANY = "*";
 
+    /**
+     * Separator character used to denote hierarchical levels in business identity
+     * or scenario strings.
+     */
     public final char SEPARATOR = '.';
 
     private final boolean[] IS_VALID = new boolean[256];
