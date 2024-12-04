@@ -8,9 +8,24 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Optional;
 
+/**
+ * Utility class for parsing the parameter index of {@code BizScenario} in methods
+ * annotated with {@link ExtensionSession}.
+ *
+ * <p>Supports different resolution policies defined in {@link BizScenarioResolvePolicy}.
+ */
 @UtilityClass
 public class ExtensionSessionParamParser {
 
+    /**
+     * Parses the parameter index for the {@code BizScenario} parameter in the given
+     * method.
+     *
+     * @param method  the method to analyze
+     * @param session the {@link ExtensionSession} annotation on the method
+     * @return the parameter index or {@link ExtensionSessionRepo#INDEX_CUSTOM_RESOLVER}
+     * or {@link ExtensionSessionRepo#INDEX_IGNORE}
+     */
     public int parseParamIndex(Method method, ExtensionSession session) {
         if (session == null
                 || session.value() == BizScenarioResolvePolicy.AUTO) {

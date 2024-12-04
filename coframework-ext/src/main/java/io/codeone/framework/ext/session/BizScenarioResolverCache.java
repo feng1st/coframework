@@ -7,6 +7,11 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Caches and retrieves {@link BizScenarioResolver} beans for resolving {@code BizScenario}.
+ *
+ * <p>Uses Spring's {@link ApplicationContext} to load resolver beans dynamically.
+ */
 @Component
 public class BizScenarioResolverCache {
 
@@ -16,6 +21,13 @@ public class BizScenarioResolverCache {
     private final Map<Class<? extends BizScenarioResolver>, BizScenarioResolver> cache
             = new ConcurrentHashMap<>();
 
+    /**
+     * Retrieves the resolver instance for the specified class.
+     *
+     * @param resolverClass the resolver class
+     * @return the {@link BizScenarioResolver} instance
+     * @throws IllegalStateException if the resolver cannot be loaded
+     */
     public BizScenarioResolver getResolver(Class<? extends BizScenarioResolver> resolverClass) {
         try {
             return cache.computeIfAbsent(resolverClass, k -> applicationContext.getBean(k));

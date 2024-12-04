@@ -8,6 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Implementation of {@link ExtensionSessionRepo} that resolves the parameter index
+ * for {@code BizScenario} in methods.
+ *
+ * <p>This implementation uses a cache to store and retrieve parameter indices for
+ * methods. It leverages {@link BizScenarioResolverCache} for custom resolvers defined
+ * in {@link ExtensionSession}.
+ */
 @Component
 public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
 

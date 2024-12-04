@@ -14,6 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+/**
+ * Plugin for handling methods annotated with {@link ExtensionSession}.
+ *
+ * <p>This plugin resolves the {@link BizScenario} for methods before execution
+ * and integrates it into the execution context. The resolved {@link BizScenario}
+ * is pushed to the {@link BizScenarioContext}, enabling subsequent routing of {@code
+ * Extension} implementations based on the context. If no {@link BizScenario} is
+ * resolved, the method executes normally.
+ *
+ * <p>The resolution process leverages the parameters of the method, the {@link
+ * ExtensionSession} configuration, or a custom {@link BizScenarioResolver} specified
+ * in the annotation.
+ */
 @Plug(value = Stages.BEFORE_TARGET, targetAnnotations = ExtensionSession.class)
 public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
 
@@ -23,12 +36,35 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
     @Autowired
     private BizScenarioResolverCache bizScenarioResolverCache;
 
+    /**
+     * Processes the method after binding by building the parameter index for resolving
+     * {@link BizScenario}.
+     *
+     * @param method      the method being processed
+     * @param targetClass the target class containing the method
+     */
     @Override
     public void processAfterBinding(Method method, Class<?> targetClass) {
         ExtensionSession session = AnnotationUtils.getAnnotation(method, ExtensionSession.class);
         extensionSessionRepo.buildParamIndex(method, session);
     }
 
+    /**
+     * Intercepts the method execution and resolves the {@link BizScenario} for
+     * the current invocation.
+     *
+     * <p>If a {@link BizScenario} is resolved, it is pushed to the {@link BizScenarioContext},
+     * ensuring that subsequent {@code Extension} implementations can route based
+     * on this context. The method execution occurs within this resolved context.
+     * If no {@link BizScenario} is resolved, the method executes without modifying
+     * the context.
+     *
+     * @param method    the method being invoked
+     * @param args      the arguments passed to the method
+     * @param invokable the invokable representing the original method
+     * @return the result of the method invocation
+     * @throws Throwable if an error occurs during resolution or method execution
+     */
     @Override
     public Object around(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
@@ -40,6 +76,24 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
         return BizScenarioContext.invoke(bizScenario, invokable);
     }
 
+    /**
+     * Resolves the {@link BizScenario} for the given method and arguments.
+     *
+     * <p>The resolution process checks:
+     * <ul>
+     *   <li>If a parameter annotated with {@link BizScenarioParam} contains a valid
+     *   {@link BizScenario}
+     *   <li>If a custom resolver is specified in the {@link ExtensionSession} annotation
+     * </ul>
+     *
+     * @param method  the method being invoked
+     * @param args    the arguments passed to the method
+     * @param session the {@link ExtensionSession} annotation on the method
+     * @return the resolved {@link BizScenario}, or {@code null} if no resolution
+     * is needed
+     * @throws IllegalStateException if the resolution fails due to missing or invalid
+     *                               configuration
+     */
     private BizScenario resolveBizScenario(Method method, Object[] args, ExtensionSession session) {
         int paramIndex = extensionSessionRepo.getParamIndex(method);
 
