@@ -9,10 +9,27 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
+/**
+ * Utility for analyzing and determining the {@code BizScenarioParam} index in method
+ * signatures.
+ *
+ * <p>This class supports parameter resolution strategies, including annotations
+ * ({@link RouteBy} and {@link RouteByContext}) and type inference.
+ */
 @UtilityClass
 @Slf4j(topic = "extension")
 public class BizScenarioParamParser {
 
+    /**
+     * Parses the parameter index for the {@code BizScenarioParam} in the specified
+     * method.
+     *
+     * @param extensibleInterface the extensible interface
+     * @param method              the method to analyze
+     * @return the parameter index or {@link BizScenarioParamRepo#INDEX_ROUTE_BY_CONTEXT}
+     * if resolved from the context
+     * @throws IllegalStateException if conflicting or invalid annotations are found
+     */
     public int parseParamIndex(Class<?> extensibleInterface, Method method) {
         if (method.getParameters().length == 0) {
             return BizScenarioParamRepo.INDEX_ROUTE_BY_CONTEXT;

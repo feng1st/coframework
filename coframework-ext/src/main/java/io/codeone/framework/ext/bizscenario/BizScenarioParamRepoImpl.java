@@ -13,6 +13,14 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * Implementation of {@link BizScenarioParamRepo} that analyzes and registers {@code
+ * BizScenarioParam} sources for {@code Extensible} methods.
+ *
+ * <p>This component processes all methods of registered {@link Extension} implementations
+ * to determine their {@code BizScenario} source. It supports resolution via {@code
+ * RouteBy}, {@code RouteByContext}, or direct parameter analysis.
+ */
 @Component
 public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizScenarioParamRepo {
 
@@ -20,6 +28,13 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
 
     private final Map<Method, Integer> map = new HashMap<>();
 
+    /**
+     * Processes the bean factory to discover {@link Extension} beans and analyze
+     * their methods for {@code BizScenarioParam} sources.
+     *
+     * @param beanFactory the Spring bean factory
+     * @throws BeansException if any error occurs during processing
+     */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         if (beanFactory instanceof DefaultListableBeanFactory) {
@@ -27,6 +42,9 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getParamIndex(Method method) {
         Integer index = map.get(method);
