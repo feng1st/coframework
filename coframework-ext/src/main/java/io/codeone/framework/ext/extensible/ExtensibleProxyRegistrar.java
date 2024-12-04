@@ -16,11 +16,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Registers proxy beans for all {@code Extensible} interfaces.
+ *
+ * <p>This class ensures that extensible interfaces are proxied and dynamically
+ * routed to the appropriate {@link Extension} implementation based on a {@code
+ * BizScenario}.
+ */
 @Component
 public class ExtensibleProxyRegistrar implements BeanFactoryPostProcessor {
 
     private final Set<Class<?>> registered = new HashSet<>();
 
+    /**
+     * Processes the bean factory to register proxies for all extensible interfaces.
+     *
+     * @param beanFactory the Spring bean factory
+     * @throws BeansException if any error occurs during processing
+     */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         if (beanFactory instanceof DefaultListableBeanFactory) {
