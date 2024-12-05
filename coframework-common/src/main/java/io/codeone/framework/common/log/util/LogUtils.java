@@ -1,6 +1,6 @@
-package io.codeone.framework.log.util;
+package io.codeone.framework.common.log.util;
 
-import io.codeone.framework.log.formatter.LogFormatter;
+import io.codeone.framework.common.log.formatter.LogFormatter;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -46,7 +46,7 @@ public class LogUtils {
 
             @SuppressWarnings("unchecked")
             Class<? extends LogFormatter> clazz = (Class<? extends LogFormatter>) Class.forName(
-                    "io.codeone.framework.log.formatter.support.JacksonLogFormatter");
+                    "io.codeone.framework.common.log.formatter.support.JacksonLogFormatter");
             return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             return null;

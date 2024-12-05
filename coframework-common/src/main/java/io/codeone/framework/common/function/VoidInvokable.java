@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.function;
+package io.codeone.framework.common.function;
 
 /**
  * Represents a callable function that has no return value and may throw exceptions.

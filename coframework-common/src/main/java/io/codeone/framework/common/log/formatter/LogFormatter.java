@@ -1,4 +1,4 @@
-package io.codeone.framework.log.formatter;
+package io.codeone.framework.common.log.formatter;
 
 /**
  * Interface for formatting log content.

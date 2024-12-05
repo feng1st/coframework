@@ -1,7 +1,7 @@
-package io.codeone.framework.log.formatter.support;
+package io.codeone.framework.common.log.formatter.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.codeone.framework.log.formatter.LogFormatter;
+import io.codeone.framework.common.log.formatter.LogFormatter;
 
 /**
  * Log formatter using Jackson for JSON conversion.

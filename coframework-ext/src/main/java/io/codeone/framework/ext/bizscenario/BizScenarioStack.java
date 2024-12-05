@@ -1,8 +1,8 @@
 package io.codeone.framework.ext.bizscenario;
 
+import io.codeone.framework.common.function.Invokable;
+import io.codeone.framework.common.function.VoidInvokable;
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.plugin.function.Invokable;
-import io.codeone.framework.plugin.function.VoidInvokable;
 import lombok.experimental.UtilityClass;
 
 import java.util.Deque;

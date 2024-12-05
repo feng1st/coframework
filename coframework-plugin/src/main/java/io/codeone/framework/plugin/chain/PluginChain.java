@@ -1,9 +1,9 @@
 package io.codeone.framework.plugin.chain;
 
+import io.codeone.framework.common.function.Invokable;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.function.Invokable;
 import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
