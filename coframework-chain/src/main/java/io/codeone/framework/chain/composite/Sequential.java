@@ -5,7 +5,6 @@ import io.codeone.framework.chain.context.Context;
 import io.codeone.framework.chain.log.Quiet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 public interface Sequential extends Chainable, Composite, Quiet {
 
@@ -14,7 +13,6 @@ public interface Sequential extends Chainable, Composite, Quiet {
     }
 
     @Override
-    @SneakyThrows
     default boolean execute(Context context) {
         for (Chainable component : getComponents()) {
             if (!component.run(context)) {
