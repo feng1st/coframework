@@ -1,4 +1,4 @@
-package io.codeone.framework.plugin.util;
+package io.codeone.framework.common.util;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

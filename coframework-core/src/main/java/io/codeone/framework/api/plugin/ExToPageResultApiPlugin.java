@@ -4,10 +4,10 @@ import io.codeone.framework.api.API;
 import io.codeone.framework.api.exception.CustomErrorMessage;
 import io.codeone.framework.api.response.PageResult;
 import io.codeone.framework.api.util.ApiExceptionUtils;
+import io.codeone.framework.common.util.AnnotationUtils;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
-import io.codeone.framework.plugin.util.AnnotationUtils;
 
 import java.lang.reflect.Method;
 

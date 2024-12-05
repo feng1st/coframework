@@ -1,8 +1,8 @@
 package io.codeone.framework.plugin.binding.repo;
 
+import io.codeone.framework.common.util.AnnotationUtils;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.binding.EnablePlugin;
-import io.codeone.framework.plugin.util.AnnotationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -2,10 +2,10 @@ package io.codeone.framework.ext.extension;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import io.codeone.framework.common.util.ClassUtils;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.util.ExtUtils;
-import io.codeone.framework.plugin.util.ClassUtils;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;

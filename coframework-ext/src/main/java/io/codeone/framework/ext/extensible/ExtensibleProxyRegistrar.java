@@ -1,8 +1,8 @@
 package io.codeone.framework.ext.extensible;
 
+import io.codeone.framework.common.util.ClassUtils;
 import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.util.ExtUtils;
-import io.codeone.framework.plugin.util.ClassUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
