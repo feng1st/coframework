@@ -1,20 +1,14 @@
 package io.codeone.framework.chain.context;
 
-import io.codeone.framework.chain.Chainable;
-import io.codeone.framework.chain.log.Quiet;
+import io.codeone.framework.chain.log.MDC;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
-import io.codeone.framework.log.util.LogUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.support.AopUtils;
-import org.springframework.util.CollectionUtils;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -27,8 +21,6 @@ import java.util.function.Supplier;
 public class Context implements BizScenarioParam {
 
     private final Map<Object, Object> paramMap = new ConcurrentHashMap<>();
-
-    private final MDC mdc = new MDC();
 
     @Getter
     @Setter
@@ -44,7 +36,7 @@ public class Context implements BizScenarioParam {
 
     @Getter
     @Setter
-    private Consumer<Context> onEnterNode;
+    private Consumer<Context> onEnterChainable;
 
     public static Context of() {
         return new Context();
@@ -177,46 +169,7 @@ public class Context implements BizScenarioParam {
     }
 
     public void log(Object key, Object value) {
-        mdc.put(key, value);
-    }
-
-    public void preExecute() {
-        mdc.stackPush();
-
-        if (onEnterNode != null) {
-            onEnterNode.accept(this);
-        }
-    }
-
-    public void postExecute(Chainable chainable, Object resultOrException, long elapsed) {
-        Map<Object, Object> paramMap = mdc.stackPop();
-
-        if (chainable instanceof Quiet) {
-            return;
-        }
-
-        Map<Object, Object> map = new LinkedHashMap<>();
-        map.put("chain", chainName);
-        map.put("node", getTargetClass(chainable).getSimpleName());
-        if (bizScenario != null) {
-            map.put("bizId", bizScenario.getBizId());
-            map.put("scenario", bizScenario.getScenario());
-        }
-        map.put("elapsed", elapsed);
-        if (resultOrException instanceof Throwable) {
-            map.put("exception", resultOrException.toString());
-        } else if (Objects.equals(resultOrException, false)) {
-            map.put("break", true);
-        }
-        if (!CollectionUtils.isEmpty(paramMap)) {
-            map.put("params", paramMap);
-        }
-
-        if (resultOrException instanceof Throwable) {
-            log.error("{}", LogUtils.format(map));
-        } else {
-            log.info("{}", LogUtils.format(map));
-        }
+        MDC.put(key, value);
     }
 
     @Override
@@ -230,12 +183,5 @@ public class Context implements BizScenarioParam {
             return ((Typed) key).cast(obj);
         }
         return (T) obj;
-    }
-
-    private Class<?> getTargetClass(Object obj) {
-        if (AopUtils.isAopProxy(obj)) {
-            return AopUtils.getTargetClass(obj);
-        }
-        return obj.getClass();
     }
 }
