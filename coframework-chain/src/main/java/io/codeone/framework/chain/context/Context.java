@@ -6,7 +6,6 @@ import io.codeone.framework.ext.BizScenarioParam;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +16,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Accessors(fluent = true, chain = true)
-@Slf4j(topic = "chain")
 public class Context implements BizScenarioParam {
 
     private final Map<Object, Object> paramMap = new ConcurrentHashMap<>();

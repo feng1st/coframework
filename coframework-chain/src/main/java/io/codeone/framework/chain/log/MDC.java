@@ -1,68 +1,33 @@
 package io.codeone.framework.chain.log;
 
-import io.codeone.framework.chain.Chainable;
-import io.codeone.framework.chain.context.Context;
-import io.codeone.framework.common.function.Invokable;
-import io.codeone.framework.common.log.util.LogUtils;
-import io.codeone.framework.common.util.ClassUtils;
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.Deque;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.function.Function;
 
 @UtilityClass
-@Slf4j
 public class MDC {
 
-    private final ThreadLocal<Deque<Map<Object, Object>>> stack = ThreadLocal.withInitial(LinkedList::new);
+    private final ThreadLocal<Deque<Map<Object, Object>>> THREAD_LOCAL = ThreadLocal.withInitial(LinkedList::new);
 
-    @SneakyThrows
-    public boolean wrap(Invokable<Boolean> invokable) {
-        stack.get().push(new LinkedHashMap<>());
+    public boolean wrap(Function<Map<Object, Object>, Boolean> function) {
+        Deque<Map<Object, Object>> stack = THREAD_LOCAL.get();
+        Map<Object, Object> mdc = new LinkedHashMap<>();
+        stack.push(mdc);
         try {
-            return invokable.invoke();
+            return function.apply(mdc);
         } finally {
-            stack.get().pop();
+            stack.pop();
         }
     }
 
     public void put(Object key, Object value) {
-        Map<Object, Object> map = stack.get().peek();
+        Map<Object, Object> map = THREAD_LOCAL.get().peek();
         if (map != null) {
             map.put(key, value);
-        }
-    }
-
-    public void log(Context context, Chainable chainable, Object resultOrException, long elapsed) {
-        Map<Object, Object> params = stack.get().peek();
-
-        if (chainable instanceof Quiet) {
-            return;
-        }
-
-        Map<Object, Object> map = new LinkedHashMap<>();
-        map.put("chain", context.chainName());
-        map.put("node", ClassUtils.getTargetClass(chainable).getSimpleName());
-        if (context.bizScenario() != null) {
-            map.put("bizId", context.bizScenario().getBizId());
-            map.put("scenario", context.bizScenario().getScenario());
-        }
-        map.put("elapsed", elapsed);
-        if (resultOrException instanceof Throwable) {
-            map.put("exception", resultOrException.toString());
-        } else if (Objects.equals(resultOrException, false)) {
-            map.put("break", true);
-        }
-        if (!CollectionUtils.isEmpty(params)) {
-            map.put("params", params);
-        }
-
-        if (resultOrException instanceof Throwable) {
-            log.error("{}", LogUtils.format(map));
-        } else {
-            log.info("{}", LogUtils.format(map));
         }
     }
 }
