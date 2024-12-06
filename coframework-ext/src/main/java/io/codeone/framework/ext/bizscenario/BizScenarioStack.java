@@ -17,7 +17,7 @@ import java.util.LinkedList;
 @UtilityClass
 public class BizScenarioStack {
 
-    private final ThreadLocal<Deque<BizScenario>> stack = ThreadLocal.withInitial(LinkedList::new);
+    private final ThreadLocal<Deque<BizScenario>> THREAD_LOCAL = ThreadLocal.withInitial(LinkedList::new);
 
     /**
      * Retrieves the current {@link BizScenario} at the top of the stack.
@@ -26,7 +26,7 @@ public class BizScenarioStack {
      * empty
      */
     public BizScenario peek() {
-        return stack.get().peek();
+        return THREAD_LOCAL.get().peek();
     }
 
     /**
@@ -39,11 +39,12 @@ public class BizScenarioStack {
      * @throws Throwable if the operation throws an exception
      */
     public <T> T invoke(BizScenario bizScenario, Invokable<T> invokable) throws Throwable {
-        stack.get().push(bizScenario);
+        Deque<BizScenario> stack = THREAD_LOCAL.get();
+        stack.push(bizScenario);
         try {
             return invokable.invoke();
         } finally {
-            stack.get().pop();
+            stack.pop();
         }
     }
 
