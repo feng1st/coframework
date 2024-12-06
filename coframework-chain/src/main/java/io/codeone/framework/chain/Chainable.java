@@ -7,12 +7,9 @@ import io.codeone.framework.chain.log.MDC;
 /**
  * Represents a unit of execution in a chain of operations.
  *
- * <p>Classes implementing this interface define a specific action that can be executed
- * within a given {@link Context}. The {@link #run(Context)} and {@link #run(Context,
- * Object)} methods are the primary entry points for executing the chainable unit.
- * The {@link #execute(Context)} method is the core logic that must be implemented
- * by developers to define the behavior
- * of the chainable unit.
+ * <p>Implementing classes define the specific behavior to be executed within a
+ * given {@link Context}. This interface provides entry points for execution, allowing
+ * integration into broader chains of operations.
  */
 @FunctionalInterface
 public interface Chainable {
@@ -20,24 +17,23 @@ public interface Chainable {
     /**
      * Executes the core logic of this chainable unit.
      *
-     * <p>Developers should implement this method to define the actual operation
-     * to be performed by this unit. This method is invoked internally by the {@link
-     * #run(Context)} methods and is not intended to handle logging or external
-     * concerns.
+     * <p>This method must be implemented by developers to define the primary operation
+     * of the unit. It is invoked internally by the {@link #run(Context)} methods
+     * and should not handle external concerns such as logging.
      *
-     * @param context the context in which the execution occurs
-     * @return {@code true} to continue the chain, {@code false} to stop the chain
+     * @param context the context in which execution occurs
+     * @return {@code true} to continue the chain, {@code false} to halt it
      */
     boolean execute(Context context);
 
     /**
-     * Executes this chainable unit as an entry point, wrapping the execution with
-     * scoped logging.
+     * Executes this chainable unit with scoped logging as an entry point.
      *
-     * <p>This method serves as the primary entry point for triggering execution.
+     * <p>This method serves as the primary entry point for triggering execution,
+     * wrapping the execution logic with logging and monitoring.
      *
-     * @param context the context in which the execution occurs
-     * @return {@code true} to continue the chain, {@code false} to stop the chain
+     * @param context the context in which execution occurs
+     * @return {@code true} to continue the chain, {@code false} to halt it
      */
     default boolean run(Context context) {
         return MDC.wrap(mdc -> {
@@ -61,17 +57,16 @@ public interface Chainable {
     }
 
     /**
-     * Executes this chainable unit as an entry point and retrieves a specific result
-     * from the context.
+     * Executes this chainable unit and retrieves a result from the context.
      *
-     * <p>Like {@link #run(Context)}, this method wraps the execution with scoped
-     * logging. It is typically used when the execution produces a value stored
-     * in the context under a specified key.
+     * <p>Similar to {@link #run(Context)}, this method wraps execution with logging
+     * but is designed to fetch a specific result stored in the context under a
+     * given key.
      *
-     * @param context   the context in which the execution occurs
-     * @param resultKey the key identifying the result in the context
+     * @param context   the context in which execution occurs
+     * @param resultKey the key identifying the desired result in the context
      * @param <T>       the type of the result
-     * @return the result associated with the specified key
+     * @return the result associated with the given key
      */
     default <T> T run(Context context, Object resultKey) {
         run(context);
