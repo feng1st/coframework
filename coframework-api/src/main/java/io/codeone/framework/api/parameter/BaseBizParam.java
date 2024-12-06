@@ -7,13 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Base class for parameters that:
- * <ul>
- *   <li>Implements {@link ApiParam}, allowing automatic validation by the framework.
- *   <li>Implements {@link BizScenarioParam}, which can be used to route to a specific
- *   implementation of an {@code Extensible} interface when the {@code bizScenario}
- *   is present.
- * </ul>
+ * Base class for parameters with business identity and scenario.
+ *
+ * <p>The associated {@code bizScenario} provides the identity used to route requests
+ * to specific implementations of an {@code Extensible} interface.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -23,9 +20,9 @@ public abstract class BaseBizParam extends BaseParam implements BizScenarioParam
     private BizScenario bizScenario;
 
     /**
-     * Retrieves the business ID.
+     * Retrieves the business identity.
      *
-     * @return the business ID
+     * @return the business identity
      */
     public String getBizId() {
         if (bizScenario == null) {
@@ -35,9 +32,9 @@ public abstract class BaseBizParam extends BaseParam implements BizScenarioParam
     }
 
     /**
-     * Sets the business ID.
+     * Sets the business identity.
      *
-     * @param bizId the business ID to set
+     * @param bizId the business identity to set
      */
     public void setBizId(String bizId) {
         if (bizScenario == null) {

@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Base class for pagination parameters.
+ * Base class for pagination parameters with identity for extension routing.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
