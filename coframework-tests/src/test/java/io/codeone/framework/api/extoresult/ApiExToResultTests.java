@@ -1,7 +1,7 @@
 package io.codeone.framework.api.extoresult;
 
 import io.codeone.framework.api.exception.CommonCodes;
-import io.codeone.framework.api.extoresult.domain.param.MyParam;
+import io.codeone.framework.api.extoresult.domain.param.MyBizParam;
 import io.codeone.framework.api.extoresult.domain.service.TestApiExToResultService;
 import io.codeone.framework.api.response.Result;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +17,7 @@ public class ApiExToResultTests {
 
     @Test
     void testCheckArgs() {
-        Result<Void> result = testApiExToResultService.withCheckArgs(new MyParam());
+        Result<Void> result = testApiExToResultService.withCheckArgs(new MyBizParam());
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertEquals(CommonCodes.INVALID_ARGS, result.getErrorCode());
         Assertions.assertEquals("None accepted", result.getErrorMessage());

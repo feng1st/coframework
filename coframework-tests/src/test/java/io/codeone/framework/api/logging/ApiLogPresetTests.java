@@ -1,7 +1,7 @@
 package io.codeone.framework.api.logging;
 
 import ch.qos.logback.classic.Level;
-import io.codeone.framework.api.logging.domain.param.MyParam;
+import io.codeone.framework.api.logging.domain.param.MyBizParam;
 import io.codeone.framework.api.logging.domain.service.TestApiLogPresetService;
 import io.codeone.framework.logging.BaseLogTests;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class ApiLogPresetTests extends BaseLogTests {
 
     @Test
     void testNoneSuccess() {
-        testApiLogPresetService.none(new MyParam().setId(1L));
+        testApiLogPresetService.none(new MyBizParam().setId(1L));
 
         assertLog(TestApiLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are not logged.
@@ -25,7 +25,7 @@ public class ApiLogPresetTests extends BaseLogTests {
 
     @Test
     void testAllSuccess() {
-        testApiLogPresetService.all(new MyParam().setId(1L));
+        testApiLogPresetService.all(new MyBizParam().setId(1L));
 
         assertLog(TestApiLogPresetService.class.getName(), Level.INFO, null,
                 // arg.param and result are logged.
@@ -34,7 +34,7 @@ public class ApiLogPresetTests extends BaseLogTests {
 
     @Test
     void testNoneError() {
-        testApiLogPresetService.none(new MyParam());
+        testApiLogPresetService.none(new MyBizParam());
 
         assertLog(TestApiLogPresetService.class.getName(), Level.ERROR,
                 // Stack trace is not logged.
@@ -45,7 +45,7 @@ public class ApiLogPresetTests extends BaseLogTests {
 
     @Test
     void testAllError() {
-        testApiLogPresetService.all(new MyParam());
+        testApiLogPresetService.all(new MyBizParam());
 
         assertLog(TestApiLogPresetService.class.getName(), Level.ERROR,
                 // Stack trace is logged.

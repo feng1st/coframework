@@ -1,6 +1,6 @@
 package io.codeone.framework.api.enableplugins;
 
-import io.codeone.framework.api.enableplugins.domain.param.MyParam;
+import io.codeone.framework.api.enableplugins.domain.param.MyBizParam;
 import io.codeone.framework.api.enableplugins.domain.service.TestApiEnablePluginsService;
 import io.codeone.framework.api.exception.CommonCodes;
 import io.codeone.framework.api.response.Result;
@@ -17,7 +17,7 @@ public class ApiEnablePluginsTests {
 
     @Test
     void testCheckArgs() {
-        Result<Long> result = testApiEnablePluginsService.noArgIniting(new MyParam());
+        Result<Long> result = testApiEnablePluginsService.noArgIniting(new MyBizParam());
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertEquals(CommonCodes.INVALID_ARGS, result.getErrorCode());
         Assertions.assertEquals("id is null", result.getErrorMessage());
@@ -25,7 +25,7 @@ public class ApiEnablePluginsTests {
 
     @Test
     void testWithCustomMessage() {
-        Result<Long> result = testApiEnablePluginsService.argIniting(new MyParam());
+        Result<Long> result = testApiEnablePluginsService.argIniting(new MyBizParam());
         Assertions.assertTrue(result.isSuccess());
         Assertions.assertEquals(0L, result.getData());
     }

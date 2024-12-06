@@ -1,6 +1,6 @@
 package io.codeone.framework.api.enableplugins.ext.plugin;
 
-import io.codeone.framework.api.enableplugins.domain.param.MyParam;
+import io.codeone.framework.api.enableplugins.domain.param.MyBizParam;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
@@ -13,9 +13,9 @@ public class InitMyParamTestPlugin implements Plugin {
     @Override
     public void before(Method method, Object[] args) {
         for (int i = 0; i < args.length; i++) {
-            if (args[i] instanceof MyParam
-                    && ((MyParam) args[i]).getId() == null) {
-                ((MyParam) args[i]).setId(0L);
+            if (args[i] instanceof MyBizParam
+                    && ((MyBizParam) args[i]).getId() == null) {
+                ((MyBizParam) args[i]).setId(0L);
             }
         }
     }

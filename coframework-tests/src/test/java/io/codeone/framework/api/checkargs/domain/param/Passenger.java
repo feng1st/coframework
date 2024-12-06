@@ -1,7 +1,7 @@
 package io.codeone.framework.api.checkargs.domain.param;
 
 import io.codeone.framework.api.checkargs.domain.constants.GandalfsQuotes;
-import io.codeone.framework.api.parameter.BaseParam;
+import io.codeone.framework.api.parameter.BaseBizParam;
 import io.codeone.framework.api.util.Validator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Accessors(chain = true)
-public class Passenger extends BaseParam {
+public class Passenger extends BaseBizParam {
 
     private static final Set<String> DEMONS;
 

@@ -4,7 +4,7 @@ import io.codeone.framework.api.API;
 import io.codeone.framework.api.exception.CommonCodes;
 import io.codeone.framework.api.exception.CustomErrorMessage;
 import io.codeone.framework.api.extoresult.domain.exception.MyException;
-import io.codeone.framework.api.extoresult.domain.param.MyParam;
+import io.codeone.framework.api.extoresult.domain.param.MyBizParam;
 import io.codeone.framework.api.response.Result;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestApiExToResultService {
 
-    public Result<Void> withCheckArgs(MyParam param) {
+    public Result<Void> withCheckArgs(MyBizParam param) {
         return Result.success();
     }
 
