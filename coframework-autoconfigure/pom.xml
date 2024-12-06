@@ -26,11 +26,11 @@
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-ext</artifactId>
+            <artifactId>coframework-chain</artifactId>
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-chain</artifactId>
+            <artifactId>coframework-ext</artifactId>
         </dependency>
     </dependencies>
 
