@@ -6,28 +6,52 @@ import io.codeone.framework.chain.log.Quiet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Represents a chainable unit that executes its components sequentially.
+ *
+ * <p>If any component in the sequence returns {@code false}, the execution stops,
+ * and the chain breaks.
+ */
 public interface Sequential extends Chainable, Composite, Quiet {
 
+    /**
+     * Creates a new {@code Sequential} instance with the specified components.
+     *
+     * @param components the components to be executed sequentially
+     * @return a new {@code Sequential} instance
+     */
     static Sequential of(Chainable... components) {
         return new PlainSequential(components);
     }
 
+    /**
+     * Executes all components in sequence.
+     *
+     * @param context the context in which execution occurs
+     * @return {@code true} if all components succeed; {@code false} otherwise
+     */
     @Override
     default boolean execute(Context context) {
         for (Chainable component : getComponents()) {
             if (!component.run(context)) {
-                // break chain earlier
+                // Break chain early
                 return false;
             }
         }
-        // continue chain
+        // Continue chain
         return true;
     }
 
+    /**
+     * A plain implementation of {@link Sequential}.
+     */
     @RequiredArgsConstructor
     @Getter
     class PlainSequential implements Sequential {
 
+        /**
+         * The components to be executed sequentially.
+         */
         private final Chainable[] components;
     }
 }

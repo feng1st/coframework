@@ -12,17 +12,36 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+/**
+ * Represents a chainable unit that executes its components in parallel.
+ *
+ * <p>Components are executed concurrently if a thread pool is available. If any
+ * component returns {@code false}, the chain stops, and the execution short-circuits.
+ */
 public interface Parallel extends Chainable, Composite, Quiet {
 
+    /**
+     * Creates a new {@code Parallel} instance with the specified components.
+     *
+     * @param components the components to be executed in parallel
+     * @return a new {@code Parallel} instance
+     */
     static Parallel of(Chainable... components) {
         return new PlainParallel(components);
     }
 
+    /**
+     * Executes all components in parallel using the provided thread pool, or sequentially
+     * if no thread pool is available.
+     *
+     * @param context the context in which execution occurs
+     * @return {@code true} if all components succeed; {@code false} otherwise
+     */
     @Override
     @SneakyThrows
     default boolean execute(Context context) {
         ExecutorService threadPool = context.threadPool();
-        // execute in parallel
+        // Execute in parallel
         if (threadPool != null
                 && !threadPool.isShutdown()) {
             List<Future<Boolean>> futures = new ArrayList<>();
@@ -31,28 +50,34 @@ public interface Parallel extends Chainable, Composite, Quiet {
             }
             for (Future<Boolean> future : futures) {
                 if (!future.get()) {
-                    // break chain earlier
+                    // Break chain early
                     return false;
                 }
             }
         }
-        // fallback to sequential
+        // Fallback to sequential execution
         else {
             for (Chainable component : getComponents()) {
                 if (!component.run(context)) {
-                    // break chain earlier
+                    // Break chain early
                     return false;
                 }
             }
         }
-        // continue chain
+        // Continue chain
         return true;
     }
 
+    /**
+     * A plain implementation of {@link Parallel}.
+     */
     @RequiredArgsConstructor
     @Getter
     class PlainParallel implements Parallel {
 
+        /**
+         * The components to be executed in parallel.
+         */
         private final Chainable[] components;
     }
 }
