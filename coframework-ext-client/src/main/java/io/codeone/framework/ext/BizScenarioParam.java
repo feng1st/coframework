@@ -1,7 +1,7 @@
 package io.codeone.framework.ext;
 
 /**
- * Defines a contract for providing a {@code BizScenario} instance.
+ * Defines a contract for providing a {@link BizScenario} instance.
  *
  * <p>Classes implementing this interface allow the framework to extract a {@code
  * BizScenario} that can be used to locate a specific {@code Extension} implementation

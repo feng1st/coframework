@@ -9,7 +9,7 @@ import lombok.ToString;
 /**
  * Base class for parameters with business identity and scenario.
  *
- * <p>The associated {@code bizScenario} provides the identity used to route requests
+ * <p>The associated {@link BizScenario} provides the identity used to route requests
  * to specific implementations of an {@code Extensible} interface.
  */
 @Data
