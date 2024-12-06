@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Accessors(fluent = true, chain = true)
 @Slf4j(topic = "chain")
@@ -36,7 +36,7 @@ public class Context implements BizScenarioParam {
 
     @Getter
     @Setter
-    private Consumer<Context> onEnterChainable;
+    private Consumer<Context> onExecute;
 
     public static Context of() {
         return new Context();
@@ -93,25 +93,25 @@ public class Context implements BizScenarioParam {
         return of(context.paramMap);
     }
 
-    public Context withParam(Object key, Object value) {
-        putParam(key, value);
+    public Context with(Object key, Object value) {
+        put(key, value);
         return this;
     }
 
-    public <V> void ifParamPresent(Object key, Consumer<V> consumer) {
+    public <V> void ifPresent(Object key, Consumer<V> action) {
         Optional.ofNullable(this.<V>tryCast(key, paramMap.get(key)))
-                .ifPresent(consumer);
+                .ifPresent(action);
     }
 
-    public <V> V getParam(Object key) {
+    public <V> V get(Object key) {
         return tryCast(key, paramMap.get(key));
     }
 
-    public <V> V getParamOrDefault(Object key, V defaultValue) {
+    public <V> V getOrDefault(Object key, V defaultValue) {
         return tryCast(key, paramMap.getOrDefault(key, tryCast(key, defaultValue)));
     }
 
-    public <V> V putParam(Object key, V value) {
+    public <V> V put(Object key, V value) {
         if (value != null) {
             return tryCast(key, paramMap.put(key, tryCast(key, value)));
         } else {
@@ -119,53 +119,55 @@ public class Context implements BizScenarioParam {
         }
     }
 
-    public <V> V putParamIfAbsent(Object key, V value) {
+    public <V> V putIfAbsent(Object key, V value) {
         if (value != null) {
             return tryCast(key, paramMap.putIfAbsent(key, tryCast(key, value)));
         }
         return null;
     }
 
-    public <V> V removeParam(Object key) {
+    public <V> V remove(Object key) {
         return tryCast(key, paramMap.remove(key));
     }
 
-    public <V> V supplyParamIfAbsent(Object key, Supplier<V> supplier) {
-        return tryCast(key, paramMap.computeIfAbsent(key, k -> tryCast(key, supplier.get())));
+    public <V> V computeIfAbsent(Object key, Function<Object, ? extends V> mappingFunction) {
+        return tryCast(key, paramMap.computeIfAbsent(key,
+                k -> tryCast(k, mappingFunction.apply(k))));
     }
 
-    public <V> V updateParamIfPresent(Object key, Function<V, V> updater) {
-        return tryCast(key, paramMap.computeIfPresent(key, (k, v) -> tryCast(key, updater.apply(tryCast(key, v)))));
+    public <V> V computeIfPresent(Object key, BiFunction<Object, ? super V, ? extends V> remappingFunction) {
+        return tryCast(key, paramMap.computeIfPresent(key,
+                (k, v) -> tryCast(k, remappingFunction.apply(k, tryCast(k, v)))));
     }
 
-    public <V> V updateParam(Object key, Function<V, V> updater) {
-        return tryCast(key, paramMap.compute(key, (k, v) -> tryCast(key, updater.apply(tryCast(key, v)))));
+    public <V> V compute(Object key, BiFunction<Object, ? super V, ? extends V> remappingFunction) {
+        return tryCast(key, paramMap.compute(key,
+                (k, v) -> tryCast(k, remappingFunction.apply(k, tryCast(k, v)))));
     }
 
-    public <K, V> V getKvParam(Object key, K subKey) {
-        Map<K, V> subMap = getParam(key);
+    public <K, V> V kvGet(Object key, K subKey) {
+        Map<K, V> subMap = get(key);
         if (subMap != null) {
             return subMap.get(subKey);
         }
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    public <K, V> V putKvParam(Object key, K subKey, V value) {
+    public <K, V> V kvPut(Object key, K subKey, V value) {
         if (value != null) {
-            return (V) supplyParamIfAbsent(key, ConcurrentHashMap::new)
+            return computeIfAbsent(key, k -> new ConcurrentHashMap<K, V>())
                     .put(subKey, value);
         }
-        Map<K, V> subMap = getParam(key);
+        Map<K, V> subMap = get(key);
         if (subMap != null) {
             return subMap.remove(subKey);
         }
         return null;
     }
 
-    public <K, V> V supplyKvParamIfAbsent(Object key, K subKey, Supplier<V> supplier) {
-        return supplyParamIfAbsent(key, () -> new ConcurrentHashMap<K, V>())
-                .computeIfAbsent(subKey, k -> supplier.get());
+    public <K, V> V kvComputeIfAbsent(Object key, K subKey, Function<? super K, ? extends V> mappingFunction) {
+        return computeIfAbsent(key, k -> new ConcurrentHashMap<K, V>())
+                .computeIfAbsent(subKey, mappingFunction);
     }
 
     public void log(Object key, Object value) {
