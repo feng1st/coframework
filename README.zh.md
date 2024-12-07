@@ -148,17 +148,27 @@ public class OldExceptionConverter implements ApiExceptionConverter<OldException
 }
 ```
 
-## 2. Plugin System
+---
 
-### 2.1 Quick Start
+## 2. 插件系统
+
+### 2.1 快速开始
+
+#### 2.1.1 二方包
+
+---
 
 ## 3. Chain System
 
 ### 3.1 Quick Start
 
+---
+
 ## 4. Extension System
 
 ### 4.1 Quick Start
+
+---
 
 ## 5. Logging
 
