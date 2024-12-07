@@ -282,6 +282,8 @@ public class BizProcessPlugin implements Plugin {
 
 ## 3. 链系统
 
+链系统提供了灵活的流程编排能力，支持节点解耦与链式执行，简化复杂业务逻辑的组织与扩展。
+
 ### 3.1 快速开始
 
 #### 3.1.1 二方包
@@ -295,7 +297,9 @@ public class BizProcessPlugin implements Plugin {
 </dependency>
 ```
 
-#### 3.1.2 基础链
+#### 3.1.2 案例
+
+下面案例演示了包含两个节点的链的执行：
 
 ```java
 
@@ -328,6 +332,68 @@ public class Consume implements Chainable {
         assert "content".equals(context.get(String.class));
         return true;
     }
+}
+```
+
+### 3.2 高级用法
+
+#### 3.2.1 Lambda表达式
+
+`Chainable`可以写为lambda表达式，例如：
+
+```java
+
+@Service
+public class ChainService {
+    public void run() {
+        Sequential.of(
+                context -> {
+                    context.put(String.class, "content");
+                    return true;
+                },
+                context -> {
+                    assert "content".equals(context.get(String.class));
+                    return true;
+                }).run(Context.of());
+    }
+}
+```
+
+#### 3.2.2 链节点种类
+
+链系统提供了下列链节点：
+
+|             | 说明                                        |
+|-------------|-------------------------------------------|
+| Chainable   | 提供`execute`方法，返回`false`结束链的执行，否则继续执行下一节点  |
+| Continuous  | 提供`executeAndContinue`方法，方式没有返回值，不会中断链的执行 |
+| Conditional | 有条件执行                                     |
+| Empty       | 空节点                                       |
+| Sequential  | 串行执行成员节点                                  |
+| Parallel    | 如果线程池可用，并行执行成员节点；否则退化为串行                  |
+
+#### 3.2.3 流程编排
+
+可以通过`Sequential`、`Parallel`进行流程编排：
+
+```java
+private Chainable getChain() {
+    // 整体串行生产消费
+    return Sequential.of(
+            // 并行生产
+            Parallel.of(
+                    mapProduceFoo,
+                    mapProduceBar,
+                    mapProduceBaz),
+            // 生产汇合
+            reduceProduce,
+            // 并行消费
+            Parallel.of(
+                    mapConsumeFoo,
+                    mapConsumeBar,
+                    mapConsumeBaz),
+            // 消费汇合
+            reduceConsume);
 }
 ```
 
