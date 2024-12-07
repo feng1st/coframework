@@ -169,11 +169,11 @@ public class BizContext extends Context implements BizScenarioParam {
      * {@inheritDoc}
      */
     @Override
-    public void buildLog(Map<String, Object> map) {
-        super.buildLog(map);
+    public void buildLog(Map<String, Object> content) {
+        super.buildLog(content);
         if (bizScenario != null) {
-            map.put("bizId", bizScenario.getBizId());
-            map.put("scenario", bizScenario.getScenario());
+            content.put("bizId", bizScenario.getBizId());
+            content.put("scenario", bizScenario.getScenario());
         }
     }
 }

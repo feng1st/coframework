@@ -382,10 +382,10 @@ public class Context {
     /**
      * Builds the log representation of this context.
      *
-     * @param map the map to populate with loggable context information
+     * @param content the map to populate with log content
      */
-    public void buildLog(Map<String, Object> map) {
-        map.put("chain", chainName);
+    public void buildLog(Map<String, Object> content) {
+        content.put("chain", chainName);
     }
 
     @SuppressWarnings("unchecked")

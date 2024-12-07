@@ -26,7 +26,7 @@ public class ChainLogger {
      * Logs the details of a chainable unit execution.
      *
      * <p>The method records information such as execution time, the chain name,
-     * business identity and scenario, parameters, and any results or exceptions.
+     * parameters, and any results or exceptions.
      *
      * @param context           the execution context
      * @param chainable         the chainable unit being executed
