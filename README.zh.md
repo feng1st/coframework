@@ -42,6 +42,7 @@
 
 @API // 服务上，对所有方法生效
 public class BizApiImpl implements BizApi {
+
     @API // 或者方法上，对当前方法生效
     public Result<BizData> getData(BizParam param) {
         // ...
