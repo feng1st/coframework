@@ -183,7 +183,7 @@ public class BizProcessPlugin implements Plugin {
 }
 ```
 
-通过应用目标注解启用插件：
+通过应用目标注解来启用插件：
 
 ```java
 
