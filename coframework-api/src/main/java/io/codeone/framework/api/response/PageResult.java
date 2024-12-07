@@ -8,11 +8,15 @@ import java.util.List;
 /**
  * Represents a paginated result that includes metadata for pagination.
  *
+ * <p>Note: {@code Result<Page<T>>} is the recommended approach for returning paginated
+ * results and is generally preferred over {@code PageResult<T>}.
+ *
  * <p>When a service or method is annotated with {@code API} and returns a {@code
  * PageResult} type, any exception thrown during the operation will be automatically
  * transformed by the framework into a failed {@code PageResult} instance.
  *
  * @param <T> the type of data in the paginated result
+ * @see Page
  */
 @Data
 public class PageResult<T> implements ApiResult<List<T>>, PageData<T> {
