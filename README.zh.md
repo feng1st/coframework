@@ -83,7 +83,7 @@ public Result<BizData> getData(BizParam param) {
 #### 1.2.1 定制异常转失败结果
 
 1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiException`接口，比如继承自`BaseException`。
-   此时`Result.errorCode`会使用`ApiException.code`。
+   此时`errorCode`会使用`ApiException.code`。
 2. 如果希望定制结果的`errorMessage`（默认为异常消息），可以使用`@CustomErrorMessage`注解：
 
 ```java
@@ -110,7 +110,7 @@ public Result<BizData> getData(BizParam param) {
 
 ### 1.3 支持现有系统
 
-框架支持不修改接口签名，直接在现有系统上应用增强能力。
+框架支持在现有系统上应用增强能力。
 
 #### 1.3.1 参数校验
 
