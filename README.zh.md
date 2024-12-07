@@ -249,7 +249,34 @@ io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
 
 #### 2.2.4 插件顺序
 
-多个插件的执行类似于堆栈，需要额外注意插件**各方法**的执行顺序：
+框架定义了8个标准阶段用于决定插件执行顺序：
+
+| 阶段                       | 顺序值 | 主逻辑      |
+|--------------------------|-----|----------|
+| PRE_ARG_INTERCEPTING     | 0   | before() |
+| ARG_INTERCEPTING         | 1   | before() |
+| POST_ARG_INTERCEPTING    | 2   | before() |
+| BEFORE_TARGET            | 3   | before() |
+| AFTER_TARGET             | -4  | after()  |
+| PRE_RESULT_INTERCEPTING  | -5  | after()  |
+| RESULT_INTERCEPTING      | -6  | after()  |
+| POST_RESULT_INTERCEPTING | -7  | after()  |
+
+多个插件的执行顺序类似于堆栈。如图所示，`POST_RESULT_INTERCEPTING`阶段插件的`before()`方法，甚至早于`PRE_ARG_INTERCEPTING`
+阶段插件的`before()`方法。请额外注意插件**各方法**的执行顺序，将主逻辑放在正确的方法里。
+
+![](docs/images/order-of-plugins.png)
+
+如果需要精细控制同一阶段中不同插件的先后顺序，可以搭配`org.springframework.core.annotation.Order`使用：
+
+```java
+
+@Plug(value = Stages.BEFORE_TARGET)
+@Order(1)
+public class BizProcessPlugin implements Plugin {
+    // ...
+}
+```
 
 ---
 
