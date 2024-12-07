@@ -302,30 +302,30 @@ public class BizProcessPlugin implements Plugin {
 @Service
 public class ChainService {
     @Autowired
-    private Write write;
+    private Produce produce;
     @Autowired
-    private Read read;
+    private Consume consume;
 
     public void run() {
-        Sequential.of(write, read)
+        Sequential.of(produce, consume)
                 .run(Context.of());
     }
 }
 
 @Component
-public class Write implements Chainable {
+public class Produce implements Chainable {
     @Override
     public boolean execute(Context context) {
-        context.put(String.class, "test");
+        context.put(String.class, "content");
         return true;
     }
 }
 
 @Component
-public class Read implements Chainable {
+public class Consume implements Chainable {
     @Override
     public boolean execute(Context context) {
-        assert "test".equals(context.get(String.class));
+        assert "content".equals(context.get(String.class));
         return true;
     }
 }

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChainService {
     @Autowired
-    private Write write;
+    private Produce produce;
     @Autowired
-    private Read read;
+    private Consume consume;
 
     public void run() {
-        Sequential.of(write, read)
+        Sequential.of(produce, consume)
                 .run(Context.of());
     }
 }

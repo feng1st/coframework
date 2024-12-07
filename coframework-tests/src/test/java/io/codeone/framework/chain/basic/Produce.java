@@ -5,10 +5,10 @@ import io.codeone.framework.chain.context.Context;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Write implements Chainable {
+public class Produce implements Chainable {
     @Override
     public boolean execute(Context context) {
-        context.put(String.class, "test");
+        context.put(String.class, "content");
         return true;
     }
 }
