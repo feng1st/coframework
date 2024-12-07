@@ -1,8 +1,6 @@
 package io.codeone.framework.chain.context;
 
 import io.codeone.framework.chain.log.MDC;
-import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.ext.BizScenarioParam;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -23,9 +21,9 @@ import java.util.function.Function;
  * configurations and is thread-safe.
  */
 @Accessors(fluent = true, chain = true)
-public class Context implements BizScenarioParam {
+public class Context {
 
-    private final Map<Object, Object> paramMap = new ConcurrentHashMap<>();
+    protected final Map<Object, Object> paramMap = new ConcurrentHashMap<>();
 
     /**
      * The name of the chain associated with this context.
@@ -33,13 +31,6 @@ public class Context implements BizScenarioParam {
     @Getter
     @Setter
     private String chainName = "anonymous";
-
-    /**
-     * The business identity and scenario associated with this context.
-     */
-    @Getter
-    @Setter
-    private BizScenario bizScenario;
 
     /**
      * The thread pool associated with this context.
@@ -178,7 +169,8 @@ public class Context implements BizScenarioParam {
      * Creates a new {@code Context} as a copy of another {@code Context}.
      *
      * @param context the context to copy
-     * @return a new {@code Context} instance with the same parameters as the provided context
+     * @return a new {@code Context} instance with the same parameters as the provided
+     * context
      */
     public static Context of(Context context) {
         return of(context.paramMap);
@@ -222,7 +214,8 @@ public class Context implements BizScenarioParam {
     }
 
     /**
-     * Retrieves the value associated with the specified key or returns a default value if the key is not present.
+     * Retrieves the value associated with the specified key or returns a default
+     * value if the key is not present.
      *
      * @param key          the key
      * @param defaultValue the default value to return if the key is not found
@@ -269,7 +262,8 @@ public class Context implements BizScenarioParam {
      *
      * @param key the key to remove
      * @param <V> the type of the value
-     * @return the removed value, or {@code null} if no value was associated with the key
+     * @return the removed value, or {@code null} if no value was associated with
+     * the key
      */
     public <V> V remove(Object key) {
         return tryCast(key, paramMap.remove(key));
@@ -317,7 +311,8 @@ public class Context implements BizScenarioParam {
     // Nested map operations (Key-Value maps)
 
     /**
-     * Retrieves a value from a nested map associated with the specified key and sub-key.
+     * Retrieves a value from a nested map associated with the specified key and
+     * sub-key.
      *
      * @param key    the main key
      * @param subKey the sub-key within the nested map
@@ -334,14 +329,16 @@ public class Context implements BizScenarioParam {
     }
 
     /**
-     * Adds or updates a key-value pair within a nested map associated with the specified key.
+     * Adds or updates a key-value pair within a nested map associated with the
+     * specified key.
      *
      * @param key    the main key
      * @param subKey the sub-key
      * @param value  the value to associate with the sub-key
      * @param <K>    the type of the sub-key
      * @param <V>    the type of the value
-     * @return the previous value associated with the sub-key, or {@code null} if none
+     * @return the previous value associated with the sub-key, or {@code null} if
+     * none
      */
     public <K, V> V kvPut(Object key, K subKey, V value) {
         if (value != null) {
@@ -382,16 +379,13 @@ public class Context implements BizScenarioParam {
         MDC.put(key, value);
     }
 
-    // Business identity and scenario handling
-
     /**
-     * Retrieves the business identity and scenario associated with this context.
+     * Builds the log representation of this context.
      *
-     * @return the {@link BizScenario}
+     * @param map the map to populate with loggable context information
      */
-    @Override
-    public BizScenario getBizScenario() {
-        return bizScenario;
+    public void buildLog(Map<String, Object> map) {
+        map.put("chain", chainName);
     }
 
     @SuppressWarnings("unchecked")
