@@ -23,7 +23,7 @@ logic implementation.
 <dependency>
     <groupId>io.codeone</groupId>
     <artifactId>coframework-api</artifactId>
-    <version>1.0.0</version>
+    <version>${coframework.version}</version>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@ logic implementation.
 <dependency>
     <groupId>io.codeone</groupId>
     <artifactId>coframework-api-core</artifactId>
-    <version>1.0.0</version>
+    <version>${coframework.version}</version>
 </dependency>
 ```
 

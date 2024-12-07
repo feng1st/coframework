@@ -12,25 +12,25 @@
 
 假设你的业务应用由两部分组成，`biz-client`用于对外暴露接口，`biz-service`用于实现业务逻辑。则：
 
-在`biz-client`中引入`coframework-api`，用于引入接口所需模型：
+- 在`biz-client`中引入`coframework-api`，用于引入接口所需模型：
 
 ```xml
 
 <dependency>
     <groupId>io.codeone</groupId>
     <artifactId>coframework-api</artifactId>
-    <version>1.0.0</version>
+    <version>${coframework.version}</version>
 </dependency>
 ```
 
-在`biz-service`中引入`coframework-api-core`，用于自动生效增强功能：
+- 在`biz-service`中引入`coframework-api-core`，用于自动生效增强功能：
 
 ```xml
 
 <dependency>
     <groupId>io.codeone</groupId>
     <artifactId>coframework-api-core</artifactId>
-    <version>1.0.0</version>
+    <version>${coframework.version}</version>
 </dependency>
 ```
 
@@ -152,9 +152,104 @@ public class OldExceptionConverter implements ApiExceptionConverter<OldException
 
 ## 2. 插件系统
 
+插件系统提供了类似AOP语法，但是更加灵活友好的切面拦截能力。
+
 ### 2.1 快速开始
 
 #### 2.1.1 二方包
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-plugin</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
+
+#### 2.1.2 定义和使用插件
+
+通过实现`Plugin`接口生成插件，通过`@Plug`注解指定生效阶段和目标注解（此处为`@BizProcess`）：
+
+```java
+
+@Plug(value = Stages.BEFORE_TARGET, targetAnnotations = BizProcess.class)
+public class BizProcessPlugin implements Plugin {
+
+    @Override
+    public void before(Method method, Object[] args) {
+        // ...
+    }
+}
+```
+
+通过应用目标注解启用插件：
+
+```java
+
+@BizProcess
+public Result<BizData> getData(BizParam param) {
+    // ...
+}
+```
+
+### 2.2 高级用法
+
+#### 2.2.1 动态启用
+
+可以通过`@EnablePlugin`注解动态启用插件：
+
+```java
+
+@EnablePlugin({FooPlugin.class, BarPlugin.class})
+public Result<BizData> getData(BizParam param) {
+    // ...
+}
+```
+
+这些插件不必指定`@Plug.targetAnnotations`。
+
+#### 2.2.2 动态绑定
+
+可以通过注册`AnnoPluginBinding`bean来实现动态绑定，而不用提前指定`@Plug.targetAnnotations`。
+此方法常用来绑定已存在的插件。
+
+```java
+
+@Bean
+public AnnoPluginBinding bizProcessBinding() {
+    return AnnoPluginBinding.of(BizProcess.class, BizProcessPlugin.class);
+}
+```
+
+#### 2.2.3 通过SPI绑定
+
+和动态绑定类似，但是通过SPI在项目启动早期建立绑定关系。
+此方法主要解决复杂业务应用可能出现的插件循环依赖导致加载失败的问题。
+
+1. 实现`AnnoPluginBindingFactory`工厂类，提供动态绑定关系：
+
+```java
+public class BizPluginBindingFactory implements AnnoPluginBindingFactory {
+
+    @Override
+    public List<AnnoPluginBinding> getBindings() {
+        return Arrays.asList(
+                AnnoPluginBinding.of(BizProcess.class, BizProcessPlugin.class));
+    }
+}
+```
+
+2. 在项目的`META-INF/spring.factories`中引入实现的工厂类：
+
+```properties
+io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
+  com.biz.config.BizPluginBindingFactory
+```
+
+#### 2.2.4 插件顺序
+
+多个插件的执行类似于堆栈，需要额外注意插件**各方法**的执行顺序：
 
 ---
 
