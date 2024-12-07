@@ -1,116 +1,158 @@
-# coframework
+# Co-Framework
 
-Elegant and efficient Java framework
+An Elegant and Efficient Java Business Framework
 
-## 1. API Models
+---
 
-API models are standard models that mainly used in but not limited to the API layer.
+## 1. API
 
-The framework provided many mechanisms and utilities to automize the using of these models.
+The framework enhances the API layer with features like parameter validation, exception-to-failure conversion, and call
+logging.
 
-| Section   | Class            | Type           | Summary                                                      |
-|-----------|------------------|----------------|--------------------------------------------------------------|
-| Request   | ApiParam         | interface      | Automatic argument checking                                  |
-|           | BizScenarioParam | interface      | Extension routing (in `coframework-ext-client`)              |
-|           | BaseRequest      | abstract class | ApiParam + BizScenarioParam                                  |
-|           | PageRequest      | abstract class | Same as above, for paged request                             |
-| Response  | Result           | class          | Result container, automatic exception wrapping               |
-|           | Page             | class          | Paged data container                                         |
-| Exception | ApiError         | interface      | Error code and message carrier, automatic exception wrapping |
-|           | BaseException    | abstract class | RuntimeException + ApiError                                  |
-|           | CommonErrors     | enum           | Common ApiErrors                                             |
+### 1.1 Quick Start
 
-Package:
+#### 1.1.1 Dependencies
+
+Assume your business application consists of two modules: `biz-client` for exposing APIs and `biz-service` for business
+logic implementation.
+
+- In `biz-client`, add the `coframework-api` dependency for defining API models:
 
 ```xml
 
 <dependency>
     <groupId>io.codeone</groupId>
     <artifactId>coframework-api</artifactId>
-    <version>...</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
-### 1.1 Requests
+- In `biz-service`, add the `coframework-api-core` dependency for enabling core features:
 
-#### 1.1.1 `ApiParam` interface
+```xml
 
-`ApiParam` is the interface of all API requests, you can implement it directly, or extend the `BaseRequest` class which
-implemented the `ApiParam`.
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-api-core</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
-`ApiParam` has a `checkArgs()` method which will be called **automatically** upon an API invocation. You should throw an
-IllegalArgume ntException if there is an unexpected or incorrect argument. The framework also provided a `ArgChecker`
-utility which has some handy argument-checking functions.
+#### 1.1.2 Parameter Validation
 
-The content of the `checkArgs()` will be part of the API signatures and will be distributed along with the client jar.
-In this way the users of the client will have a clear insight of your APIs and know the requirements exactly.
+1. Annotate the service class or methods with `@API`:
 
-#### 1.1.2 `BaseRequest` abstract class
+```java
 
-`BaseRequest` is the base class of all API requests, which implemented the `ApiParam` and `BizScenarioParam` interfaces.
+@API // Applies to all methods in the class
+public class BizApiImpl implements BizApi {
 
-The implementation of the `BizScenarioParam` means `BaseRequest` will have the business identity of the
-caller, which is a necessity in the Extension System.
+    @API // Applies only to this method
+    public Result<BizData> getData(BizParam param) {
+        // ...
+    }
+}
+```
 
-All properties of `BaseRequest` are lazily instantiated so the overhead is little.
+2. Make API parameters extend `BaseParam` or `BasePageParam` and implement the `validate()` method:
 
-#### 1.1.3 `PageRequest` abstract class
+```java
+public class BizParam extends BaseParam {
+    @Override
+    public void validate() {
+        Validator.requireNonNull(userId, "userId is null");
+    }
+}
+```
 
-`PageRequest` is the base class of all paged API requests, and is a subclass of the `BaseRequest`.
+#### 1.1.3 Exception-to-Failure Conversion
 
-### 1.2 Responses
+1. Annotate the service class or methods with `@API`.
+2. Wrap the method's return value using `Result`:
 
-#### 1.2.1 `Result<T>` class
+```java
+// The method will return a failure result instead of throwing an exception
+public Result<BizData> getData(BizParam param) {
+    // ...
+    throw new BizException(CODE, MESSAGE);
+}
+```
 
-`Result<T>` is the wrapping class of the result of all API invocations, and it contains the successfulness, error code,
-error message and the actual result.
+#### 1.1.4 Call Logging
 
-The framework will convert any exception to a `Result<T>` **automatically** if this is the return type of the API
-service.
+Adding the `@API` annotation to a service or method enables automatic API call logging.
 
-#### 1.2.2 `Page<T>` class
+### 1.2 Advanced Features
 
-`Page<T>` is the container class of a paged data, which contains the current page index, size of one page, total number
-of data and the list of data of current page.
+#### 1.2.1 Custom Exception-to-Failure Conversion
 
-`Page<T>` alone is NOT a result. To represent a paged result, please use `Result<Page<T>>`.
+1. To customize the `errorCode` (default is the exception class name), implement the `ApiException` interface, such as
+   by extending `BaseException`. This sets `Result.errorCode` to `ApiException.code`.
 
-### 1.3 Exceptions
+2. To customize the `errorMessage` (default is the exception message), use the `@CustomErrorMessage` annotation:
 
-#### 1.3.1 `ApiError` interface
+```java
 
-The `ApiError` interface represents the code and message of an error. When the framework converts an `ApiError` to a
-failed `Result<T>`, these properties will be copied to that result.
+@CustomErrorMessage("System is busy, please try again later.")
+public Result<BizData> getData(BizParam param) {
+    // ...
+}
+```
 
-#### 1.3.2 `BaseException` abstract class
+#### 1.2.2 Custom Call Logging
 
-`BaseException` is the base class of all custom exceptions. It has a `code` property since it implemented
-the `ApiError`.
+Use the `@Logging` annotation to adjust log behavior, such as enabling or disabling logging of arguments and return
+values:
 
-#### 1.3.3 `CommonErrors` enumeration
+```java
 
-`CommonErrors` are the constants that represent commonly seen `ApiError`s, including two special ones:
+@Logging(logArgs = false, logResult = false)
+public Result<BizData> getData(BizParam param) {
+    // ...
+}
+```
 
-1. `CommonErrors#SUCCESS` which indicates there is no error.
-2. `CommonErrors#INVALID_ARGS` which is recommended to use when there is an `IllegalArgumentException`.
+For more details, see section **5. Logging**.
 
-### 1.4 Specifications and Standards
+### 1.3 Integrating with Existing Systems
 
-#### 1.4.1 Request and Response Types
+The framework supports applying enhanced features without changing the API signatures of existing systems.
 
-In the **API** layer, all requests should be a `BaseRequest`, and all responses should be the `Result`, since the
-framework is depending on these types to do some automatic works.
+#### 1.3.1 Parameter Validation
 
-Other than the API layer, services should **NOT** use the `Result` class as the return type, and should return results
-unwrapped. To return a failed result, just throw a `BaseException` with the error code and message, and it will be
-wrapped to a `Result` at the API layer by the framework.
+Refer to `ArgCheckingApiPlugin` for creating custom plugins that add validation to existing parameter types.
 
-#### 1.4.2 Exceptions as Control Flow
+#### 1.3.2 Exception-to-Failure Conversion
 
-As we said before, in the non-API layer, you should throw an exception rather than return a wrapped failed result.
+Refer to `ExToResultApiPlugin` for creating custom plugins that convert exceptions into existing result types.
 
-This is the trade-off we like to accept. We value the huge improvement of readability over the little sacrifice of
-performance. And in a business system, the creation of an exception (and the stack trace) is never really an expense.
+#### 1.3.3 Call Logging
+
+To enable accurate logging when using legacy models, implement and register Spring beans for `ApiResultConverter` and
+`ApiExceptionConverter`:
+
+```java
+
+@Component
+public class OldResultConverter<T> implements ApiResultConverter<OldResult<T>> {
+
+    @Override
+    public ApiResult<T> convert(OldResult<T> source) {
+        return source.isSuccess()
+                ? Result.success(source.getData())
+                : Result.failure(source.getErrorCode(), source.getErrorMessage());
+    }
+}
+
+@Component
+public class OldExceptionConverter implements ApiExceptionConverter<OldException> {
+
+    @Override
+    public ApiException convert(OldException source) {
+        return source::getCode;
+    }
+}
+```
 
 ## 2. Plugin System
 
