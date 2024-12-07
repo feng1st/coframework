@@ -390,6 +390,9 @@ public class Context {
 
     @SuppressWarnings("unchecked")
     private <T> T tryCast(Object key, Object obj) {
+        if (key instanceof Class) {
+            return ((Class<T>) key).cast(obj);
+        }
         if (key instanceof Typed) {
             return ((Typed) key).cast(obj);
         }

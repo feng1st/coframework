@@ -280,9 +280,56 @@ public class BizProcessPlugin implements Plugin {
 
 ---
 
-## 3. Chain System
+## 3. 链系统
 
-### 3.1 Quick Start
+### 3.1 快速开始
+
+#### 3.1.1 二方包
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-chain</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
+
+#### 3.1.2 基础链
+
+```java
+
+@Service
+public class ChainService {
+    @Autowired
+    private Write write;
+    @Autowired
+    private Read read;
+
+    public void run() {
+        Sequential.of(write, read)
+                .run(Context.of());
+    }
+}
+
+@Component
+public class Write implements Chainable {
+    @Override
+    public boolean execute(Context context) {
+        context.put(String.class, "test");
+        return true;
+    }
+}
+
+@Component
+public class Read implements Chainable {
+    @Override
+    public boolean execute(Context context) {
+        assert "test".equals(context.get(String.class));
+        return true;
+    }
+}
+```
 
 ---
 
