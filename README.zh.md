@@ -2,7 +2,7 @@
 
 优雅高效的Java业务框架。
 
-## 1. API
+## 1. API增强
 
 框架为API层提供了参数校验、异常转失败结果、调用日志等增强功能。
 
@@ -10,26 +10,24 @@
 
 #### 1.1.1 二方包
 
-假设你的业务应用由两部分组成，`biz-client`用于对外暴露接口，`biz-service`用于实现业务逻辑。则：
-
-- 在`biz-client`中引入`coframework-api`，用于引入接口所需模型：
-
-```xml
-
-<dependency>
-    <groupId>io.codeone</groupId>
-    <artifactId>coframework-api</artifactId>
-    <version>${coframework.version}</version>
-</dependency>
-```
-
-- 在`biz-service`中引入`coframework-api-core`，用于自动生效增强功能：
+- `coframework-api-core`用于自动生效增强功能：
 
 ```xml
 
 <dependency>
     <groupId>io.codeone</groupId>
     <artifactId>coframework-api-core</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
+
+- （可选）`coframework-api`用于引入接口所需模型：
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-api</artifactId>
     <version>${coframework.version}</version>
 </dependency>
 ```
@@ -78,6 +76,8 @@ public Result<BizData> getData(BizParam param) {
 
 在接口服务或者方法上添加`@API`注解，则接口调用会自动记录日志。
 
+日志系统能自动识别`ApiResult<T>`和`ApiException`接口模型。
+
 ### 1.2 高级用法
 
 #### 1.2.1 定制异常转失败结果
@@ -110,7 +110,7 @@ public Result<BizData> getData(BizParam param) {
 
 ### 1.3 支持现有系统
 
-框架支持在现有系统上应用增强能力。
+框架支持在现有系统API上应用增强。
 
 #### 1.3.1 参数校验
 
