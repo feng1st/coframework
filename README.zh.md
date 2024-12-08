@@ -246,7 +246,7 @@ public class BizAbilityForManager implements BizAbility {
 
 @Service
 public class BizService {
-    // 引用接口，而不是具体类
+    // 引用接口，而不关心具体类
     @Autowired
     private BizAbility bizAbility;
 
@@ -644,7 +644,7 @@ public class ConsumeForFoo implements Consume {
 public class ChainService {
     @Autowired
     private Produce produce;
-    // 引用接口，而不是具体类
+    // 引用接口，而不关心具体类
     @Autowired
     private Consume consume;
 
