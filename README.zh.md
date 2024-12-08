@@ -190,6 +190,78 @@ public class ChainService {
 
 请参考**4. 链系统**，了解关于链节点、上下文、日志和扩展的高级用法。
 
+### 1.4 扩展系统
+
+扩展系统通过引入可扩展接口提升业务整体的可扩展性——同一个可扩展接口，可以根据不同的业务身份场景，路由到不同的具体扩展实现。
+
+#### 1.4.1 二方包
+
+- `coframework-ext`用于扩展系统自动生效：
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-ext</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
+
+- （如果对外暴露接口）`coframework-ext-client`用于引入可扩展模型：
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-ext-client</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
+
+#### 1.4.2 可扩展接口的定义、实现和调用
+
+1. 定义可扩展接口：
+
+```java
+
+@Ability
+public interface BizAbility {
+    void execute(BizScenario bizScenario);
+}
+```
+
+2. 为不同的业务身份场景提供不同的扩展实现：
+
+```java
+
+@Extension(bizId = "manager")
+public class BizAbilityForManager implements BizAbility {
+    // ...
+}
+```
+
+3. 可扩展接口的调用：
+
+```java
+
+@Service
+public class BizService {
+    // 引用接口，而不是具体类
+    @Autowired
+    private BizAbility bizAbility;
+
+    public void executeBizAbility() {
+        // 因为bizId匹配，对bizAbility的调用会路由到BizAbilityForManager
+        bizAbility.execute(BizScenario.ofBizId("manager"));
+    }
+}
+```
+
+整体实现和普通服务（`org.springframework.stereotype.Service`）差别不大，
+并且还能进一步简化，比如通过上下文而不是显式参数传递路由参数，减少侵入性。
+
+请参考**5. 扩展系统**，了解这些高级用法和更多细节。
+
 ---
 
 ## 2. API增强
@@ -232,7 +304,8 @@ public Result<BizData> getData(BizParam param) {
 
 1. 可以参考`ArgCheckingApiPlugin`，编写插件为现有参数类型增加校验能力。
 2. 可以参考`ExToResultApiPlugin`，编写插件转化异常为现有结果包装类型。
-3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，可以注册旧模型的`ApiResultConverter`和
+3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，可以注册旧模型的`ApiResultConverter`
+   和
    `ApiExceptionConverter`的Spring bean。
 
 ```java
@@ -563,7 +636,7 @@ public class ConsumeForFoo implements Consume {
 }
 ```
 
-3. 扩展点的引用和上下文中的路由参数：
+3. 可扩展链节点的调用：
 
 ```java
 
