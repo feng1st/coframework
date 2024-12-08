@@ -472,30 +472,49 @@ public void run(Input input) {
 
 ### 4.3 记录日志
 
-链节点的执行会记录日志：
+链节点的执行会记录日志，其JSON格式如下：
 
-```json
+```json5
 {
+  // 通过Context.of().chainName("chainName")指定，默认为"anonymous"
   "chain": "chainName",
-  "bizId": "*",
-  "scenario": "*",
+  // 如果使用BizContext.of(BizScenario.of("bizId", "scenario"))，则会记录bizId和scenario
+  "bizId": "bizId",
+  "scenario": "scenario",
   "node": "ClassNameOfNode",
   "elapsed": 0,
+  // 如果链节点抛出异常，则会记录
   "exception": "stringOfException",
+  // 如果链节点返回false，则会记录
   "break": true,
+  // 可通过Context.log("key", "value")来记录
   "params": {
     "key": "value"
   }
 }
 ```
 
+#### 4.3.1 TODO
+
 TODO
+
+```java
+public void run(Input input) {
+    getChain().run(Context.of(Input.class, input)
+            // 会在进入每个节点时执行，有助于记录公共参数
+            .onExecute(context -> {
+                // 在每个节点输出userId，有助于追踪执行链
+                context.<Input>ifPresent(Input.class,
+                        o -> context.log("userId", o.getUserId()));
+            }));
+}
+```
 
 ### 4.4 链节点扩展
 
-如果使用可扩展接口（而不是具体类）作为链节点，则可以实现根据上下文中的业务身份场景，运行时动态路由到不同的链节点实现，从而实现链节点的可扩展性。
+如果使用可扩展接口（而不是具体类）作为链节点，则可以实现根据上下文中的业务身份场景，运行时动态路由到不同的节点实现，从而实现节点的可扩展性。
 
-> 可扩展（"Extensible"）接口、扩展（"Extension"）实现，以及业务身份场景（`BizScenario`）请参考**5. 扩展系统**。
+（可扩展（"Extensible"）接口、扩展（"Extension"）实现，以及业务身份场景（`BizScenario`）概念请参考**5. 扩展系统**。）
 
 1. 链节点作为扩展点：
 
