@@ -2,13 +2,15 @@
 
 优雅高效的Java业务框架。
 
-## 1. API增强
+## 1. 快速开始
+
+## 2. API增强
 
 框架为API层提供了参数校验、异常转失败结果、调用日志等增强功能。
 
-### 1.1 快速开始
+### 2.1 快速开始
 
-#### 1.1.1 二方包
+#### 2.1.1 二方包
 
 - `coframework-api-core`用于自动生效增强功能：
 
@@ -32,7 +34,7 @@
 </dependency>
 ```
 
-#### 1.1.2 参数校验
+#### 2.1.2 参数校验
 
 1. 在接口服务或者方法上添加`@API`注解：
 
@@ -59,7 +61,7 @@ public class BizParam extends BaseParam {
 }
 ```
 
-#### 1.1.3 异常转失败结果
+#### 2.1.3 异常转失败结果
 
 1. 在接口服务或者方法上添加`@API`注解。
 2. 使用`Result`包装接口的返回：
@@ -72,15 +74,15 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-#### 1.1.4 调用日志
+#### 2.1.4 调用日志
 
 在接口服务或者方法上添加`@API`注解，则接口调用会自动记录日志。
 
 日志系统能自动识别`ApiResult<T>`和`ApiException`接口模型。
 
-### 1.2 高级用法
+### 2.2 高级用法
 
-#### 1.2.1 定制异常转失败结果
+#### 2.2.1 定制异常转失败结果
 
 1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiException`接口，比如继承自`BaseException`。
    此时`errorCode`会使用`ApiException.code`。
@@ -94,7 +96,7 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-#### 1.2.2 定制调用日志
+#### 2.2.2 定制调用日志
 
 可以通过使用`@Logging`注解，进一步控制调用日志的行为，比如是否记录参数、是否记录返回值。
 
@@ -106,21 +108,21 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-具体请参考<5. 日志>。
+具体请参考<6. 日志>。
 
-### 1.3 支持现有系统
+### 2.3 支持现有系统
 
 框架支持在现有系统API上应用增强。
 
-#### 1.3.1 参数校验
+#### 2.3.1 参数校验
 
 请参考`ArgCheckingApiPlugin`，编写插件为现有参数类型增加校验能力。
 
-#### 1.3.2 异常转失败结果
+#### 2.3.2 异常转失败结果
 
 请参考`ExToResultApiPlugin`，编写插件转化异常为现有结果包装类型。
 
-#### 1.3.3 调用日志
+#### 2.3.3 调用日志
 
 为了使用旧模型时，依然能正确的记录调用是否成功、错误码和错误消息等信息，可以注册用于旧模型的`ApiResultConverter`和
 `ApiExceptionConverter`的Spring bean。
@@ -150,13 +152,13 @@ public class OldExceptionConverter implements ApiExceptionConverter<OldException
 
 ---
 
-## 2. 插件系统
+## 3. 插件系统
 
 插件系统提供了类似AOP语法，但是更加灵活友好的切面拦截能力。
 
-### 2.1 快速开始
+### 3.1 快速开始
 
-#### 2.1.1 二方包
+#### 3.1.1 二方包
 
 ```xml
 
@@ -167,7 +169,7 @@ public class OldExceptionConverter implements ApiExceptionConverter<OldException
 </dependency>
 ```
 
-#### 2.1.2 定义和使用插件
+#### 3.1.2 定义和使用插件
 
 通过实现`Plugin`接口生成插件，通过`@Plug`注解指定生效阶段和目标注解（此处为`@BizProcess`）：
 
@@ -193,9 +195,9 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-### 2.2 高级用法
+### 3.2 高级用法
 
-#### 2.2.1 动态启用
+#### 3.2.1 动态启用
 
 可以通过`@EnablePlugin`注解动态启用插件：
 
@@ -209,7 +211,7 @@ public Result<BizData> getData(BizParam param) {
 
 这些插件不必指定`@Plug.targetAnnotations`。
 
-#### 2.2.2 动态绑定
+#### 3.2.2 动态绑定
 
 可以通过注册`AnnoPluginBinding`bean来实现动态绑定，而不用提前指定`@Plug.targetAnnotations`。
 此方法常用来绑定已存在的插件。
@@ -222,7 +224,7 @@ public AnnoPluginBinding bizProcessBinding() {
 }
 ```
 
-#### 2.2.3 通过SPI绑定
+#### 3.2.3 通过SPI绑定
 
 和动态绑定类似，但是通过SPI在项目启动早期建立绑定关系。
 此方法主要解决复杂业务应用可能出现的插件循环依赖导致加载失败的问题。
@@ -247,7 +249,7 @@ io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
   com.biz.config.BizPluginBindingFactory
 ```
 
-#### 2.2.4 插件顺序
+#### 3.2.4 插件顺序
 
 框架定义了8个标准阶段用于决定插件执行顺序：
 
@@ -280,13 +282,13 @@ public class BizProcessPlugin implements Plugin {
 
 ---
 
-## 3. 链系统
+## 4. 链系统
 
 链系统提供了灵活的流程编排能力，支持节点解耦与链式执行，简化复杂业务逻辑的组织与扩展。
 
-### 3.1 快速开始
+### 4.1 快速开始
 
-#### 3.1.1 二方包
+#### 4.1.1 二方包
 
 ```xml
 
@@ -297,25 +299,11 @@ public class BizProcessPlugin implements Plugin {
 </dependency>
 ```
 
-#### 3.1.2 案例
+#### 4.1.2 节点定义和编排
 
-下面案例演示了包含两个节点的链的执行：
+1. 定义链节点
 
 ```java
-
-@Service
-public class ChainService {
-    @Autowired
-    private Produce produce;
-    @Autowired
-    private Consume consume;
-
-    public void run() {
-        Sequential.of(produce, consume)
-                .run(Context.of());
-    }
-}
-
 @Component
 public class Produce implements Chainable {
     @Override
@@ -335,9 +323,27 @@ public class Consume implements Chainable {
 }
 ```
 
-### 3.2 高级用法
+2. 编排并执行链
 
-#### 3.2.1 Lambda表达式
+```java
+
+@Service
+public class ChainService {
+    @Autowired
+    private Produce produce;
+    @Autowired
+    private Consume consume;
+
+    public void run() {
+        Sequential.of(produce, consume)
+                .run(Context.of());
+    }
+}
+```
+
+### 4.2 高级用法
+
+#### 4.2.1 Lambda表达式
 
 `Chainable`可以写为lambda表达式，例如：
 
@@ -359,7 +365,7 @@ public class ChainService {
 }
 ```
 
-#### 3.2.2 链节点种类
+#### 4.2.2 链节点种类
 
 链系统提供了下列链节点：
 
@@ -372,7 +378,7 @@ public class ChainService {
 | Sequential  | 串行执行成员节点                                  |
 | Parallel    | 如果线程池可用，并行执行成员节点；否则退化为串行                  |
 
-#### 3.2.3 流程编排
+#### 4.2.3 流程编排
 
 可以通过`Sequential`、`Parallel`进行流程编排：
 
