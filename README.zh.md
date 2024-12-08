@@ -80,7 +80,7 @@ public Result<BizData> getData(BizParam param) {
 
 #### 1.1.5 延伸阅读
 
-如何进一步定制异常转失败结果和调用日志，如何支持现有系统模型，请参考**2. API增强**。
+请参考**2. API增强**，了解如何定制异常转失败结果和调用日志，以及如何支持现有系统模型。
 
 ### 1.2 插件系统
 
@@ -125,7 +125,7 @@ public Result<BizData> getData(BizParam param) {
 
 #### 1.2.3 延伸阅读
 
-如何动态绑定和启用插件，如何指定插件顺序，请参考**3. 插件系统**。
+请参考**3. 插件系统**，了解如何动态绑定和启用插件，如何指定插件顺序。
 
 ### 1.3 链系统
 
@@ -187,7 +187,7 @@ public class ChainService {
 
 #### 1.3.3 延伸阅读
 
-TODO，请参考**4. 链系统**。
+请参考**4. 链系统**，了解关于链节点、上下文、日志和扩展的高级用法。
 
 ---
 
@@ -470,11 +470,7 @@ public void run(Input input) {
 }
 ```
 
-### 4.3 链节点作为扩展点
-
-TODO
-
-### 4.4 日志
+### 4.3 记录日志
 
 链节点的执行会记录日志：
 
@@ -494,6 +490,52 @@ TODO
 ```
 
 TODO
+
+### 4.4 链节点扩展
+
+如果使用可扩展接口（而不是具体类）作为链节点，则可以实现根据上下文中的业务身份场景，运行时动态路由到不同的链节点实现，从而实现链节点的可扩展性。
+
+> 可扩展（"Extensible"）接口、扩展（"Extension"）实现，以及业务身份场景（`BizScenario`）请参考**5. 扩展系统**。
+
+1. 链节点作为扩展点：
+
+```java
+// 接口，而不是具体类
+@ExtensionPoint
+public interface Consume extends Chainable {
+}
+```
+
+2. 为不同的业务身份场景提供不同的扩展实现：
+
+```java
+// 场景为"foo"的Consume接口的实现
+@Extension(scenarios = "foo")
+public class ConsumeForFoo implements Consume {
+    // ...
+}
+```
+
+3. 扩展点引用和路由参数：
+
+```java
+
+@Service
+public class ChainService {
+    @Autowired
+    private Produce produce;
+    // 引用接口，而不是类
+    @Autowired
+    private Consume consume;
+
+    public void run() {
+        Sequential.of(produce, consume)
+                // 通过使用BizContext（Context的子类）带上业务身份场景
+                // 本例对consume的调用会路由到ConsumeForFoo
+                .run(BizContext.of(BizScenario.ofScenario("foo")));
+    }
+}
+```
 
 ---
 
