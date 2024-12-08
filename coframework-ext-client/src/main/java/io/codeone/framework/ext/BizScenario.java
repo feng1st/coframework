@@ -26,23 +26,24 @@ import java.util.Iterator;
  * <ul>
  *   <li>{@code @Ability
  *   interface Work { void execute(BizScenario bizScenario); }}
- *   <li>{@code @Extension(bizId = "Sales", scenario = "weekday.morning")
- *   class WorkInSalesMorning implements Work {}}
- *   <li>{@code @Extension(bizId = "Sales", scenario = "weekday")
- *   class WorkInSalesWeekday implements Work {}}
- *   <li>{@code @Extension(bizId = "HR", scenario = "weekday.morning")
- *   class WorkInHRMorning implements Work {}}
+ *   <li>{@code @Extension(bizId = "full-time", scenarios = "weekday.monday")
+ *   class WorkForFullTimeMonday implements Work {}}
+ *   <li>{@code @Extension(bizId = "full-time", scenarios = "weekday")
+ *   class WorkForFullTimeWeekday implements Work {}}
+ *   <li>{@code @Extension(bizId = "outsourced", scenarios = "weekday.monday")
+ *   class WorkForOutsourcedMonday implements Work {}}
  * </ul>
  *
  * <p>Routing examples:
  * <ul>
- *   <li>{@code work.execute(BizScenario.of("Sales", "weekday.morning"))} will route
- *   to {@code WorkInSalesMorning}.
- *   <li>{@code work.execute(BizScenario.of("Sales", "weekday.evening"))} will route
- *   to {@code WorkInSalesWeekday}, as the exact scenario match is not found, but
- *   its hierarchical traversal identifies {@code BizScenario.of("Sales", "weekday")}.
- *   <li>{@code work.execute(BizScenario.of("HR", "weekday.morning"))} will route
- *   to {@code WorkInHRMorning}.
+ *   <li>{@code work.execute(BizScenario.of("full-time", "weekday.monday"))} will
+ *   route to {@code WorkForFullTimeMonday}.
+ *   <li>{@code work.execute(BizScenario.of("full-time", "weekday.friday"))} will
+ *   route to {@code WorkForFullTimeWeekday}, as the exact scenario match is not
+ *   found, but its hierarchical traversal identifies {@code BizScenario.of("full-time",
+ *   "weekday")}.
+ *   <li>{@code work.execute(BizScenario.of("outsourced", "weekday.monday"))} will
+ *   route to {@code WorkForOutsourcedMonday}.
  * </ul>
  *
  * <p>This class provides utilities for defining and manipulating a combination
@@ -196,7 +197,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
      * and {@code scenario} in this {@code BizScenario}.
      *
      * <p>The iteration starts from the most specific levels (e.g., {@code "region.branch"
-     * or "weekday.morning"}) and moves to broader levels (e.g., {@code "region"
+     * or "weekday.monday"}) and moves to broader levels (e.g., {@code "region"
      * or "weekday"}), eventually reaching the wildcard {@code "*"}.
      *
      * @return an iterator for hierarchical traversal of this {@code BizScenario}
