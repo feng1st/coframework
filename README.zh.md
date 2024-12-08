@@ -509,14 +509,14 @@ public interface Consume extends Chainable {
 2. 为不同的业务身份场景提供不同的扩展实现：
 
 ```java
-// 场景为"foo"的Consume接口的实现
-@Extension(scenarios = "foo")
+// 业务身份为"foo"的Consume接口的实现
+@Extension(bizId = "foo")
 public class ConsumeForFoo implements Consume {
     // ...
 }
 ```
 
-3. 扩展点引用和路由参数：
+3. 扩展点的引用和上下文中的路由参数：
 
 ```java
 
@@ -531,8 +531,8 @@ public class ChainService {
     public void run() {
         Sequential.of(produce, consume)
                 // 通过使用BizContext（Context的子类）带上业务身份场景
-                // 本例对consume的调用会路由到ConsumeForFoo
-                .run(BizContext.of(BizScenario.ofScenario("foo")));
+                // 本例中对consume的调用会路由到ConsumeForFoo
+                .run(BizContext.of(BizScenario.ofBizId("foo")));
     }
 }
 ```
