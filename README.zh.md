@@ -507,6 +507,7 @@ public void run() {
 - 按需记录日志：
 
 ```java
+
 @Component
 public class Produce implements Chainable {
     @Override
@@ -532,17 +533,18 @@ public void run(Input input) {
 }
 ```
 
-### 4.4 链节点扩展
+### 4.4 可扩展链节点
 
-如果使用可扩展接口（而不是具体类）作为链节点，则可以实现根据上下文中的业务身份场景，运行时动态路由到不同的节点实现，从而实现节点的可扩展性。
+如果使用可扩展接口（而不是具体类）作为链节点，则可以实现链节点的可扩展性
+——根据上下文中的业务身份场景，在运行时动态路由到不同的链节点实现。
 
-（可扩展（"Extensible"）接口、扩展（"Extension"）实现，以及业务身份场景（`BizScenario`）概念请参考**5. 扩展系统**。）
+（可扩展（"Extensible"）接口、扩展（"Extension"）实现，以及业务身份场景（`BizScenario`）概念请参考**5. 扩展系统**）
 
-1. 链节点作为扩展点：
+1. 可扩展接口作为链节点：
 
 ```java
-// 接口，而不是具体类
-@ExtensionPoint
+// 注意本节点只是接口，而不是具体类
+@Ability
 public interface Consume extends Chainable {
 }
 ```
@@ -565,15 +567,16 @@ public class ConsumeForFoo implements Consume {
 public class ChainService {
     @Autowired
     private Produce produce;
-    // 引用接口，而不是类
+    // 引用接口，而不是具体类
     @Autowired
     private Consume consume;
 
     public void run() {
         Sequential.of(produce, consume)
-                // 通过使用BizContext（Context的子类）带上业务身份场景
-                // 本例中对consume的调用会路由到ConsumeForFoo
-                .run(BizContext.of(BizScenario.ofBizId("foo")));
+                // 通过使用BizContext（Context的子类），带上业务身份场景
+                .run(BizContext.of(
+                        // 因为bizId匹配，对consume的调用会路由到ConsumeForFoo
+                        BizScenario.ofBizId("foo")));
     }
 }
 ```
