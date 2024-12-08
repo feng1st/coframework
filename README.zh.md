@@ -21,7 +21,7 @@
 </dependency>
 ```
 
-- （可选）`coframework-api`用于引入增强所需模型：
+- （如果对外暴露接口）`coframework-api`用于引入增强所需模型：
 
 ```xml
 
@@ -61,11 +61,12 @@ public class BizParam extends BaseParam {
 
 #### 1.1.3 异常转失败结果
 
+方法会返回一个失败的`Result<T>`，而不是抛出异常。
+
 1. 在接口服务或者方法上添加`@API`注解。
-2. 使用`Result`包装接口的返回：
+2. 接口返回`Result<T>`类型：
 
 ```java
-// 方法会返回一个失败的Result，而不是抛出异常
 public Result<BizData> getData(BizParam param) {
     // ...
     throw new BizException(CODE, MESSAGE);
@@ -99,7 +100,7 @@ public Result<BizData> getData(BizParam param) {
 
 #### 1.2.2 插件的定义和启用
 
-1. 通过实现`Plugin`接口生成插件，通过`@Plug`注解指定生效阶段和目标注解：
+1. 通过实现`Plugin`接口定义插件，通过`@Plug`注解指定生效阶段和目标注解：
 
 ```java
 
@@ -213,7 +214,7 @@ public Result<BizData> getData(BizParam param) {
 
 #### 2.1.2 定制调用日志
 
-可以通过使用`@Logging`注解，进一步控制调用日志的行为，比如是否记录参数、是否记录返回值。
+可以通过使用`@Logging`注解，进一步控制调用日志的行为，比如是否记录参数、是否记录返回值等。
 
 ```java
 
@@ -223,7 +224,7 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-具体请参考<6. 日志>。
+具体请参考**6. 日志**。
 
 ### 2.2 支持现有系统
 
@@ -231,7 +232,7 @@ public Result<BizData> getData(BizParam param) {
 
 1. 可以参考`ArgCheckingApiPlugin`，编写插件为现有参数类型增加校验能力。
 2. 可以参考`ExToResultApiPlugin`，编写插件转化异常为现有结果包装类型。
-3. 为了使用旧模型时，依然能正确的记录调用是否成功、错误码和错误消息等信息，可以注册用于旧模型的`ApiResultConverter`和
+3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，可以注册旧模型的`ApiResultConverter`和
    `ApiExceptionConverter`的Spring bean。
 
 ```java
@@ -265,7 +266,7 @@ public class OldExceptionConverter implements ApiExceptionConverter<OldException
 
 ### 3.1 插件顺序
 
-框架定义了8个标准阶段用于决定插件执行顺序：
+- 框架定义了8个标准阶段，用于决定插件的执行顺序：
 
 | 阶段                       | 顺序值 | 主逻辑      |
 |--------------------------|-----|----------|
@@ -278,19 +279,20 @@ public class OldExceptionConverter implements ApiExceptionConverter<OldException
 | RESULT_INTERCEPTING      | -6  | after()  |
 | POST_RESULT_INTERCEPTING | -7  | after()  |
 
-多个插件的执行顺序类似于堆栈。如图所示，`POST_RESULT_INTERCEPTING`阶段插件的`before()`方法，甚至早于`PRE_ARG_INTERCEPTING`
-阶段插件的`before()`方法。
+多个插件的执行过程类似于堆栈。
 
-请额外注意插件**各方法**的执行顺序，将主逻辑放在正确的方法里。
+以图为例，`AFTER_TARGET`阶段插件的`before()`方法，甚至早于`BEFORE_TARGET`阶段插件的`before()`方法。
+
+因此请额外注意插件**各方法**的执行顺序，确保主逻辑放在正确的方法里。
 
 ![](docs/images/order-of-plugins.png)
 
-如果需要精细控制同一阶段中不同插件的先后顺序，可以搭配`org.springframework.core.annotation.Order`使用：
+- 如果需要精细控制同一阶段中不同插件的先后顺序，可以搭配`org.springframework.core.annotation.Order`使用：
 
 ```java
 
 @Plug(value = Stages.BEFORE_TARGET)
-@Order(1)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class BizProcessPlugin implements Plugin {
     // ...
 }
@@ -315,6 +317,7 @@ public Result<BizData> getData(BizParam param) {
 #### 3.2.2 动态绑定
 
 可以通过注册`AnnoPluginBinding`bean来实现动态绑定，而不用提前指定`@Plug.targetAnnotations`。
+
 此方法常用来绑定已存在的插件。
 
 ```java
@@ -328,6 +331,7 @@ public AnnoPluginBinding bizProcessBinding() {
 #### 3.2.3 通过SPI绑定
 
 和动态绑定类似，但是通过SPI在项目启动早期建立绑定关系。
+
 此方法主要解决复杂业务应用可能出现的插件循环依赖导致加载失败的问题。
 
 1. 实现`AnnoPluginBindingFactory`工厂类，提供动态绑定关系：
@@ -360,7 +364,7 @@ io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
 
 #### 4.1.1 节点类型
 
-链系统提供了下列链节点：
+链系统提供了下列节点类型：
 
 |             | 说明                                        |
 |-------------|-------------------------------------------|
