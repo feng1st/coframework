@@ -257,8 +257,8 @@ public class BizService {
 }
 ```
 
-整体实现和普通服务（`org.springframework.stereotype.Service`）差别不大，
-并且还能进一步简化，比如通过上下文而不是显式参数传递路由参数，减少侵入性。
+整体结构和普通服务（`org.springframework.stereotype.Service`）相差无几，
+并且还能进一步简化，比如通过上下文而不是显式参数进行路由，减少侵入性。
 
 请参考**5. 扩展系统**，了解这些高级用法和更多细节。
 
