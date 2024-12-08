@@ -86,7 +86,7 @@ public Result<BizData> getData(BizParam param) {
 
 1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiException`接口，比如继承自`BaseException`。
    此时`errorCode`会使用`ApiException.code`。
-2. 如果希望定制结果的`errorMessage`（默认为异常消息），可以使用`@CustomErrorMessage`注解：
+2. 如果希望定制结果的`errorMessage`（默认为异常消息），比如对最终用户隐藏技术细节，可以使用`@CustomErrorMessage`注解：
 
 ```java
 
