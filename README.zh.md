@@ -354,7 +354,7 @@ io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
 
 ## 4. 链系统
 
-请参考**快速开始**查看如何定义和编排节点。
+请参考**快速开始**查看基本的节点定义和编排。
 
 ### 4.1 链节点
 
@@ -366,7 +366,7 @@ io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
 |-------------|-------------------------------------------|
 | Chainable   | 提供`execute`方法，返回`false`结束链的执行，否则继续执行下一节点  |
 | Continuous  | 提供`executeAndContinue`方法，方式没有返回值，不会中断链的执行 |
-| Conditional | 有条件执行                                     |
+| Conditional | 有条件执行的节点                                  |
 | Empty       | 空节点                                       |
 | Sequential  | 串行执行成员节点                                  |
 | Parallel    | 如果线程池可用，并行执行成员节点；否则退化为串行                  |
@@ -445,7 +445,7 @@ public Output runAndReturn(Input input) {
 
 但是，如果使用`Class<?>`或者`Typed`作为参数key，则读写参数时会进行类型校验。
 
-如何使用`Typed`：
+如何定义`Typed`类型参数：
 
 ```java
 
@@ -461,7 +461,9 @@ public enum TypedParamEnum implements Typed {
 
 #### 4.2.3 线程池
 
-如果上下文中提供了线程池，则`Parallel`下的成员节点将被并发执行。请确保成员节点间是线程安全的。
+如果上下文中提供了线程池，则`Parallel`下的成员节点将被并发执行。
+
+请确保成员节点间是线程安全的。
 
 ```java
 public void run(Input input) {
@@ -470,9 +472,9 @@ public void run(Input input) {
 }
 ```
 
-### 4.3 记录日志
+### 4.3 日志
 
-链节点的执行会记录日志，其JSON格式如下：
+链节点的执行会记录日志，格式如下：
 
 ```json5
 {
@@ -483,29 +485,49 @@ public void run(Input input) {
   "scenario": "scenario",
   "node": "ClassNameOfNode",
   "elapsed": 0,
-  // 如果链节点抛出异常，则会记录
+  // 如果链节点抛出异常，则会记录exception
   "exception": "stringOfException",
-  // 如果链节点返回false，则会记录
+  // 如果链节点返回false，则会记录break
   "break": true,
-  // 可通过Context.log("key", "value")来记录
+  // 可通过Context.log("key", value)来记录
   "params": {
-    "key": "value"
+    "key": {}
   }
 }
 ```
 
-#### 4.3.1 TODO
+- 设置链名称：
 
-TODO
+```java
+public void run() {
+    getChain().run(Context.of().chainName("chainName"));
+}
+```
+
+- 按需记录日志：
+
+```java
+@Component
+public class Produce implements Chainable {
+    @Override
+    public boolean execute(Context context) {
+        // ...
+        context.log("key", value);
+        // ...
+    }
+}
+```
+
+- 每个节点统一记录日志：
+
+上下文提供了`onExecute`方法，每个节点都会执行该方法，可以用来记录公共参数。
 
 ```java
 public void run(Input input) {
     getChain().run(Context.of(Input.class, input)
-            // 会在进入每个节点时执行，有助于记录公共参数
             .onExecute(context -> {
-                // 在每个节点输出userId，有助于追踪执行链
-                context.<Input>ifPresent(Input.class,
-                        o -> context.log("userId", o.getUserId()));
+                // 在每个节点输出userId，帮助追踪执行链
+                context.<Input>ifPresent(Input.class, o -> context.log("userId", o.getUserId()));
             }));
 }
 ```
