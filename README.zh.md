@@ -708,13 +708,16 @@ public class BizAbilityForBranchMonday implements BizAbility {
 8. `@Extension(bizId = "*", scenarios = "weekday")`
 9. `@Extension(bizId = "*", scenarios = "*")`
 
-### 5.4 获取业务身份场景
+### 5.4 获取路由参数
 
-扩展系统从两个地方获取业务身份场景：类型为`BizScenarioParam`的参数，或者上下文。
+当调用可扩展接口时，扩展系统从两个地方获取路由参数（即业务身份场景）：
 
-#### 5.4.1 默认获取过程
+1. 类型为`BizScenarioParam`的方法参数，其`getBizScenario()`方法返回业务身份场景。
+2. 上下文`BizScenarioContext`，内部是一个堆栈，栈顶存放最后一次路由所用到的业务身份场景。
 
-扩展系统默认按下列顺序获取业务身份场景：
+#### 5.4.1 获取过程
+
+扩展系统默认按下列顺序获取路由参数：
 
 1. 如果扩展方法没有参数，从上下文中获取。
 2. 如果方法仅有一个参数带`@RouteBy`注解，且是`BizScenarioParam`类型，使用该参数。
@@ -726,20 +729,48 @@ public class BizAbilityForBranchMonday implements BizAbility {
 
 #### 5.4.2 上下文
 
-上下文即`BizScenarioContext`，每次路由并执行扩展时，路由用的业务身份场景就会压入上下文（堆栈）。
-
-上下文是`ThreadLocal`，不跨线程。
-
-可以手动将业务身份场景压入上下文，这样后继链路就有可用的路由参数了，例如：
+可以手动将业务身份场景压入上下文，用于后继链路，例如：
 
 ```java
 public void run() {
-    // ...
+    // bizScenario在process()全程可用
     BizScenarioContext.invoke(bizScenario, this::process);
 }
 ```
 
+注意：上下文是`ThreadLocal`，不跨线程。
+
 #### 5.4.3 扩展会话
+
+扩展会话通过`@ExtensionSession`注解，自动将可用的业务身份场景压入上下文：
+
+| `@ExtensionSession.value` | 说明                                            |
+|---------------------------|-----------------------------------------------|
+| FIRST                     | 使用第一个`BizScenarioParam`类型的参数                  |
+| LAST                      | 使用最后一个`BizScenarioParam`类型的参数                 |
+| SPECIFIED                 | 使用`@RouteBy`注解指定的参数（必须是`BizScenarioParam`类型）  |
+| CUSTOM                    | 使用`@ExtensionSession.customResolver`从所有参数里解析  |
+| IGNORE                    | 不修改上下文                                        |
+| AUTO（默认值）                 | 依次尝试`CUSTOM`、`SPECIFIED`、`FIRST`，兜底采用`IGNORE` |
+
+`@ExtensionSession`注解一般用于API层，在入口处填充上下文。
+这样可扩展接口可以不必带`BizScenarioParam`类型参数，减少代码侵入性。例如：
+
+```java
+
+@API
+@ExtensionSession
+public class BizApiImpl implements BizApi {
+    @Autowired
+    private BizAbility bizAbility;
+
+    // 假设BizParam类型可以解析出BizScenario
+    public Result<BizData> getData(BizParam param) {
+        // 没有额外参数也能路由
+        bizAbility.runWithoutParam();
+    }
+}
+```
 
 ---
 
