@@ -226,6 +226,7 @@ public class ChainService {
 
 @Ability
 public interface BizAbility {
+    // 参数为BizScenarioParam类型，可用于路由
     void execute(BizScenario bizScenario);
 }
 ```
@@ -690,26 +691,55 @@ public class BizAbilityForBranchMonday implements BizAbility {
 
 ### 5.3 业务身份场景
 
-业务身份场景`BizScenario`包含调用者业务身份`bizId`和场景`scenario`，是用来路由到具体扩展实现的坐标。
+业务身份场景（`BizScenario`）包含调用者业务身份`bizId`和场景`scenario`，是用来路由到具体扩展实现的坐标。
 
 业务身份和场景均支持层级，路由时会从具体到宽泛进行匹配。
 
 举个例子，假设参数或者上下文中的`BizScenario`为`"region.branch|weekday.monday"`，
 则会依次查找下列扩展实现，并匹配第一个命中的（如果全不命中，则抛出异常）：
 
-- `@Extension(bizId = "region.branch", scenarios = "weekday.monday")`
-- `@Extension(bizId = "region.branch", scenarios = "weekday")`
-- `@Extension(bizId = "region.branch", scenarios = "*")`
-- `@Extension(bizId = "region", scenarios = "weekday.monday")`
-- `@Extension(bizId = "region", scenarios = "weekday")`
-- `@Extension(bizId = "region", scenarios = "*")`
-- `@Extension(bizId = "*", scenarios = "weekday.monday")`
-- `@Extension(bizId = "*", scenarios = "weekday")`
-- `@Extension(bizId = "*", scenarios = "*")`
+1. `@Extension(bizId = "region.branch", scenarios = "weekday.monday")`
+2. `@Extension(bizId = "region.branch", scenarios = "weekday")`
+3. `@Extension(bizId = "region.branch", scenarios = "*")`
+4. `@Extension(bizId = "region", scenarios = "weekday.monday")`
+5. `@Extension(bizId = "region", scenarios = "weekday")`
+6. `@Extension(bizId = "region", scenarios = "*")`
+7. `@Extension(bizId = "*", scenarios = "weekday.monday")`
+8. `@Extension(bizId = "*", scenarios = "weekday")`
+9. `@Extension(bizId = "*", scenarios = "*")`
 
 ### 5.4 获取业务身份场景
 
-#### 5.4.1 扩展会话
+扩展系统从两个地方获取业务身份场景：类型为`BizScenarioParam`的参数，或者上下文。
+
+#### 5.4.1 默认获取过程
+
+扩展系统默认按下列顺序获取业务身份场景：
+
+1. 如果扩展方法没有参数，从上下文中获取。
+2. 如果方法仅有一个参数带`@RouteBy`注解，且是`BizScenarioParam`类型，使用该参数。
+3. 如果方法或者服务带`@RouteByContext`注解，从上下文中获取。
+4. 如果方法仅有一个参数为`BizScenarioParam`类型，使用该参数。
+5. 兜底从上下文中获取。
+
+如果上下文中也没有，则抛出异常。
+
+#### 5.4.2 上下文
+
+上下文即`BizScenarioContext`，每次路由并执行扩展时，路由用的业务身份场景就会压入上下文（堆栈）。
+
+上下文是`ThreadLocal`，不跨线程。
+
+可以手动将业务身份场景压入上下文，这样后继链路就有可用的路由参数了，例如：
+
+```java
+public void run() {
+    // ...
+    BizScenarioContext.invoke(bizScenario, this::process);
+}
+```
+
+#### 5.4.3 扩展会话
 
 ---
 
