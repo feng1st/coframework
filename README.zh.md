@@ -124,8 +124,6 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-#### 1.2.3 延伸阅读
-
 请参考**3. 插件系统**，了解如何动态绑定和启用插件，如何指定插件顺序。
 
 ### 1.3 链系统
@@ -185,8 +183,6 @@ public class ChainService {
     }
 }
 ```
-
-#### 1.3.3 延伸阅读
 
 请参考**4. 链系统**，了解关于链节点、上下文、日志和扩展的高级用法。
 
@@ -679,7 +675,7 @@ public class ChainService {
 
 一个扩展（"Extension"）实现是可扩展接口在特定业务身份场景下的实现。
 
-扩展实现通过`@Extension`注解进行标记，并指定其实现的业务身份场景，例如：
+扩展系统通过`@Extension`注解标记扩展实现，并指定其实现的业务身份场景，例如：
 
 ```java
 
@@ -696,7 +692,7 @@ public class BizAbilityForBranchMonday implements BizAbility {
 业务身份和场景均支持层级，路由时会从具体到宽泛进行匹配。
 
 举个例子，假设参数或者上下文中的`BizScenario`为`"region.branch|weekday.monday"`，
-则会依次查找下列扩展实现，并匹配第一个命中的（如果全不命中，则抛出异常）：
+则扩展系统会依次查找下列扩展实现，并匹配第一个命中的（如果全部不命中，则抛出异常）：
 
 1. `@Extension(bizId = "region.branch", scenarios = "weekday.monday")`
 2. `@Extension(bizId = "region.branch", scenarios = "weekday")`
@@ -753,7 +749,7 @@ public void run() {
 | IGNORE                    | 不修改上下文                                        |
 | AUTO（默认值）                 | 依次尝试`CUSTOM`、`SPECIFIED`、`FIRST`，兜底采用`IGNORE` |
 
-`@ExtensionSession`注解一般用于API层，在入口处填充上下文。
+`@ExtensionSession`注解一般用于API层，在调用入口填充上下文。
 这样可扩展接口可以不必带`BizScenarioParam`类型参数，减少代码侵入性。例如：
 
 ```java
@@ -766,7 +762,7 @@ public class BizApiImpl implements BizApi {
 
     // 假设BizParam类型可以解析出BizScenario
     public Result<BizData> getData(BizParam param) {
-        // 没有额外参数也能路由
+        // 可扩展接口没有额外参数也能路由
         bizAbility.runWithoutParam();
     }
 }
