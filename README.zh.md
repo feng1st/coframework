@@ -662,6 +662,55 @@ public class ChainService {
 
 ## 5. 扩展系统
 
+请参考**快速开始**查看如何定义、实现和调用可扩展接口。
+
+### 5.1 可扩展接口
+
+可扩展（"Extensible"）接口可以有多个扩展实现，运行时根据参数或者上下文中的业务身份场景，路由到其中一个具体的实现。
+
+扩展系统提供了`@Ability`和`@ExtensionPoint`两个注解来标记可扩展接口。
+两者功能完全一样，但业务语义有所不同：
+
+- 能力（`@Ability`）：一般用来代表可扩展的能力、功能等，抽象层次较高。
+- 扩展点（`@ExtensionPoint`）：一般用来代表可扩展的规则、配置等，抽象层次偏低。
+
+### 5.2 扩展实现
+
+一个扩展（"Extension"）实现是可扩展接口在特定业务身份场景下的实现。
+
+扩展实现通过`@Extension`注解进行标记，并指定其实现的业务身份场景，例如：
+
+```java
+
+@Extension(bizId = "region.branch", scenarios = {"weekday.monday", "weekday.tuesday"})
+public class BizAbilityForBranchMonday implements BizAbility {
+    // ...
+}
+```
+
+### 5.3 业务身份场景
+
+业务身份场景`BizScenario`包含调用者业务身份`bizId`和场景`scenario`，是用来路由到具体扩展实现的坐标。
+
+业务身份和场景均支持层级，路由时会从具体到宽泛进行匹配。
+
+举个例子，假设参数或者上下文中的`BizScenario`为`"region.branch|weekday.monday"`，
+则会依次查找下列扩展实现，并匹配第一个命中的（如果全不命中，则抛出异常）：
+
+- `@Extension(bizId = "region.branch", scenarios = "weekday.monday")`
+- `@Extension(bizId = "region.branch", scenarios = "weekday")`
+- `@Extension(bizId = "region.branch", scenarios = "*")`
+- `@Extension(bizId = "region", scenarios = "weekday.monday")`
+- `@Extension(bizId = "region", scenarios = "weekday")`
+- `@Extension(bizId = "region", scenarios = "*")`
+- `@Extension(bizId = "*", scenarios = "weekday.monday")`
+- `@Extension(bizId = "*", scenarios = "weekday")`
+- `@Extension(bizId = "*", scenarios = "*")`
+
+### 5.4 获取业务身份场景
+
+#### 5.4.1 扩展会话
+
 ---
 
 ## 6. 日志
