@@ -1,14 +1,54 @@
 # Co-Framework
 
-优雅高效的Java业务框架。
+优雅高效的Java业务框架
 
 ## 1. 快速开始
 
 ### 1.1 API增强
 
-框架为API层提供了参数校验、异常转失败结果、调用日志等增强功能。
+框架为API层提供了参数校验、异常包装、和调用日志功能，自动生效。
 
-#### 1.1.1 二方包
+例如：
+
+1. 在接口服务上添加`@API`注解，自动启用参数校验、异常包装、和调用日志功能：
+
+```java
+
+@API // 服务上，对所有方法生效
+public class BizApiImpl implements BizApi {
+
+    @API // 或者方法上，对当前方法生效
+    public Result<BizData> getData(BizParam param) {
+        // ...
+    }
+}
+```
+
+2. `BaseParam`或`BasePageParam`参数的`validate()`方法会自动被调用：
+
+```java
+public class BizParam extends BaseParam {
+    @Override
+    public void validate() {
+        Validator.requireNonNull(userId, "userId is null");
+    }
+}
+```
+
+3. 如果接口返回`Result<T>`，则任何异常会自动转为失败结果并返回，不会外抛：
+
+```java
+public Result<BizData> getData(BizParam param) {
+    // ...
+    throw new BizException(CODE, MESSAGE);
+}
+```
+
+4. 接口调用会自动记录日志，能自动从`ApiResult<T>`和`ApiException`及兼容模型中识别调用是否成功、错误码、错误消息。
+
+请参考**2. API增强**，了解如何定制异常转失败结果和调用日志，以及如何支持现有系统模型。
+
+二方包：
 
 - `coframework-api-core`用于自动生效增强功能：
 
@@ -32,73 +72,11 @@
 </dependency>
 ```
 
-#### 1.1.2 参数校验
-
-1. 在接口服务或者方法上添加`@API`注解：
-
-```java
-
-@API // 服务上，对所有方法生效
-public class BizApiImpl implements BizApi {
-
-    @API // 或者方法上，对当前方法生效
-    public Result<BizData> getData(BizParam param) {
-        // ...
-    }
-}
-```
-
-2. 接口参数继承自`BaseParam`或者`BasePageParam`，并实现`validate()`方法：
-
-```java
-public class BizParam extends BaseParam {
-    @Override
-    public void validate() {
-        Validator.requireNonNull(userId, "userId is null");
-    }
-}
-```
-
-#### 1.1.3 异常转失败结果
-
-方法会返回一个失败的`Result<T>`，而不是抛出异常。
-
-1. 在接口服务或者方法上添加`@API`注解。
-2. 接口返回`Result<T>`类型：
-
-```java
-public Result<BizData> getData(BizParam param) {
-    // ...
-    throw new BizException(CODE, MESSAGE);
-}
-```
-
-#### 1.1.4 调用日志
-
-在接口服务或者方法上添加`@API`注解，则接口调用会自动记录日志。
-
-日志系统能自动识别`ApiResult<T>`和`ApiException`接口模型。
-
-#### 1.1.5 延伸阅读
-
-请参考**2. API增强**，了解如何定制异常转失败结果和调用日志，以及如何支持现有系统模型。
-
 ### 1.2 插件系统
 
 插件系统提供了类似AOP语法，但是更加灵活友好的切面拦截能力。
 
-#### 1.2.1 二方包
-
-```xml
-
-<dependency>
-    <groupId>io.codeone</groupId>
-    <artifactId>coframework-plugin</artifactId>
-    <version>${coframework.version}</version>
-</dependency>
-```
-
-#### 1.2.2 插件的定义和启用
+例如：
 
 1. 通过实现`Plugin`接口定义插件，通过`@Plug`注解指定生效阶段和目标注解：
 
@@ -126,22 +104,22 @@ public Result<BizData> getData(BizParam param) {
 
 请参考**3. 插件系统**，了解如何动态绑定和启用插件，如何指定插件顺序。
 
-### 1.3 链系统
-
-链系统提供了灵活的流程编排能力，支持节点解耦与链式执行，简化复杂业务逻辑的组织与扩展。
-
-#### 1.3.1 二方包
+二方包：
 
 ```xml
 
 <dependency>
     <groupId>io.codeone</groupId>
-    <artifactId>coframework-chain</artifactId>
+    <artifactId>coframework-plugin</artifactId>
     <version>${coframework.version}</version>
 </dependency>
 ```
 
-#### 1.3.2 定义和编排节点
+### 1.3 链系统
+
+链系统提供了灵活的流程编排能力，支持节点解耦与链式执行，简化复杂业务逻辑的组织与扩展。
+
+例如：
 
 1. 定义链节点
 
@@ -186,35 +164,22 @@ public class ChainService {
 
 请参考**4. 链系统**，了解关于链节点、上下文、日志和扩展的高级用法。
 
+二方包：
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-chain</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
+
 ### 1.4 扩展系统
 
 扩展系统通过引入可扩展接口提升业务整体的可扩展性——同一个可扩展接口，可以根据不同的业务身份场景，路由到不同的具体扩展实现。
 
-#### 1.4.1 二方包
-
-- `coframework-ext`用于扩展系统自动生效：
-
-```xml
-
-<dependency>
-    <groupId>io.codeone</groupId>
-    <artifactId>coframework-ext</artifactId>
-    <version>${coframework.version}</version>
-</dependency>
-```
-
-- （如果对外暴露接口）`coframework-ext-client`用于引入可扩展模型：
-
-```xml
-
-<dependency>
-    <groupId>io.codeone</groupId>
-    <artifactId>coframework-ext-client</artifactId>
-    <version>${coframework.version}</version>
-</dependency>
-```
-
-#### 1.4.2 可扩展接口的定义、实现和调用
+例如：
 
 1. 定义可扩展接口：
 
@@ -258,6 +223,30 @@ public class BizService {
 并且还能进一步简化，比如通过上下文而不是显式参数进行路由，减少侵入性。
 
 请参考**5. 扩展系统**，了解这些高级用法和更多细节。
+
+二方包：
+
+- `coframework-ext`用于扩展系统自动生效：
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-ext</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
+
+- （如果对外暴露接口）`coframework-ext-client`用于引入可扩展模型：
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-ext-client</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
 
 ---
 
