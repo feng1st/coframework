@@ -824,3 +824,5 @@ public Result<BizData> run(BizParam param) {
   "exception": "IllegalArgumentException: id is null"
 }
 ```
+
+注意：JSON格式日志需要项目有引入`jackson-databind`二方包，并且`LogUtils.logAsJson`为`true`（默认即为`true`）。
