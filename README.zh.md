@@ -760,7 +760,7 @@ public class BizApiImpl implements BizApi {
     @Autowired
     private BizAbility bizAbility;
 
-    // 假设BizParam类型可以解析出BizScenario
+    // 假设BizParam实现了BizScenarioParam
     public Result<BizData> getData(BizParam param) {
         // 可扩展接口没有额外参数也能路由
         bizAbility.runWithoutParam();
