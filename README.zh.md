@@ -275,6 +275,7 @@ public class BizService {
 
 ```java
 
+@API
 @CustomErrorMessage("System is busy, please try again later.")
 public Result<BizData> getData(BizParam param) {
     // ...
@@ -287,6 +288,7 @@ public Result<BizData> getData(BizParam param) {
 
 ```java
 
+@API
 @Logging(logArgs = false, logResult = false)
 public Result<BizData> getData(BizParam param) {
     // ...
@@ -771,3 +773,54 @@ public class BizApiImpl implements BizApi {
 ---
 
 ## 6. 日志
+
+除了通过`@API`注解在API层启用调用日志外，还可以通过`@Logging`注解在任意服务上配置并启用调用日志：
+
+```java
+
+@Logging(
+        // 日志名，默认为当前类名
+        name = "business",
+        // 是否记录参数，默认为true。如果argKvs有值则不记录
+        logArgs = true,
+        // 是否记录返回值，默认为true
+        logResult = true,
+        // 是否记录异常堆栈，默认为true
+        logException = true,
+        // 调用是否成功的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
+        expSuccess = "#r?.success",
+        // 错误码的SpEL表达式。默认不需要，框架能识别ApiResult、ApiException兼容模型
+        expCode = "#r?.errorCode",
+        // 错误消息的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
+        expMessage = "#r?.errorMessage",
+        // 关键参数的键值对列表。键为String，值为SpEL表达式
+        argKvs = {"bizScenario", "#a0?.bizScenario",
+                "userId", "#a0?.userId"})
+public Result<BizData> run(BizParam param) {
+    // ...
+}
+```
+
+日志格式如下：
+
+```json5
+{
+  // 异常：ERROR，失败：WARN，其它：INFO
+  "level": "WARN",
+  "method": "BizService.run",
+  "success": false,
+  "code": "ERROR_CODE",
+  "message": "error message",
+  "elapsed": 0,
+  "args": {
+    "bizScenario": "*|*",
+    "userId": 10000
+  },
+  // 有返回值时记录
+  "result": {
+    "status": "ENABLED"
+  },
+  // 抛异常时记录
+  "exception": "IllegalArgumentException: id is null"
+}
+```
