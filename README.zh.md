@@ -38,10 +38,10 @@
 
 ```java
 
-@API // 类级注解
+@API // 类级注解，所有方法生效
 public class BizApiImpl implements BizApi {
 
-    @API // 方法级注解
+    @API // 方法级注解，单个方法生效
     public Result<BizData> getData(BizParam param) {
         // ...
     }
@@ -62,6 +62,7 @@ public class BizParam extends BaseParam {
 4. 异常自动转化为失败结果：
 
 ```java
+// 返回失败结果，而不是抛出异常
 public Result<BizData> getData(BizParam param) {
     throw new BizException(CODE, MESSAGE);
 }
@@ -94,7 +95,7 @@ public Result<BizData> getData(BizParam param) {
 2. 定义插件：
 
 ```java
-
+// 插件顺序和目标注解
 @Plug(value = Stages.BEFORE_TARGET, targetAnnotations = BizProcess.class)
 public class BizProcessPlugin implements Plugin {
     @Override
@@ -108,7 +109,7 @@ public class BizProcessPlugin implements Plugin {
 
 ```java
 
-@BizProcess
+@BizProcess // 通过目标注解启用插件
 public Result<BizData> getData(BizParam param) {
     // ...
 }
