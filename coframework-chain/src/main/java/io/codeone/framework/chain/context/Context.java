@@ -203,6 +203,18 @@ public class Context {
     }
 
     /**
+     * Executes an action if the specified class type key is present in the context.
+     *
+     * @param key    the class type key to check
+     * @param action the action to execute with the associated value
+     * @param <V>    the type of the value
+     */
+    public <V> void ifPresent(Class<V> key, Consumer<V> action) {
+        Optional.ofNullable(key.cast(paramMap.get(key)))
+                .ifPresent(action);
+    }
+
+    /**
      * Retrieves the value associated with the specified key.
      *
      * @param key the key
@@ -211,6 +223,17 @@ public class Context {
      */
     public <V> V get(Object key) {
         return tryCast(key, paramMap.get(key));
+    }
+
+    /**
+     * Retrieves the value associated with the specified class type key.
+     *
+     * @param key the class type key
+     * @param <V> the expected type of the value
+     * @return the value associated with the key, or {@code null} if not found
+     */
+    public <V> V get(Class<V> key) {
+        return key.cast(paramMap.get(key));
     }
 
     /**
@@ -224,6 +247,20 @@ public class Context {
      */
     public <V> V getOrDefault(Object key, V defaultValue) {
         return tryCast(key, paramMap.getOrDefault(key, tryCast(key, defaultValue)));
+    }
+
+    /**
+     * Retrieves the value associated with the specified class type key or returns
+     * a default value.
+     *
+     * @param key          the class type key to search for
+     * @param defaultValue the default value to return if the key is not found
+     * @param <V>          the type of the value
+     * @return the value associated with the key, or the default value if the key
+     * is not found
+     */
+    public <V> V getOrDefault(Class<V> key, V defaultValue) {
+        return key.cast(paramMap.getOrDefault(key, key.cast(defaultValue)));
     }
 
     /**
@@ -243,6 +280,23 @@ public class Context {
     }
 
     /**
+     * Adds or updates a key-value pair using a class type key.
+     *
+     * @param key   the class type key to update
+     * @param value the value to associate with the key
+     * @param <V>   the type of the value
+     * @return the previous value associated with the key, or {@code null} if none
+     * existed
+     */
+    public <V> V put(Class<V> key, V value) {
+        if (value != null) {
+            return key.cast(paramMap.put(key, key.cast(value)));
+        } else {
+            return key.cast(paramMap.remove(key));
+        }
+    }
+
+    /**
      * Adds a key-value pair to the context if the key is not already present.
      *
      * @param key   the key
@@ -253,6 +307,23 @@ public class Context {
     public <V> V putIfAbsent(Object key, V value) {
         if (value != null) {
             return tryCast(key, paramMap.putIfAbsent(key, tryCast(key, value)));
+        }
+        return null;
+    }
+
+    /**
+     * Adds a key-value pair to the context if the specified class type key is not
+     * already present.
+     *
+     * @param key   the class type key to check and add
+     * @param value the value to associate if the key is not present
+     * @param <V>   the type of the value
+     * @return the current value associated with the key if present, or the new
+     * value if added
+     */
+    public <V> V putIfAbsent(Class<V> key, V value) {
+        if (value != null) {
+            return key.cast(paramMap.putIfAbsent(key, key.cast(value)));
         }
         return null;
     }
@@ -270,6 +341,18 @@ public class Context {
     }
 
     /**
+     * Removes the value associated with the specified class type key.
+     *
+     * @param key the class type key to remove
+     * @param <V> the type of the removed value
+     * @return the removed value, or {@code null} if no value was associated with
+     * the key
+     */
+    public <V> V remove(Class<V> key) {
+        return key.cast(paramMap.remove(key));
+    }
+
+    /**
      * Computes a value for the specified key if it is not already present.
      *
      * @param key             the key
@@ -280,6 +363,19 @@ public class Context {
     public <V> V computeIfAbsent(Object key, Function<Object, ? extends V> mappingFunction) {
         return tryCast(key, paramMap.computeIfAbsent(key,
                 k -> tryCast(k, mappingFunction.apply(k))));
+    }
+
+    /**
+     * Computes a value for the specified class type key if it is not already present.
+     *
+     * @param key             the class type key
+     * @param mappingFunction the function to compute a value if the key is absent
+     * @param <V>             the type of the computed value
+     * @return the computed value or the existing value if the key was already present
+     */
+    public <V> V computeIfAbsent(Class<V> key, Function<Object, ? extends V> mappingFunction) {
+        return key.cast(paramMap.computeIfAbsent(key,
+                k -> key.cast(mappingFunction.apply(k))));
     }
 
     /**
@@ -296,6 +392,20 @@ public class Context {
     }
 
     /**
+     * Executes a remapping function if the specified class type key is present
+     * in the context.
+     *
+     * @param key               the class type key to check
+     * @param remappingFunction the function to compute a new value
+     * @param <V>               the type of the computed value
+     * @return the updated value, or {@code null} if the key was not present
+     */
+    public <V> V computeIfPresent(Class<V> key, BiFunction<Object, ? super V, ? extends V> remappingFunction) {
+        return key.cast(paramMap.computeIfPresent(key,
+                (k, v) -> key.cast(remappingFunction.apply(k, key.cast(v)))));
+    }
+
+    /**
      * Executes a remapping function for the specified key.
      *
      * @param key               the key
@@ -306,6 +416,21 @@ public class Context {
     public <V> V compute(Object key, BiFunction<Object, ? super V, ? extends V> remappingFunction) {
         return tryCast(key, paramMap.compute(key,
                 (k, v) -> tryCast(k, remappingFunction.apply(k, tryCast(k, v)))));
+    }
+
+    /**
+     * Computes a new value for the specified class type key, regardless of its
+     * presence.
+     *
+     * @param key               the class type key
+     * @param remappingFunction the function to compute a new value
+     * @param <V>               the type of the computed value
+     * @return the updated value, or {@code null} if the computation returned {@code
+     * null}
+     */
+    public <V> V compute(Class<V> key, BiFunction<Object, ? super V, ? extends V> remappingFunction) {
+        return key.cast(paramMap.compute(key,
+                (k, v) -> key.cast(remappingFunction.apply(k, key.cast(v)))));
     }
 
     // Nested map operations (Key-Value maps)
