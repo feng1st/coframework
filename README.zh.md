@@ -237,16 +237,18 @@ public class BizService {
 
 ## 2. API增强高级用法
 
+框架提供了更多高级功能，帮助开发者根据需求定制异常处理、调用日志和支持现有系统的集成。以下是相关功能的介绍。
+
 ### 2.1 定制异常包装
 
 1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiException`接口，比如继承自`BaseException`。
-   此时`errorCode`会使用`ApiException.code`。
+   此时`errorCode`会取自`getCode()`。
 2. 如果希望定制结果的`errorMessage`（默认为异常消息），比如对最终用户隐藏技术细节，可以使用`@CustomErrorMessage`注解：
 
 ```java
 
 @API
-@CustomErrorMessage("System is busy, please try again later.")
+@CustomErrorMessage("系统繁忙，请稍后重试。")
 public Result<BizData> getData(BizParam param) {
     // ...
 }
@@ -265,7 +267,7 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-具体请参考**6. 日志**。
+详细的日志配置请参考**6. 日志**部分。
 
 ### 2.3 支持现有系统
 
@@ -273,15 +275,13 @@ public Result<BizData> getData(BizParam param) {
 
 1. 可以参考`ArgCheckingApiPlugin`，编写插件为现有参数类型增加校验能力。
 2. 可以参考`ExToResultApiPlugin`，编写插件转化异常为现有结果包装类型。
-3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，可以注册旧模型的`ApiResultConverter`
-   和
-   `ApiExceptionConverter`的Spring bean。
+3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，
+   可以注册旧模型的`ApiResultConverter`和`ApiExceptionConverter`的Spring bean。
 
 ```java
 
 @Component
 public class OldResultConverter<T> implements ApiResultConverter<OldResult<T>> {
-
     @Override
     public ApiResult<T> convert(OldResult<T> source) {
         return source.isSuccess()
@@ -292,7 +292,6 @@ public class OldResultConverter<T> implements ApiResultConverter<OldResult<T>> {
 
 @Component
 public class OldExceptionConverter implements ApiExceptionConverter<OldException> {
-
     @Override
     public ApiException convert(OldException source) {
         return source::getCode;
@@ -303,6 +302,9 @@ public class OldExceptionConverter implements ApiExceptionConverter<OldException
 ---
 
 ## 3. 插件系统高级用法
+
+框架的插件系统提供了灵活的扩展能力，适用于复杂的业务场景。
+在此部分，我们将介绍如何控制插件的执行顺序、动态绑定插件以及通过SPI实现更精细的插件管理。
 
 ### 3.1 插件顺序
 
@@ -378,7 +380,6 @@ public AnnoPluginBinding bizProcessBinding() {
 
 ```java
 public class BizPluginBindingFactory implements AnnoPluginBindingFactory {
-
     @Override
     public List<AnnoPluginBinding> getBindings() {
         return Arrays.asList(
@@ -397,6 +398,9 @@ io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
 ---
 
 ## 4. 链系统高级用法
+
+框架的链系统提供了灵活的流程编排能力，使得复杂的业务逻辑能够通过链式调用进行简洁且模块化的管理。
+以下将介绍链节点的类型、流程编排以及上下文管理等高级用法，帮助更高效地构建业务流程。
 
 ### 4.1 链节点
 
@@ -462,9 +466,7 @@ private Chainable getChain() {
 
 ### 4.2 上下文
 
-`Context`上下文内部持有参数的map，提供了`get`、`put`、`computIfAbsent`等常见map操作。
-
-`Context`是线程安全的。
+`Context`上下文内部持有参数的map，提供了`get`、`put`、`computIfAbsent`等常见map操作。并且是线程安全的。
 
 #### 4.2.1 整体输入和输出
 
@@ -563,7 +565,7 @@ public class Produce implements Chainable {
 
 - 每个节点统一记录日志：
 
-上下文提供了`onExecute`方法，每个节点都会执行该方法，可以用来记录公共参数。
+上下文提供了`onExecute`方法，可以在执行链时统一配置日志记录行为，确保日志的一致性和可追溯性。
 
 ```java
 public void run(Input input) {
@@ -627,6 +629,9 @@ public class ChainService {
 
 ## 5. 扩展系统高级用法
 
+框架的扩展系统旨在提升系统的灵活性和可扩展性。通过可扩展接口和动态路由机制，可以在运行时根据不同的业务身份场景选择适当的实现。
+以下将介绍如何使用扩展接口、扩展实现和业务身份场景等功能，以应对更复杂的业务需求。
+
 ### 5.1 可扩展接口
 
 可扩展（"Extensible"）接口可以有多个扩展实现，运行时根据参数或者上下文中的业务身份场景，路由到其中一个具体的实现。
@@ -636,6 +641,16 @@ public class ChainService {
 
 - 能力（`@Ability`）：一般用来代表可扩展的能力、功能等，抽象层次较高。
 - 扩展点（`@ExtensionPoint`）：一般用来代表可扩展的规则、配置等，抽象层次偏低。
+
+示例：
+
+```java
+
+@Ability
+public interface BizAbility {
+    void execute(BizScenario bizScenario);
+}
+```
 
 ### 5.2 扩展实现
 
@@ -738,6 +753,10 @@ public class BizApiImpl implements BizApi {
 
 ## 6. 日志
 
+框架提供了强大的日志功能，帮助追踪和管理服务调用及业务流程。
+
+### 6.1 启用日志记录
+
 除了通过`@API`注解在API层启用调用日志外，还可以通过`@Logging`注解在任意服务上配置并启用调用日志：
 
 ```java
@@ -765,7 +784,9 @@ public Result<BizData> run(BizParam param) {
 }
 ```
 
-日志格式如下：
+### 6.2 日志格式
+
+日志的记录格式如下所示：
 
 ```json5
 {
@@ -789,8 +810,8 @@ public Result<BizData> run(BizParam param) {
 }
 ```
 
-注意：JSON格式日志需要项目有引入`jackson-databind`二方包，并且`LogUtils.logAsJson`为`true`（默认即为`true`）。
+注意：启用JSON格式日志需要项目有引入`jackson-databind`二方包，并且`LogUtils.logAsJson`为`true`（默认即为`true`）。
 
 ---
 
-让 Co-Framework 助力您的业务开发之旅！
+希望Co-Framework能成为您开发过程中得力的助手，助力您的业务系统更高效、稳定地运行。
