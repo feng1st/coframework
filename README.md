@@ -2,8 +2,6 @@
 
 An Elegant and Efficient Java Business Framework
 
----
-
 **Co-Framework** is a modern business framework designed for Java developers. It provides out-of-the-box API
 enhancements, a flexible plugin system, chain-based process orchestration, and dynamic business capability routing. By
 simplifying repetitive tasks, improving code consistency, and enhancing extensibility, it accelerates development and
@@ -75,8 +73,6 @@ public Result<BizData> getData(BizParam param) {
 
 API call logs include results, error codes, and messages automatically—no extra configuration required.
 
----
-
 ### 1.2 Plugin System: Flexible Interception
 
 #### 1.2.1 Key Features
@@ -119,8 +115,6 @@ public Result<BizData> getData(BizParam param) {
     // ...
 }
 ```
-
----
 
 ### 1.3 Chain System: Flexible Process Orchestration
 
@@ -181,8 +175,6 @@ public class ChainService {
     }
 }
 ```
-
----
 
 ### 1.4 Extension System: Dynamic Multi-Implementation Routing
 
@@ -413,8 +405,6 @@ The chain system provides flexible process orchestration, enabling complex busin
 chain-based execution in a modular and streamlined way. This section covers chain node types, process orchestration,
 context management, and logging.
 
----
-
 ### 4.1 Chain Nodes
 
 #### 4.1.1 Node Types
@@ -429,8 +419,6 @@ The chain system supports the following node types:
 | **Empty**       | A no-op node.                                                                                                   |
 | **Sequential**  | Executes member nodes sequentially.                                                                             |
 | **Parallel**    | Executes member nodes concurrently if a thread pool is available; falls back to sequential execution otherwise. |
-
----
 
 #### 4.1.2 Lambda-Style Chain Nodes
 
@@ -454,8 +442,6 @@ public class ChainService {
     }
 }
 ```
-
----
 
 #### 4.1.3 Process Orchestration
 
@@ -484,14 +470,10 @@ private Chainable getChain() {
 }
 ```
 
----
-
 ### 4.2 Context Management
 
 The `Context` class maintains a thread-safe map for input/output parameters, supporting common map operations like`get`,
 `put`, and `computeIfAbsent`.
-
----
 
 #### 4.2.1 End-to-End Input and Output
 
@@ -506,8 +488,6 @@ public Output runAndReturn(Input input) {
     return getChain().run(Context.of(Input.class, input), Output.class);
 }
 ```
-
----
 
 #### 4.2.2 Parameter Type Management
 
@@ -528,8 +508,6 @@ public enum TypedParamEnum implements Typed {
 }
 ```
 
----
-
 #### 4.2.3 Thread Pool Support
 
 Chains can execute nodes concurrently if a thread pool is provided via the context:
@@ -539,8 +517,6 @@ public void run(Input input) {
     getChain().run(Context.of().threadPool(ForkJoinPool.commonPool()));
 }
 ```
-
----
 
 ### 4.3 Logging
 
@@ -567,8 +543,6 @@ Chain execution is logged with the following format:
 }
 ```
 
----
-
 #### 4.3.1 Setting the Chain Name
 
 ```java
@@ -576,8 +550,6 @@ public void run() {
     getChain().run(Context.of().chainName("chainName"));
 }
 ```
-
----
 
 #### 4.3.2 Custom Logging
 
@@ -594,8 +566,6 @@ public class Produce implements Chainable {
 }
 ```
 
----
-
 #### 4.3.3 Unified Node-Level Logging
 
 Use `onExecute()` for unified logging behavior across all nodes:
@@ -611,13 +581,9 @@ public void run(Input input) {
 }
 ```
 
----
-
 ### 4.4 Extensible Chain Nodes
 
 Chains support extensible nodes that resolve dynamically at runtime based on the business context.
-
----
 
 #### 4.4.1 Defining an Extensible Interface
 
@@ -627,8 +593,6 @@ Chains support extensible nodes that resolve dynamically at runtime based on the
 public interface Consume extends Chainable {
 }
 ```
-
----
 
 #### 4.4.2 Providing Business-Specific Implementations
 
@@ -643,8 +607,6 @@ public class ConsumeForFoo implements Consume {
     }
 }
 ```
-
----
 
 #### 4.4.3 Dynamic Node Invocation
 
@@ -672,8 +634,6 @@ The extension system in Co-Framework enhances system flexibility and scalability
 different implementations based on business scenarios. This section covers extensible interfaces, extension
 implementations, business scenarios, and routing mechanisms.
 
----
-
 ### 5.1 Extensible Interfaces
 
 An **Extensible Interface** supports multiple implementations that can be dynamically selected at runtime based on
@@ -693,8 +653,6 @@ public interface BizAbility {
 }
 ```
 
----
-
 ### 5.2 Extension Implementations
 
 An **Extension Implementation** is a specific implementation of an extensible interface for a particular business
@@ -710,8 +668,6 @@ public class BizAbilityForBranchMonday implements BizAbility {
     }
 }
 ```
-
----
 
 ### 5.3 Business Scenarios
 
@@ -730,8 +686,6 @@ Example routing search sequence for `region.branch|weekday.monday`:
 8. `@Extension(bizId = "*", scenarios = "weekday")`
 9. `@Extension(bizId = "*", scenarios = "*")`
 
----
-
 ### 5.4 Routing Parameters
 
 The system retrieves routing parameters from:
@@ -739,8 +693,6 @@ The system retrieves routing parameters from:
 1. **Method Parameters**: If the method has a parameter of type `BizScenarioParam`, its `getBizScenario()` method
    provides the routing information.
 2. **Routing Context (`BizScenarioContext`)**: Uses the last active routing scenario stored in a thread-local stack.
-
----
 
 #### 5.4.1 Routing Parameter Resolution
 
@@ -751,8 +703,6 @@ The system follows this sequence:
 3. If the method or service has `@RouteByContext`, it uses the context.
 4. If only one parameter is a `BizScenarioParam`, it uses that.
 5. If none of the above apply, it uses the context.
-
----
 
 #### 5.4.2 Routing Context Management
 
@@ -765,8 +715,6 @@ public void run() {
 ```
 
 > **Note:** The context is thread-local and does not cross threads.
-
----
 
 #### 5.4.3 Extension Session
 
@@ -808,8 +756,6 @@ public class BizApiImpl implements BizApi {
 Co-Framework provides a powerful logging system that tracks service calls and business processes, offering detailed
 traceability.
 
----
-
 ### 6.1 Enabling Logging
 
 You can enable call logging using the `@Logging` annotation:
@@ -833,8 +779,6 @@ public Result<BizData> run(BizParam param) {
     // Business logic
 }
 ```
-
----
 
 ### 6.2 Log Format
 
