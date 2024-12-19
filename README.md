@@ -4,254 +4,272 @@ An Elegant and Efficient Java Business Framework
 
 ---
 
-**Co-Framework** is a business framework designed for modern Java developers. It offers out-of-the-box API enhancements,
-a flexible plugin system, chained invocation, and extensible routing for business capabilities. By simplifying
-repetitive tasks, enhancing code consistency, and improving extensibility, Co-Framework significantly accelerates
-development and lowers maintenance costs. It’s ideal for complex business scenarios that require efficient development
-and flexible extension.
+**Co-Framework** is a modern business framework designed for Java developers. It provides out-of-the-box API
+enhancements, a flexible plugin system, chain-based process orchestration, and dynamic business capability routing. By
+simplifying repetitive tasks, improving code consistency, and enhancing extensibility, it accelerates development and
+reduces maintenance costs. It is well-suited for complex business scenarios that require high development efficiency and
+scalability.
 
 ---
 
 ## 1. Getting Started
 
-Follow these steps to quickly experience the core features of Co-Framework:
+Here’s how to quickly experience the core features of Co-Framework:
 
-### 1.1 API Enhancements: Achieve Multiple Improvements with a Single Annotation
+### 1.1 API Enhancements: Enable Powerful Features with a Single Annotation
 
 #### 1.1.1 Key Features
 
-- **Parameter Validation:** Automatically invokes `validate()` to ensure input validity.
-- **Exception Wrapping:** Exceptions are automatically converted into user-friendly responses.
-- **Invocation Logging:** Unified logs for successful, failed, or exceptional API calls.
+- **Parameter Validation**: Automatically invokes the `validate()` method to ensure input validity.
+- **Exception Wrapping**: Automatically converts exceptions into user-friendly API responses.
+- **Call Logging**: Logs API calls, including successes, failures, and exceptions.
 
 #### 1.1.2 Quick Start
 
-1. Add the Maven dependency:
+1. **Add Maven Dependency**:
 
-   ```xml
-   <dependency>
-       <groupId>io.codeone</groupId>
-       <artifactId>coframework-api-core</artifactId>
-       <version>${coframework.version}</version>
-   </dependency>
-   ```
+```xml
 
-2. Add the `@API` annotation to your service interface:
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-api-core</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
 
-   ```java
-   @API // Class-level annotation applies to all methods
-   public class BizApiImpl implements BizApi {
+2. **Apply the `@API` Annotation**:
 
-       @API // Method-level annotation applies to this specific method
-       public Result<BizData> getData(BizParam param) {
-           // ...
-       }
-   }
-   ```
+```java
 
-3. Parameter validation example:
+@API // Class-level annotation applies to all methods
+public class BizApiImpl implements BizApi {
 
-   ```java
-   public class BizParam extends BaseParam {
-       @Override
-       public void validate() {
-           Validator.requireNonNull(userId, "userId is null");
-       }
-   }
-   ```
+    @API // Method-level annotation applies to a single method
+    public Result<BizData> getData(BizParam param) {
+        // ...
+    }
+}
+```
 
-4. Exceptions are automatically converted into error responses:
+3. **Parameter Validation Example**:
 
-   ```java
-   // Instead of throwing an exception, the framework returns a failure result
-   public Result<BizData> getData(BizParam param) {
-       throw new BizException(CODE, MESSAGE);
-   }
-   ```
+```java
+public class BizParam extends BaseParam {
+    @Override
+    public void validate() {
+        Validator.requireNonNull(userId, "userId is null");
+    }
+}
+```
 
-5. View invocation logs:
+4. **Automatic Exception Handling**:
 
-   API invocation logs record results, error codes, and error messages with no extra configuration required.
+```java
+// Converts exceptions into API failure responses
+public Result<BizData> getData(BizParam param) {
+    throw new BizException(CODE, MESSAGE);
+}
+```
 
-### 1.2 Plugin System: Flexible Interception Capabilities
+5. **Call Logging**:
+
+API call logs include results, error codes, and messages automatically—no extra configuration required.
+
+---
+
+### 1.2 Plugin System: Flexible Interception
 
 #### 1.2.1 Key Features
 
-- Similar to AOP but more flexible, suitable for complex scenarios.
-- Supports multi-stage, multi-plugin dynamic binding.
+- **More Flexible than AOP**: Works well for complex scenarios.
+- **Multi-Phase, Multi-Plugin Binding**: Supports dynamic binding at multiple stages.
 
 #### 1.2.2 Quick Start
 
-1. Add the Maven dependency:
+1. **Add Maven Dependency**:
 
-   ```xml
-   <dependency>
-       <groupId>io.codeone</groupId>
-       <artifactId>coframework-plugin</artifactId>
-       <version>${coframework.version}</version>
-   </dependency>
-   ```
+```xml
 
-2. Define a plugin:
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-plugin</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
 
-   ```java
-   // Specify plugin order and target annotation
-   @Plug(value = Stages.BEFORE_TARGET, targetAnnotations = BizProcess.class)
-   public class BizProcessPlugin implements Plugin {
-       @Override
-       public void before(Method method, Object[] args) {
-           // Plugin logic
-       }
-   }
-   ```
+2. **Define a Plugin**:
 
-3. Apply the plugin:
+```java
 
-   ```java
-   @BizProcess // The target annotation that activates the plugin
-   public Result<BizData> getData(BizParam param) {
-       // ...
-   }
-   ```
+@Plug(value = Stages.BEFORE_TARGET, targetAnnotations = BizProcess.class)
+public class BizProcessPlugin implements Plugin {
+    @Override
+    public void before(Method method, Object[] args) {
+        // Plugin logic
+    }
+}
+```
+
+3. **Apply the Plugin**:
+
+```java
+
+@BizProcess // Activates the plugin via the target annotation
+public Result<BizData> getData(BizParam param) {
+    // ...
+}
+```
+
+---
 
 ### 1.3 Chain System: Flexible Process Orchestration
 
 #### 1.3.1 Key Features
 
-- Supports chained invocation to simplify complex business flows.
-- Independent, reusable nodes improve code modularity.
+- **Chained Calls**: Simplifies complex business processes.
+- **Modular Nodes**: Independent and reusable, enhancing code modularity.
 
 #### 1.3.2 Quick Start
 
-1. Add the Maven dependency:
+1. **Add Maven Dependency**:
 
-   ```xml
-   <dependency>
-       <groupId>io.codeone</groupId>
-       <artifactId>coframework-chain</artifactId>
-       <version>${coframework.version}</version>
-   </dependency>
-   ```
+```xml
 
-2. Define chain nodes:
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-chain</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
 
-   ```java
-   @Component
-   public class Produce implements Chainable {
-       @Override
-       public boolean execute(Context context) {
-           context.put(String.class, "content");
-           return true;
-       }
-   }
+2. **Define Chain Nodes**:
 
-   @Component
-   public class Consume implements Chainable {
-       @Override
-       public boolean execute(Context context) {
-           assert "content".equals(context.get(String.class));
-           return true;
-       }
-   }
-   ```
+```java
 
-3. Arrange and run the chain:
+@Component
+public class Produce implements Chainable {
+    @Override
+    public boolean execute(Context context) {
+        context.put(String.class, "content");
+        return true;
+    }
+}
 
-   ```java
-   @Service
-   public class ChainService {
-       @Autowired
-       private Produce produce;
-       @Autowired
-       private Consume consume;
+@Component
+public class Consume implements Chainable {
+    @Override
+    public boolean execute(Context context) {
+        assert "content".equals(context.get(String.class));
+        return true;
+    }
+}
+```
 
-       public void run() {
-           Sequential.of(produce, consume).run(Context.of());
-       }
-   }
-   ```
+3. **Orchestrate and Execute the Chain**:
 
-### 1.4 Extension System: Dynamic Routing to Multiple Implementations
+```java
 
-#### 1.4.1 Key Features
+@Service
+public class ChainService {
+    @Autowired
+    private Produce produce;
+    @Autowired
+    private Consume consume;
 
-- Dynamically route to different implementations based on varying business scenarios.
-- Enhance code extensibility and reduce duplicate development.
-
-#### 1.4.2 Quick Start
-
-1. Add the Maven dependency:
-
-   ```xml
-   <dependency>
-       <groupId>io.codeone</groupId>
-       <artifactId>coframework-ext</artifactId>
-       <version>${coframework.version}</version>
-   </dependency>
-   ```
-
-2. Define an extensible interface:
-
-   ```java
-   @Ability
-   public interface BizAbility {
-       void execute(BizScenario bizScenario);
-   }
-   ```
-
-3. Provide different implementations for various business scenarios:
-
-   ```java
-   @Extension(bizId = "manager")
-   public class BizAbilityForManager implements BizAbility {
-       @Override
-       public void execute(BizScenario bizScenario) {
-           // ...
-       }
-   }
-   ```
-
-4. Dynamic routing at runtime:
-
-   ```java
-   @Service
-   public class BizService {
-       @Autowired
-       private BizAbility bizAbility;
-
-       public void executeBizAbility() {
-           bizAbility.execute(BizScenario.ofBizId("manager"));
-       }
-   }
-   ```
+    public void run() {
+        Sequential.of(produce, consume).run(Context.of());
+    }
+}
+```
 
 ---
 
-## 2. Advanced Usage of API Enhancements
+### 1.4 Extension System: Dynamic Multi-Implementation Routing
 
-The framework provides more advanced features to help developers customize exception handling, invocation logging, and
-integration with existing systems. The following outlines these capabilities.
+#### 1.4.1 Key Features
+
+- **Dynamic Routing**: Route requests to different implementations based on business context.
+- **Enhanced Extensibility**: Minimize redundant development by adding new implementations as needed.
+
+#### 1.4.2 Quick Start
+
+1. **Add Maven Dependency**:
+
+```xml
+
+<dependency>
+    <groupId>io.codeone</groupId>
+    <artifactId>coframework-ext</artifactId>
+    <version>${coframework.version}</version>
+</dependency>
+```
+
+2. **Define an Extensible Interface**:
+
+```java
+
+@Ability
+public interface BizAbility {
+    void execute(BizScenario bizScenario);
+}
+```
+
+3. **Provide Different Implementations**:
+
+```java
+
+@Extension(bizId = "manager")
+public class BizAbilityForManager implements BizAbility {
+    @Override
+    public void execute(BizScenario bizScenario) {
+        // Custom logic
+    }
+}
+```
+
+4. **Invoke with Dynamic Routing**:
+
+```java
+
+@Service
+public class BizService {
+    @Autowired
+    private BizAbility bizAbility;
+
+    public void executeBizAbility() {
+        bizAbility.execute(BizScenario.ofBizId("manager"));
+    }
+}
+```
+
+---
+
+## 2. Advanced API Enhancements
+
+Co-Framework offers advanced features to help developers customize exception handling, logging, and integration with
+existing systems. Below are the details of these advanced capabilities.
 
 ### 2.1 Customizing Exception Wrapping
 
-1. If you want to customize the `errorCode` (by default, it’s the exception class name), let the exception implement the
-   `ApiException` interface, for example by extending `BaseException`. In this case, `errorCode` will be retrieved from
-   `getCode()`.
-2. To customize the `errorMessage` (which by default is the exception message), for example to hide technical details
-   from end users, use the `@CustomErrorMessage` annotation:
+1. **Custom Error Codes**: To customize the `errorCode` in the response (default is the exception class name), implement
+   the `ApiException` interface or extend `BaseException`. The `getCode()` method will define the `errorCode`.
 
-   ```java
-   @API
-   @CustomErrorMessage("System is busy, please try again later.")
-   public Result<BizData> getData(BizParam param) {
-       // ...
-   }
-   ```
+2. **Custom Error Messages**: To customize the `errorMessage` (default is the exception message), use the
+   `@CustomErrorMessage` annotation:
 
-### 2.2 Customizing Invocation Logging
+```java
 
-You can use the `@Logging` annotation to further control invocation logging behavior—such as whether to log parameters
-or return values:
+@API
+@CustomErrorMessage("System is busy, please try again later.")
+public Result<BizData> getData(BizParam param) {
+    // ...
+}
+```
+
+### 2.2 Customizing Call Logging
+
+The `@Logging` annotation provides control over call logging behavior, such as whether to log parameters and return
+values:
 
 ```java
 
@@ -262,87 +280,84 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-For detailed logging configurations, see **Section 6: Logging**.
+For detailed configuration options, refer to the **6. Logging** section.
 
 ### 2.3 Integrating with Existing Systems
 
-The framework can enhance existing APIs by applying the same enhancements:
+The framework supports enhancing APIs in existing systems.
 
-1. Refer to `ArgCheckingApiPlugin` as an example of writing a plugin to add validation to existing parameter types.
-2. Refer to `ExToResultApiPlugin` for an example of converting exceptions into existing result wrapper formats.
-3. To ensure that exception-to-failure conversion and logging can correctly identify success states, error codes, and
-   messages in older models, register Spring beans for `ApiResultConverter` and `ApiExceptionConverter` for legacy
-   models:
+1. **Adding Parameter Validation**: Create a plugin similar to `ArgCheckingApiPlugin` to add validation for existing
+   parameter types.
 
-   ```java
-   @Component
-   public class OldResultConverter<T> implements ApiResultConverter<OldResult<T>> {
-       @Override
-       public ApiResult<T> convert(OldResult<T> source) {
-           return source.isSuccess()
-                   ? Result.success(source.getData())
-                   : Result.failure(source.getErrorCode(), source.getErrorMessage());
-       }
-   }
+2. **Transforming Exceptions into Responses**: Develop a plugin like `ExToResultApiPlugin` to convert exceptions into
+   custom response types.
 
-   @Component
-   public class OldExceptionConverter implements ApiExceptionConverter<OldException> {
-       @Override
-       public ApiException convert(OldException source) {
-           return source::getCode;
-       }
-   }
-   ```
+3. **Custom Result and Exception Converters**: Register Spring beans for `ApiResultConverter` and`ApiExceptionConverter`
+   to ensure compatibility with existing models:
+
+```java
+
+@Component
+public class OldResultConverter<T> implements ApiResultConverter<OldResult<T>> {
+    @Override
+    public ApiResult<T> convert(OldResult<T> source) {
+        return source.isSuccess()
+                ? Result.success(source.getData())
+                : Result.failure(source.getErrorCode(), source.getErrorMessage());
+    }
+}
+
+@Component
+public class OldExceptionConverter implements ApiExceptionConverter<OldException> {
+    @Override
+    public ApiException convert(OldException source) {
+        return source::getCode;
+    }
+}
+```
 
 ---
 
-## 3. Advanced Usage of the Plugin System
+## 3. Advanced Plugin System Usage
 
-The plugin system in Co-Framework provides powerful extension capabilities suitable for complex business scenarios. In
-this section, we’ll introduce how to control plugin execution order, dynamically bind plugins, and manage plugins more
-intricately through SPI.
+The plugin system provides powerful extensibility, making it ideal for complex business scenarios. Below are details on
+controlling plugin execution order, dynamic binding, and fine-grained plugin management through SPI.
 
 ### 3.1 Plugin Execution Order
 
-- The framework defines 8 standard stages to control plugin execution order:
+- The framework defines **8 standard phases** for plugin execution:
 
-  | Stage                     | Order Value | Logic       |
-  |---------------------------|-------------|-------------|
-  | PRE_ARG_INTERCEPTING      | 0           | before()    |
-  | ARG_INTERCEPTING          | 1           | before()    |
-  | POST_ARG_INTERCEPTING     | 2           | before()    |
-  | BEFORE_TARGET             | 3           | before()    |
-  | AFTER_TARGET              | -4          | after()     |
-  | PRE_RESULT_INTERCEPTING   | -5          | after()     |
-  | RESULT_INTERCEPTING       | -6          | after()     |
-  | POST_RESULT_INTERCEPTING  | -7          | after()     |
+| Phase                    | Order Value | Primary Logic |
+|--------------------------|-------------|---------------|
+| PRE_ARG_INTERCEPTING     | 0           | `before()`    |
+| ARG_INTERCEPTING         | 1           | `before()`    |
+| POST_ARG_INTERCEPTING    | 2           | `before()`    |
+| BEFORE_TARGET            | 3           | `before()`    |
+| AFTER_TARGET             | -4          | `after()`     |
+| PRE_RESULT_INTERCEPTING  | -5          | `after()`     |
+| RESULT_INTERCEPTING      | -6          | `after()`     |
+| POST_RESULT_INTERCEPTING | -7          | `after()`     |
 
-Multiple plugins execute in a stack-like manner.
-
-For instance, the `before()` method of a plugin in the `AFTER_TARGET` stage may run even before a `before()` method in
-the `BEFORE_TARGET` stage.
-
-Therefore, pay close attention to the execution order of **each method** within plugins, making sure that the main logic
-is placed in the correct method.
+Execution proceeds like a stack, with later phases being executed first for `after()` methods.
 
 ![](docs/images/order-of-plugins.png)
 
-- If you need finer control over the order of plugins within the same stage, use `@Order` from
-  `org.springframework.core.annotation.Order`:
+- For finer control within the same phase, use `@Order`:
 
-  ```java
-  @Plug(value = Stages.BEFORE_TARGET)
-  @Order(Ordered.HIGHEST_PRECEDENCE)
-  public class BizProcessPlugin implements Plugin {
-      // ...
-  }
-  ```
+```java
+
+@Plug(value = Stages.BEFORE_TARGET)
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class BizProcessPlugin implements Plugin {
+    // ...
+}
+```
 
 ### 3.2 Dynamic Binding and Activation
 
 #### 3.2.1 Dynamic Activation
 
-Use the `@EnablePlugin` annotation to dynamically activate plugins:
+Enable plugins dynamically using the `@EnablePlugin` annotation:
 
 ```java
 
@@ -352,13 +367,11 @@ public Result<BizData> getData(BizParam param) {
 }
 ```
 
-These plugins don’t need `@Plug.targetAnnotations`.
+These plugins do not need the `@Plug.targetAnnotations`.
 
 #### 3.2.2 Dynamic Binding
 
-You can register an `AnnoPluginBinding` bean to dynamically bind plugins without predefining `@Plug.targetAnnotations`.
-
-This is commonly used to bind existing plugins:
+Register `AnnoPluginBinding` beans to dynamically bind plugins without specifying `@Plug.targetAnnotations`:
 
 ```java
 
@@ -368,56 +381,60 @@ public AnnoPluginBinding bizProcessBinding() {
 }
 ```
 
-#### 3.2.3 Binding via SPI
+#### 3.2.3 SPI-Based Binding
 
-Similar to dynamic binding, but established early during project startup via SPI. This approach solves issues with
-plugin circular dependencies in complex applications.
+Similar to dynamic binding, SPI-based binding establishes relationships during the project’s initialization phase,
+resolving potential circular dependencies.
 
-1. Implement an `AnnoPluginBindingFactory` that provides binding relationships:
+1. Implement the `AnnoPluginBindingFactory` interface:
 
-   ```java
-   public class BizPluginBindingFactory implements AnnoPluginBindingFactory {
-       @Override
-       public List<AnnoPluginBinding> getBindings() {
-           return Arrays.asList(
-                   AnnoPluginBinding.of(BizProcess.class, BizProcessPlugin.class));
-       }
-   }
-   ```
+```java
+public class BizPluginBindingFactory implements AnnoPluginBindingFactory {
+    @Override
+    public List<AnnoPluginBinding> getBindings() {
+        return Arrays.asList(
+                AnnoPluginBinding.of(BizProcess.class, BizProcessPlugin.class));
+    }
+}
+```
 
-2. Include the factory in your project’s `META-INF/spring.factories`:
+2. Register the factory in `META-INF/spring.factories`:
 
-   ```properties
-   io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
-     com.biz.config.BizPluginBindingFactory
-   ```
+```properties
+io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
+  com.biz.config.BizPluginBindingFactory
+```
 
 ---
 
-## 4. Advanced Usage of the Chain System
+## 4. Advanced Chain System Usage
 
-The chain system of Co-Framework provides flexible process orchestration capabilities, enabling complex business logic
-to be organized using chained invocations for simplicity and modularity. This section introduces node types, process
-orchestration, context management, and other advanced features to help you build more efficient business flows.
+The chain system provides flexible process orchestration, enabling complex business logic to be managed through
+chain-based execution in a modular and streamlined way. This section covers chain node types, process orchestration,
+context management, and logging.
+
+---
 
 ### 4.1 Chain Nodes
 
 #### 4.1.1 Node Types
 
-The chain system offers the following node types:
+The chain system supports the following node types:
 
-| Node Type   | Description                                                                                                    |
-|-------------|----------------------------------------------------------------------------------------------------------------|
-| Chainable   | Provides an `execute` method. Returns `false` to end the chain, otherwise continues to the next node.          |
-| Continuous  | Provides an `executeAndContinue` method with no return value. The chain does not stop at this node.            |
-| Conditional | Nodes that execute conditionally.                                                                              |
-| Empty       | An empty node that does nothing.                                                                               |
-| Sequential  | Executes member nodes in sequence.                                                                             |
-| Parallel    | Executes member nodes in parallel if a thread pool is available; otherwise falls back to sequential execution. |
+| Node Type       | Description                                                                                                     |
+|-----------------|-----------------------------------------------------------------------------------------------------------------|
+| **Chainable**   | Implements `execute()` and continues execution only if `true` is returned.                                      |
+| **Continuous**  | Implements `executeAndContinue()`. Never interrupts the chain.                                                  |
+| **Conditional** | Executes based on specified conditions.                                                                         |
+| **Empty**       | A no-op node.                                                                                                   |
+| **Sequential**  | Executes member nodes sequentially.                                                                             |
+| **Parallel**    | Executes member nodes concurrently if a thread pool is available; falls back to sequential execution otherwise. |
 
-#### 4.1.2 Lambda Expressions
+---
 
-`Chainable` nodes can be defined using lambda expressions. For example:
+#### 4.1.2 Lambda-Style Chain Nodes
+
+`Chainable` nodes can be expressed as lambda functions:
 
 ```java
 
@@ -438,13 +455,14 @@ public class ChainService {
 }
 ```
 
+---
+
 #### 4.1.3 Process Orchestration
 
-Use `Sequential` and `Parallel` to orchestrate processes:
+Use `Sequential` and `Parallel` to create complex workflows:
 
 ```java
 private Chainable getChain() {
-    // The overall production-consumption process runs sequentially
     return Sequential.of(
             // Parallel production
             Parallel.of(
@@ -452,7 +470,7 @@ private Chainable getChain() {
                     mapProduceBar,
                     mapProduceBaz
             ),
-            // Production aggregation
+            // Reduce production results
             reduceProduce,
             // Parallel consumption
             Parallel.of(
@@ -460,20 +478,24 @@ private Chainable getChain() {
                     mapConsumeBar,
                     mapConsumeBaz
             ),
-            // Consumption aggregation
+            // Reduce consumption results
             reduceConsume
     );
 }
 ```
 
-### 4.2 Context
+---
 
-`Context` holds a map of parameters, providing common map operations such as `get`, `put`, and `computeIfAbsent`. It is
-thread-safe.
+### 4.2 Context Management
 
-#### 4.2.1 Overall Input and Output
+The `Context` class maintains a thread-safe map for input/output parameters, supporting common map operations like`get`,
+`put`, and `computeIfAbsent`.
 
-You can pass input and retrieve output for the entire chain through the context:
+---
+
+#### 4.2.1 End-to-End Input and Output
+
+Chains can use the context to handle overall input and output:
 
 ```java
 public void run(Input input) {
@@ -481,174 +503,187 @@ public void run(Input input) {
 }
 
 public Output runAndReturn(Input input) {
-    // Automatically returns context.get(Output.class)
     return getChain().run(Context.of(Input.class, input), Output.class);
 }
 ```
 
-#### 4.2.2 Parameter Types
+---
 
-Context parameters can be of any key type, including strings and enums. If you use `Class<?>` or `Typed` as a parameter
-key, the framework performs type checks when reading and writing parameters.
+#### 4.2.2 Parameter Type Management
 
-Here’s how to define `Typed` parameters:
+Context parameters support various key types such as `String`, `Enum`,
+`Class<?>`, or `Typed`. Type validation is enforced when using `Class<?>` or `Typed` keys.
+
+Example of defining `Typed` parameters:
 
 ```java
 
-@RequiredArgConstructor
+@RequiredArgsConstructor
 @Getter
 public enum TypedParamEnum implements Typed {
     INPUT(Input.class),
-    OUTPUT(Output.class),
-    ;
+    OUTPUT(Output.class);
+
     private final Class<?> type;
 }
 ```
 
-#### 4.2.3 Thread Pools
+---
 
-If the context provides a thread pool, the nodes within `Parallel` will be executed concurrently. Ensure that these
-nodes are thread-safe.
+#### 4.2.3 Thread Pool Support
+
+Chains can execute nodes concurrently if a thread pool is provided via the context:
 
 ```java
 public void run(Input input) {
-    getChain().run(Context.of()
-            .threadPool(ForkJoinPool.commonPool()));
+    getChain().run(Context.of().threadPool(ForkJoinPool.commonPool()));
 }
 ```
 
+---
+
 ### 4.3 Logging
 
-The execution of chain nodes is logged, producing the following format:
+Chain execution is logged with the following format:
 
 ```json5
 {
-  // Specified by context.of().chainName("chainName"), defaults to "anonymous"
+  // Default: "anonymous"
   "chain": "chainName",
-  // If using BizContext.of(BizScenario.of("bizId", "scenario")), bizId and scenario are recorded
+  // Business ID if present
   "bizId": "bizId",
+  // Scenario if present
   "scenario": "scenario",
   "node": "ClassNameOfNode",
   "elapsed": 0,
-  // If the chain node throws an exception, it will be recorded
-  "exception": "stringOfException",
-  // If the chain node returns false, "break" will be recorded
+  // Recorded if an exception occurs
+  "exception": "ExceptionString",
+  // Recorded if execution breaks
   "break": true,
-  // Use context.log("key", value) to record key-value pairs
+  // Custom key-value pairs
   "params": {
     "key": {}
   }
 }
 ```
 
-- Setting the chain name:
+---
 
-  ```java
-  public void run() {
-      getChain().run(Context.of().chainName("chainName"));
-  }
-  ```
+#### 4.3.1 Setting the Chain Name
 
-- Logging as needed:
-
-  ```java
-  @Component
-  public class Produce implements Chainable {
-      @Override
-      public boolean execute(Context context) {
-          // ...
-          context.log("key", value);
-          // ...
-      }
-  }
-  ```
-
-- Unified logging for every node:
-
-  The context provides an `onExecute` method to configure logging behavior uniformly during chain execution, ensuring
-  consistent and traceable logs.
-
-  ```java
-  public void run(Input input) {
-      getChain().run(Context.of(Input.class, input)
-              .onExecute(context -> {
-                  // For each node, log userId to help trace the execution chain
-                  context.<Input>ifPresent(Input.class, o -> context.log("userId", o.getUserId()));
-              }));
-  }
-  ```
-
-### 4.4 Extensible Chain Nodes
-
-By using extensible interfaces (instead of concrete classes) as chain nodes, you can achieve node
-extensibility—dynamically routing to different chain node implementations at runtime based on the business scenario in
-the context.
-
-(For the concepts of extensible (“Ability”) interfaces, extensions (“Extension”), and business scenarios (
-`BizScenario`), see **Section 5: Extension System**.)
-
-1. Define an extensible interface as a chain node:
-
-   ```java
-   // Note that this node is an interface, not a concrete class
-   @Ability
-   public interface Consume extends Chainable {
-   }
-   ```
-
-2. Provide different implementations for different business scenarios:
-
-   ```java
-   // Implementation for the bizId "foo" scenario
-   @Extension(bizId = "foo")
-   public class ConsumeForFoo implements Consume {
-       // ...
-   }
-   ```
-
-3. Invoking the extensible chain node:
-
-   ```java
-   @Service
-   public class ChainService {
-       @Autowired
-       private Produce produce;
-       // Reference the interface rather than a specific class
-       @Autowired
-       private Consume consume;
-
-       public void run() {
-           Sequential.of(produce, consume)
-                   // Use BizContext (a subclass of Context) to set business scenario
-                   .run(BizContext.of(
-                       // Because the bizId matches, the consume call routes to ConsumeForFoo
-                       BizScenario.ofBizId("foo")));
-       }
-   }
-   ```
+```java
+public void run() {
+    getChain().run(Context.of().chainName("chainName"));
+}
+```
 
 ---
 
-## 5. Advanced Usage of the Extension System
+#### 4.3.2 Custom Logging
 
-Co-Framework’s extension system is designed to enhance flexibility and extensibility. By using extensible interfaces and
-a dynamic routing mechanism, you can choose the appropriate implementation at runtime based on various business
-scenarios. This section explains how to use extensible interfaces, extension implementations, and business scenarios to
-handle more complex business needs.
+```java
+
+@Component
+public class Produce implements Chainable {
+    @Override
+    public boolean execute(Context context) {
+        // ...
+        context.log("key", value);
+        // ...
+    }
+}
+```
+
+---
+
+#### 4.3.3 Unified Node-Level Logging
+
+Use `onExecute()` for unified logging behavior across all nodes:
+
+```java
+public void run(Input input) {
+    getChain().run(
+            Context.of(Input.class, input)
+                    .onExecute(context -> {
+                        context.ifPresent(Input.class, i -> context.log("userId", i.getUserId()));
+                    })
+    );
+}
+```
+
+---
+
+### 4.4 Extensible Chain Nodes
+
+Chains support extensible nodes that resolve dynamically at runtime based on the business context.
+
+---
+
+#### 4.4.1 Defining an Extensible Interface
+
+```java
+
+@Ability
+public interface Consume extends Chainable {
+}
+```
+
+---
+
+#### 4.4.2 Providing Business-Specific Implementations
+
+```java
+
+@Extension(bizId = "foo")
+public class ConsumeForFoo implements Consume {
+    @Override
+    public boolean execute(Context context) {
+        // Custom logic
+        return true;
+    }
+}
+```
+
+---
+
+#### 4.4.3 Dynamic Node Invocation
+
+```java
+
+@Service
+public class ChainService {
+    @Autowired
+    private Produce produce;
+    @Autowired
+    private Consume consume; // Reference interface, not implementation
+
+    public void run() {
+        Sequential.of(produce, consume)
+                .run(BizContext.of(BizScenario.ofBizId("foo")));
+    }
+}
+```
+
+---
+
+## 5. Advanced Extension System Usage
+
+The extension system in Co-Framework enhances system flexibility and scalability by dynamically routing requests to
+different implementations based on business scenarios. This section covers extensible interfaces, extension
+implementations, business scenarios, and routing mechanisms.
+
+---
 
 ### 5.1 Extensible Interfaces
 
-An “Extensible” interface can have multiple extension implementations. At runtime, the framework routes to a specific
-implementation based on parameters or the current business scenario.
+An **Extensible Interface** supports multiple implementations that can be dynamically selected at runtime based on
+routing criteria such as `bizId` or `scenario`. The framework provides two annotations for defining extensible
+interfaces:
 
-The extension system provides two annotations, `@Ability` and `@ExtensionPoint`. Both function similarly, but differ in
-semantics:
+- **`@Ability`**: Represents capabilities or functionalities.
+- **`@ExtensionPoint`**: Represents extensible rules or configurations.
 
-- **`@Ability`**: Generally represents a higher-level, abstract, and extensible capability or function.
-- **`@ExtensionPoint`**: Generally represents a lower-level, more concrete extension point, often used for rules,
-  configurations, etc.
-
-Example:
+**Example**:
 
 ```java
 
@@ -658,31 +693,32 @@ public interface BizAbility {
 }
 ```
 
+---
+
 ### 5.2 Extension Implementations
 
-An “Extension” is an implementation of an extensible interface that applies to a particular business scenario.
-
-Use the `@Extension` annotation to mark an implementation and specify the business scenario coordinates it supports. For
-example:
+An **Extension Implementation** is a specific implementation of an extensible interface for a particular business
+scenario. Use the `@Extension` annotation to define implementations:
 
 ```java
 
 @Extension(bizId = "region.branch", scenarios = {"weekday.monday", "weekday.tuesday"})
 public class BizAbilityForBranchMonday implements BizAbility {
-    // ...
+    @Override
+    public void execute(BizScenario bizScenario) {
+        // Custom logic
+    }
 }
 ```
 
+---
+
 ### 5.3 Business Scenarios
 
-A `BizScenario` includes the caller’s business identity (`bizId`) and scenario (`scenario`), serving as the routing
-coordinates for finding the correct extension implementation.
+A **Business Scenario** (`BizScenario`) includes `bizId` and `scenario`, which are used as routing keys. Scenarios
+support hierarchical matching from specific to broader scopes.
 
-Both `bizId` and `scenario` support hierarchical structures. When routing, the system tries to match from the most
-specific to the more general.
-
-For example, if your `BizScenario` is `"region.branch|weekday.monday"`, the extension system will attempt to find a
-match in this order (stop at the first match):
+Example routing search sequence for `region.branch|weekday.monday`:
 
 1. `@Extension(bizId = "region.branch", scenarios = "weekday.monday")`
 2. `@Extension(bizId = "region.branch", scenarios = "weekday")`
@@ -694,58 +730,62 @@ match in this order (stop at the first match):
 8. `@Extension(bizId = "*", scenarios = "weekday")`
 9. `@Extension(bizId = "*", scenarios = "*")`
 
-### 5.4 Obtaining Routing Parameters
+---
 
-When calling an extensible interface, the extension system obtains routing parameters (the business scenario) from two
-sources:
+### 5.4 Routing Parameters
 
-1. A method parameter of type `BizScenarioParam`, whose `getBizScenario()` method returns the business scenario.
-2. The `BizScenarioContext`, which internally maintains a stack of business scenarios, with the top of the stack holding
-   the scenario used in the latest routing.
+The system retrieves routing parameters from:
 
-#### 5.4.1 Retrieval Process
+1. **Method Parameters**: If the method has a parameter of type `BizScenarioParam`, its `getBizScenario()` method
+   provides the routing information.
+2. **Routing Context (`BizScenarioContext`)**: Uses the last active routing scenario stored in a thread-local stack.
 
-By default, the extension system tries the following steps to obtain routing parameters:
+---
 
-1. If there are no parameters in the method, get from the context.
-2. If the method has exactly one parameter annotated with `@RouteBy`, and it is of type `BizScenarioParam`, use that
-   parameter.
-3. If the method or service is annotated with `@RouteByContext`, get from the context.
-4. If the method has exactly one `BizScenarioParam`-type parameter (without `@RouteBy`), use that parameter.
-5. Otherwise, fallback to the context.
+#### 5.4.1 Routing Parameter Resolution
 
-If the context also provides nothing, an exception is thrown.
+The system follows this sequence:
 
-#### 5.4.2 Routing Context
+1. If no method parameters exist, it checks the context.
+2. If there’s only one parameter with `@RouteBy`, it uses that.
+3. If the method or service has `@RouteByContext`, it uses the context.
+4. If only one parameter is a `BizScenarioParam`, it uses that.
+5. If none of the above apply, it uses the context.
 
-You can manually push a business scenario into the context for subsequent execution steps:
+---
+
+#### 5.4.2 Routing Context Management
+
+You can manually push a business scenario into the context:
 
 ```java
 public void run() {
-    // bizScenario is available throughout process()
     BizScenarioContext.invoke(bizScenario, this::process);
 }
 ```
 
-Note: The context is `ThreadLocal` and does not span across threads.
+> **Note:** The context is thread-local and does not cross threads.
 
-#### 5.4.3 Extension Sessions
+---
 
-`@ExtensionSession` annotation automatically pushes an available business scenario into the context based on certain
-rules:
+#### 5.4.3 Extension Session
 
-| `@ExtensionSession.value` | Description                                                            |
-|---------------------------|------------------------------------------------------------------------|
-| FIRST                     | Use the first `BizScenarioParam`-type parameter                        |
-| LAST                      | Use the last `BizScenarioParam`-type parameter                         |
-| SPECIFIED                 | Use the parameter specified by `@RouteBy` (must be `BizScenarioParam`) |
-| CUSTOM                    | Use `@ExtensionSession.customResolver` to parse from all parameters    |
-| IGNORE                    | Do not modify the context                                              |
-| AUTO (default)            | Tries `CUSTOM` → `SPECIFIED` → `FIRST`, and falls back to `IGNORE`     |
+The `@ExtensionSession` annotation automatically pushes routing scenarios into the context. Supported strategies:
 
-`@ExtensionSession` is typically used at the API layer to populate the context at the entry point. This allows
-extensible interfaces to be called without explicitly passing `BizScenarioParam` parameters, reducing code intrusion.
-For example:
+| `@ExtensionSession.value` | Description                                                    |
+|---------------------------|----------------------------------------------------------------|
+| `FIRST`                   | Uses the first `BizScenarioParam`.                             |
+| `LAST`                    | Uses the last `BizScenarioParam`.                              |
+| `SPECIFIED`               | Uses the parameter marked with `@RouteBy`.                     |
+| `CUSTOM`                  | Uses a custom resolver.                                        |
+| `IGNORE`                  | Ignores the session context.                                   |
+| `AUTO` (default)          | Tries `CUSTOM`, `SPECIFIED`, `FIRST`, or defaults to `IGNORE`. |
+
+The `@ExtensionSession` annotation is typically applied at the API layer to populate the business context when the
+service entry point is called. This allows extensible interfaces to work without explicitly requiring a
+`BizScenarioParam` parameter, reducing code coupling and improving maintainability.
+
+**Example**:
 
 ```java
 
@@ -755,10 +795,8 @@ public class BizApiImpl implements BizApi {
     @Autowired
     private BizAbility bizAbility;
 
-    // Suppose BizParam implements BizScenarioParam
     public Result<BizData> getData(BizParam param) {
-        // Even without extra parameters, extensible interfaces can route correctly
-        bizAbility.runWithoutParam();
+        bizAbility.runWithoutParam(); // No explicit param needed
     }
 }
 ```
@@ -767,69 +805,73 @@ public class BizApiImpl implements BizApi {
 
 ## 6. Logging
 
-Co-Framework offers powerful logging features for tracking and managing service calls and business processes.
+Co-Framework provides a powerful logging system that tracks service calls and business processes, offering detailed
+traceability.
+
+---
 
 ### 6.1 Enabling Logging
 
-In addition to enabling invocation logs via the `@API` annotation at the API layer, you can also enable and configure
-invocation logging on any service using the `@Logging` annotation:
+You can enable call logging using the `@Logging` annotation:
 
 ```java
 
 @Logging(
-        // Log name, defaults to the current class name
-        name = "business",
-        // Whether to log parameters (default: true). If argKvs is set, args won't be logged directly.
-        logArgs = true,
-        // Whether to log return values (default: true)
-        logResult = true,
-        // Whether to log stack traces (default: true)
-        logException = true,
-        // A SpEL expression to determine success of the call. Usually not needed if the result model is compatible with ApiResult.
-        expSuccess = "#r?.success",
-        // SpEL expression for error code. Usually not needed if the result or exception model is compatible.
-        expCode = "#r?.errorCode",
-        // SpEL expression for error message. Usually not needed if the result model is compatible.
-        expMessage = "#r?.errorMessage",
-        // Key-value pairs for important parameters. Key is String, value is a SpEL expression.
-        argKvs = {"bizScenario", "#a0?.bizScenario",
-                "userId", "#a0?.userId"}
+        name = "business",           // Log name (default: class name)
+        logArgs = true,              // Whether to log parameters
+        logResult = true,            // Whether to log return values
+        logException = true,         // Whether to log exceptions
+        expSuccess = "#r?.success",  // SpEL expression for success check
+        expCode = "#r?.errorCode",   // SpEL expression for error code
+        expMessage = "#r?.errorMessage", // SpEL expression for error message
+        argKvs = {
+                "bizScenario", "#a0?.bizScenario",
+                "userId", "#a0?.userId"
+        }
 )
 public Result<BizData> run(BizParam param) {
-    // ...
+    // Business logic
 }
 ```
 
+---
+
 ### 6.2 Log Format
 
-Logs are recorded in the following format:
+Logs follow a structured format like this:
 
 ```json5
 {
-  // ERROR if an exception is thrown, WARN if failed, otherwise INFO
+  // Log level (ERROR/WARN/INFO)
   "level": "WARN",
+  // Method name
   "method": "BizService.run",
+  // Success indicator
   "success": false,
+  // Error code
   "code": "ERROR_CODE",
+  // Error message
   "message": "error message",
+  // Execution time
   "elapsed": 0,
+  // Arguments
   "args": {
     "bizScenario": "*|*",
     "userId": 10000
   },
-  // Recorded if there is a return value
+  // Return value (if applicable)
   "result": {
     "status": "ENABLED"
   },
-  // Recorded if an exception is thrown
+  // Exception details
   "exception": "IllegalArgumentException: id is null"
 }
 ```
 
-Note: To enable JSON-format logs, ensure that `jackson-databind` is on the classpath and that `LogUtils.logAsJson` is
-`true` (which is the default).
+> **Note:** Enable JSON-formatted logs by including the `jackson-databind` dependency and setting `LogUtils.logAsJson`to
+`true` (default).
 
 ---
 
-We hope that Co-Framework will become a valuable assistant in your development process, helping your business system run
-more efficiently and reliably.
+We hope **Co-Framework** becomes your trusted development companion, enabling you to build business systems that are
+efficient, scalable, and easy to maintain.

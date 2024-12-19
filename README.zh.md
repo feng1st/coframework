@@ -572,7 +572,7 @@ public void run(Input input) {
     getChain().run(Context.of(Input.class, input)
             .onExecute(context -> {
                 // 在每个节点输出userId，帮助追踪执行链
-                context.<Input>ifPresent(Input.class, o -> context.log("userId", o.getUserId()));
+                context.ifPresent(Input.class, o -> context.log("userId", o.getUserId()));
             }));
 }
 ```
