@@ -12,23 +12,23 @@ class ArgValidatingApiPluginTest {
     private ArgValidatingApiPluginTestService argValidatingApiPluginTestService;
 
     @Test
-    public void withUserId() {
+    public void apiParamWithUserId() {
         ArgValidatingApiPluginTestApiParam param = new ArgValidatingApiPluginTestApiParam();
         param.setUserId(0L);
-        argValidatingApiPluginTestService.consume(param);
+        argValidatingApiPluginTestService.apiParam(param);
     }
 
     @Test
-    public void withoutUserId() {
+    public void apiParamWithoutUserId() {
         ArgValidatingApiPluginTestApiParam param = new ArgValidatingApiPluginTestApiParam();
         Assertions.assertEquals("userId is required",
                 Assertions.assertThrows(IllegalArgumentException.class,
-                        () -> argValidatingApiPluginTestService.consume(param)).getMessage());
+                        () -> argValidatingApiPluginTestService.apiParam(param)).getMessage());
     }
 
     @Test
     public void nonApiParam() {
         ArgValidatingApiPluginTestNonApiParam param = new ArgValidatingApiPluginTestNonApiParam();
-        argValidatingApiPluginTestService.consume(param);
+        argValidatingApiPluginTestService.nonApiParam(param);
     }
 }

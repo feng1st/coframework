@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArgValidatingApiPluginTestService {
 
-    public void consume(ArgValidatingApiPluginTestApiParam param) {
+    public void apiParam(ArgValidatingApiPluginTestApiParam param) {
     }
 
-    public void consume(ArgValidatingApiPluginTestNonApiParam param) {
+    public void nonApiParam(ArgValidatingApiPluginTestNonApiParam param) {
     }
 }
