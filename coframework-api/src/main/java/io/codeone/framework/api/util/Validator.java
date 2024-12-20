@@ -205,7 +205,7 @@ public class Validator {
      * @throws IllegalArgumentException if the value is not in the collection
      */
     public void requireIn(Object value, Collection<?> collection, String message) {
-        if (value == null || !collection.contains(value)) {
+        if (collection == null || !collection.contains(value)) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -219,7 +219,7 @@ public class Validator {
      * @throws IllegalArgumentException if the value is in the collection
      */
     public void requireNotIn(Object value, Collection<?> collection, String message) {
-        if (value != null && collection.contains(value)) {
+        if (collection != null && collection.contains(value)) {
             throw new IllegalArgumentException(message);
         }
     }
