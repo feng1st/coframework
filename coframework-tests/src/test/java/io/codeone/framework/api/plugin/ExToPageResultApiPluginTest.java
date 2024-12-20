@@ -17,6 +17,9 @@ class ExToPageResultApiPluginTest {
         PageResult<Object> result = exToPageResultApiPluginTestService.illegalArgumentException();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("INVALID_ARGS", result.getErrorCode());
         Assertions.assertEquals("Illegal argument", result.getErrorMessage());
     }
@@ -26,6 +29,9 @@ class ExToPageResultApiPluginTest {
         PageResult<Object> result = exToPageResultApiPluginTestService.illegalStateException();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("IllegalStateException", result.getErrorCode());
         Assertions.assertEquals("Illegal state", result.getErrorMessage());
     }
@@ -35,6 +41,9 @@ class ExToPageResultApiPluginTest {
         PageResult<Object> result = exToPageResultApiPluginTestService.apiExceptionCode();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
     }
@@ -44,6 +53,9 @@ class ExToPageResultApiPluginTest {
         PageResult<Object> result = exToPageResultApiPluginTestService.apiExceptionCodeMessage();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
         Assertions.assertEquals("System error", result.getErrorMessage());
     }
@@ -53,6 +65,9 @@ class ExToPageResultApiPluginTest {
         PageResult<Object> result = exToPageResultApiPluginTestService.apiExceptionCodeCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
         Assertions.assertEquals("java.lang.IllegalStateException: Illegal state", result.getErrorMessage());
     }
@@ -62,6 +77,9 @@ class ExToPageResultApiPluginTest {
         PageResult<Object> result = exToPageResultApiPluginTestService.apiExceptionCodeMessageCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
         Assertions.assertEquals("System error", result.getErrorMessage());
     }
@@ -71,6 +89,9 @@ class ExToPageResultApiPluginTest {
         PageResult<Object> result = exToPageResultApiPluginTestService.customErrorMessage();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("IllegalStateException", result.getErrorCode());
         Assertions.assertEquals("Custom error message", result.getErrorMessage());
     }
