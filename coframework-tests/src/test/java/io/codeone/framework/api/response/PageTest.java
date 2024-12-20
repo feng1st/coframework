@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 class PageTest {
 
@@ -61,6 +62,17 @@ class PageTest {
         Assertions.assertEquals(100L, page.getTotalCount());
         Assertions.assertFalse(page.isEmpty());
         Assertions.assertTrue(page.isHasMore());
+    }
+
+    @Test
+    public void isEmpty() {
+        Page<Object> page = Page.of(Collections.emptyList(), 5, 3);
+        Assertions.assertEquals(Collections.emptyList(), page.getData());
+        Assertions.assertEquals(5, page.getPageIndex());
+        Assertions.assertEquals(3, page.getPageSize());
+        Assertions.assertNull(page.getTotalCount());
+        Assertions.assertTrue(page.isEmpty());
+        Assertions.assertFalse(page.isHasMore());
     }
 
     @Test
