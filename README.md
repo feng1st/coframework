@@ -278,7 +278,7 @@ For detailed configuration options, refer to the **6. Logging** section.
 
 The framework supports enhancing APIs in existing systems.
 
-1. **Adding Parameter Validation**: Create a plugin similar to `ArgCheckingApiPlugin` to add validation for existing
+1. **Adding Parameter Validation**: Create a plugin similar to `ArgValidatingApiPlugin` to add validation for existing
    parameter types.
 
 2. **Transforming Exceptions into Responses**: Develop a plugin like `ExToResultApiPlugin` to convert exceptions into

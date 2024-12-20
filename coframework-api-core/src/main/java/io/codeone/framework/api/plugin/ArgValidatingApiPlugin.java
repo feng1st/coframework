@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  * parameters.
  */
 @Plug(value = Stages.ARG_INTERCEPTING, targetAnnotations = API.class)
-public class ArgCheckingApiPlugin implements Plugin {
+public class ArgValidatingApiPlugin implements Plugin {
 
     @Override
     public void before(Method method, Object[] args) {

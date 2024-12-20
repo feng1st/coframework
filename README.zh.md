@@ -271,7 +271,7 @@ public Result<BizData> getData(BizParam param) {
 
 框架支持在现有系统API上应用增强。
 
-1. 可以参考`ArgCheckingApiPlugin`，编写插件为现有参数类型增加校验能力。
+1. 可以参考`ArgValidatingApiPlugin`，编写插件为现有参数类型增加校验能力。
 2. 可以参考`ExToResultApiPlugin`，编写插件转化异常为现有结果包装类型。
 3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，
    可以注册旧模型的`ApiResultConverter`和`ApiExceptionConverter`的Spring bean。
