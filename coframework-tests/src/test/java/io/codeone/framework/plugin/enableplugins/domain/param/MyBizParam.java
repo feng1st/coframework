@@ -1,4 +1,4 @@
-package io.codeone.framework.legacy.enableplugins.domain.param;
+package io.codeone.framework.plugin.enableplugins.domain.param;
 
 import io.codeone.framework.api.parameter.BaseBizParam;
 import io.codeone.framework.api.util.Validator;

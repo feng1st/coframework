@@ -1,9 +1,9 @@
-package io.codeone.framework.legacy.enableplugins.ext.plugin;
+package io.codeone.framework.plugin.enableplugins.ext.plugin;
 
-import io.codeone.framework.legacy.enableplugins.domain.param.MyBizParam;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.Stages;
+import io.codeone.framework.plugin.enableplugins.domain.param.MyBizParam;
 
 import java.lang.reflect.Method;
 

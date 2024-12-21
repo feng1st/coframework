@@ -1,9 +1,9 @@
-package io.codeone.framework.legacy.enableplugins;
+package io.codeone.framework.plugin.enableplugins;
 
 import io.codeone.framework.api.exception.CommonCodes;
 import io.codeone.framework.api.response.Result;
-import io.codeone.framework.legacy.enableplugins.domain.param.MyBizParam;
-import io.codeone.framework.legacy.enableplugins.domain.service.TestApiEnablePluginsService;
+import io.codeone.framework.plugin.enableplugins.domain.param.MyBizParam;
+import io.codeone.framework.plugin.enableplugins.domain.service.TestApiEnablePluginsService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
