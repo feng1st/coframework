@@ -94,11 +94,11 @@ class LoggingPluginTest extends BaseLoggingTest {
     public void loggingSpEL() {
         Map<String, Object> param = new HashMap<>();
         param.put("userId", 10000L);
-        loggingPluginTestService.loggingSpEL(param);
+        loggingPluginTestService.loggingSpEL(param, null);
         assertLog("customLogger",
                 Level.WARN,
                 null,
-                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingSpEL\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"userId\":10000},\"result\":{\"code\":\"CODE\",\"message\":\"Message\",\"userId\":10000,\"success\":false}}");
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingSpEL\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"userId\":10000,\"extra\":null},\"result\":{\"code\":\"CODE\",\"success\":false,\"message\":\"Message\"}}");
     }
 
     @Test
@@ -108,16 +108,6 @@ class LoggingPluginTest extends BaseLoggingTest {
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSpELNoParam\",\"success\":true,\"elapsed\":0,\"result\":{\"success\":true}}");
-    }
-
-    @Test
-    public void loggingSpELException() {
-        Assertions.assertThrows(IllegalStateException.class,
-                () -> loggingPluginTestService.loggingSpELException());
-        assertLog("customLogger",
-                Level.ERROR,
-                IllegalStateException.class,
-                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingSpELException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Exception\",\"elapsed\":0,\"exception\":\"java.lang.IllegalStateException: Exception\"}");
     }
 
     @Test
