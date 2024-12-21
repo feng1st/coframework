@@ -2,6 +2,7 @@ package io.codeone.framework.logging.plugin;
 
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.logging.BaseLoggingTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,7 +64,8 @@ class LoggingPluginTest extends BaseLoggingTest {
 
     @Test
     public void loggingException() {
-        loggingPluginTestService.loggingException();
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> loggingPluginTestService.loggingException());
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.ERROR,
                 IllegalStateException.class,
@@ -97,6 +99,25 @@ class LoggingPluginTest extends BaseLoggingTest {
                 Level.WARN,
                 null,
                 "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingSpEL\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"userId\":10000},\"result\":{\"code\":\"CODE\",\"message\":\"Message\",\"userId\":10000,\"success\":false}}");
+    }
+
+    @Test
+    public void loggingSpELNoParam() {
+        loggingPluginTestService.loggingSpELNoParam();
+        assertLog("customLogger",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSpELNoParam\",\"success\":true,\"elapsed\":0,\"result\":{\"success\":true}}");
+    }
+
+    @Test
+    public void loggingSpELException() {
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> loggingPluginTestService.loggingSpELException());
+        assertLog("customLogger",
+                Level.ERROR,
+                IllegalStateException.class,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingSpELException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Exception\",\"elapsed\":0,\"exception\":\"java.lang.IllegalStateException: Exception\"}");
     }
 
     @Test

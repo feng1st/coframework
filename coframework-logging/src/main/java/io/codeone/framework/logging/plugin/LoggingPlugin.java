@@ -68,7 +68,7 @@ public class LoggingPlugin implements Plugin {
 
         Logging logging = AnnotationUtils.getAnnotation(method, Logging.class);
 
-        LoggingExpressionParser expParser = new LoggingExpressionParser(args, result, throwable);
+        LoggingExpressionParser expParser = new LoggingExpressionParser(args, result);
 
         ApiResult<?> apiResult = ApiResultUtils.toApiResult(result);
         Throwable cause = ApiExceptionUtils.getCause(throwable);

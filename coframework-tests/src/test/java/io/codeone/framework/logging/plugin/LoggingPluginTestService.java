@@ -36,7 +36,6 @@ public class LoggingPluginTestService {
         return Result.failure("FAILURE", "Failure");
     }
 
-    @API
     @Logging
     public Result<Object> loggingException() {
         throw new IllegalStateException("Exception");
@@ -58,7 +57,7 @@ public class LoggingPluginTestService {
     @Logging(name = "customLogger",
             expSuccess = "#r?.get('success')",
             expCode = "#r?.get('code')",
-            expMessage = "#r?.get('message')",
+            expMessage = "#r != null ? #r?.get('message') : #e?.getMessage()",
             argKvs = {"userId", "#a0?.get('userId')"})
     public Map<String, Object> loggingSpEL(Map<String, Object> param) {
         Map<String, Object> result = new HashMap<>(param);
@@ -66,6 +65,20 @@ public class LoggingPluginTestService {
         result.put("code", "CODE");
         result.put("message", "Message");
         return result;
+    }
+
+    @Logging(name = "customLogger",
+            expSuccess = "#r?.get('success')")
+    public Map<String, Object> loggingSpELNoParam() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        return result;
+    }
+
+    @Logging(name = "customLogger",
+            expMessage = "#r != null ? #r?.get('message') : #e?.getMessage()")
+    public Map<String, Object> loggingSpELException() {
+        throw new IllegalStateException("Exception");
     }
 
     @Logging(expSuccess = "ERROR")

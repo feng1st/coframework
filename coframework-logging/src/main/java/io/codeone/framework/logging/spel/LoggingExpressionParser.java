@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Parses SpEL expressions for logging purposes.
  *
- * <p>Uses method arguments, results, or exceptions to evaluate custom expressions
- * provided in the {@code Logging} annotation.
+ * <p>Uses method arguments or results to evaluate custom expressions provided in
+ * the {@code Logging} annotation.
  */
 public class LoggingExpressionParser {
 
@@ -24,22 +24,18 @@ public class LoggingExpressionParser {
 
     private final Object result;
 
-    private final Throwable throwable;
-
     private StandardEvaluationContext context;
 
     /**
-     * Constructs a new {@code LoggingExpressionParser} with method arguments, result,
-     * and throwable.
+     * Constructs a new {@code LoggingExpressionParser} with method arguments and
+     * result.
      *
-     * @param args      the arguments of the method
-     * @param result    the result of the method execution
-     * @param throwable the throwable thrown during method execution, if any
+     * @param args   the arguments of the method
+     * @param result the result of the method execution
      */
-    public LoggingExpressionParser(Object[] args, Object result, Throwable throwable) {
+    public LoggingExpressionParser(Object[] args, Object result) {
         this.args = args;
         this.result = result;
-        this.throwable = throwable;
     }
 
     /**
@@ -56,8 +52,7 @@ public class LoggingExpressionParser {
     /**
      * Lazily initializes and loads the evaluation context.
      *
-     * @return the evaluation context populated with method arguments, result, and
-     * throwable
+     * @return the evaluation context populated with method arguments and result
      */
     private StandardEvaluationContext lazyLoadContext() {
         if (context == null) {
@@ -70,10 +65,6 @@ public class LoggingExpressionParser {
             }
             if (result != null) {
                 variables.put("r", result);
-            }
-            if (throwable != null) {
-                variables.put("e", throwable);
-                variables.put("t", throwable);
             }
 
             context = new StandardEvaluationContext();
