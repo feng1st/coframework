@@ -64,12 +64,17 @@ public class LoggingPluginTestService {
 
     @API
     public Result<Object> loggingApiException(Object param1, Object param2) {
-        throw new BizException("CODE", "Message");
+        throw new BizException("CODE", "Message", new IllegalStateException("Root message"));
     }
 
     @API
     public Result<Object> loggingIllegalArgumentException(Object param1, Object param2) {
-        throw new IllegalArgumentException("Message");
+        throw new IllegalArgumentException("Message", new IllegalStateException("Root message"));
+    }
+
+    @API
+    public Result<Object> loggingRootException(Object param1, Object param2) {
+        throw new IllegalStateException("Message", new IllegalStateException("Root message"));
     }
 
     @Logging

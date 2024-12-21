@@ -122,6 +122,15 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
+    public void loggingRootException() {
+        loggingPluginTestService.loggingRootException(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.ERROR,
+                IllegalStateException.class,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingRootException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Root message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
+    }
+
+    @Test
     public void loggingNoState() {
         loggingPluginTestService.loggingNoState(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
