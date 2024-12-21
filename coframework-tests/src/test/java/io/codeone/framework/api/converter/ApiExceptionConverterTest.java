@@ -69,11 +69,57 @@ class ApiExceptionConverterTest {
     @Test
     public void apiCompatibleExceptionCause() {
         Exception e0 = new IllegalStateException();
-        Exception e1 = new ApiExceptionConverterTestLegacyException("LEGACY_EXCEPTION", "Legacy exception", e0);
+        Exception e1 = new ApiExceptionConverterTestLegacyException("LEGACY_EXCEPTION", e0);
         Exception e2 = new IllegalStateException(e1);
         Throwable cause = ApiExceptionUtils.getCause(e2);
         Assertions.assertNotEquals(e0, cause);
         Assertions.assertEquals(e1, cause);
         Assertions.assertNotEquals(e2, cause);
+    }
+
+    @Test
+    public void nullApiCompatibleExceptionCause() {
+        Exception e0 = new IllegalStateException();
+        Exception e1 = new ApiExceptionConverterTestVoidException("VOID_EXCEPTION", e0);
+        Exception e2 = new IllegalStateException(e1);
+        Throwable cause = ApiExceptionUtils.getCause(e2);
+        Assertions.assertNotEquals(e0, cause);
+        Assertions.assertEquals(e1, cause);
+        Assertions.assertNotEquals(e2, cause);
+    }
+
+    @Test
+    public void nullCode() {
+        Assertions.assertNull(ApiExceptionUtils.getCode(null));
+    }
+
+    @Test
+    public void nonApiExceptionCode() {
+        Assertions.assertEquals("IllegalStateException",
+                ApiExceptionUtils.getCode(new IllegalStateException()));
+    }
+
+    @Test
+    public void illegalArgumentCode() {
+        Assertions.assertEquals("INVALID_ARGS",
+                ApiExceptionUtils.getCode(new IllegalArgumentException()));
+    }
+
+    @Test
+    public void apiExceptionCode() {
+        Assertions.assertEquals("API_EXCEPTION",
+                ApiExceptionUtils.getCode(new ApiExceptionConverterTestApiException("API_EXCEPTION")));
+    }
+
+    @Test
+    public void apiCompatibleExceptionCode() {
+        Assertions.assertEquals("LEGACY_EXCEPTION",
+                ApiExceptionUtils.getCode(new ApiExceptionConverterTestLegacyException("LEGACY_EXCEPTION")));
+    }
+
+    @Test
+    public void nullApiCompatibleExceptionCode() {
+        Assertions.assertEquals("ApiExceptionConverterTestVoidException",
+                ApiExceptionUtils.getCode(new ApiExceptionConverterTestVoidException("VOID_EXCEPTION")));
     }
 }

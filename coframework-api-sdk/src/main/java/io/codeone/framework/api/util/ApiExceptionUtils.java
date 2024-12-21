@@ -57,6 +57,9 @@ public class ApiExceptionUtils {
      * @return the corresponding error code
      */
     public String getCode(Throwable cause) {
+        if (cause == null) {
+            return null;
+        }
         if (cause instanceof ApiException) {
             return ((ApiException) cause).getCode();
         }
