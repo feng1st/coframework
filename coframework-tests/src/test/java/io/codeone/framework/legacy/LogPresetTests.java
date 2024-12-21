@@ -3,13 +3,13 @@ package io.codeone.framework.legacy;
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.legacy.domain.param.MyParam;
 import io.codeone.framework.legacy.domain.service.TestLogPresetService;
-import io.codeone.framework.logging.BaseLogTests;
+import io.codeone.framework.logging.BaseLoggingTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class LogPresetTests extends BaseLogTests {
+public class LogPresetTests extends BaseLoggingTest {
 
     @Autowired
     private TestLogPresetService testLogPresetService;

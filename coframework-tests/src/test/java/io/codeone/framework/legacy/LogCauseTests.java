@@ -2,13 +2,13 @@ package io.codeone.framework.legacy;
 
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.legacy.domain.service.TestLogCauseService;
-import io.codeone.framework.logging.BaseLogTests;
+import io.codeone.framework.logging.BaseLoggingTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class LogCauseTests extends BaseLogTests {
+public class LogCauseTests extends BaseLoggingTest {
 
     @Autowired
     private TestLogCauseService testLogCauseService;

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class BaseLogTests {
+public class BaseLoggingTest {
 
     private final Appender<ILoggingEvent> appender = Mockito.mock(Appender.class);
 
@@ -40,7 +40,7 @@ public class BaseLogTests {
                 argument.getValue().getThrowableProxy() == null ? null
                         : argument.getValue().getThrowableProxy().getClassName());
         Assertions.assertEquals(msg, argument.getValue().getFormattedMessage()
-                .replaceAll("elapsed=>\\d+", "elapsed=>0")
+                .replaceAll("\"elapsed\":\\d+", "\"elapsed\":0")
                 .replaceAll("elapsed=\\d+", "elapsed=0"));
     }
 
@@ -52,7 +52,7 @@ public class BaseLogTests {
         for (int i = 0; i < msgs.size(); i++) {
             Assertions.assertEquals(msgs.get(i),
                     argument.getAllValues().get(i).getFormattedMessage()
-                            .replaceAll("elapsed=>\\d+", "elapsed=>0")
+                            .replaceAll("\"elapsed\":\\d+", "\"elapsed\":0")
                             .replaceAll("elapsed=\\d+", "elapsed=0"));
         }
     }
