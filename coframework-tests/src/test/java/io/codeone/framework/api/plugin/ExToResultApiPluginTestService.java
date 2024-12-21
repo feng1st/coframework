@@ -1,6 +1,7 @@
 package io.codeone.framework.api.plugin;
 
 import io.codeone.framework.api.API;
+import io.codeone.framework.api.converter.ApiExceptionConverterTestApiException;
 import io.codeone.framework.api.exception.CommonCodes;
 import io.codeone.framework.api.exception.CustomErrorMessage;
 import io.codeone.framework.api.response.Result;
@@ -19,21 +20,21 @@ public class ExToResultApiPluginTestService {
     }
 
     public Result<Object> apiExceptionCode() {
-        throw new ExToResultApiPluginTestApiException(CommonCodes.SYS_ERROR);
+        throw new ApiExceptionConverterTestApiException(CommonCodes.SYS_ERROR);
     }
 
     public Result<Object> apiExceptionCodeMessage() {
-        throw new ExToResultApiPluginTestApiException(CommonCodes.SYS_ERROR,
+        throw new ApiExceptionConverterTestApiException(CommonCodes.SYS_ERROR,
                 "System error");
     }
 
     public Result<Object> apiExceptionCodeCause() {
-        throw new ExToResultApiPluginTestApiException(CommonCodes.SYS_ERROR,
+        throw new ApiExceptionConverterTestApiException(CommonCodes.SYS_ERROR,
                 new IllegalStateException("Illegal state"));
     }
 
     public Result<Object> apiExceptionCodeMessageCause() {
-        throw new ExToResultApiPluginTestApiException(CommonCodes.SYS_ERROR,
+        throw new ApiExceptionConverterTestApiException(CommonCodes.SYS_ERROR,
                 "System error",
                 new IllegalStateException("Illegal state"));
     }
