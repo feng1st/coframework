@@ -5,6 +5,10 @@ import io.codeone.framework.logging.BaseLoggingTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.expression.spel.SpelEvaluationException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootTest
 class LoggingPluginTest extends BaseLoggingTest {
@@ -18,7 +22,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.apiSuccess\",\"success\":true,\"elapsed\":0,\"result\":\"success\"}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.apiSuccess\",\"success\":true,\"elapsed\":0,\"result\":\"data\"}");
     }
 
     @Test
@@ -45,7 +49,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"result\":\"success\"}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"result\":\"data\"}");
     }
 
     @Test
@@ -64,5 +68,43 @@ class LoggingPluginTest extends BaseLoggingTest {
                 Level.ERROR,
                 IllegalStateException.class,
                 "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Exception\",\"elapsed\":0,\"exception\":\"java.lang.IllegalStateException: Exception\"}");
+    }
+
+    @Test
+    public void loggingDefault() {
+        loggingPluginTestService.loggingDefault(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingDefault\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingCustom() {
+        loggingPluginTestService.loggingCustom(1, 2);
+        assertLog("customLogger",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingCustom\",\"success\":true,\"elapsed\":0}");
+    }
+
+    @Test
+    public void loggingSpEL() {
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", 10000L);
+        loggingPluginTestService.loggingSpEL(param);
+        assertLog("customLogger",
+                Level.WARN,
+                null,
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingSpEL\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"userId\":10000},\"result\":{\"code\":\"CODE\",\"message\":\"Message\",\"userId\":10000,\"success\":false}}");
+    }
+
+    @Test
+    public void invalidSpEL() {
+        loggingPluginTestService.invalidSpEL();
+        assertLog("logging",
+                Level.ERROR,
+                SpelEvaluationException.class,
+                "Error logging invocation of 'public void io.codeone.framework.logging.plugin.LoggingPluginTestService.invalidSpEL()'");
     }
 }
