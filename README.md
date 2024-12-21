@@ -290,9 +290,9 @@ The framework supports enhancing APIs in existing systems.
 ```java
 
 @Component
-public class OldResultConverter<T> implements ApiResultConverter<OldResult<T>> {
+public class MyResultConverter<T> implements ApiResultConverter<MyResult<T>> {
     @Override
-    public ApiResult<T> convert(OldResult<T> source) {
+    public ApiResult<T> convert(MyResult<T> source) {
         return source.isSuccess()
                 ? Result.success(source.getData())
                 : Result.failure(source.getErrorCode(), source.getErrorMessage());
@@ -300,9 +300,9 @@ public class OldResultConverter<T> implements ApiResultConverter<OldResult<T>> {
 }
 
 @Component
-public class OldExceptionConverter implements ApiExceptionConverter<OldException> {
+public class MyExceptionConverter implements ApiExceptionConverter<MyException> {
     @Override
-    public ApiException convert(OldException source) {
+    public ApiException convert(MyException source) {
         return source::getCode;
     }
 }
