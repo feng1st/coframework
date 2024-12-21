@@ -12,13 +12,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 public class BaseLoggingTest {
 
-    private final Appender<ILoggingEvent> appender = Mockito.mock(Appender.class);
-
     private final Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+
+    private final Appender<ILoggingEvent> appender = Mockito.mock(Appender.class);
 
     @BeforeEach
     public void beforeEach() {
@@ -30,30 +28,18 @@ public class BaseLoggingTest {
         logger.detachAppender(appender);
     }
 
-    protected void assertLog(String loggerName, Level level, Class<? extends Throwable> errClass, String msg) {
+    protected void assertLog(String loggerName, Level level, Class<? extends Throwable> throwableClass, String msg) {
         ArgumentCaptor<LoggingEvent> argument = ArgumentCaptor.forClass(LoggingEvent.class);
         Mockito.verify(appender).doAppend(argument.capture());
 
         Assertions.assertEquals(loggerName, argument.getValue().getLoggerName());
         Assertions.assertEquals(level, argument.getValue().getLevel());
-        Assertions.assertEquals(errClass == null ? null : errClass.getName(),
-                argument.getValue().getThrowableProxy() == null ? null
-                        : argument.getValue().getThrowableProxy().getClassName());
+        Assertions.assertEquals(throwableClass == null ? null : throwableClass.getName(),
+                argument.getValue().getThrowableProxy() == null ? null : argument.getValue().getThrowableProxy().getClassName());
         Assertions.assertEquals(msg, argument.getValue().getFormattedMessage()
+                // JSON
                 .replaceAll("\"elapsed\":\\d+", "\"elapsed\":0")
+                // toString
                 .replaceAll("elapsed=\\d+", "elapsed=0"));
-    }
-
-    protected void assertLogs(List<String> msgs) {
-        ArgumentCaptor<LoggingEvent> argument = ArgumentCaptor.forClass(LoggingEvent.class);
-        Mockito.verify(appender, Mockito.atLeast(msgs.size())).doAppend(argument.capture());
-
-        Assertions.assertEquals(msgs.size(), argument.getAllValues().size());
-        for (int i = 0; i < msgs.size(); i++) {
-            Assertions.assertEquals(msgs.get(i),
-                    argument.getAllValues().get(i).getFormattedMessage()
-                            .replaceAll("\"elapsed\":\\d+", "\"elapsed\":0")
-                            .replaceAll("elapsed=\\d+", "elapsed=0"));
-        }
     }
 }
