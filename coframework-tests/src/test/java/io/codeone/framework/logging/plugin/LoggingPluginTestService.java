@@ -1,10 +1,13 @@
 package io.codeone.framework.logging.plugin;
 
 import io.codeone.framework.api.API;
+import io.codeone.framework.api.response.Page;
+import io.codeone.framework.api.response.PageResult;
 import io.codeone.framework.api.response.Result;
 import io.codeone.framework.logging.Logging;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +57,16 @@ public class LoggingPluginTestService {
     @Logging
     public Object loggingNoState(Object param1, Object param2) {
         return null;
+    }
+
+    @Logging
+    public Object loggingPage(Object param1, Object param2) {
+        return Page.of(Arrays.asList(1, 2, 3), 1, 20);
+    }
+
+    @Logging
+    public Object loggingPageResult(Object param1, Object param2) {
+        return PageResult.success(Arrays.asList(1, 2, 3), 1, 20);
     }
 
     @Logging(name = "customLogger")

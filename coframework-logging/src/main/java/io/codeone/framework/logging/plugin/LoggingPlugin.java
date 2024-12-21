@@ -191,10 +191,8 @@ public class LoggingPlugin implements Plugin {
     private Object getResultData(Object result, ApiResult<?> apiResult, Logging logging) {
         if (logging == null
                 || logging.logResult()) {
-            if (result instanceof Page) {
-                return result;
-            }
-            if (result instanceof PageData) {
+            if (result instanceof PageData
+                    && !(result instanceof Page)) {
                 return Page.of((PageData<?>) result);
             }
             if (apiResult != null) {

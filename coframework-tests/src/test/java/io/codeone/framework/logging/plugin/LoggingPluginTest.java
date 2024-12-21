@@ -101,6 +101,24 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
+    public void loggingPage() {
+        loggingPluginTestService.loggingPage(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingPage\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":{\"data\":[1,2,3],\"pageIndex\":1,\"pageSize\":20,\"totalCount\":null,\"hasMore\":false,\"empty\":false}}");
+    }
+
+    @Test
+    public void loggingPageResult() {
+        loggingPluginTestService.loggingPageResult(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingPageResult\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":{\"data\":[1,2,3],\"pageIndex\":1,\"pageSize\":20,\"totalCount\":null,\"hasMore\":false,\"empty\":false}}");
+    }
+
+    @Test
     public void loggingCustomLogger() {
         loggingPluginTestService.loggingCustomLogger(1, 2);
         assertLog("customLogger",
