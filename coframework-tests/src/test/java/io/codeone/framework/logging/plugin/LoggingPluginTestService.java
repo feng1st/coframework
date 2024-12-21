@@ -1,9 +1,11 @@
 package io.codeone.framework.logging.plugin;
 
 import io.codeone.framework.api.API;
+import io.codeone.framework.api.exception.CustomErrorMessage;
 import io.codeone.framework.api.response.Page;
 import io.codeone.framework.api.response.PageResult;
 import io.codeone.framework.api.response.Result;
+import io.codeone.framework.api.shared.BizException;
 import io.codeone.framework.logging.Logging;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,12 @@ public class LoggingPluginTestService {
     }
 
     @API
+    @CustomErrorMessage("Custom error message")
+    public Result<Object> apiExceptionCustomErrorMessage(Object param1, Object param2) {
+        throw new IllegalStateException("Message");
+    }
+
+    @API
     public Object nonApiResult(Object param1, Object param2) {
         return null;
     }
@@ -52,6 +60,16 @@ public class LoggingPluginTestService {
     @Logging
     public Result<Object> loggingException(Object param1, Object param2) {
         throw new IllegalStateException("Message");
+    }
+
+    @API
+    public Result<Object> loggingApiException(Object param1, Object param2) {
+        throw new BizException("CODE", "Message");
+    }
+
+    @API
+    public Result<Object> loggingIllegalArgumentException(Object param1, Object param2) {
+        throw new IllegalArgumentException("Message");
     }
 
     @Logging

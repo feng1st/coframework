@@ -1,6 +1,8 @@
 package io.codeone.framework.logging.plugin;
 
 import ch.qos.logback.classic.Level;
+import io.codeone.framework.api.response.Result;
+import io.codeone.framework.api.shared.BizException;
 import io.codeone.framework.logging.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,16 @@ class LoggingPluginTest extends BaseLoggingTest {
                 Level.ERROR,
                 IllegalStateException.class,
                 "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.apiException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
+    }
+
+    @Test
+    public void apiExceptionCustomErrorMessage() {
+        Result<?> result = loggingPluginTestService.apiExceptionCustomErrorMessage(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.ERROR,
+                IllegalStateException.class,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.apiExceptionCustomErrorMessage\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
+        Assertions.assertEquals("Custom error message", result.getErrorMessage());
     }
 
     @Test
@@ -89,6 +101,24 @@ class LoggingPluginTest extends BaseLoggingTest {
                 Level.ERROR,
                 IllegalStateException.class,
                 "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
+    }
+
+    @Test
+    public void loggingApiException() {
+        loggingPluginTestService.loggingApiException(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.ERROR,
+                BizException.class,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingApiException\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.shared.BizException: Message\"}");
+    }
+
+    @Test
+    public void loggingIllegalArgumentException() {
+        loggingPluginTestService.loggingIllegalArgumentException(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.ERROR,
+                IllegalArgumentException.class,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingIllegalArgumentException\",\"success\":false,\"code\":\"INVALID_ARGS\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalArgumentException: Message\"}");
     }
 
     @Test
