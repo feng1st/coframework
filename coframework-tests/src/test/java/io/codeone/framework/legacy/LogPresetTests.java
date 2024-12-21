@@ -3,7 +3,7 @@ package io.codeone.framework.legacy;
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.legacy.domain.param.MyParam;
 import io.codeone.framework.legacy.domain.service.TestLogPresetService;
-import io.codeone.framework.logging.BaseLoggingTest;
+import io.codeone.framework.logging.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

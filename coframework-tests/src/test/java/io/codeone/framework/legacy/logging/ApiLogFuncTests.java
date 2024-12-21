@@ -3,7 +3,7 @@ package io.codeone.framework.legacy.logging;
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.legacy.logging.domain.exception.MyException;
 import io.codeone.framework.legacy.logging.domain.service.TestApiLogFuncService;
-import io.codeone.framework.logging.BaseLoggingTest;
+import io.codeone.framework.logging.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

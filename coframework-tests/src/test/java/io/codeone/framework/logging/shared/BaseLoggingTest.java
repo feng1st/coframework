@@ -1,4 +1,4 @@
-package io.codeone.framework.logging;
+package io.codeone.framework.logging.shared;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -39,7 +39,7 @@ public class BaseLoggingTest {
         Assertions.assertEquals(msg, argument.getValue().getFormattedMessage()
                 // JSON
                 .replaceAll("\"elapsed\":\\d+", "\"elapsed\":0")
-                // toString
+                // or toString
                 .replaceAll("elapsed=\\d+", "elapsed=0"));
     }
 }

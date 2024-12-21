@@ -1,7 +1,7 @@
 package io.codeone.framework.logging.plugin;
 
 import ch.qos.logback.classic.Level;
-import io.codeone.framework.logging.BaseLoggingTest;
+import io.codeone.framework.logging.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,75 +19,122 @@ class LoggingPluginTest extends BaseLoggingTest {
 
     @Test
     public void apiSuccess() {
-        loggingPluginTestService.apiSuccess();
+        loggingPluginTestService.apiSuccess(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.apiSuccess\",\"success\":true,\"elapsed\":0,\"result\":\"data\"}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.apiSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":\"data\"}");
     }
 
     @Test
     public void apiFailure() {
-        loggingPluginTestService.apiFailure();
+        loggingPluginTestService.apiFailure(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.WARN,
                 null,
-                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.apiFailure\",\"success\":false,\"code\":\"FAILURE\",\"message\":\"Failure\",\"elapsed\":0}");
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.apiFailure\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2}}");
     }
 
     @Test
     public void apiException() {
-        loggingPluginTestService.apiException();
+        loggingPluginTestService.apiException(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.ERROR,
                 IllegalStateException.class,
-                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.apiException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Exception\",\"elapsed\":0,\"exception\":\"java.lang.IllegalStateException: Exception\"}");
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.apiException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
+    }
+
+    @Test
+    public void nonApiResult() {
+        loggingPluginTestService.nonApiResult(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.nonApiResult\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2}}");
+    }
+
+    @Test
+    public void nonApiException() {
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> loggingPluginTestService.nonApiException(1, 2));
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.ERROR,
+                IllegalStateException.class,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.nonApiException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
     }
 
     @Test
     public void loggingSuccess() {
-        loggingPluginTestService.loggingSuccess();
+        loggingPluginTestService.loggingSuccess(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"result\":\"data\"}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":\"data\"}");
     }
 
     @Test
     public void loggingFailure() {
-        loggingPluginTestService.loggingFailure();
+        loggingPluginTestService.loggingFailure(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.WARN,
                 null,
-                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingFailure\",\"success\":false,\"code\":\"FAILURE\",\"message\":\"Failure\",\"elapsed\":0}");
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingFailure\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2}}");
     }
 
     @Test
     public void loggingException() {
         Assertions.assertThrows(IllegalStateException.class,
-                () -> loggingPluginTestService.loggingException());
+                () -> loggingPluginTestService.loggingException(1, 2));
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.ERROR,
                 IllegalStateException.class,
-                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Exception\",\"elapsed\":0,\"exception\":\"java.lang.IllegalStateException: Exception\"}");
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
     }
 
     @Test
-    public void loggingDefault() {
-        loggingPluginTestService.loggingDefault(1, 2);
+    public void loggingNoState() {
+        loggingPluginTestService.loggingNoState(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingDefault\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":\"data\"}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingNoState\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2}}");
     }
 
     @Test
-    public void loggingCustom() {
-        loggingPluginTestService.loggingCustom(1, 2);
+    public void loggingCustomLogger() {
+        loggingPluginTestService.loggingCustomLogger(1, 2);
         assertLog("customLogger",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingCustom\",\"success\":true,\"elapsed\":0}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingCustomLogger\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingNoDetailsSuccess() {
+        loggingPluginTestService.loggingNoDetailsSuccess(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingNoDetailsSuccess\",\"success\":true,\"elapsed\":0}");
+    }
+
+    @Test
+    public void loggingNoDetailsFailure() {
+        loggingPluginTestService.loggingNoDetailsFailure(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.WARN,
+                null,
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingNoDetailsFailure\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0}");
+    }
+
+    @Test
+    public void loggingNoDetailsException() {
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> loggingPluginTestService.loggingNoDetailsException(1, 2));
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.ERROR,
+                null,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingNoDetailsException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"exception\":\"java.lang.IllegalStateException: Message\"}");
     }
 
     @Test
@@ -95,7 +142,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         Map<String, Object> param = new HashMap<>();
         param.put("userId", 10000L);
         loggingPluginTestService.loggingSpEL(param, null);
-        assertLog("customLogger",
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.WARN,
                 null,
                 "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingSpEL\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"userId\":10000,\"extra\":null},\"result\":{\"code\":\"CODE\",\"success\":false,\"message\":\"Message\"}}");
@@ -104,7 +151,7 @@ class LoggingPluginTest extends BaseLoggingTest {
     @Test
     public void loggingSpELNoParam() {
         loggingPluginTestService.loggingSpELNoParam();
-        assertLog("customLogger",
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSpELNoParam\",\"success\":true,\"elapsed\":0,\"result\":{\"success\":true}}");

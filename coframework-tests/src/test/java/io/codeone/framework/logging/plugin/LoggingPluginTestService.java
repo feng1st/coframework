@@ -12,50 +12,77 @@ import java.util.Map;
 public class LoggingPluginTestService {
 
     @API
-    public Result<Object> apiSuccess() {
+    public Result<Object> apiSuccess(Object param1, Object param2) {
         return Result.success("data");
     }
 
     @API
-    public Result<Object> apiFailure() {
-        return Result.failure("FAILURE", "Failure");
+    public Result<Object> apiFailure(Object param1, Object param2) {
+        return Result.failure("CODE", "Message");
     }
 
     @API
-    public Result<Object> apiException() {
-        throw new IllegalStateException("Exception");
+    public Result<Object> apiException(Object param1, Object param2) {
+        throw new IllegalStateException("Message");
+    }
+
+    @API
+    public Object nonApiResult(Object param1, Object param2) {
+        return null;
+    }
+
+    @API
+    public Object nonApiException(Object param1, Object param2) {
+        throw new IllegalStateException("Message");
     }
 
     @Logging
-    public Result<Object> loggingSuccess() {
+    public Result<Object> loggingSuccess(Object param1, Object param2) {
         return Result.success("data");
     }
 
     @Logging
-    public Result<Object> loggingFailure() {
-        return Result.failure("FAILURE", "Failure");
+    public Result<Object> loggingFailure(Object param1, Object param2) {
+        return Result.failure("CODE", "Message");
     }
 
     @Logging
-    public Result<Object> loggingException() {
-        throw new IllegalStateException("Exception");
+    public Result<Object> loggingException(Object param1, Object param2) {
+        throw new IllegalStateException("Message");
     }
 
     @Logging
-    public Result<Object> loggingDefault(Object param1, Object param2) {
+    public Object loggingNoState(Object param1, Object param2) {
+        return null;
+    }
+
+    @Logging(name = "customLogger")
+    public Result<Object> loggingCustomLogger(Object param1, Object param2) {
         return Result.success("data");
     }
 
-    @Logging(name = "customLogger",
-            logArgs = false,
+    @Logging(logArgs = false,
             logResult = false,
             logException = false)
-    public Result<Object> loggingCustom(Object param1, Object param2) {
+    public Result<Object> loggingNoDetailsSuccess(Object param1, Object param2) {
         return Result.success("data");
     }
 
-    @Logging(name = "customLogger",
-            expSuccess = "#r?.get('success')",
+    @Logging(logArgs = false,
+            logResult = false,
+            logException = false)
+    public Result<Object> loggingNoDetailsFailure(Object param1, Object param2) {
+        return Result.failure("CODE", "Message");
+    }
+
+    @Logging(logArgs = false,
+            logResult = false,
+            logException = false)
+    public Result<Object> loggingNoDetailsException(Object param1, Object param2) {
+        throw new IllegalStateException("Message");
+    }
+
+    @Logging(expSuccess = "#r?.get('success')",
             expCode = "#r?.get('code')",
             expMessage = "#r?.get('message')",
             argKvs = {"userId", "#a0?.get('userId')", "extra", "#a1"})
@@ -67,15 +94,14 @@ public class LoggingPluginTestService {
         return result;
     }
 
-    @Logging(name = "customLogger",
-            expSuccess = "#r?.get('success')")
+    @Logging(expSuccess = "#r?.get('success')")
     public Map<String, Object> loggingSpELNoParam() {
         Map<String, Object> result = new HashMap<>();
         result.put("success", true);
         return result;
     }
 
-    @Logging(expSuccess = "ERROR")
+    @Logging(expSuccess = "INVALID_EXP")
     public void invalidSpEL() {
     }
 }
