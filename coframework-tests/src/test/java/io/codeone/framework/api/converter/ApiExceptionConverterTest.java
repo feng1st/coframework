@@ -1,5 +1,6 @@
 package io.codeone.framework.api.converter;
 
+import io.codeone.framework.api.shared.BizException;
 import io.codeone.framework.api.util.ApiExceptionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ class ApiExceptionConverterTest {
     @Test
     public void apiExceptionCause() {
         Exception e0 = new IllegalStateException();
-        Exception e1 = new ApiExceptionConverterTestApiException("API_EXCEPTION", e0);
+        Exception e1 = new BizException("API_EXCEPTION", e0);
         Exception e2 = new IllegalStateException(e1);
         Throwable cause = ApiExceptionUtils.getCause(e2);
         Assertions.assertNotEquals(e0, cause);
@@ -108,7 +109,7 @@ class ApiExceptionConverterTest {
     @Test
     public void apiExceptionCode() {
         Assertions.assertEquals("API_EXCEPTION",
-                ApiExceptionUtils.getCode(new ApiExceptionConverterTestApiException("API_EXCEPTION")));
+                ApiExceptionUtils.getCode(new BizException("API_EXCEPTION")));
     }
 
     @Test
