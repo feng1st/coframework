@@ -38,9 +38,6 @@ public class PluginChain {
      */
     public Object invoke(Method method, Object[] args, Invokable<?> invokable)
             throws Throwable {
-        if (plugins.isEmpty()) {
-            return invokable.invoke();
-        }
         return invoke(plugins.iterator(), method, args, invokable);
     }
 
