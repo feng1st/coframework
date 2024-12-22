@@ -447,8 +447,9 @@ public class Context {
      * @param <V>    the type of the value
      * @return the value associated with the sub-key, or {@code null} if not found
      */
+    @SuppressWarnings("unchecked")
     public <K, V> V kvGet(Object key, K subKey) {
-        Map<K, V> subMap = get(key);
+        Map<K, V> subMap = (Map<K, V>) paramMap.get(key);
         if (subMap != null) {
             return subMap.get(subKey);
         }
@@ -467,16 +468,17 @@ public class Context {
      * @return the previous value associated with the sub-key, or {@code null} if
      * none
      */
+    @SuppressWarnings("unchecked")
     public <K, V> V kvPut(Object key, K subKey, V value) {
         if (value != null) {
-            return computeIfAbsent(key, k -> new ConcurrentHashMap<K, V>())
+            return ((Map<K, V>) paramMap.computeIfAbsent(key, k -> new ConcurrentHashMap<K, V>()))
                     .put(subKey, value);
         }
-        Map<K, V> subMap = get(key);
+        Map<K, V> subMap = (Map<K, V>) paramMap.get(key);
         if (subMap != null) {
             V oldValue = subMap.remove(subKey);
             if (subMap.isEmpty()) {
-                remove(key);
+                paramMap.remove(key);
             }
             return oldValue;
         }
@@ -493,8 +495,9 @@ public class Context {
      * @param <V>             the type of the value
      * @return the computed or existing value
      */
+    @SuppressWarnings("unchecked")
     public <K, V> V kvComputeIfAbsent(Object key, K subKey, Function<? super K, ? extends V> mappingFunction) {
-        return computeIfAbsent(key, k -> new ConcurrentHashMap<K, V>())
+        return ((Map<K, V>) paramMap.computeIfAbsent(key, k -> new ConcurrentHashMap<K, V>()))
                 .computeIfAbsent(subKey, mappingFunction);
     }
 
