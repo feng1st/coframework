@@ -20,16 +20,16 @@ class PluginTest {
         List<Object> param = new ArrayList<>();
         pluginTestService.returning(param);
         Assertions.assertEquals(Arrays.asList("result-before",
-                        "after-2-before",
                         "after-1-before",
+                        "after-2-before",
                         "arg-before",
                         "before-1-before",
                         "before-2-before",
                         "before-2-after-returning",
                         "before-1-after-returning",
                         "arg-after-returning",
-                        "after-1-after-returning",
                         "after-2-after-returning",
+                        "after-1-after-returning",
                         "result-after-returning"),
                 param);
     }
@@ -40,16 +40,16 @@ class PluginTest {
         Assertions.assertThrows(IllegalStateException.class,
                 () -> pluginTestService.throwing(param));
         Assertions.assertEquals(Arrays.asList("result-before",
-                        "after-2-before",
                         "after-1-before",
+                        "after-2-before",
                         "arg-before",
                         "before-1-before",
                         "before-2-before",
                         "before-2-after-throwing",
                         "before-1-after-throwing",
                         "arg-after-throwing",
-                        "after-1-after-throwing",
                         "after-2-after-throwing",
+                        "after-1-after-throwing",
                         "result-after-throwing"),
                 param);
     }

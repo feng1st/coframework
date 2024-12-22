@@ -1,6 +1,6 @@
 package io.codeone.framework.plugin;
 
-import org.junit.jupiter.api.Order;
+import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 import java.util.List;
