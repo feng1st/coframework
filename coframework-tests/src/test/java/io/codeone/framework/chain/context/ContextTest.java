@@ -81,4 +81,26 @@ class ContextTest {
         });
         Assertions.assertNull(context.get(key));
     }
+
+    @Test
+    public void putAndGetTypedInvalid() {
+        Context context = Context.of();
+        context.put(ContextTestTyped.INT, 1);
+        Assertions.assertThrows(ClassCastException.class, () -> context.<String>ifPresent(ContextTestTyped.INT, o -> {
+        }));
+        Assertions.assertThrows(ClassCastException.class, () -> context.getOrDefault(ContextTestTyped.INT, "value"));
+        Assertions.assertThrows(ClassCastException.class, () -> context.put(ContextTestTyped.INT, "value"));
+        Assertions.assertThrows(ClassCastException.class, () -> context.putIfAbsent(ContextTestTyped.INT, "value"));
+    }
+
+    @Test
+    public void putAndGetClassInvalid() {
+        Context context = Context.of();
+        context.put(Integer.class, 1);
+        Assertions.assertThrows(ClassCastException.class, () -> context.<String>ifPresent(Integer.class, o -> {
+        }));
+        Assertions.assertThrows(ClassCastException.class, () -> context.getOrDefault(Integer.class, "value"));
+        Assertions.assertThrows(ClassCastException.class, () -> context.put(Integer.class, "value"));
+        Assertions.assertThrows(ClassCastException.class, () -> context.putIfAbsent(Integer.class, "value"));
+    }
 }
