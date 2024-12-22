@@ -18,15 +18,11 @@ class ChainableTest {
     @Autowired
     private MapProduceBar mapProduceBar;
     @Autowired
-    private MapProduceBaz mapProduceBaz;
-    @Autowired
     private ReduceProduce reduceProduce;
     @Autowired
     private MapConsumeFoo mapConsumeFoo;
     @Autowired
     private MapConsumeBar mapConsumeBar;
-    @Autowired
-    private MapConsumeBaz mapConsumeBaz;
     @Autowired
     private ReduceConsume reduceConsume;
 
@@ -35,13 +31,12 @@ class ChainableTest {
         Sequential.of(
                 Parallel.of(
                         mapProduceFoo,
-                        mapProduceBar,
-                        mapProduceBaz),
+                        mapProduceBar),
                 reduceProduce,
                 Parallel.of(
                         mapConsumeFoo,
-                        mapConsumeBar,
-                        mapConsumeBaz),
-                reduceConsume).run(Context.of().threadPool(ForkJoinPool.commonPool()));
+                        mapConsumeBar),
+                reduceConsume).run(Context.of()
+                .threadPool(ForkJoinPool.commonPool()));
     }
 }
