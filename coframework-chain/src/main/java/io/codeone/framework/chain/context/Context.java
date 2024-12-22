@@ -474,7 +474,11 @@ public class Context {
         }
         Map<K, V> subMap = get(key);
         if (subMap != null) {
-            return subMap.remove(subKey);
+            V oldValue = subMap.remove(subKey);
+            if (subMap.isEmpty()) {
+                remove(key);
+            }
+            return oldValue;
         }
         return null;
     }
