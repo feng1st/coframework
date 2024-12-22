@@ -56,12 +56,6 @@ public enum Stages {
      */
     POST_RESULT_INTERCEPTING(false);
 
-    /**
-     * The default stage of method interception, set to execute before the target
-     * method.
-     */
-    public static final Stages DEFAULT = BEFORE_TARGET;
-
     private final boolean beforeTarget;
 
     /**

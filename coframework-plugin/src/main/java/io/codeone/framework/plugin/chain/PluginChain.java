@@ -3,7 +3,6 @@ package io.codeone.framework.plugin.chain;
 import io.codeone.framework.common.function.Invokable;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
-import io.codeone.framework.plugin.Stages;
 import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
@@ -55,14 +54,11 @@ public class PluginChain {
 
     private List<Plugin> sortPlugins(List<Plugin> plugins) {
         List<Plugin> result = new LinkedList<>(plugins);
-        result.sort(Comparator.comparing(o
-                -> Optional.ofNullable(o.getClass().getAnnotation(Plug.class))
-                .map(Plug::value)
-                .orElse(Stages.DEFAULT)
-                .getOrder()).thenComparing(o
-                -> Optional.ofNullable(o.getClass().getAnnotation(Order.class))
-                .map(Order::value)
-                .orElse(0)));
+        result.sort(Comparator
+                .comparing(o -> o.getClass().getAnnotation(Plug.class).value().getOrder())
+                .thenComparing(o -> Optional.ofNullable(o.getClass().getAnnotation(Order.class))
+                        .map(Order::value)
+                        .orElse(0)));
         return result;
     }
 }

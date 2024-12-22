@@ -23,7 +23,7 @@ public @interface Plug {
      *
      * @return the target interception stage
      */
-    Stages value();
+    Stages value() default Stages.BEFORE_TARGET;
 
     /**
      * Specifies the annotations that the plugin will target.
