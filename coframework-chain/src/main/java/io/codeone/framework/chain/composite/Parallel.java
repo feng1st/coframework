@@ -48,12 +48,14 @@ public interface Parallel extends Chainable, Composite, Quiet {
             for (Chainable component : getComponents()) {
                 futures.add(threadPool.submit(() -> component.run(context)));
             }
+            boolean toContinue = true;
             for (Future<Boolean> future : futures) {
                 if (!future.get()) {
                     // Break chain early
-                    return false;
+                    toContinue = false;
                 }
             }
+            return toContinue;
         }
         // Fallback to sequential execution
         else {
