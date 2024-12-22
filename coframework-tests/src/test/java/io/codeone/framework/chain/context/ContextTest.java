@@ -11,6 +11,7 @@ class ContextTest {
     public void putAndGet() {
         Context context = Context.of();
         Object key = new Object();
+        Assertions.assertNull(context.get(key));
         Assertions.assertEquals("default value", context.getOrDefault(key, "default value"));
         Assertions.assertNull(context.putIfAbsent(key, null));
         Assertions.assertNull(context.putIfAbsent(key, "value"));
@@ -35,6 +36,7 @@ class ContextTest {
     public void putAndGetTyped() {
         Context context = Context.of();
         Typed key = ContextTestTyped.STR;
+        Assertions.assertNull(context.get(key));
         Assertions.assertEquals("default value", context.getOrDefault(key, "default value"));
         Assertions.assertNull(context.putIfAbsent(key, null));
         Assertions.assertNull(context.putIfAbsent(key, "value"));
@@ -59,6 +61,7 @@ class ContextTest {
     public void putAndGetClass() {
         Context context = Context.of();
         Class<String> key = String.class;
+        Assertions.assertNull(context.get(key));
         Assertions.assertEquals("default value", context.getOrDefault(key, "default value"));
         Assertions.assertNull(context.putIfAbsent(key, null));
         Assertions.assertNull(context.putIfAbsent(key, "value"));
