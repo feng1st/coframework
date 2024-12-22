@@ -307,8 +307,9 @@ public class Context {
     public <V> V putIfAbsent(Object key, V value) {
         if (value != null) {
             return tryCast(key, paramMap.putIfAbsent(key, tryCast(key, value)));
+        } else {
+            return tryCast(key, paramMap.get(key));
         }
-        return null;
     }
 
     /**
@@ -324,8 +325,9 @@ public class Context {
     public <V> V putIfAbsent(Class<V> key, V value) {
         if (value != null) {
             return key.cast(paramMap.putIfAbsent(key, key.cast(value)));
+        } else {
+            return key.cast(paramMap.get(key));
         }
-        return null;
     }
 
     /**
