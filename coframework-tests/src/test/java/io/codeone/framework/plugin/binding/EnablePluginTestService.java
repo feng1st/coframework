@@ -2,7 +2,6 @@ package io.codeone.framework.plugin.binding;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -10,21 +9,21 @@ import java.util.List;
 public class EnablePluginTestService {
 
     @EnablePlugin(EnablePluginTestPluginFoo.class)
-    public static List<Object> staticMethod() {
-        return new ArrayList<>();
+    public static List<Object> staticMethod(List<Object> param) {
+        return param;
     }
 
     @EnablePlugin({})
-    public List<Object> empty() {
-        return new ArrayList<>();
+    public List<Object> empty(List<Object> param) {
+        return param;
     }
 
-    public List<Object> foo() {
-        return new ArrayList<>();
+    public List<Object> foo(List<Object> param) {
+        return param;
     }
 
     @EnablePlugin({EnablePluginTestPluginFoo.class, EnablePluginTestPluginBar.class})
-    public List<Object> fooBar() {
-        return new ArrayList<>();
+    public List<Object> fooBar(List<Object> param) {
+        return param;
     }
 }

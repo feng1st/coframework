@@ -8,12 +8,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 @Plug
-@Order(2)
-public class EnablePluginTestPluginBar implements Plugin {
+@Order(1)
+public class AnnoPluginBindingTestPluginFoo implements Plugin {
 
     @Override
     @SuppressWarnings("unchecked")
     public void before(Method method, Object[] args) {
-        ((List<Object>) args[0]).add("bar");
+        ((List<Object>) args[0]).add("foo");
     }
 }

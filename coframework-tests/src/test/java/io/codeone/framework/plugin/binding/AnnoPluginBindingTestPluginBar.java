@@ -9,7 +9,7 @@ import java.util.List;
 
 @Plug
 @Order(2)
-public class EnablePluginTestPluginBar implements Plugin {
+public class AnnoPluginBindingTestPluginBar implements Plugin {
 
     @Override
     @SuppressWarnings("unchecked")
