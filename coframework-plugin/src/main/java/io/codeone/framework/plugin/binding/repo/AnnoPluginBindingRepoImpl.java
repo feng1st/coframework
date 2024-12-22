@@ -69,7 +69,7 @@ public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, Anno
 
             Plug plug = pluginClass.getAnnotation(Plug.class);
             if (plug == null) {
-                throw new IllegalStateException(String.format("Plugin without @Plug annotation: %s",
+                throw new IllegalStateException(String.format("Plugin should be annotated with @Plug: %s",
                         pluginBeanName));
             }
 
