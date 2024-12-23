@@ -7,10 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.*;
 
 class ParallelTest {
 
@@ -96,6 +93,28 @@ class ParallelTest {
                 context -> {
                     context.<List<Integer>>get("key").add(3);
                     return true;
+                }).run(Context.of("key", new ArrayList<>()).threadPool(ForkJoinPool.commonPool()), "key"));
+    }
+
+    @Test
+    public void parallelInterrupt() {
+        CountDownLatch latch = new CountDownLatch(1);
+        Assertions.assertThrows(ExecutionException.class, () -> Parallel.of(context -> {
+                    try {
+                        latch.await();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    context.<List<Integer>>get("key").add(1);
+                    return true;
+                },
+                context -> {
+                    try {
+                        context.<List<Integer>>get("key").add(2);
+                        throw new IllegalStateException();
+                    } finally {
+                        latch.countDown();
+                    }
                 }).run(Context.of("key", new ArrayList<>()).threadPool(ForkJoinPool.commonPool()), "key"));
     }
 }

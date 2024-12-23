@@ -42,4 +42,19 @@ public class BaseLoggingTest {
                 // or toString
                 .replaceAll("elapsed=\\d+", "elapsed=0"));
     }
+
+    protected void assertLogs(String... msgs) {
+        ArgumentCaptor<LoggingEvent> argument = ArgumentCaptor.forClass(LoggingEvent.class);
+        Mockito.verify(appender, Mockito.atLeast(msgs.length)).doAppend(argument.capture());
+
+        Assertions.assertEquals(msgs.length, argument.getAllValues().size());
+        for (int i = 0; i < msgs.length; i++) {
+            Assertions.assertEquals(msgs[i],
+                    argument.getAllValues().get(i).getFormattedMessage()
+                            // JSON
+                            .replaceAll("\"elapsed\":\\d+", "\"elapsed\":0")
+                            // or toString
+                            .replaceAll("elapsed=\\d+", "elapsed=0"));
+        }
+    }
 }
