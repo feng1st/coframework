@@ -2,10 +2,7 @@ package io.codeone.framework.chain.log;
 
 import lombok.experimental.UtilityClass;
 
-import java.util.Deque;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -44,8 +41,7 @@ public class MDC {
      */
     public void put(Object key, Object value) {
         Map<Object, Object> map = THREAD_LOCAL.get().peek();
-        if (map != null) {
-            map.put(key, value);
-        }
+        Objects.requireNonNull(map);
+        map.put(key, value);
     }
 }

@@ -42,7 +42,7 @@ public class ChainLogger {
 
         Map<String, Object> map = new LinkedHashMap<>();
         context.buildLog(map);
-        map.put("node", ClassUtils.getTargetClass(chainable).getSimpleName());
+        map.put("node", ClassUtils.getSimpleName(ClassUtils.getTargetClass(chainable)));
         map.put("elapsed", elapsed);
         if (resultOrException instanceof Throwable) {
             map.put("exception", resultOrException.toString());
@@ -54,7 +54,7 @@ public class ChainLogger {
         }
 
         if (resultOrException instanceof Throwable) {
-            log.error("{}", LogUtils.format(map));
+            log.error("{}", LogUtils.format(map), resultOrException);
         } else {
             log.info("{}", LogUtils.format(map));
         }
