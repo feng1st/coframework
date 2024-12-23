@@ -21,6 +21,9 @@ class AbilityTest {
         Assertions.assertEquals("bar",
                 BizScenarioContext.invoke(BizScenario.ofBizId("bar"),
                         () -> abilityTestAbility.byContext()));
+        Assertions.assertEquals("default",
+                BizScenarioContext.invoke(BizScenario.ofBizId("baz"),
+                        () -> abilityTestAbility.byContext()));
     }
 
     @Test
@@ -29,6 +32,8 @@ class AbilityTest {
                 abilityTestAbility.byRouteBy(AbilityTestParam.of("bar"), BizScenario.ofBizId("foo")));
         Assertions.assertEquals("bar",
                 abilityTestAbility.byRouteBy(AbilityTestParam.of("foo"), BizScenario.ofBizId("bar")));
+        Assertions.assertEquals("default",
+                abilityTestAbility.byRouteBy(AbilityTestParam.of("foo"), BizScenario.ofBizId("baz")));
     }
 
     @Test
@@ -39,6 +44,9 @@ class AbilityTest {
         Assertions.assertEquals("bar",
                 BizScenarioContext.invoke(BizScenario.ofBizId("bar"),
                         () -> abilityTestAbility.byRouteByContext(AbilityTestParam.of("foo"))));
+        Assertions.assertEquals("default",
+                BizScenarioContext.invoke(BizScenario.ofBizId("baz"),
+                        () -> abilityTestAbility.byRouteByContext(AbilityTestParam.of("foo"))));
     }
 
     @Test
@@ -47,6 +55,8 @@ class AbilityTest {
                 abilityTestAbility.byParamType(AbilityTestParam.of("foo")));
         Assertions.assertEquals("bar",
                 abilityTestAbility.byParamType(AbilityTestParam.of("bar")));
+        Assertions.assertEquals("default",
+                abilityTestAbility.byParamType(AbilityTestParam.of("baz")));
     }
 
     @Test
@@ -56,6 +66,9 @@ class AbilityTest {
                         () -> abilityTestAbility.byDefault(new Object())));
         Assertions.assertEquals("bar",
                 BizScenarioContext.invoke(BizScenario.ofBizId("bar"),
+                        () -> abilityTestAbility.byDefault(new Object())));
+        Assertions.assertEquals("default",
+                BizScenarioContext.invoke(BizScenario.ofBizId("baz"),
                         () -> abilityTestAbility.byDefault(new Object())));
     }
 }

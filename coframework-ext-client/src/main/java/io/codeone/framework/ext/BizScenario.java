@@ -140,7 +140,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
      * business identity
      */
     public BizScenario appendScenario(String scenario) {
-        return of(this.scenario, scenario);
+        return withScenario(this.scenario, scenario);
     }
 
     /**
