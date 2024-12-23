@@ -41,4 +41,16 @@ class BizScenarioIteratorTest {
         Assertions.assertEquals("bar",
                 bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofScenario("s2", "a").withBizId("foo", "bar", "baz")));
     }
+
+    @Test
+    public void defaultExt() {
+        Assertions.assertEquals("default",
+                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofBizId("foo")));
+        Assertions.assertEquals("default",
+                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofScenario("s2")));
+        Assertions.assertEquals("default",
+                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo", "s2")));
+        Assertions.assertEquals("default",
+                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("baz", "s3")));
+    }
 }
