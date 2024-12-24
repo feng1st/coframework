@@ -18,8 +18,7 @@ class PageResultTest {
         Assertions.assertNull(result.getTotalCount());
         Assertions.assertNull(result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
-        Assertions.assertTrue(result.isEmpty());
-        Assertions.assertFalse(result.isHasMore());
+        Assertions.assertNull(result.isHasMore());
     }
 
     @Test
@@ -33,7 +32,6 @@ class PageResultTest {
         Assertions.assertEquals(100L, result.getTotalCount());
         Assertions.assertNull(result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
-        Assertions.assertFalse(result.isEmpty());
         Assertions.assertTrue(result.isHasMore());
     }
 
@@ -47,8 +45,7 @@ class PageResultTest {
         Assertions.assertNull(result.getTotalCount());
         Assertions.assertNull(result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
-        Assertions.assertTrue(result.isEmpty());
-        Assertions.assertFalse(result.isHasMore());
+        Assertions.assertNull(result.isHasMore());
     }
 
     @Test
@@ -61,8 +58,7 @@ class PageResultTest {
         Assertions.assertNull(result.getTotalCount());
         Assertions.assertNull(result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
-        Assertions.assertFalse(result.isEmpty());
-        Assertions.assertFalse(result.isHasMore());
+        Assertions.assertNull(result.isHasMore());
     }
 
     @Test
@@ -75,7 +71,6 @@ class PageResultTest {
         Assertions.assertEquals(100L, result.getTotalCount());
         Assertions.assertNull(result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
-        Assertions.assertFalse(result.isEmpty());
         Assertions.assertTrue(result.isHasMore());
     }
 
@@ -101,8 +96,7 @@ class PageResultTest {
         Assertions.assertNull(result.getTotalCount());
         Assertions.assertNull(result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
-        Assertions.assertTrue(result.isEmpty());
-        Assertions.assertFalse(result.isHasMore());
+        Assertions.assertNull(result.isHasMore());
     }
 
     @Test
@@ -115,7 +109,6 @@ class PageResultTest {
         Assertions.assertEquals(16L, result.getTotalCount());
         Assertions.assertNull(result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
-        Assertions.assertFalse(result.isEmpty());
         Assertions.assertTrue(result.isHasMore());
     }
 
@@ -129,7 +122,6 @@ class PageResultTest {
         Assertions.assertEquals(15L, result.getTotalCount());
         Assertions.assertNull(result.getErrorCode());
         Assertions.assertNull(result.getErrorMessage());
-        Assertions.assertFalse(result.isEmpty());
         Assertions.assertFalse(result.isHasMore());
     }
 }

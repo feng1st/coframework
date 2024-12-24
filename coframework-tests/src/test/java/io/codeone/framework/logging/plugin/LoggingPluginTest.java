@@ -145,7 +145,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingPage\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":{\"data\":[1,2,3],\"pageIndex\":1,\"pageSize\":20,\"totalCount\":null,\"hasMore\":false,\"empty\":false}}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingPage\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":{\"data\":[1,2,3],\"pageIndex\":1,\"pageSize\":20,\"totalCount\":null,\"hasMore\":null}}");
     }
 
     @Test
@@ -154,7 +154,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingPageResult\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":{\"data\":[1,2,3],\"pageIndex\":1,\"pageSize\":20,\"totalCount\":null,\"hasMore\":false,\"empty\":false}}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingPageResult\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":{\"data\":[1,2,3],\"pageIndex\":1,\"pageSize\":20,\"totalCount\":null,\"hasMore\":null}}");
     }
 
     @Test

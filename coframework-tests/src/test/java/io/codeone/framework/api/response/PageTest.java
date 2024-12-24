@@ -15,8 +15,7 @@ class PageTest {
         Assertions.assertEquals(1, page.getPageIndex());
         Assertions.assertEquals(1, page.getPageSize());
         Assertions.assertNull(page.getTotalCount());
-        Assertions.assertTrue(page.isEmpty());
-        Assertions.assertFalse(page.isHasMore());
+        Assertions.assertNull(page.isHasMore());
     }
 
     @Test
@@ -27,7 +26,6 @@ class PageTest {
         Assertions.assertEquals(5, page.getPageIndex());
         Assertions.assertEquals(3, page.getPageSize());
         Assertions.assertEquals(100L, page.getTotalCount());
-        Assertions.assertFalse(page.isEmpty());
         Assertions.assertTrue(page.isHasMore());
     }
 
@@ -38,8 +36,7 @@ class PageTest {
         Assertions.assertEquals(5, page.getPageIndex());
         Assertions.assertEquals(10, page.getPageSize());
         Assertions.assertNull(page.getTotalCount());
-        Assertions.assertTrue(page.isEmpty());
-        Assertions.assertFalse(page.isHasMore());
+        Assertions.assertNull(page.isHasMore());
     }
 
     @Test
@@ -49,8 +46,7 @@ class PageTest {
         Assertions.assertEquals(5, page.getPageIndex());
         Assertions.assertEquals(10, page.getPageSize());
         Assertions.assertNull(page.getTotalCount());
-        Assertions.assertFalse(page.isEmpty());
-        Assertions.assertFalse(page.isHasMore());
+        Assertions.assertNull(page.isHasMore());
     }
 
     @Test
@@ -60,7 +56,6 @@ class PageTest {
         Assertions.assertEquals(5, page.getPageIndex());
         Assertions.assertEquals(3, page.getPageSize());
         Assertions.assertEquals(100L, page.getTotalCount());
-        Assertions.assertFalse(page.isEmpty());
         Assertions.assertTrue(page.isHasMore());
     }
 
@@ -71,8 +66,7 @@ class PageTest {
         Assertions.assertEquals(5, page.getPageIndex());
         Assertions.assertEquals(3, page.getPageSize());
         Assertions.assertNull(page.getTotalCount());
-        Assertions.assertTrue(page.isEmpty());
-        Assertions.assertFalse(page.isHasMore());
+        Assertions.assertNull(page.isHasMore());
     }
 
     @Test
@@ -82,7 +76,6 @@ class PageTest {
         Assertions.assertEquals(5, page.getPageIndex());
         Assertions.assertEquals(3, page.getPageSize());
         Assertions.assertEquals(16L, page.getTotalCount());
-        Assertions.assertFalse(page.isEmpty());
         Assertions.assertTrue(page.isHasMore());
     }
 
@@ -93,7 +86,6 @@ class PageTest {
         Assertions.assertEquals(5, page.getPageIndex());
         Assertions.assertEquals(3, page.getPageSize());
         Assertions.assertEquals(15L, page.getTotalCount());
-        Assertions.assertFalse(page.isEmpty());
         Assertions.assertFalse(page.isHasMore());
     }
 }
