@@ -1,13 +1,18 @@
 package io.codeone.framework.chain.context;
 
+import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.logging.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-class ContextTest {
+@SpringBootTest
+class ContextTest extends BaseLoggingTest {
 
     @Test
     public void build() {
@@ -263,5 +268,17 @@ class ContextTest {
         Assertions.assertEquals("value", context.kvGet(key, subKey));
         Assertions.assertEquals("value", context.kvComputeIfAbsent(key, subKey, k -> "new value"));
         Assertions.assertEquals("value", context.kvGet(key, subKey));
+    }
+
+    @Autowired
+    private ContextTestProduce contextTestProduce;
+
+    @Test
+    public void route() {
+        Assertions.assertEquals("foo", contextTestProduce.run(Context.of().bizScenario(BizScenario.ofBizId("foo")), String.class));
+        Assertions.assertEquals("bar", contextTestProduce.run(Context.of().bizScenario(BizScenario.ofBizId("bar")), String.class));
+
+        assertLogs("{\"chain\":\"anonymous\",\"node\":\"ContextTestProduceForFoo\",\"bizId\":\"foo\",\"scenario\":\"*\",\"elapsed\":0}",
+                "{\"chain\":\"anonymous\",\"node\":\"ContextTestProduceForBar\",\"bizId\":\"bar\",\"scenario\":\"*\",\"elapsed\":0}");
     }
 }
