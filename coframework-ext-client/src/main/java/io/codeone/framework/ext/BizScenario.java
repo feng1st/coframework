@@ -152,10 +152,12 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
      * or null, it is replaced with the wildcard {@code "*"}.
      *
      * @param bizId the business identity
+     * @return this {@code BizScenario}
      */
-    public void setBizId(String bizId) {
+    public BizScenario setBizId(String bizId) {
         BizScenarioUtils.validate(bizId);
         this.bizId = BizScenarioUtils.emptyToAny(bizId);
+        return this;
     }
 
     /**
@@ -165,10 +167,12 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
      * it is replaced with the wildcard {@code "*"}.
      *
      * @param scenario the scenario
+     * @return this {@code BizScenario}
      */
-    public void setScenario(String scenario) {
+    public BizScenario setScenario(String scenario) {
         BizScenarioUtils.validate(scenario);
         this.scenario = BizScenarioUtils.emptyToAny(scenario);
+        return this;
     }
 
     /**

@@ -8,21 +8,29 @@ class BizScenarioTest {
     @Test
     public void any() {
         Assertions.assertEquals("*|*", BizScenario.of().toString());
+        Assertions.assertEquals("*|*", BizScenario.ofBizId().toString());
+        Assertions.assertEquals("*|*", BizScenario.ofScenario().toString());
+        Assertions.assertEquals("*|*", BizScenario.of().setBizId(null).setScenario(null).toString());
+        Assertions.assertEquals("*|*", BizScenario.of().setBizId("").setScenario("").toString());
         Assertions.assertEquals("foo|*", BizScenario.ofBizId("foo").toString());
         Assertions.assertEquals("*|s", BizScenario.ofScenario("s").toString());
         Assertions.assertEquals("foo.bar|*", BizScenario.ofBizId(null, "foo", null, "bar", null).toString());
         Assertions.assertEquals("foo.bar|*", BizScenario.ofBizId("", "foo", "", "bar", "").toString());
         Assertions.assertEquals("*|s1.s2", BizScenario.ofScenario(null, "s1", null, "s2", null).toString());
         Assertions.assertEquals("*|s1.s2", BizScenario.ofScenario("", "s1", "", "s2", "").toString());
-        BizScenario bizScenario;
-        bizScenario = BizScenario.of();
-        bizScenario.setBizId(null);
-        bizScenario.setScenario(null);
-        Assertions.assertEquals("*|*", bizScenario.toString());
-        bizScenario = BizScenario.of();
-        bizScenario.setBizId("");
-        bizScenario.setScenario("");
-        Assertions.assertEquals("*|*", bizScenario.toString());
+    }
+
+    @Test
+    public void invalid() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("#"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofScenario("#"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId(".foo"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("foo."));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("foo.#"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofScenario(".s"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofScenario("s."));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofScenario("s.#"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("汉字"));
     }
 
     @Test

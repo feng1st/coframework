@@ -10,47 +10,56 @@ import org.springframework.boot.test.context.SpringBootTest;
 class BizScenarioIteratorTest {
 
     @Autowired
-    private BizScenarioIteratorTestExtensionPoint bizScenarioIteratorTestExtensionPoint;
+    private BizScenarioIteratorTestEp bizScenarioIteratorTestEp;
+
+    @Autowired
+    private BizScenarioIteratorTestNoDefaultEp bizScenarioIteratorTestNoDefaultEp;
 
     @Test
     public void foo() {
         Assertions.assertEquals("foo",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo", "s1.a")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("foo", "s1.a")));
         Assertions.assertEquals("foo",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo", "s1.b")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("foo", "s1.b")));
         Assertions.assertEquals("foo",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo.baz", "s1.a")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("foo.baz", "s1.a")));
         Assertions.assertEquals("foo",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo", "s1.a.i")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("foo", "s1.a.i")));
         Assertions.assertEquals("foo",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofBizId("foo", "baz").withScenario("s1", "a", "i")));
+                bizScenarioIteratorTestEp.execute(BizScenario.ofBizId("foo", "baz").withScenario("s1", "a", "i")));
         Assertions.assertEquals("foo",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofScenario("s1", "a", "i").withBizId("foo", "baz")));
+                bizScenarioIteratorTestEp.execute(BizScenario.ofScenario("s1", "a", "i").withBizId("foo", "baz")));
     }
 
     @Test
     public void bar() {
         Assertions.assertEquals("bar",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo.bar", "s2")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("foo.bar", "s2")));
         Assertions.assertEquals("bar",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo.bar.baz", "s2")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("foo.bar.baz", "s2")));
         Assertions.assertEquals("bar",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo.bar", "s2.a")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("foo.bar", "s2.a")));
         Assertions.assertEquals("bar",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofBizId("foo", "bar", "baz").withScenario("s2", "a")));
+                bizScenarioIteratorTestEp.execute(BizScenario.ofBizId("foo", "bar", "baz").withScenario("s2", "a")));
         Assertions.assertEquals("bar",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofScenario("s2", "a").withBizId("foo", "bar", "baz")));
+                bizScenarioIteratorTestEp.execute(BizScenario.ofScenario("s2", "a").withBizId("foo", "bar", "baz")));
     }
 
     @Test
     public void defaultExt() {
         Assertions.assertEquals("default",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofBizId("foo")));
+                bizScenarioIteratorTestEp.execute(BizScenario.ofBizId("foo")));
         Assertions.assertEquals("default",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.ofScenario("s2")));
+                bizScenarioIteratorTestEp.execute(BizScenario.ofScenario("s2")));
         Assertions.assertEquals("default",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("foo", "s2")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("foo", "s2")));
         Assertions.assertEquals("default",
-                bizScenarioIteratorTestExtensionPoint.execute(BizScenario.of("baz", "s3")));
+                bizScenarioIteratorTestEp.execute(BizScenario.of("baz", "s3")));
+    }
+
+    @Test
+    public void noDefault() {
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> bizScenarioIteratorTestNoDefaultEp.execute(BizScenario.ofBizId("bar")));
     }
 }
