@@ -38,21 +38,14 @@ public interface PageData<T> {
     Long getTotalCount();
 
     /**
-     * Checks if the current page contains no data.
-     *
-     * @return true if there are no data items, false otherwise
-     */
-    default boolean isEmpty() {
-        return getData() == null || getData().isEmpty();
-    }
-
-    /**
      * Checks if there are more pages available after the current page.
      *
      * @return true if more pages are available, false otherwise
      */
-    default boolean isHasMore() {
-        return getTotalCount() != null
-                && (long) getPageSize() * getPageIndex() < getTotalCount();
+    default Boolean isHasMore() {
+        if (getTotalCount() == null) {
+            return null;
+        }
+        return (long) getPageSize() * getPageIndex() < getTotalCount();
     }
 }
