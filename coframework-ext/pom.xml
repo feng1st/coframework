@@ -24,10 +24,6 @@
             <groupId>io.codeone</groupId>
             <artifactId>coframework-plugin</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.codeone</groupId>
-            <artifactId>coframework-chain</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>

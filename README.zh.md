@@ -522,10 +522,11 @@ public void run(Input input) {
 {
   // 通过Context.of().chainName("chainName")指定，默认为"anonymous"
   "chain": "chainName",
-  // 如果使用BizContext.of(BizScenario.of("bizId", "scenario"))，则会记录bizId和scenario
-  "bizId": "bizId",
-  "scenario": "scenario",
   "node": "ClassNameOfNode",
+  // 业务身份
+  "bizId": "bizId",
+  // 场景
+  "scenario": "scenario",
   "elapsed": 0,
   // 如果链节点抛出异常，则会记录exception
   "exception": "stringOfException",
@@ -615,10 +616,7 @@ public class ChainService {
 
     public void run() {
         Sequential.of(produce, consume)
-                // 通过使用BizContext（Context的子类），带上业务身份场景
-                .run(BizContext.of(
-                        // 因为bizId匹配，对consume的调用会路由到ConsumeForFoo
-                        BizScenario.ofBizId("foo")));
+                .run(Context.of().bizScenario(BizScenario.ofBizId("foo")));
     }
 }
 ```

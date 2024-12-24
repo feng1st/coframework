@@ -1,6 +1,8 @@
 package io.codeone.framework.chain.context;
 
 import io.codeone.framework.chain.log.MDC;
+import io.codeone.framework.ext.BizScenario;
+import io.codeone.framework.ext.BizScenarioParam;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -21,9 +23,15 @@ import java.util.function.Function;
  * configurations and is thread-safe.
  */
 @Accessors(fluent = true, chain = true)
-public class Context {
+public class Context implements BizScenarioParam {
 
     protected final Map<Object, Object> paramMap = new ConcurrentHashMap<>();
+
+    /**
+     * The business identity and scenario associated with this context.
+     */
+    @Setter
+    private BizScenario bizScenario;
 
     /**
      * The name of the chain associated with this context.
@@ -501,6 +509,18 @@ public class Context {
                 .computeIfAbsent(subKey, mappingFunction);
     }
 
+    // Extension routing support
+
+    /**
+     * Retrieves the business identity and scenario associated with this context.
+     *
+     * @return the {@link BizScenario}
+     */
+    @Override
+    public BizScenario getBizScenario() {
+        return bizScenario;
+    }
+
     // Logging support
 
     /**
@@ -511,15 +531,6 @@ public class Context {
      */
     public void log(Object key, Object value) {
         MDC.put(key, value);
-    }
-
-    /**
-     * Builds the log representation of this context.
-     *
-     * @param content the map to populate with log content
-     */
-    public void buildLog(Map<String, Object> content) {
-        content.put("chain", chainName);
     }
 
     @SuppressWarnings("unchecked")

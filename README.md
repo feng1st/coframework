@@ -526,11 +526,11 @@ Chain execution is logged with the following format:
 {
   // Default: "anonymous"
   "chain": "chainName",
+  "node": "ClassNameOfNode",
   // Business ID if present
   "bizId": "bizId",
   // Scenario if present
   "scenario": "scenario",
-  "node": "ClassNameOfNode",
   "elapsed": 0,
   // Recorded if an exception occurs
   "exception": "ExceptionString",
@@ -616,12 +616,13 @@ public class ConsumeForFoo implements Consume {
 public class ChainService {
     @Autowired
     private Produce produce;
+    // Reference interface, not implementation
     @Autowired
-    private Consume consume; // Reference interface, not implementation
+    private Consume consume;
 
     public void run() {
         Sequential.of(produce, consume)
-                .run(BizContext.of(BizScenario.ofBizId("foo")));
+                .run(Context.of().bizScenario(BizScenario.ofBizId("foo")));
     }
 }
 ```

@@ -41,8 +41,12 @@ public class ChainLogger {
         }
 
         Map<String, Object> map = new LinkedHashMap<>();
-        context.buildLog(map);
+        map.put("chain", context.chainName());
         map.put("node", ClassUtils.getSimpleName(ClassUtils.getTargetClass(chainable)));
+        if (context.getBizScenario() != null) {
+            map.put("bizId", context.getBizScenario().getBizId());
+            map.put("scenario", context.getBizScenario().getScenario());
+        }
         map.put("elapsed", elapsed);
         if (resultOrException instanceof Throwable) {
             map.put("exception", resultOrException.toString());
