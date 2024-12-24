@@ -4,6 +4,7 @@ import io.codeone.framework.ext.util.BizScenarioIterator;
 import io.codeone.framework.ext.util.BizScenarioUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.beans.Transient;
 import java.util.Iterator;
@@ -54,6 +55,7 @@ import java.util.Iterator;
  */
 @Getter
 @EqualsAndHashCode
+@NoArgsConstructor(staticName = "of")
 public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
 
     private String bizId = BizScenarioUtils.ANY;
