@@ -15,4 +15,8 @@ public interface AbilityTestAbility {
     Object byParamType(AbilityTestParam param);
 
     Object byDefault(Object param);
+
+    default void exception() {
+        throw new RuntimeException();
+    }
 }

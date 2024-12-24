@@ -71,4 +71,35 @@ class AbilityTest {
                 BizScenarioContext.invoke(BizScenario.ofBizId("baz"),
                         () -> abilityTestAbility.byDefault(new Object())));
     }
+
+    @Test
+    public void nullBizScenario() {
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> abilityTestAbility.byParamType(null));
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> abilityTestAbility.byParamType(AbilityTestParam.of()));
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> abilityTestAbility.byContext());
+    }
+
+    @Test
+    public void exception() {
+        Assertions.assertThrows(RuntimeException.class,
+                () -> BizScenarioContext.invoke(BizScenario.ofBizId("foo"),
+                        () -> abilityTestAbility.exception()));
+    }
+
+    @Test
+    public void voidInvokable() throws Throwable {
+        BizScenarioContext.invoke(BizScenario.ofBizId("foo"),
+                () -> {
+                    abilityTestAbility.byDefault(new Object());
+                });
+    }
+
+    @Test
+    public void methodOfObject() throws Throwable {
+        BizScenarioContext.invoke(BizScenario.ofBizId("foo"),
+                () -> abilityTestAbility.hashCode());
+    }
 }

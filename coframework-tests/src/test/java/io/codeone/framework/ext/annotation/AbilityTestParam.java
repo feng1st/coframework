@@ -1,12 +1,14 @@
 package io.codeone.framework.ext.annotation;
 
-import io.codeone.framework.api.parameter.BaseBizParam;
+import io.codeone.framework.api.parameter.BaseBizPageParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AbilityTestParam extends BaseBizParam {
+@NoArgsConstructor(staticName = "of")
+public class AbilityTestParam extends BaseBizPageParam {
 
     public static AbilityTestParam of(String bizId) {
         AbilityTestParam param = new AbilityTestParam();
