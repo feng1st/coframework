@@ -131,8 +131,8 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
             throw new IllegalStateException(String.format(
                     "Duplicate Extension found for '%s': existing '%s' vs new '%s'",
                     extensibleInterface.getSimpleName(),
-                    existing.getClass().getSimpleName(),
-                    extension.getClass().getSimpleName()));
+                    ClassUtils.getTargetClass(existing).getSimpleName(),
+                    ClassUtils.getTargetClass(extension).getSimpleName()));
         }
     }
 
