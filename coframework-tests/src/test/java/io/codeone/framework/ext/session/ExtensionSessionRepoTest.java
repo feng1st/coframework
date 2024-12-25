@@ -15,7 +15,8 @@ class ExtensionSessionRepoTest {
 
     @Test
     public void getParamIndex() {
-        Assertions.assertThrows(IllegalStateException.class,
-                () -> extensionSessionRepo.getParamIndex(ArrayList.class.getMethods()[0]));
+        Assertions.assertEquals("No BizScenario source found for method 'public boolean java.util.ArrayList.add(java.lang.Object)'",
+                Assertions.assertThrows(IllegalStateException.class,
+                        () -> extensionSessionRepo.getParamIndex(ArrayList.class.getMethods()[0])).getMessage());
     }
 }

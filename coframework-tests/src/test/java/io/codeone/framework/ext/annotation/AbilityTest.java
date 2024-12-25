@@ -81,12 +81,15 @@ class AbilityTest {
 
     @Test
     public void nullBizScenario() {
-        Assertions.assertThrows(IllegalStateException.class,
-                () -> abilityTestAbility.byParamType(null));
-        Assertions.assertThrows(IllegalStateException.class,
-                () -> abilityTestAbility.byParamType(AbilityTestParam.of()));
-        Assertions.assertThrows(IllegalStateException.class,
-                () -> abilityTestAbility.byContext());
+        Assertions.assertEquals("Failed to retrieve BizScenario from parameter 0 of method 'public abstract java.lang.Object io.codeone.framework.ext.annotation.AbilityTestAbility.byParamType(io.codeone.framework.ext.annotation.AbilityTestParam)' or current context",
+                Assertions.assertThrows(IllegalStateException.class,
+                        () -> abilityTestAbility.byParamType(null)).getMessage());
+        Assertions.assertEquals("Failed to retrieve BizScenario from parameter 0 of method 'public abstract java.lang.Object io.codeone.framework.ext.annotation.AbilityTestAbility.byParamType(io.codeone.framework.ext.annotation.AbilityTestParam)' or current context",
+                Assertions.assertThrows(IllegalStateException.class,
+                        () -> abilityTestAbility.byParamType(AbilityTestParam.of())).getMessage());
+        Assertions.assertEquals("Failed to retrieve BizScenario from current context for method 'public abstract java.lang.Object io.codeone.framework.ext.annotation.AbilityTestAbility.byContext()'",
+                Assertions.assertThrows(IllegalStateException.class,
+                        () -> abilityTestAbility.byContext()).getMessage());
     }
 
     @Test

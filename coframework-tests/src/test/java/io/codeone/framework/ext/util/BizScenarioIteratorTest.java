@@ -59,7 +59,8 @@ class BizScenarioIteratorTest {
 
     @Test
     public void noDefault() {
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> bizScenarioIteratorTestNoDefaultEp.execute(BizScenario.ofBizId("bar")));
+        Assertions.assertEquals("No Extension found for 'BizScenarioIteratorTestNoDefaultEp[bar|*]'",
+                Assertions.assertThrows(IllegalArgumentException.class,
+                        () -> bizScenarioIteratorTestNoDefaultEp.execute(BizScenario.ofBizId("bar"))).getMessage());
     }
 }

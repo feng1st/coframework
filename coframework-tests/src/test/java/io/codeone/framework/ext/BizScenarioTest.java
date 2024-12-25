@@ -22,8 +22,10 @@ class BizScenarioTest {
 
     @Test
     public void invalid() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("#"));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofScenario("#"));
+        Assertions.assertEquals("Invalid code '#', should be '*', or '.' separated alphabets, numbers, '-' and '_'",
+                Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("#")).getMessage());
+        Assertions.assertEquals("Invalid code '#', should be '*', or '.' separated alphabets, numbers, '-' and '_'",
+                Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofScenario("#")).getMessage());
         Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId(".foo"));
         Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("foo."));
         Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("foo.#"));

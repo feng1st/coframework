@@ -17,7 +17,8 @@ class BizScenarioParamRepoTest {
     @Test
     public void getParamIndex() {
         Method method = ArrayList.class.getMethods()[0];
-        Assertions.assertThrows(IllegalStateException.class,
-                () -> bizScenarioParamRepo.getParamIndex(method));
+        Assertions.assertEquals("No BizScenario source registered for method 'public boolean java.util.ArrayList.add(java.lang.Object)'",
+                Assertions.assertThrows(IllegalStateException.class,
+                        () -> bizScenarioParamRepo.getParamIndex(method)).getMessage());
     }
 }

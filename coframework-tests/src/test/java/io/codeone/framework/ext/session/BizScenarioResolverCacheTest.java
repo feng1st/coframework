@@ -12,8 +12,9 @@ class BizScenarioResolverCacheTest {
     private BizScenarioResolverCache bizScenarioResolverCache;
 
     @Test
-    public void test() {
-        Assertions.assertThrows(IllegalStateException.class,
-                () -> bizScenarioResolverCache.getResolver(BizScenarioResolverCacheTestInvalidResolver.class));
+    public void getResolver() {
+        Assertions.assertEquals("Cannot load BizScenarioResolver 'BizScenarioResolverCacheTestInvalidResolver'",
+                Assertions.assertThrows(IllegalStateException.class,
+                        () -> bizScenarioResolverCache.getResolver(BizScenarioResolverCacheTestInvalidResolver.class)).getMessage());
     }
 }
