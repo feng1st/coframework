@@ -1,5 +1,6 @@
 package io.codeone.framework.ext.session;
 
+import io.codeone.framework.ext.annotation.ExtensionSession;
 import io.codeone.framework.ext.annotation.RouteBy;
 import io.codeone.framework.ext.util.ExtUtils;
 import lombok.experimental.UtilityClass;

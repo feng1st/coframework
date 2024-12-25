@@ -11,7 +11,7 @@ public enum BizScenarioResolvePolicy {
      * Automatically resolves the {@code BizScenario} by applying the following
      * steps in order:
      * <ol>
-     *   <li>If {@link ExtensionSession#customResolver()} specifies a custom resolver,
+     *   <li>If {@code ExtensionSession#customResolver()} specifies a custom resolver,
      *   it is used to resolve the {@code BizScenario}.
      *   <li>If a method parameter is annotated with {@code RouteBy}, its {@code
      *   BizScenario} is used.

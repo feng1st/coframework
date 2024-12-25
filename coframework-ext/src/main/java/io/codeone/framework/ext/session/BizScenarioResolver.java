@@ -5,7 +5,7 @@ import io.codeone.framework.ext.BizScenario;
 /**
  * Interface for resolving a {@link BizScenario} during a method invocation.
  *
- * <p>Used when the resolution policy in {@link ExtensionSession} is {@link BizScenarioResolvePolicy#CUSTOM}
+ * <p>Used when the resolution policy in {@code ExtensionSession} is {@link BizScenarioResolvePolicy#CUSTOM}
  * or {@link BizScenarioResolvePolicy#AUTO}. For {@code CUSTOM}, the specified custom
  * resolver is used. For {@code AUTO}, the custom resolver is used if specified;
  * otherwise, default resolution applies.

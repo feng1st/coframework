@@ -10,7 +10,7 @@ import java.lang.annotation.*;
  * compared to {@link Ability}.
  *
  * <p>Interfaces annotated with this are a type of {@link Extensible} and can have
- * multiple {@link Extension} implementations tailored to various {@code BizScenario}.
+ * multiple {@code Extension} implementations tailored to various {@code BizScenario}.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

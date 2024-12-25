@@ -1,5 +1,6 @@
 package io.codeone.framework.ext.session;
 
+import io.codeone.framework.ext.annotation.ExtensionSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -10,7 +10,7 @@ import java.lang.annotation.*;
  * is considered a higher-level concept compared to {@link ExtensionPoint}.
  *
  * <p>Interfaces annotated with this are a type of {@link Extensible} and can have
- * multiple {@link Extension} implementations tailored to different {@code BizScenario}.
+ * multiple {@code Extension} implementations tailored to different {@code BizScenario}.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

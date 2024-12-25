@@ -6,7 +6,7 @@ import java.lang.annotation.*;
  * Indicates that a parameter is used to determine the {@code BizScenario} for routing.
  *
  * <p>When applied to a method parameter, this annotation marks it as the source
- * of the {@code BizScenario} used to locate the appropriate {@link Extension} implementation.
+ * of the {@code BizScenario} used to locate the appropriate {@code Extension} implementation.
  * The parameter must implement the {@code BizScenarioParam} interface.
  *
  * <p>Usage constraints:
