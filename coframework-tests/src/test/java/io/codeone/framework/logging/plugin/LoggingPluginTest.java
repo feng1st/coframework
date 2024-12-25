@@ -236,4 +236,14 @@ class LoggingPluginTest extends BaseLoggingTest {
                 IllegalStateException.class,
                 "{level=ERROR, method=LoggingPluginTestService.loggingException, success=false, code=IllegalStateException, message=Message, elapsed=0, args={param1=1, param2=2}, exception=java.lang.IllegalStateException: Message}");
     }
+
+    @Test
+    public void loggingMalformed() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestEmptyParam(), 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestSelfRefParam(), 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDateParam(), 2);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{},\"param2\":2},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"self\":null},\"param2\":2},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"date\":\"1970-01-02T03:46:40.000+00:00\"},\"param2\":2},\"result\":\"data\"}");
+    }
 }
