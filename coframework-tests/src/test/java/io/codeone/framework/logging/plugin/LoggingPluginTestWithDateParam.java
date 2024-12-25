@@ -7,5 +7,5 @@ import java.util.Date;
 @Data
 public class LoggingPluginTestWithDateParam {
 
-    private Date date = new Date(1000L * 60 * 60 * 24);
+    private Date date = new Date(0L);
 }
