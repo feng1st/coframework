@@ -3,6 +3,7 @@ package io.codeone.framework.logging.plugin;
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.api.response.Result;
 import io.codeone.framework.api.shared.BizException;
+import io.codeone.framework.common.log.util.LogUtils;
 import io.codeone.framework.logging.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -221,5 +222,18 @@ class LoggingPluginTest extends BaseLoggingTest {
                 Level.ERROR,
                 SpelEvaluationException.class,
                 "Error logging invocation of 'public void io.codeone.framework.logging.plugin.LoggingPluginTestService.invalidSpEL()'");
+    }
+
+    @Test
+    public void loggingNoJson() {
+        LogUtils.logAsJson = false;
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> loggingPluginTestService.loggingException(1, 2));
+        LogUtils.logAsJson = true;
+
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.ERROR,
+                IllegalStateException.class,
+                "{level=ERROR, method=LoggingPluginTestService.loggingException, success=false, code=IllegalStateException, message=Message, elapsed=0, args={param1=1, param2=2}, exception=java.lang.IllegalStateException: Message}");
     }
 }
