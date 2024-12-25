@@ -3,6 +3,7 @@ package io.codeone.framework.chain.log;
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.chain.composite.Sequential;
 import io.codeone.framework.chain.context.Context;
+import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.logging.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,8 @@ class ChainLoggerTest extends BaseLoggingTest {
     private ChainLoggerTestNodeProduce chainLoggerTestNodeProduce;
     @Autowired
     private ChainLoggerTestNodeConsume chainLoggerTestNodeConsume;
+    @Autowired
+    private ChainLoggerTestNodeAbility chainLoggerTestNodeAbility;
 
     @Test
     public void logDefault() {
@@ -111,5 +114,14 @@ class ChainLoggerTest extends BaseLoggingTest {
 
         assertLogs("{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0,\"params\":{\"traceId\":10000}}",
                 "{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0,\"params\":{\"traceId\":10000,\"text\":\"Hello chain\"}}");
+    }
+
+    @Test
+    public void route() {
+        Assertions.assertEquals("foo", chainLoggerTestNodeAbility.run(Context.of().bizScenario(BizScenario.ofBizId("foo")), String.class));
+        Assertions.assertEquals("bar", chainLoggerTestNodeAbility.run(Context.of().bizScenario(BizScenario.ofBizId("bar")), String.class));
+
+        assertLogs("{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTestNodeAbilityForFoo\",\"bizId\":\"foo\",\"scenario\":\"*\",\"elapsed\":0}",
+                "{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTestNodeAbilityForBar\",\"bizId\":\"bar\",\"scenario\":\"*\",\"elapsed\":0}");
     }
 }
