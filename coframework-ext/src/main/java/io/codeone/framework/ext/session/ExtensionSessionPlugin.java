@@ -13,7 +13,6 @@ import io.codeone.framework.plugin.binding.PluginBindingProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * Plugin for handling methods annotated with {@link ExtensionSession}.
@@ -47,7 +46,9 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
     @Override
     public void processAfterBinding(Method method, Class<?> targetClass) {
         ExtensionSession session = AnnotationUtils.getAnnotation(method, ExtensionSession.class);
-        extensionSessionRepo.buildParamIndex(method, session);
+        if (session != null) {
+            extensionSessionRepo.buildParamIndex(method, session);
+        }
     }
 
     /**
@@ -96,25 +97,36 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
      *                               configuration
      */
     private BizScenario resolveBizScenario(Method method, Object[] args, ExtensionSession session) {
-        int paramIndex = extensionSessionRepo.getParamIndex(method);
 
         BizScenario bizScenario;
+
+        if (session == null) {
+            for (Object arg : args) {
+                if (arg instanceof BizScenarioParam) {
+                    BizScenarioParam bizScenarioParam = (BizScenarioParam) arg;
+                    if ((bizScenario = bizScenarioParam.getBizScenario()) != null) {
+                        return bizScenario;
+                    }
+                }
+            }
+            return null;
+        }
+
+        int paramIndex = extensionSessionRepo.getParamIndex(method);
+
         if (paramIndex >= 0) {
             BizScenarioParam bizScenarioParam = (BizScenarioParam) args[paramIndex];
             if (bizScenarioParam != null
                     && (bizScenario = bizScenarioParam.getBizScenario()) != null) {
                 return bizScenario;
             }
-            if (session != null) {
-                throw new IllegalStateException(String.format(
-                        "BizScenario is null for parameter %d in method '%s'",
-                        paramIndex,
-                        method));
-            }
+            throw new IllegalStateException(String.format(
+                    "BizScenario is null for parameter %d in method '%s'",
+                    paramIndex,
+                    method));
         }
 
         if (paramIndex == ExtensionSessionRepo.INDEX_CUSTOM_RESOLVER) {
-            Objects.requireNonNull(session);
             BizScenarioResolver resolver = bizScenarioResolverCache.getResolver(session.customResolver());
             if ((bizScenario = resolver.resolve(args)) != null) {
                 return bizScenario;

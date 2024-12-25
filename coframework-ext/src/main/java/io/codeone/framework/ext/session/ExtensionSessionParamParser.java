@@ -7,6 +7,7 @@ import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -28,8 +29,8 @@ public class ExtensionSessionParamParser {
      * or {@link ExtensionSessionRepo#INDEX_IGNORE}
      */
     public int parseParamIndex(Method method, ExtensionSession session) {
-        if (session == null
-                || session.value() == BizScenarioResolvePolicy.AUTO) {
+        Objects.requireNonNull(session);
+        if (session.value() == BizScenarioResolvePolicy.AUTO) {
             Integer paramIndex;
             if ((paramIndex = parseCustomResolver(session)) != null) {
                 return paramIndex;
@@ -113,8 +114,7 @@ public class ExtensionSessionParamParser {
     }
 
     private Integer parseCustomResolver(ExtensionSession session) {
-        if (session != null
-                && session.customResolver() != BizScenarioResolver.class) {
+        if (session.customResolver() != BizScenarioResolver.class) {
             return ExtensionSessionRepo.INDEX_CUSTOM_RESOLVER;
         }
         return null;

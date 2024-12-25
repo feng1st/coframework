@@ -27,10 +27,10 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
 
     @Override
     public void buildParamIndex(Method method, ExtensionSession session) {
+        Objects.requireNonNull(session);
         paramIndexMap.computeIfAbsent(method, k -> {
             int index = ExtensionSessionParamParser.parseParamIndex(method, session);
             if (index == INDEX_CUSTOM_RESOLVER) {
-                Objects.requireNonNull(session);
                 BizScenarioResolver ignored = bizScenarioResolverCache.getResolver(session.customResolver());
             }
             return index;
