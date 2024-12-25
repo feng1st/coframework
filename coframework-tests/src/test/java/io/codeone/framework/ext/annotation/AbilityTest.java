@@ -13,6 +13,9 @@ class AbilityTest {
     @Autowired
     private AbilityTestAbility abilityTestAbility;
 
+    @Autowired
+    private AbilityTestAnotherAbility abilityTestAnotherAbility;
+
     @Test
     public void byContext() throws Throwable {
         Assertions.assertEquals("foo",
@@ -47,6 +50,10 @@ class AbilityTest {
         Assertions.assertEquals("default",
                 BizScenarioContext.invoke(BizScenario.ofBizId("baz"),
                         () -> abilityTestAbility.byRouteByContext(AbilityTestParam.of("foo"))));
+
+        Assertions.assertEquals("foo",
+                BizScenarioContext.invoke(BizScenario.ofBizId("foo"),
+                        () -> abilityTestAnotherAbility.byRouteByContext(AbilityTestParam.of("bar"))));
     }
 
     @Test
@@ -86,7 +93,7 @@ class AbilityTest {
     public void exception() {
         Assertions.assertThrows(RuntimeException.class,
                 () -> BizScenarioContext.invoke(BizScenario.ofBizId("foo"),
-                        () -> abilityTestAbility.exception()));
+                        () -> abilityTestAnotherAbility.exception()));
     }
 
     @Test
