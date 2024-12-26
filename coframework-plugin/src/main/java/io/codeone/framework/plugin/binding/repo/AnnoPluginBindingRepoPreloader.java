@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Scans the Spring bean factory to discover and process plugins.
+ * Scans the Spring bean factory to discover and process annotation-to-plugin bindings.
  *
  * <p>This class uses the {@link BeanFactoryPostProcessor} mechanism to locate
  * plugin beans and bind their associated annotations to the plugin classes.
