@@ -1,14 +1,10 @@
 package io.codeone.framework.plugin.binding.repo;
 
-import io.codeone.framework.common.util.ClassUtils;
-import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.binding.AnnoPluginBinding;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -26,27 +22,31 @@ import java.util.concurrent.ConcurrentHashMap;
  * matching and post-processing logic execute. This guarantees that {@code PluginPointcut#matches}
  * and {@code PluginInterceptorPostProcessor#postProcessAfterInitialization} can
  * work as expected.
- *
- * <p>Uses the Spring {@link BeanFactoryPostProcessor} mechanism to perform its
- * initialization.
  */
 @Component
-public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, AnnoPluginBindingRepo {
+public class AnnoPluginBindingRepoImpl implements InitializingBean, AnnoPluginBindingRepo {
 
     private final Map<Class<? extends Annotation>, Set<Class<? extends Plugin>>> map = new ConcurrentHashMap<>();
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private AnnoPluginBindingRepoPreloader annoPluginBindingRepoPreloader;
+
     /**
-     * Processes the bean factory to discover plugins and build annotation-to-plugin
-     * bindings.
+     * Initializes the static bindings and loads plugins from the application context.
      *
-     * @param beanFactory the Spring bean factory
-     * @throws BeansException if any bean-related error occurs
+     * @throws Exception if an error occurs during initialization
      */
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        if (beanFactory instanceof DefaultListableBeanFactory) {
-            process((DefaultListableBeanFactory) beanFactory);
-        }
+    public void afterPropertiesSet() throws Exception {
+        STATIC_BINDINGS
+                .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
+        applicationContext.getBeansOfType(AnnoPluginBinding.class).values()
+                .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
+        annoPluginBindingRepoPreloader.getBindings()
+                .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
     }
 
     /**
@@ -58,30 +58,6 @@ public class AnnoPluginBindingRepoImpl implements BeanFactoryPostProcessor, Anno
     @Override
     public Set<Class<? extends Plugin>> getPluginClasses(Class<? extends Annotation> annoType) {
         return map.get(annoType);
-    }
-
-    private void process(DefaultListableBeanFactory beanFactory) {
-        String[] pluginBeanNames = beanFactory.getBeanNamesForType(Plugin.class);
-        for (String pluginBeanName : pluginBeanNames) {
-            BeanDefinition pluginDefinition = beanFactory.getBeanDefinition(pluginBeanName);
-            String pluginClassName = pluginDefinition.getBeanClassName();
-            Class<? extends Plugin> pluginClass = ClassUtils.forName(pluginClassName, getClass().getClassLoader());
-
-            Plug plug = pluginClass.getAnnotation(Plug.class);
-            if (plug == null) {
-                throw new IllegalStateException(String.format("Plugin should be annotated with @Plug: %s",
-                        pluginBeanName));
-            }
-
-            for (Class<? extends Annotation> annoType : plug.targetAnnotations()) {
-                bind(annoType, pluginClass);
-            }
-        }
-
-        STATIC_BINDINGS
-                .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
-        beanFactory.getBeansOfType(AnnoPluginBinding.class).values()
-                .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
     }
 
     private void bind(Class<? extends Annotation> annoType, Class<? extends Plugin> pluginClass) {
