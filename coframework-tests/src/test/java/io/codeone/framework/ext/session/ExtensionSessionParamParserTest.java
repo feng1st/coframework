@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 class ExtensionSessionParamParserTest {
 
     @Test
-    public void last() throws Throwable {
+    public void last() throws Exception {
         Method method = ExtensionSessionParamParserTestInvalidService.class.getMethod("last",
                 Object.class, Object.class);
         ExtensionSession session = method.getAnnotation(ExtensionSession.class);
@@ -20,7 +20,7 @@ class ExtensionSessionParamParserTest {
     }
 
     @Test
-    public void specifiedDuplicate() throws Throwable {
+    public void specifiedDuplicate() throws Exception {
         Method method = ExtensionSessionParamParserTestInvalidService.class.getMethod("specifiedDuplicate",
                 BizScenarioParam.class, BizScenarioParam.class);
         ExtensionSession session = method.getAnnotation(ExtensionSession.class);
@@ -30,7 +30,7 @@ class ExtensionSessionParamParserTest {
     }
 
     @Test
-    public void specifiedInvalid() throws Throwable {
+    public void specifiedInvalid() throws Exception {
         Method method = ExtensionSessionParamParserTestInvalidService.class.getMethod("specifiedInvalid",
                 BizScenarioParam.class, Object.class);
         ExtensionSession session = method.getAnnotation(ExtensionSession.class);

@@ -26,7 +26,7 @@ class ExtensionRepoTest {
     }
 
     @Test
-    public void register() throws Throwable {
+    public void register() throws Exception {
         Method method = ExtensionRepoImpl.class.getDeclaredMethod("register", Object.class);
         method.setAccessible(true);
         Assertions.assertEquals("'Object' does not implement any Extensible interface (annotated with @Ability or @ExtensionPoint)",
@@ -35,7 +35,7 @@ class ExtensionRepoTest {
     }
 
     @Test
-    public void registerExtension() throws Throwable {
+    public void registerExtension() throws Exception {
         Method method = ExtensionRepoImpl.class.getDeclaredMethod("registerExtension", Class.class, BizScenario.class, Object.class);
         method.setAccessible(true);
         method.invoke(extensionRepo, List.class, BizScenario.ofScenario("s"), new ArrayList<>());
