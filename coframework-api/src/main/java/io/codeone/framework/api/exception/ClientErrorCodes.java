@@ -23,8 +23,8 @@ public enum ClientErrorCodes implements ApiErrorCode {
      */
     ACCESS_DENIED(false),
     /**
-     * The server cannot find the requested resource. Servers may also send this
-     * response instead of {@code ACCESS_DENIED} to hide the existence of a resource
+     * The server cannot find the requested content. Servers may also send this
+     * response instead of {@code ACCESS_DENIED} to hide the existence of a content
      * from an unauthorized client.
      */
     NOT_FOUND(false),
