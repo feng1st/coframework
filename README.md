@@ -244,11 +244,11 @@ existing systems. Below are the details of these advanced capabilities.
 
 ### 2.1 Customizing Exception Wrapping
 
-1. **Custom Error Codes**: To customize the `errorCode` in the response (default is the exception class name), implement
-   the `ApiErrorCode` interface or use `ApiException`. The `getCode()` method will define the `errorCode`.
+1. **Custom Error Codes**: To customize the `errorCode` in the response (default: the exception class name), implement
+   the `ApiErrorCode` interface or use `ApiException`. The `errorCode` will be derived from the `getCode()` method.
 
-2. **Custom Error Messages**: To customize the `errorMessage` (default is the exception message), use the
-   `@CustomErrorMessage` annotation:
+2. **Custom Error Messages**: To customize the `errorMessage` in the response (default: the exception message), such as
+   hiding technical details from end users, use the `@CustomErrorMessage` annotation:
 
 ```java
 
