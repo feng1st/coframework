@@ -1,9 +1,8 @@
 package io.codeone.framework.logging.plugin;
 
+import io.codeone.framework.api.exception.ApiErrorCode;
 import io.codeone.framework.api.response.ApiResult;
-import io.codeone.framework.api.response.Page;
-import io.codeone.framework.api.response.PageData;
-import io.codeone.framework.api.util.ApiExceptionUtils;
+import io.codeone.framework.api.util.ApiErrorCodeUtils;
 import io.codeone.framework.api.util.ApiResultUtils;
 import io.codeone.framework.common.function.Invokable;
 import io.codeone.framework.common.log.util.LogUtils;
@@ -71,14 +70,15 @@ public class LoggingPlugin implements Plugin {
         LoggingExpressionParser expParser = new LoggingExpressionParser(args, result);
 
         ApiResult<?> apiResult = ApiResultUtils.toApiResult(result);
-        Throwable cause = ApiExceptionUtils.getCause(throwable);
+        Throwable cause = ApiErrorCodeUtils.getCause(throwable);
+        ApiErrorCode apiErrorCode = ApiErrorCodeUtils.toApiErrorCode(cause);
 
         Boolean success = getSuccess(apiResult, cause, logging, expParser);
-        String code = getCode(apiResult, cause, logging, expParser);
+        String code = getCode(apiResult, apiErrorCode, logging, expParser);
         String message = getMessage(apiResult, cause, logging, expParser);
         Map<String, Object> argMap = getArgMap(method, args, logging, expParser);
-        Object resultData = getResultData(result, apiResult, logging);
-        Level level = getLevel(throwable, success);
+        Object resultData = getResultData(apiResult, result, logging);
+        Level level = getLevel(apiErrorCode, success);
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("level", level);
@@ -104,23 +104,32 @@ public class LoggingPlugin implements Plugin {
         }
 
         Logger logger = getLogger(method, logging);
-        if (level == Level.ERROR) {
-            if (logging == null
-                    || logging.logException()) {
+        if (throwable != null
+                && (logging == null
+                || logging.logException())) {
+            if (level == Level.ERROR) {
                 logger.error("{}", LogUtils.format(map), throwable);
             } else {
-                logger.error("{}", LogUtils.format(map));
+                logger.warn("{}", LogUtils.format(map), throwable);
             }
-        } else if (level == Level.WARN) {
-            logger.warn("{}", LogUtils.format(map));
         } else {
-            logger.info("{}", LogUtils.format(map));
+            if (level == Level.ERROR) {
+                logger.error("{}", LogUtils.format(map));
+            } else if (level == Level.WARN) {
+                logger.warn("{}", LogUtils.format(map));
+            } else {
+                logger.info("{}", LogUtils.format(map));
+            }
         }
     }
 
-    private Level getLevel(Throwable throwable, Boolean success) {
-        if (throwable != null) {
-            return Level.ERROR;
+    private Level getLevel(ApiErrorCode apiErrorCode, Boolean success) {
+        if (apiErrorCode != null) {
+            if (apiErrorCode.isCritical()) {
+                return Level.ERROR;
+            } else {
+                return Level.WARN;
+            }
         }
         if (Objects.equals(success, false)) {
             return Level.WARN;
@@ -141,9 +150,9 @@ public class LoggingPlugin implements Plugin {
         return null;
     }
 
-    private String getCode(ApiResult<?> apiResult, Throwable cause, Logging logging, LoggingExpressionParser expParser) {
-        if (cause != null) {
-            return ApiExceptionUtils.getCode(cause);
+    private String getCode(ApiResult<?> apiResult, ApiErrorCode apiErrorCode, Logging logging, LoggingExpressionParser expParser) {
+        if (apiErrorCode != null) {
+            return apiErrorCode.getCode();
         }
         if (apiResult != null) {
             return apiResult.getErrorCode();
@@ -188,13 +197,9 @@ public class LoggingPlugin implements Plugin {
         return null;
     }
 
-    private Object getResultData(Object result, ApiResult<?> apiResult, Logging logging) {
+    private Object getResultData(ApiResult<?> apiResult, Object result, Logging logging) {
         if (logging == null
                 || logging.logResult()) {
-            if (result instanceof PageData
-                    && !(result instanceof Page)) {
-                return Page.of((PageData<?>) result);
-            }
             if (apiResult != null) {
                 return apiResult.getData();
             }

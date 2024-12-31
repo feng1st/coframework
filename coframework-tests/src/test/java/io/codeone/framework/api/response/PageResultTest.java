@@ -22,9 +22,9 @@ class PageResultTest {
     }
 
     @Test
-    public void successPageData() {
-        PageData<Object> pageData = Page.of(Arrays.asList(1, 2, 3), 5, 3, 100L);
-        PageResult<Object> result = PageResult.success(pageData);
+    public void successPage() {
+        Page<Object> page = Page.of(Arrays.asList(1, 2, 3), 5, 3, 100L);
+        PageResult<Object> result = PageResult.success(page);
         Assertions.assertTrue(result.isSuccess());
         Assertions.assertEquals(Arrays.asList(1, 2, 3), result.getData());
         Assertions.assertEquals(5, result.getPageIndex());

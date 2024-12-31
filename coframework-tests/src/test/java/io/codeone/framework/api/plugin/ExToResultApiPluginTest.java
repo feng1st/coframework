@@ -31,8 +31,8 @@ class ExToResultApiPluginTest {
     }
 
     @Test
-    public void apiExceptionCode() {
-        Result<Object> result = exToResultApiPluginTestService.apiExceptionCode();
+    public void code() {
+        Result<Object> result = exToResultApiPluginTestService.code();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
@@ -40,8 +40,8 @@ class ExToResultApiPluginTest {
     }
 
     @Test
-    public void apiExceptionCodeMessage() {
-        Result<Object> result = exToResultApiPluginTestService.apiExceptionCodeMessage();
+    public void codeMessage() {
+        Result<Object> result = exToResultApiPluginTestService.codeMessage();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
@@ -49,8 +49,8 @@ class ExToResultApiPluginTest {
     }
 
     @Test
-    public void apiExceptionCodeCause() {
-        Result<Object> result = exToResultApiPluginTestService.apiExceptionCodeCause();
+    public void codeCause() {
+        Result<Object> result = exToResultApiPluginTestService.codeCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
@@ -58,11 +58,47 @@ class ExToResultApiPluginTest {
     }
 
     @Test
-    public void apiExceptionCodeMessageCause() {
-        Result<Object> result = exToResultApiPluginTestService.apiExceptionCodeMessageCause();
+    public void codeMessageCause() {
+        Result<Object> result = exToResultApiPluginTestService.codeMessageCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
+        Assertions.assertEquals("System error", result.getErrorMessage());
+    }
+
+    @Test
+    public void apiErrorCode() {
+        Result<Object> result = exToResultApiPluginTestService.apiErrorCode();
+        Assertions.assertFalse(result.isSuccess());
+        Assertions.assertNull(result.getData());
+        Assertions.assertEquals("SERVICE_UNAVAILABLE", result.getErrorCode());
+        Assertions.assertNull(result.getErrorMessage());
+    }
+
+    @Test
+    public void apiErrorCodeMessage() {
+        Result<Object> result = exToResultApiPluginTestService.apiErrorCodeMessage();
+        Assertions.assertFalse(result.isSuccess());
+        Assertions.assertNull(result.getData());
+        Assertions.assertEquals("SERVICE_UNAVAILABLE", result.getErrorCode());
+        Assertions.assertEquals("System error", result.getErrorMessage());
+    }
+
+    @Test
+    public void apiErrorCodeCause() {
+        Result<Object> result = exToResultApiPluginTestService.apiErrorCodeCause();
+        Assertions.assertFalse(result.isSuccess());
+        Assertions.assertNull(result.getData());
+        Assertions.assertEquals("SERVICE_UNAVAILABLE", result.getErrorCode());
+        Assertions.assertEquals("java.lang.IllegalStateException: Illegal state", result.getErrorMessage());
+    }
+
+    @Test
+    public void apiErrorCodeMessageCause() {
+        Result<Object> result = exToResultApiPluginTestService.apiErrorCodeMessageCause();
+        Assertions.assertFalse(result.isSuccess());
+        Assertions.assertNull(result.getData());
+        Assertions.assertEquals("SERVICE_UNAVAILABLE", result.getErrorCode());
         Assertions.assertEquals("System error", result.getErrorMessage());
     }
 

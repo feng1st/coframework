@@ -37,8 +37,8 @@ class ExToPageResultApiPluginTest {
     }
 
     @Test
-    public void apiExceptionCode() {
-        PageResult<Object> result = exToPageResultApiPluginTestService.apiExceptionCode();
+    public void code() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.code();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals(1, result.getPageIndex());
@@ -49,8 +49,8 @@ class ExToPageResultApiPluginTest {
     }
 
     @Test
-    public void apiExceptionCodeMessage() {
-        PageResult<Object> result = exToPageResultApiPluginTestService.apiExceptionCodeMessage();
+    public void codeMessage() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.codeMessage();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals(1, result.getPageIndex());
@@ -61,8 +61,8 @@ class ExToPageResultApiPluginTest {
     }
 
     @Test
-    public void apiExceptionCodeCause() {
-        PageResult<Object> result = exToPageResultApiPluginTestService.apiExceptionCodeCause();
+    public void codeCause() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.codeCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals(1, result.getPageIndex());
@@ -73,14 +73,62 @@ class ExToPageResultApiPluginTest {
     }
 
     @Test
-    public void apiExceptionCodeMessageCause() {
-        PageResult<Object> result = exToPageResultApiPluginTestService.apiExceptionCodeMessageCause();
+    public void codeMessageCause() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.codeMessageCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals(1, result.getPageIndex());
         Assertions.assertEquals(20, result.getPageSize());
         Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("SYS_ERROR", result.getErrorCode());
+        Assertions.assertEquals("System error", result.getErrorMessage());
+    }
+
+    @Test
+    public void apiErrorCode() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCode();
+        Assertions.assertFalse(result.isSuccess());
+        Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
+        Assertions.assertEquals("INTERNAL_SYS_ERROR", result.getErrorCode());
+        Assertions.assertNull(result.getErrorMessage());
+    }
+
+    @Test
+    public void apiErrorCodeMessage() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCodeMessage();
+        Assertions.assertFalse(result.isSuccess());
+        Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
+        Assertions.assertEquals("INTERNAL_SYS_ERROR", result.getErrorCode());
+        Assertions.assertEquals("System error", result.getErrorMessage());
+    }
+
+    @Test
+    public void apiErrorCodeCause() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCodeCause();
+        Assertions.assertFalse(result.isSuccess());
+        Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
+        Assertions.assertEquals("INTERNAL_SYS_ERROR", result.getErrorCode());
+        Assertions.assertEquals("java.lang.IllegalStateException: Illegal state", result.getErrorMessage());
+    }
+
+    @Test
+    public void apiErrorCodeMessageCause() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCodeMessageCause();
+        Assertions.assertFalse(result.isSuccess());
+        Assertions.assertNull(result.getData());
+        Assertions.assertEquals(1, result.getPageIndex());
+        Assertions.assertEquals(20, result.getPageSize());
+        Assertions.assertNull(result.getTotalCount());
+        Assertions.assertEquals("INTERNAL_SYS_ERROR", result.getErrorCode());
         Assertions.assertEquals("System error", result.getErrorMessage());
     }
 

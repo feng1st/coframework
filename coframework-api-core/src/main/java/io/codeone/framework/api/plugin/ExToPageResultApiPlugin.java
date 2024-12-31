@@ -1,9 +1,10 @@
 package io.codeone.framework.api.plugin;
 
 import io.codeone.framework.api.API;
+import io.codeone.framework.api.exception.ApiErrorCode;
 import io.codeone.framework.api.exception.CustomErrorMessage;
 import io.codeone.framework.api.response.PageResult;
-import io.codeone.framework.api.util.ApiExceptionUtils;
+import io.codeone.framework.api.util.ApiErrorCodeUtils;
 import io.codeone.framework.common.util.AnnotationUtils;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
@@ -28,8 +29,9 @@ public class ExToPageResultApiPlugin implements Plugin {
         if (returnType != PageResult.class) {
             throw throwable;
         }
-        Throwable cause = ApiExceptionUtils.getCause(throwable);
-        String code = ApiExceptionUtils.getCode(cause);
+        Throwable cause = ApiErrorCodeUtils.getCause(throwable);
+        ApiErrorCode apiErrorCode = ApiErrorCodeUtils.toApiErrorCode(cause);
+        String code = apiErrorCode.getCode();
         String message = cause.getMessage();
         CustomErrorMessage customErrorMessage = AnnotationUtils.getAnnotation(method, CustomErrorMessage.class);
         if (customErrorMessage != null) {

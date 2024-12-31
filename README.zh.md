@@ -35,13 +35,12 @@
 2. 在接口服务上添加 `@API` 注解：
 
 ```java
-
-@API // 类级注解，所有方法生效
+// 类级注解，所有方法生效
+@API
 public class BizApiImpl implements BizApi {
-
-    @API // 方法级注解，单个方法生效
+    // 方法级注解，单个方法生效
+    @API
     public Result<BizData> getData(BizParam param) {
-        // ...
     }
 }
 ```
@@ -62,7 +61,7 @@ public class BizParam extends BaseParam {
 ```java
 // 返回失败结果，而不是抛出异常
 public Result<BizData> getData(BizParam param) {
-    throw new BizException(CODE, MESSAGE);
+    throw new ApiException(ClientErrorCodes.ACCESS_DENIED, message);
 }
 ```
 
@@ -106,10 +105,9 @@ public class BizProcessPlugin implements Plugin {
 3. 应用插件：
 
 ```java
-
-@BizProcess // 通过目标注解启用插件
+// 通过目标注解启用插件
+@BizProcess
 public Result<BizData> getData(BizParam param) {
-    // ...
 }
 ```
 
@@ -196,7 +194,7 @@ public class ChainService {
 2. 定义可扩展接口：
 
 ```java
-
+// 通过@Ability或者@ExtensionPoint注解标注可扩展接口
 @Ability
 public interface BizAbility {
     void execute(BizScenario bizScenario);
@@ -206,12 +204,12 @@ public interface BizAbility {
 3. 提供不同业务场景的扩展实现：
 
 ```java
-
+// 业务身份为"manager"的具体实现
 @Extension(bizId = "manager")
 public class BizAbilityForManager implements BizAbility {
     @Override
     public void execute(BizScenario bizScenario) {
-        // ...
+        // 自定义逻辑
     }
 }
 ```
@@ -222,10 +220,12 @@ public class BizAbilityForManager implements BizAbility {
 
 @Service
 public class BizService {
+    // 通过接口引用
     @Autowired
     private BizAbility bizAbility;
 
     public void executeBizAbility() {
+        // 会路由到BizAbilityForManager
         bizAbility.execute(BizScenario.ofBizId("manager"));
     }
 }
@@ -239,7 +239,7 @@ public class BizService {
 
 ### 2.1 定制异常包装
 
-1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiException`接口，比如继承自`BaseException`。
+1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiErrorCode`接口，或者使用`ApiException`。
    此时`errorCode`会取自`getCode()`。
 2. 如果希望定制结果的`errorMessage`（默认为异常消息），比如对最终用户隐藏技术细节，可以使用`@CustomErrorMessage`注解：
 
@@ -248,33 +248,49 @@ public class BizService {
 @API
 @CustomErrorMessage("系统繁忙，请稍后重试。")
 public Result<BizData> getData(BizParam param) {
-    // ...
 }
 ```
 
-### 2.2 定制调用日志
+### 2.2 指定错误日志等级
+
+`ApiErrorCode.critical`决定了对应日志是`error`还是`warn`。
+可以通过抛出`ApiErrorCode`类型的异常（比如`ApiException`），来指定错误日志等级：
+
+```java
+public Result<BizData> getData(BizParam param) {
+    // warn - ClientErrorCodes.INVALID_ARGS.critical = false
+    throw new ApiException(ClientErrorCodes.INVALID_ARGS, message);
+    // error - ServerErrorCodes.INTERNAL_SYS_ERROR.critical = true
+    throw new ApiException(ServerErrorCodes.INTERNAL_SYS_ERROR, message);
+    // 可以参考ClientErrorCodes和ServerErrorCodes，定制错误日志等级
+    throw new ApiException(MyErrorCodes.MY_CODE, message);
+    // 可以直接传code和critical
+    throw new ApiException(code, critical, message);
+}
+```
+
+### 2.3 定制调用日志
 
 可以通过使用`@Logging`注解，进一步控制调用日志的行为，比如是否记录参数、是否记录返回值等。
 
 ```java
 
 @API
-@Logging(logArgs = false, logResult = false)
+@Logging(logArgs = false, logResult = false, argKvs = {"userId", "#a0?.userId"})
 public Result<BizData> getData(BizParam param) {
-    // ...
 }
 ```
 
 详细的日志配置请参考**6. 日志**部分。
 
-### 2.3 支持现有系统
+### 2.4 支持现有系统
 
 框架支持在现有系统API上应用增强。
 
 1. 可以参考`ArgValidatingApiPlugin`，编写插件为现有参数类型增加校验能力。
 2. 可以参考`ExToResultApiPlugin`，编写插件转化异常为现有结果包装类型。
 3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，
-   可以注册旧模型的`ApiResultConverter`和`ApiExceptionConverter`的Spring bean。
+   可以注册旧模型的`ApiResultConverter`和`ApiErrorCodeConverter`的Spring bean。
 
 ```java
 
@@ -289,10 +305,10 @@ public class MyResultConverter<T> implements ApiResultConverter<MyResult<T>> {
 }
 
 @Component
-public class MyExceptionConverter implements ApiExceptionConverter<MyException> {
+public class MyExceptionConverter implements ApiErrorCodeConverter<MyException> {
     @Override
-    public ApiException convert(MyException source) {
-        return source::getCode;
+    public ApiErrorCode convert(MyException source) {
+        return ApiErrorCode.of("ERR_" + source.getCode(), true);
     }
 }
 ```
@@ -334,7 +350,6 @@ public class MyExceptionConverter implements ApiExceptionConverter<MyException> 
 @Plug(value = Stages.BEFORE_TARGET)
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class BizProcessPlugin implements Plugin {
-    // ...
 }
 ```
 
@@ -348,7 +363,6 @@ public class BizProcessPlugin implements Plugin {
 
 @EnablePlugin({FooPlugin.class, BarPlugin.class})
 public Result<BizData> getData(BizParam param) {
-    // ...
 }
 ```
 
@@ -443,7 +457,6 @@ public class ChainService {
 
 ```java
 private Chainable getChain() {
-    // 整体串行生产消费
     return Sequential.of(
             // 并行生产
             Parallel.of(
@@ -522,11 +535,13 @@ public void run(Input input) {
 {
   // 通过Context.of().chainName("chainName")指定，默认为"anonymous"
   "chain": "chainName",
+  // 节点类名
   "node": "ClassNameOfNode",
   // 业务身份
   "bizId": "bizId",
   // 场景
   "scenario": "scenario",
+  // 执行时间
   "elapsed": 0,
   // 如果链节点抛出异常，则会记录exception
   "exception": "stringOfException",
@@ -555,9 +570,7 @@ public void run() {
 public class Produce implements Chainable {
     @Override
     public boolean execute(Context context) {
-        // ...
         context.log("key", value);
-        // ...
     }
 }
 ```
@@ -598,7 +611,6 @@ public interface Consume extends Chainable {
 // 业务身份为"foo"的Consume接口的实现
 @Extension(bizId = "foo")
 public class ConsumeForFoo implements Consume {
-    // ...
 }
 ```
 
@@ -615,8 +627,9 @@ public class ChainService {
     private Consume consume;
 
     public void run() {
-        Sequential.of(produce, consume)
-                .run(Context.of().bizScenario(BizScenario.ofBizId("foo")));
+        Sequential.of(produce, consume).run(Context.of()
+                // 会路由到ConsumeForFoo
+                .bizScenario(BizScenario.ofBizId("foo")));
     }
 }
 ```
@@ -658,7 +671,6 @@ public interface BizAbility {
 
 @Extension(bizId = "region.branch", scenarios = {"weekday.monday", "weekday.tuesday"})
 public class BizAbilityForBranchMonday implements BizAbility {
-    // ...
 }
 ```
 
@@ -768,7 +780,7 @@ public class BizApiImpl implements BizApi {
         logException = true,
         // 调用是否成功的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
         expSuccess = "#r?.success",
-        // 错误码的SpEL表达式。默认不需要，框架能识别ApiResult、ApiException兼容模型
+        // 错误码的SpEL表达式。默认不需要，框架能识别ApiResult、ApiErrorCode兼容模型
         expCode = "#r?.errorCode",
         // 错误消息的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
         expMessage = "#r?.errorMessage",
@@ -776,7 +788,6 @@ public class BizApiImpl implements BizApi {
         argKvs = {"bizScenario", "#a0?.bizScenario",
                 "userId", "#a0?.userId"})
 public Result<BizData> run(BizParam param) {
-    // ...
 }
 ```
 
@@ -788,11 +799,17 @@ public Result<BizData> run(BizParam param) {
 {
   // 异常：ERROR，失败：WARN，其它：INFO
   "level": "WARN",
+  // 方法名
   "method": "BizService.run",
+  // 是否成功
   "success": false,
+  // 错误码
   "code": "ERROR_CODE",
+  // 错误消息
   "message": "error message",
+  // 执行时间
   "elapsed": 0,
+  // 参数
   "args": {
     "bizScenario": "*|*",
     "userId": 10000

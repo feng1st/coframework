@@ -38,13 +38,12 @@ Here’s how to quickly experience the core features of Co-Framework:
 2. **Apply the `@API` Annotation**:
 
 ```java
-
-@API // Class-level annotation applies to all methods
+// Class-level annotation applies to all methods
+@API
 public class BizApiImpl implements BizApi {
-
-    @API // Method-level annotation applies to a single method
+    // Method-level annotation applies to a single method
+    @API
     public Result<BizData> getData(BizParam param) {
-        // ...
     }
 }
 ```
@@ -65,7 +64,7 @@ public class BizParam extends BaseParam {
 ```java
 // Converts exceptions into API failure responses
 public Result<BizData> getData(BizParam param) {
-    throw new BizException(CODE, MESSAGE);
+    throw new ApiException(ClientErrorCodes.ACCESS_DENIED, message);
 }
 ```
 
@@ -96,7 +95,7 @@ API call logs include results, error codes, and messages automatically—no extr
 2. **Define a Plugin**:
 
 ```java
-
+// Specify the order of the plugin, and the activating target annotations
 @Plug(value = Stages.BEFORE_TARGET, targetAnnotations = BizProcess.class)
 public class BizProcessPlugin implements Plugin {
     @Override
@@ -109,10 +108,9 @@ public class BizProcessPlugin implements Plugin {
 3. **Apply the Plugin**:
 
 ```java
-
-@BizProcess // Activates the plugin via the target annotation
+// Activates the plugin via the target annotation
+@BizProcess
 public Result<BizData> getData(BizParam param) {
-    // ...
 }
 ```
 
@@ -199,7 +197,7 @@ public class ChainService {
 2. **Define an Extensible Interface**:
 
 ```java
-
+// Marks Extensible interface via @Ability or @ExtensionPoint
 @Ability
 public interface BizAbility {
     void execute(BizScenario bizScenario);
@@ -209,7 +207,7 @@ public interface BizAbility {
 3. **Provide Different Implementations**:
 
 ```java
-
+// Specific implementation for bizId "manager"
 @Extension(bizId = "manager")
 public class BizAbilityForManager implements BizAbility {
     @Override
@@ -225,10 +223,12 @@ public class BizAbilityForManager implements BizAbility {
 
 @Service
 public class BizService {
+    // Reference the interface, not implementations
     @Autowired
     private BizAbility bizAbility;
 
     public void executeBizAbility() {
+        // Will route to BizAbilityForManager
         bizAbility.execute(BizScenario.ofBizId("manager"));
     }
 }
@@ -244,7 +244,7 @@ existing systems. Below are the details of these advanced capabilities.
 ### 2.1 Customizing Exception Wrapping
 
 1. **Custom Error Codes**: To customize the `errorCode` in the response (default is the exception class name), implement
-   the `ApiException` interface or extend `BaseException`. The `getCode()` method will define the `errorCode`.
+   the `ApiErrorCode` interface or use `ApiException`. The `getCode()` method will define the `errorCode`.
 
 2. **Custom Error Messages**: To customize the `errorMessage` (default is the exception message), use the
    `@CustomErrorMessage` annotation:
@@ -254,11 +254,29 @@ existing systems. Below are the details of these advanced capabilities.
 @API
 @CustomErrorMessage("System is busy, please try again later.")
 public Result<BizData> getData(BizParam param) {
-    // ...
 }
 ```
 
-### 2.2 Customizing Call Logging
+### 2.2 Specifying Error Log Levels
+
+The `ApiErrorCode.critical` field determines whether the corresponding log is recorded as `error` or `warn`.
+
+You can specify the error log level by throwing an exception of type `ApiErrorCode` (e.g., `ApiException`):
+
+```java
+public Result<BizData> getData(BizParam param) {
+    // warn - ClientErrorCodes.INVALID_ARGS.critical = false
+    throw new ApiException(ClientErrorCodes.INVALID_ARGS, message);
+    // error - ServerErrorCodes.INTERNAL_SYS_ERROR.critical = true
+    throw new ApiException(ServerErrorCodes.INTERNAL_SYS_ERROR, message);
+    // You can customize the error log level by implementing ApiErrorCode, like ClientErrorCodes or ServerErrorCodes
+    throw new ApiException(MyErrorCodes.MY_CODE, message);
+    // Alternatively, you can directly pass the code and critical level
+    throw new ApiException(code, critical, message);
+}
+```
+
+### 2.3 Customizing Call Logging
 
 The `@Logging` annotation provides control over call logging behavior, such as whether to log parameters and return
 values:
@@ -266,15 +284,14 @@ values:
 ```java
 
 @API
-@Logging(logArgs = false, logResult = false)
+@Logging(logArgs = false, logResult = false, argKvs = {"userId", "#a0?.userId"})
 public Result<BizData> getData(BizParam param) {
-    // ...
 }
 ```
 
 For detailed configuration options, refer to the **6. Logging** section.
 
-### 2.3 Integrating with Existing Systems
+### 2.4 Integrating with Existing Systems
 
 The framework supports enhancing APIs in existing systems.
 
@@ -284,7 +301,7 @@ The framework supports enhancing APIs in existing systems.
 2. **Transforming Exceptions into Responses**: Develop a plugin like `ExToResultApiPlugin` to convert exceptions into
    custom response types.
 
-3. **Custom Result and Exception Converters**: Register Spring beans for `ApiResultConverter` and`ApiExceptionConverter`
+3. **Custom Result and Exception Converters**: Register Spring beans for `ApiResultConverter` and`ApiErrorCodeConverter`
    to ensure compatibility with existing models:
 
 ```java
@@ -300,10 +317,10 @@ public class MyResultConverter<T> implements ApiResultConverter<MyResult<T>> {
 }
 
 @Component
-public class MyExceptionConverter implements ApiExceptionConverter<MyException> {
+public class MyExceptionConverter implements ApiErrorCodeConverter<MyException> {
     @Override
-    public ApiException convert(MyException source) {
-        return source::getCode;
+    public ApiErrorCode convert(MyException source) {
+        return ApiErrorCode.of("ERR_" + source.getCode(), true);
     }
 }
 ```
@@ -341,7 +358,6 @@ Execution proceeds like a stack, with later phases being executed first for `aft
 @Plug(value = Stages.BEFORE_TARGET)
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class BizProcessPlugin implements Plugin {
-    // ...
 }
 ```
 
@@ -355,7 +371,6 @@ Enable plugins dynamically using the `@EnablePlugin` annotation:
 
 @EnablePlugin({FooPlugin.class, BarPlugin.class})
 public Result<BizData> getData(BizParam param) {
-    // ...
 }
 ```
 
@@ -485,6 +500,7 @@ public void run(Input input) {
 }
 
 public Output runAndReturn(Input input) {
+    // I.e., returns context.get(Output.class)
     return getChain().run(Context.of(Input.class, input), Output.class);
 }
 ```
@@ -502,8 +518,8 @@ Example of defining `Typed` parameters:
 @Getter
 public enum TypedParamEnum implements Typed {
     INPUT(Input.class),
-    OUTPUT(Output.class);
-
+    OUTPUT(Output.class),
+    ;
     private final Class<?> type;
 }
 ```
@@ -514,7 +530,8 @@ Chains can execute nodes concurrently if a thread pool is provided via the conte
 
 ```java
 public void run(Input input) {
-    getChain().run(Context.of().threadPool(ForkJoinPool.commonPool()));
+    getChain().run(Context.of()
+            .threadPool(ForkJoinPool.commonPool()));
 }
 ```
 
@@ -526,11 +543,13 @@ Chain execution is logged with the following format:
 {
   // Default: "anonymous"
   "chain": "chainName",
+  // Class name of node
   "node": "ClassNameOfNode",
   // Business ID if present
   "bizId": "bizId",
   // Scenario if present
   "scenario": "scenario",
+  // Execution time
   "elapsed": 0,
   // Recorded if an exception occurs
   "exception": "ExceptionString",
@@ -559,9 +578,7 @@ public void run() {
 public class Produce implements Chainable {
     @Override
     public boolean execute(Context context) {
-        // ...
         context.log("key", value);
-        // ...
     }
 }
 ```
@@ -575,6 +592,7 @@ public void run(Input input) {
     getChain().run(
             Context.of(Input.class, input)
                     .onExecute(context -> {
+                        // Logs userId on every node, helping trace the execution of the chain
                         context.ifPresent(Input.class, i -> context.log("userId", i.getUserId()));
                     })
     );
@@ -588,7 +606,7 @@ Chains support extensible nodes that resolve dynamically at runtime based on the
 #### 4.4.1 Defining an Extensible Interface
 
 ```java
-
+// Note that this node is an interface, not an implementation
 @Ability
 public interface Consume extends Chainable {
 }
@@ -597,7 +615,7 @@ public interface Consume extends Chainable {
 #### 4.4.2 Providing Business-Specific Implementations
 
 ```java
-
+// Implementation of node Consume for "foo"
 @Extension(bizId = "foo")
 public class ConsumeForFoo implements Consume {
     @Override
@@ -621,8 +639,9 @@ public class ChainService {
     private Consume consume;
 
     public void run() {
-        Sequential.of(produce, consume)
-                .run(Context.of().bizScenario(BizScenario.ofBizId("foo")));
+        Sequential.of(produce, consume).run(Context.of()
+                // Will route to ConsumeForFoo
+                .bizScenario(BizScenario.ofBizId("foo")));
     }
 }
 ```
@@ -663,10 +682,6 @@ scenario. Use the `@Extension` annotation to define implementations:
 
 @Extension(bizId = "region.branch", scenarios = {"weekday.monday", "weekday.tuesday"})
 public class BizAbilityForBranchMonday implements BizAbility {
-    @Override
-    public void execute(BizScenario bizScenario) {
-        // Custom logic
-    }
 }
 ```
 
@@ -711,6 +726,7 @@ You can manually push a business scenario into the context:
 
 ```java
 public void run() {
+    // There is always a bizScenario available during the execution of process()
     BizScenarioContext.invoke(bizScenario, this::process);
 }
 ```
@@ -744,8 +760,10 @@ public class BizApiImpl implements BizApi {
     @Autowired
     private BizAbility bizAbility;
 
+    // Assumes BizParam implements BizScenarioParam
     public Result<BizData> getData(BizParam param) {
-        bizAbility.runWithoutParam(); // No explicit param needed
+        // The Extensible interface can route without additional parameters
+        bizAbility.runWithoutParam();
     }
 }
 ```
@@ -764,20 +782,27 @@ You can enable call logging using the `@Logging` annotation:
 ```java
 
 @Logging(
-        name = "business",           // Log name (default: class name)
-        logArgs = true,              // Whether to log parameters
-        logResult = true,            // Whether to log return values
-        logException = true,         // Whether to log exceptions
-        expSuccess = "#r?.success",  // SpEL expression for success check
-        expCode = "#r?.errorCode",   // SpEL expression for error code
-        expMessage = "#r?.errorMessage", // SpEL expression for error message
+        // Log name (default: class name)
+        name = "business",
+        // Whether to log parameters (default: true, false if argKvs is not empty)
+        logArgs = true,
+        // Whether to log return values (default: true)
+        logResult = true,
+        // Whether to log exceptions (default: true)
+        logException = true,
+        // SpEL expression for success check, not required if result type is ApiResult compatible
+        expSuccess = "#r?.success",
+        // SpEL expression for error code, not required if result/exception type is ApiResult/ApiErrorCode compatible
+        expCode = "#r?.errorCode",
+        // SpEL expression for error message, not required if result type is ApiResult compatible
+        expMessage = "#r?.errorMessage",
+        // Key-value pairs of important arguments (key: String, value: SpEL expression)
         argKvs = {
                 "bizScenario", "#a0?.bizScenario",
                 "userId", "#a0?.userId"
         }
 )
 public Result<BizData> run(BizParam param) {
-    // Business logic
 }
 ```
 

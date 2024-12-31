@@ -58,7 +58,7 @@ public @interface Logging {
      * SpEL expression to determine the error code.
      *
      * <p>By default, the framework extracts the error code from {@code ApiResult}
-     * compatible results or exceptions.
+     * compatible results or {@code ApiErrorCode} compatible exceptions.
      *
      * <p>Use {@code r} to reference the return value, e.g., {@code "#r?.errorCode"}.
      */
@@ -77,10 +77,11 @@ public @interface Logging {
     /**
      * Key-value pairs for argument logging, using SpEL expressions.
      *
-     * <p>Specify key-value pairs as {@code "name1", "expression1"}, etc.
+     * <p>Specify key-value pairs as {@code "name1", "expression1", "name2", "expression2"},
+     * etc.
      *
-     * <p>Reference arguments using {@code a0}, {@code p0}, the result as {@code
-     * r}, and exceptions as {@code e} or {@code t}, e.g., {@code "#a0?.userId"}.
+     * <p>Reference arguments using {@code a0}, {@code a1}, or {@code p0}, {@code
+     * p1}, and the result as {@code r}, e.g., {@code "#a0?.userId"}.
      */
     String[] argKvs() default {};
 }

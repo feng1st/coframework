@@ -14,7 +14,7 @@ import java.util.List;
  * @param <T> the type of data in the paginated set
  */
 @Data
-public class Page<T> implements PageData<T> {
+public class Page<T> {
 
     private List<T> data;
 
@@ -25,14 +25,14 @@ public class Page<T> implements PageData<T> {
     private Long totalCount;
 
     /**
-     * Creates a {@code Page} instance from the given {@link PageData}.
+     * Creates a {@code Page} instance from the given {@link Page}.
      *
-     * @param pageData the page data to use
-     * @param <T>      the type of the data items
+     * @param page the page data to use
+     * @param <T>  the type of the data items
      * @return a new {@code Page} instance
      */
-    public static <T> Page<T> of(PageData<T> pageData) {
-        return of(pageData.getData(), pageData.getPageIndex(), pageData.getPageSize(), pageData.getTotalCount());
+    public static <T> Page<T> of(Page<T> page) {
+        return of(page.getData(), page.getPageIndex(), page.getPageSize(), page.getTotalCount());
     }
 
     /**
@@ -98,5 +98,17 @@ public class Page<T> implements PageData<T> {
      */
     public void setPageSize(int pageSize) {
         this.pageSize = Math.max(pageSize, PageConstants.MIN_PAGE_SIZE);
+    }
+
+    /**
+     * Checks if there are more pages available after the current page.
+     *
+     * @return true if more pages are available, false otherwise
+     */
+    public Boolean isHasMore() {
+        if (totalCount == null) {
+            return null;
+        }
+        return (long) pageSize * pageIndex < totalCount;
     }
 }

@@ -1,6 +1,7 @@
 package io.codeone.framework.api.converter;
 
 import io.codeone.framework.api.response.ApiResult;
+import io.codeone.framework.api.response.Page;
 import io.codeone.framework.api.response.PageResult;
 import io.codeone.framework.api.response.Result;
 import io.codeone.framework.api.util.ApiResultUtils;
@@ -24,10 +25,17 @@ class ApiResultConverterTest {
     }
 
     @Test
-    public void pageResult() {
+    public void pageResultSuccess() {
         PageResult<?> result = PageResult.success(1, 20);
         ApiResult<?> apiResult = ApiResultUtils.toApiResult(result);
-        Assertions.assertEquals(result, apiResult);
+        Assertions.assertEquals(Result.success(Page.of(1, 20)), apiResult);
+    }
+
+    @Test
+    public void pageResultFailure() {
+        PageResult<?> result = PageResult.failure("CODE", "Message");
+        ApiResult<?> apiResult = ApiResultUtils.toApiResult(result);
+        Assertions.assertEquals(Result.failure("CODE", "Message"), apiResult);
     }
 
     @Test

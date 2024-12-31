@@ -1,49 +1,42 @@
 package io.codeone.framework.api.response;
 
-import io.codeone.framework.api.constant.PageConstants;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 /**
- * Represents a paginated result that includes metadata for pagination.
+ * This class provides paginated results according to specific interface conventions.
  *
- * <p>Note: {@code Result<Page<T>>} is the recommended approach for returning paginated
- * results and is generally preferred over {@code PageResult<T>}.
- *
- * <p>When a service or method is annotated with {@code API} and returns a {@code
- * PageResult} type, any exception thrown during the operation will be automatically
- * transformed by the framework into a failed {@code PageResult} instance.
+ * <p>Note that {@code PageResult} is not an {@code ApiResult}. The only native
+ * {@code ApiResult} supported by this framework is {@code Result}. It is recommended
+ * to return paginated results in the format of {@code Result<Page<T>>}. {@code
+ * PageResult<T>} is used solely to adhere to certain interface conventions.
  *
  * @param <T> the type of data in the paginated result
  * @see Page
  */
 @Data
-public class PageResult<T> implements ApiResult<List<T>>, PageData<T> {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class PageResult<T> extends Page<T> {
 
     private boolean success;
-
-    private List<T> data;
-
-    private int pageIndex = PageConstants.START_PAGE_INDEX;
-
-    private int pageSize = PageConstants.DEFAULT_PAGE_SIZE;
-
-    private Long totalCount;
 
     private String errorCode;
 
     private String errorMessage;
 
     /**
-     * Creates a successful paginated result from the given {@link PageData}.
+     * Creates a successful paginated result from the given {@link Page}.
      *
-     * @param pageData the page data to use
-     * @param <T>      the type of the data items
+     * @param page the page data to use
+     * @param <T>  the type of the data items
      * @return a new successful {@code PageResult} instance
      */
-    public static <T> PageResult<T> success(PageData<T> pageData) {
-        return success(pageData.getData(), pageData.getPageIndex(), pageData.getPageSize(), pageData.getTotalCount());
+    public static <T> PageResult<T> success(Page<T> page) {
+        return success(page.getData(), page.getPageIndex(), page.getPageSize(), page.getTotalCount());
     }
 
     /**
@@ -108,23 +101,5 @@ public class PageResult<T> implements ApiResult<List<T>>, PageData<T> {
         result.setErrorCode(errorCode);
         result.setErrorMessage(errorMessage);
         return result;
-    }
-
-    /**
-     * Sets the page index, ensuring it is not below the starting page index.
-     *
-     * @param pageIndex the page index to set
-     */
-    public void setPageIndex(int pageIndex) {
-        this.pageIndex = Math.max(pageIndex, PageConstants.START_PAGE_INDEX);
-    }
-
-    /**
-     * Sets the page size, ensuring it is not below the minimum page size.
-     *
-     * @param pageSize the page size to set
-     */
-    public void setPageSize(int pageSize) {
-        this.pageSize = Math.max(pageSize, PageConstants.MIN_PAGE_SIZE);
     }
 }

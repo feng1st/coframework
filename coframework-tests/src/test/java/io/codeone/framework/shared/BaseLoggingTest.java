@@ -1,4 +1,4 @@
-package io.codeone.framework.logging.shared;
+package io.codeone.framework.shared;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;

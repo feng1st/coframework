@@ -56,7 +56,7 @@ public class LoggingExpressionParser {
      */
     private StandardEvaluationContext lazyLoadContext() {
         if (context == null) {
-            Map<String, Object> variables = new HashMap<>(args.length * 2 + 2);
+            Map<String, Object> variables = new HashMap<>(args.length * 2 + 1);
             for (int i = 0; i < args.length; i++) {
                 if (args[i] != null) {
                     variables.put("a" + i, args[i]);

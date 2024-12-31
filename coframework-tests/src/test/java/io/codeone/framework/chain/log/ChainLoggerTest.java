@@ -5,7 +5,7 @@ import io.codeone.framework.chain.composite.Sequential;
 import io.codeone.framework.chain.context.Context;
 import io.codeone.framework.common.log.util.LogUtils;
 import io.codeone.framework.ext.BizScenario;
-import io.codeone.framework.logging.shared.BaseLoggingTest;
+import io.codeone.framework.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

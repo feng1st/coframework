@@ -1,10 +1,10 @@
 package io.codeone.framework.logging.plugin;
 
 import ch.qos.logback.classic.Level;
+import io.codeone.framework.api.exception.ApiException;
 import io.codeone.framework.api.response.Result;
-import io.codeone.framework.api.shared.BizException;
 import io.codeone.framework.common.log.util.LogUtils;
-import io.codeone.framework.logging.shared.BaseLoggingTest;
+import io.codeone.framework.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,13 +67,13 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
-    public void nonApiException() {
+    public void nonApiErrorCode() {
         Assertions.assertThrows(IllegalStateException.class,
-                () -> loggingPluginTestService.nonApiException(1, 2));
+                () -> loggingPluginTestService.nonApiErrorCode(1, 2));
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.ERROR,
                 IllegalStateException.class,
-                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.nonApiException\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.nonApiErrorCode\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
     }
 
     @Test
@@ -105,21 +105,57 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
-    public void loggingApiException() {
-        loggingPluginTestService.loggingApiException(1, 2);
+    public void loggingApiErrorCode() {
+        loggingPluginTestService.loggingApiErrorCode(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.WARN,
+                ApiException.class,
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingApiErrorCode\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
+    }
+
+    @Test
+    public void loggingApiErrorCodeCritical() {
+        loggingPluginTestService.loggingApiErrorCodeCritical(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.ERROR,
-                BizException.class,
-                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingApiException\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.shared.BizException: Message\"}");
+                ApiException.class,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingApiErrorCodeCritical\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
+    }
+
+    @Test
+    public void loggingInvalidState() {
+        loggingPluginTestService.loggingInvalidState(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.WARN,
+                ApiException.class,
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingInvalidState\",\"success\":false,\"code\":\"INVALID_STATE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
+    }
+
+    @Test
+    public void loggingServiceUnavailable() {
+        loggingPluginTestService.loggingServiceUnavailable(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.WARN,
+                ApiException.class,
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingServiceUnavailable\",\"success\":false,\"code\":\"SERVICE_UNAVAILABLE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
+    }
+
+    @Test
+    public void loggingExternalSysError() {
+        loggingPluginTestService.loggingExternalSysError(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.ERROR,
+                ApiException.class,
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingExternalSysError\",\"success\":false,\"code\":\"EXTERNAL_SYS_ERROR\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
     }
 
     @Test
     public void loggingIllegalArgumentException() {
         loggingPluginTestService.loggingIllegalArgumentException(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
-                Level.ERROR,
+                Level.WARN,
                 IllegalArgumentException.class,
-                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingIllegalArgumentException\",\"success\":false,\"code\":\"INVALID_ARGS\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalArgumentException: Message\"}");
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingIllegalArgumentException\",\"success\":false,\"code\":\"INVALID_ARGS\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalArgumentException: Message\"}");
     }
 
     @Test

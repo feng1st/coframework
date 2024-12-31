@@ -19,9 +19,8 @@ class PageTest {
     }
 
     @Test
-    public void ofPageData() {
-        PageData<Object> pageData = Page.of(Arrays.asList(1, 2, 3), 5, 3, 100L);
-        Page<Object> page = Page.of(pageData);
+    public void ofPage() {
+        Page<Object> page = Page.of(Page.of(Arrays.asList(1, 2, 3), 5, 3, 100L));
         Assertions.assertEquals(Arrays.asList(1, 2, 3), page.getData());
         Assertions.assertEquals(5, page.getPageIndex());
         Assertions.assertEquals(3, page.getPageSize());

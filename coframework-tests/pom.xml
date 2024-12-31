@@ -18,7 +18,23 @@
         </dependency>
         <dependency>
             <groupId>io.codeone</groupId>
-            <artifactId>coframework-starter</artifactId>
+            <artifactId>coframework-plugin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-api-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-chain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.codeone</groupId>
+            <artifactId>coframework-ext</artifactId>
         </dependency>
 
         <dependency>
