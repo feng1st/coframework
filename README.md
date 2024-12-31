@@ -52,6 +52,7 @@ public class BizApiImpl implements BizApi {
 
 ```java
 public class BizParam extends BaseParam {
+    // Validates arguments and aborts API invocation if validation fails
     @Override
     public void validate() {
         Validator.requireNonNull(userId, "userId is null");
@@ -62,7 +63,7 @@ public class BizParam extends BaseParam {
 4. **Automatic Exception Handling**:
 
 ```java
-// Converts exceptions into API failure responses
+// Returns a failed response Result.failure("ACCESS_DENIED", message) instead of throwing an exception
 public Result<BizData> getData(BizParam param) {
     throw new ApiException(ClientErrorCodes.ACCESS_DENIED, message);
 }

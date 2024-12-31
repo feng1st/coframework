@@ -49,6 +49,7 @@ public class BizApiImpl implements BizApi {
 
 ```java
 public class BizParam extends BaseParam {
+    // 校验参数，如果失败则中止API调用
     @Override
     public void validate() {
         Validator.requireNonNull(userId, "userId is null");
@@ -59,7 +60,7 @@ public class BizParam extends BaseParam {
 4. 异常自动转化为失败结果：
 
 ```java
-// 返回失败结果，而不是抛出异常
+// 返回失败结果Result.failure("ACCESS_DENIED", message)，而不是抛出异常
 public Result<BizData> getData(BizParam param) {
     throw new ApiException(ClientErrorCodes.ACCESS_DENIED, message);
 }
