@@ -2,7 +2,6 @@ package io.codeone.framework.chain.flow;
 
 import io.codeone.framework.chain.Chainable;
 import io.codeone.framework.chain.context.Context;
-import lombok.NoArgsConstructor;
 
 /**
  * Represents a chainable unit that performs no operation.
@@ -10,8 +9,16 @@ import lombok.NoArgsConstructor;
  * <p>This unit always returns {@code true} and continues the chain without any
  * side effects.
  */
-@NoArgsConstructor(staticName = "of")
-public class Empty implements Chainable {
+public interface Empty extends Chainable {
+
+    /**
+     * Creates a new {@code Empty} instance.
+     *
+     * @return a new {@code Empty} instance
+     */
+    static Empty of() {
+        return new PlainEmpty();
+    }
 
     /**
      * Executes the chainable unit. Always returns {@code true}.
@@ -20,7 +27,7 @@ public class Empty implements Chainable {
      * @return {@code true}, always
      */
     @Override
-    public boolean execute(Context context) {
+    default boolean execute(Context context) {
         // Continue chain
         return true;
     }
@@ -32,8 +39,14 @@ public class Empty implements Chainable {
      * @return {@code true}, always
      */
     @Override
-    public boolean run(Context context) {
+    default boolean run(Context context) {
         // Continue chain
         return true;
+    }
+
+    /**
+     * A plain implementation of {@link Empty}.
+     */
+    class PlainEmpty implements Empty {
     }
 }
