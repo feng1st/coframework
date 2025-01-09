@@ -1,5 +1,6 @@
-package io.codeone.framework.api.converter;
+package io.codeone.framework.api.converter.support;
 
+import io.codeone.framework.api.converter.ApiErrorCodeConverter;
 import io.codeone.framework.api.exception.ApiErrorCode;
 import io.codeone.framework.api.exception.ClientErrorCodes;
 import org.springframework.stereotype.Component;
