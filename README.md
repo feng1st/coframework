@@ -294,34 +294,62 @@ For detailed configuration options, refer to the **6. Logging** section.
 
 ### 2.4 Integrating with Existing Systems
 
-The framework supports enhancing APIs in existing systems.
+The framework supports enhancing existing system APIs through various types of `Converter` implementations.
 
-1. **Adding Parameter Validation**: Create a plugin similar to `ArgValidatingApiPlugin` to add validation for existing
-   parameter types.
-
-2. **Transforming Exceptions into Responses**: Develop a plugin like `ExToResultApiPlugin` to convert exceptions into
-   custom response types.
-
-3. **Custom Result and Exception Converters**: Register Spring beans for `ApiResultConverter` and`ApiErrorConverter`
-   to ensure compatibility with existing models:
+1. **`ApiParamConverter`**: Converts legacy API parameters with validation capabilities into `ApiParam`, enabling
+   automatic activation via `@API`:
 
 ```java
 
 @Component
-public class MyResultConverter<T> implements ApiResultConverter<MyResult<T>> {
+public class MyParamApiParamConverter implements ApiParamConverter<MyParam> {
     @Override
-    public ApiResult<T> convert(MyResult<T> source) {
+    public ApiParam convert(MyParam source) {
+        return source::check;
+    }
+}
+```
+
+2. **`ApiResultConverter`**: Transforms the return type of legacy APIs into `ApiResult` to accurately log success, error
+   codes, and error messages:
+
+```java
+
+@Component
+public class MyResultApiResultConverter implements ApiResultConverter<MyResult<?>> {
+    @Override
+    public ApiResult<?> convert(MyResult<?> source) {
         return source.isSuccess()
                 ? Result.success(source.getData())
                 : Result.failure(source.getErrorCode(), source.getErrorMessage());
     }
 }
+```
+
+3. **`ApiErrorConverter`**: Converts exceptions into `ApiError`, allowing for proper logging levels, recording error
+   codes, and wrapping failure results:
+
+```java
 
 @Component
-public class MyExceptionConverter implements ApiErrorConverter<MyException> {
+public class MyExceptionApiErrorConverter implements ApiErrorConverter<MyException> {
     @Override
     public ApiError convert(MyException source) {
         return ApiError.of("ERR_" + source.getCode(), true, source.getMessage());
+    }
+}
+```
+
+4. **`FailureConverter`**: Wraps `ApiError` into the legacy API response model to return failure results instead of
+   throwing exceptions:
+
+```java
+
+@Component
+public class MyExceptionFailureConverter implements FailureConverter<MyResult<?>> {
+    @Override
+    public MyResult<?> convert(ApiError source) {
+        return MyResult.failed(source.getErrorCode(), source.getErrorMessage());
     }
 }
 ```

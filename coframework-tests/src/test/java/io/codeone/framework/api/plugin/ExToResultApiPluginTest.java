@@ -110,4 +110,10 @@ class ExToResultApiPluginTest {
         Assertions.assertEquals("IllegalStateException", result.getErrorCode());
         Assertions.assertEquals("Custom error message", result.getErrorMessage());
     }
+
+    @Test
+    public void voidResult() {
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> exToResultApiPluginTestService.voidResult());
+    }
 }

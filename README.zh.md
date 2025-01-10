@@ -286,30 +286,58 @@ public Result<BizData> getData(BizParam param) {
 
 ### 2.4 支持现有系统
 
-框架支持在现有系统API上应用增强。
+框架通过不同类型的`Converter`，支持在现有系统API上应用增强。
 
-1. 可以参考`ArgValidatingApiPlugin`，编写插件为现有参数类型增加校验能力。
-2. 可以参考`ExToResultApiPlugin`，编写插件转化异常为现有结果包装类型。
-3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，
-   可以注册旧模型的`ApiResultConverter`和`ApiErrorConverter`的Spring bean。
+1. `ApiParamConverter`将具备校验能力的旧接口参数，转换成`ApiParam`，以支持通过`@API`自动启用：
 
 ```java
 
 @Component
-public class MyResultConverter<T> implements ApiResultConverter<MyResult<T>> {
+public class MyParamApiParamConverter implements ApiParamConverter<MyParam> {
     @Override
-    public ApiResult<T> convert(MyResult<T> source) {
+    public ApiParam convert(MyParam source) {
+        return source::check;
+    }
+}
+```
+
+2. `ApiResultConverter`将旧接口返回类型，转换成`ApiResult`，以准确记录调用是否成功、错误码、错误消息日志：
+
+```java
+
+@Component
+public class MyResultApiResultConverter implements ApiResultConverter<MyResult<?>> {
+    @Override
+    public ApiResult<?> convert(MyResult<?> source) {
         return source.isSuccess()
                 ? Result.success(source.getData())
                 : Result.failure(source.getErrorCode(), source.getErrorMessage());
     }
 }
+```
+
+3. `ApiErrorConverter`将异常转换成`ApiError`，以确定日志等级、记录错误码到日志、以及包装失败结果：
+
+```java
 
 @Component
-public class MyExceptionConverter implements ApiErrorConverter<MyException> {
+public class MyExceptionApiErrorConverter implements ApiErrorConverter<MyException> {
     @Override
     public ApiError convert(MyException source) {
         return ApiError.of("ERR_" + source.getCode(), true, source.getMessage());
+    }
+}
+```
+
+4. `FailureConverter`将`ApiError`包装为旧接口返回模型，返回失败结果，而不是抛出异常：
+
+```java
+
+@Component
+public class MyExceptionFailureConverter implements FailureConverter<MyResult<?>> {
+    @Override
+    public MyResult<?> convert(ApiError source) {
+        return MyResult.failed(source.getErrorCode(), source.getErrorMessage());
     }
 }
 ```

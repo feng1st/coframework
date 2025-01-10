@@ -5,11 +5,11 @@ import io.codeone.framework.api.response.Result;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApiResultConverterTestLegacyResultConverter<T>
-        implements ApiResultConverter<ApiResultConverterTestLegacyResult<T>> {
+public class ApiResultConverterTestLegacyResultConverter
+        implements ApiResultConverter<ApiResultConverterTestLegacyResult<?>> {
 
     @Override
-    public ApiResult<T> convert(ApiResultConverterTestLegacyResult<T> source) {
+    public ApiResult<?> convert(ApiResultConverterTestLegacyResult<?> source) {
         return source.isSucc()
                 ? Result.success(source.getData())
                 : Result.failure(source.getErrCode(), source.getErrMsg());

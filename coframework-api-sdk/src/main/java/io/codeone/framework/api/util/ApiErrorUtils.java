@@ -8,24 +8,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Utility class for handling {@link ApiError}.
+ * Utility for extracting and converting exceptions to {@link ApiError}.
  *
- * <p>Provides methods to extract and convert exceptions to {@link ApiError},
- * and retrieve error codes for service operations.
+ * <p>Supports {@code ApiErrorConverter} integration.
  */
 @UtilityClass
 public class ApiErrorUtils {
 
     /**
-     * Conversion service for converting exceptions to {@link ApiError}.
+     * Conversion service for {@link ApiError}.
      */
     public final GenericConversionService CONVERSION_SERVICE = new GenericConversionService();
 
     /**
-     * Extracts the underlying cause of the given throwable.
+     * Converts a throwable to its root cause {@link ApiError}.
      *
-     * @param throwable the throwable to analyze
-     * @return the root cause throwable or null if the input is null
+     * @param throwable the throwable to analyze, may be null
+     * @return the {@link ApiError}, or a default instance if conversion fails
      */
     public ApiError getCause(Throwable throwable) {
         if (throwable == null) {

@@ -4,11 +4,11 @@ import io.codeone.framework.api.response.ApiResult;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApiResultConverterTestVoidResultConverter<T>
-        implements ApiResultConverter<ApiResultConverterTestVoidResult<T>> {
+public class ApiResultConverterTestVoidResultConverter
+        implements ApiResultConverter<ApiResultConverterTestVoidResult<?>> {
 
     @Override
-    public ApiResult<T> convert(ApiResultConverterTestVoidResult<T> source) {
+    public ApiResult<?> convert(ApiResultConverterTestVoidResult<?> source) {
         return null;
     }
 }

@@ -5,15 +5,15 @@ import lombok.experimental.UtilityClass;
 import org.springframework.core.convert.support.GenericConversionService;
 
 /**
- * Utility class for handling {@link ApiResult} operations.
+ * Utility class for {@link ApiResult} conversions.
  *
- * <p>Provides methods to convert objects to {@link ApiResult} for service responses.
+ * <p>Supports {@code ApiResultConverter} integration.
  */
 @UtilityClass
 public class ApiResultUtils {
 
     /**
-     * Conversion service for converting objects to {@link ApiResult}.
+     * Conversion service for {@link ApiResult}.
      */
     public final GenericConversionService CONVERSION_SERVICE = new GenericConversionService();
 

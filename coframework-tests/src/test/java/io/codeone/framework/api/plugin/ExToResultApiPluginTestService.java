@@ -59,4 +59,8 @@ public class ExToResultApiPluginTestService {
     public Result<Object> customErrorMessage() {
         throw new IllegalStateException("Illegal state");
     }
+
+    public ExToResultApiPluginTestVoidResult voidResult() {
+        throw new IllegalStateException();
+    }
 }
