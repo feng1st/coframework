@@ -58,7 +58,7 @@ public @interface Logging {
      * SpEL expression to determine the error code.
      *
      * <p>By default, the framework extracts the error code from {@code ApiResult}
-     * compatible results or {@code ApiErrorCode} compatible exceptions.
+     * compatible results or {@code ApiError} compatible exceptions.
      *
      * <p>Use {@code r} to reference the return value, e.g., {@code "#r?.errorCode"}.
      */

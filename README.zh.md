@@ -240,7 +240,7 @@ public class BizService {
 
 ### 2.1 定制异常包装
 
-1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiErrorCode`接口，或者使用`ApiException`。
+1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiError`接口，或者使用`ApiException`。
    此时`errorCode`会取自`getCode()`。
 2. 如果希望定制结果的`errorMessage`（默认为异常消息），比如对最终用户隐藏技术细节，可以使用`@CustomErrorMessage`注解：
 
@@ -254,8 +254,8 @@ public Result<BizData> getData(BizParam param) {
 
 ### 2.2 指定错误日志等级
 
-`ApiErrorCode.critical`决定了对应日志是`error`还是`warn`。
-可以通过抛出`ApiErrorCode`类型的异常（比如`ApiException`），来指定错误日志等级：
+`ApiError.critical`决定了对应日志是`error`还是`warn`。
+可以通过抛出`ApiError`类型的异常（比如`ApiException`），来指定错误日志等级：
 
 ```java
 public Result<BizData> getData(BizParam param) {
@@ -291,7 +291,7 @@ public Result<BizData> getData(BizParam param) {
 1. 可以参考`ArgValidatingApiPlugin`，编写插件为现有参数类型增加校验能力。
 2. 可以参考`ExToResultApiPlugin`，编写插件转化异常为现有结果包装类型。
 3. 为了异常转失败结果、日志功能能正确识别旧模型的调用是否成功、错误码和错误消息等信息，
-   可以注册旧模型的`ApiResultConverter`和`ApiErrorCodeConverter`的Spring bean。
+   可以注册旧模型的`ApiResultConverter`和`ApiErrorConverter`的Spring bean。
 
 ```java
 
@@ -306,10 +306,10 @@ public class MyResultConverter<T> implements ApiResultConverter<MyResult<T>> {
 }
 
 @Component
-public class MyExceptionConverter implements ApiErrorCodeConverter<MyException> {
+public class MyExceptionConverter implements ApiErrorConverter<MyException> {
     @Override
-    public ApiErrorCode convert(MyException source) {
-        return ApiErrorCode.of("ERR_" + source.getCode(), true);
+    public ApiError convert(MyException source) {
+        return ApiError.of("ERR_" + source.getCode(), true, source.getMessage());
     }
 }
 ```
@@ -781,7 +781,7 @@ public class BizApiImpl implements BizApi {
         logException = true,
         // 调用是否成功的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
         expSuccess = "#r?.success",
-        // 错误码的SpEL表达式。默认不需要，框架能识别ApiResult、ApiErrorCode兼容模型
+        // 错误码的SpEL表达式。默认不需要，框架能识别ApiResult、ApiError兼容模型
         expCode = "#r?.errorCode",
         // 错误消息的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
         expMessage = "#r?.errorMessage",

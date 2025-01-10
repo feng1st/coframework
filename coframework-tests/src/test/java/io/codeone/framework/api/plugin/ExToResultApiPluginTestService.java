@@ -3,7 +3,7 @@ package io.codeone.framework.api.plugin;
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.exception.ApiException;
 import io.codeone.framework.api.exception.CustomErrorMessage;
-import io.codeone.framework.api.exception.ServerErrorCodes;
+import io.codeone.framework.api.exception.ServerErrors;
 import io.codeone.framework.api.response.Result;
 import org.springframework.stereotype.Service;
 
@@ -35,22 +35,22 @@ public class ExToResultApiPluginTestService {
         throw new ApiException("SYS_ERROR", false, "System error", new IllegalStateException("Illegal state"));
     }
 
-    public Result<Object> apiErrorCode() {
-        throw new ApiException(ServerErrorCodes.SERVICE_UNAVAILABLE);
+    public Result<Object> apiError() {
+        throw new ApiException(ServerErrors.SERVICE_UNAVAILABLE);
     }
 
-    public Result<Object> apiErrorCodeMessage() {
-        throw new ApiException(ServerErrorCodes.SERVICE_UNAVAILABLE,
+    public Result<Object> apiErrorMessage() {
+        throw new ApiException(ServerErrors.SERVICE_UNAVAILABLE,
                 "System error");
     }
 
-    public Result<Object> apiErrorCodeCause() {
-        throw new ApiException(ServerErrorCodes.SERVICE_UNAVAILABLE,
+    public Result<Object> apiErrorCause() {
+        throw new ApiException(ServerErrors.SERVICE_UNAVAILABLE,
                 new IllegalStateException("Illegal state"));
     }
 
-    public Result<Object> apiErrorCodeMessageCause() {
-        throw new ApiException(ServerErrorCodes.SERVICE_UNAVAILABLE,
+    public Result<Object> apiErrorMessageCause() {
+        throw new ApiException(ServerErrors.SERVICE_UNAVAILABLE,
                 "System error",
                 new IllegalStateException("Illegal state"));
     }

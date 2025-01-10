@@ -67,13 +67,13 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
-    public void nonApiErrorCode() {
+    public void nonApiError() {
         Assertions.assertThrows(IllegalStateException.class,
-                () -> loggingPluginTestService.nonApiErrorCode(1, 2));
+                () -> loggingPluginTestService.nonApiError(1, 2));
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.ERROR,
                 IllegalStateException.class,
-                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.nonApiErrorCode\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.nonApiError\",\"success\":false,\"code\":\"IllegalStateException\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"java.lang.IllegalStateException: Message\"}");
     }
 
     @Test
@@ -105,21 +105,21 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
-    public void loggingApiErrorCode() {
-        loggingPluginTestService.loggingApiErrorCode(1, 2);
+    public void loggingApiError() {
+        loggingPluginTestService.loggingApiError(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.WARN,
                 ApiException.class,
-                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingApiErrorCode\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
+                "{\"level\":\"WARN\",\"method\":\"LoggingPluginTestService.loggingApiError\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
     }
 
     @Test
-    public void loggingApiErrorCodeCritical() {
-        loggingPluginTestService.loggingApiErrorCodeCritical(1, 2);
+    public void loggingApiErrorCritical() {
+        loggingPluginTestService.loggingApiErrorCritical(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.ERROR,
                 ApiException.class,
-                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingApiErrorCodeCritical\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
+                "{\"level\":\"ERROR\",\"method\":\"LoggingPluginTestService.loggingApiErrorCritical\",\"success\":false,\"code\":\"CODE\",\"message\":\"Message\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"exception\":\"io.codeone.framework.api.exception.ApiException: Message\"}");
     }
 
     @Test

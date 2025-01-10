@@ -245,7 +245,7 @@ existing systems. Below are the details of these advanced capabilities.
 ### 2.1 Customizing Exception Wrapping
 
 1. **Custom Error Codes**: To customize the `errorCode` in the response (default: the exception class name), implement
-   the `ApiErrorCode` interface or use `ApiException`. The `errorCode` will be derived from the `getCode()` method.
+   the `ApiError` interface or use `ApiException`. The `errorCode` will be derived from the `getCode()` method.
 
 2. **Custom Error Messages**: To customize the `errorMessage` in the response (default: the exception message), such as
    hiding technical details from end users, use the `@CustomErrorMessage` annotation:
@@ -260,9 +260,9 @@ public Result<BizData> getData(BizParam param) {
 
 ### 2.2 Specifying Error Log Levels
 
-The `ApiErrorCode.critical` field determines whether the corresponding log is recorded as `error` or `warn`.
+The `ApiError.critical` field determines whether the corresponding log is recorded as `error` or `warn`.
 
-You can specify the error log level by throwing an exception of type `ApiErrorCode` (e.g., `ApiException`):
+You can specify the error log level by throwing an exception of type `ApiError` (e.g., `ApiException`):
 
 ```java
 public Result<BizData> getData(BizParam param) {
@@ -270,7 +270,7 @@ public Result<BizData> getData(BizParam param) {
     throw new ApiException(ClientErrorCodes.INVALID_ARGS, message);
     // error - ServerErrorCodes.INTERNAL_SYS_ERROR.critical = true
     throw new ApiException(ServerErrorCodes.INTERNAL_SYS_ERROR, message);
-    // You can customize the error log level by implementing ApiErrorCode, like ClientErrorCodes or ServerErrorCodes
+    // You can customize the error log level by implementing ApiError, like ClientErrorCodes or ServerErrorCodes
     throw new ApiException(MyErrorCodes.MY_CODE, message);
     // Alternatively, you can directly pass the code and critical level
     throw new ApiException(code, critical, message);
@@ -302,7 +302,7 @@ The framework supports enhancing APIs in existing systems.
 2. **Transforming Exceptions into Responses**: Develop a plugin like `ExToResultApiPlugin` to convert exceptions into
    custom response types.
 
-3. **Custom Result and Exception Converters**: Register Spring beans for `ApiResultConverter` and`ApiErrorCodeConverter`
+3. **Custom Result and Exception Converters**: Register Spring beans for `ApiResultConverter` and`ApiErrorConverter`
    to ensure compatibility with existing models:
 
 ```java
@@ -318,10 +318,10 @@ public class MyResultConverter<T> implements ApiResultConverter<MyResult<T>> {
 }
 
 @Component
-public class MyExceptionConverter implements ApiErrorCodeConverter<MyException> {
+public class MyExceptionConverter implements ApiErrorConverter<MyException> {
     @Override
-    public ApiErrorCode convert(MyException source) {
-        return ApiErrorCode.of("ERR_" + source.getCode(), true);
+    public ApiError convert(MyException source) {
+        return ApiError.of("ERR_" + source.getCode(), true, source.getMessage());
     }
 }
 ```
@@ -793,7 +793,7 @@ You can enable call logging using the `@Logging` annotation:
         logException = true,
         // SpEL expression for success check, not required if result type is ApiResult compatible
         expSuccess = "#r?.success",
-        // SpEL expression for error code, not required if result/exception type is ApiResult/ApiErrorCode compatible
+        // SpEL expression for error code, not required if result/exception type is ApiResult/ApiError compatible
         expCode = "#r?.errorCode",
         // SpEL expression for error message, not required if result type is ApiResult compatible
         expMessage = "#r?.errorMessage",

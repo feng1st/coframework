@@ -2,9 +2,9 @@ package io.codeone.framework.logging.plugin;
 
 import io.codeone.framework.api.API;
 import io.codeone.framework.api.exception.ApiException;
-import io.codeone.framework.api.exception.ClientErrorCodes;
+import io.codeone.framework.api.exception.ClientErrors;
 import io.codeone.framework.api.exception.CustomErrorMessage;
-import io.codeone.framework.api.exception.ServerErrorCodes;
+import io.codeone.framework.api.exception.ServerErrors;
 import io.codeone.framework.api.response.Page;
 import io.codeone.framework.api.response.PageResult;
 import io.codeone.framework.api.response.Result;
@@ -45,7 +45,7 @@ public class LoggingPluginTestService {
     }
 
     @API
-    public Object nonApiErrorCode(Object param1, Object param2) {
+    public Object nonApiError(Object param1, Object param2) {
         throw new IllegalStateException("Message");
     }
 
@@ -65,28 +65,28 @@ public class LoggingPluginTestService {
     }
 
     @API
-    public Result<Object> loggingApiErrorCode(Object param1, Object param2) {
+    public Result<Object> loggingApiError(Object param1, Object param2) {
         throw new ApiException("CODE", false, "Message", new IllegalStateException("Root message"));
     }
 
     @API
-    public Result<Object> loggingApiErrorCodeCritical(Object param1, Object param2) {
+    public Result<Object> loggingApiErrorCritical(Object param1, Object param2) {
         throw new ApiException("CODE", true, "Message", new IllegalStateException("Root message"));
     }
 
     @API
     public Result<Object> loggingInvalidState(Object param1, Object param2) {
-        throw new ApiException(ClientErrorCodes.INVALID_STATE, "Message", new IllegalStateException("Root message"));
+        throw new ApiException(ClientErrors.INVALID_STATE, "Message", new IllegalStateException("Root message"));
     }
 
     @API
     public Result<Object> loggingServiceUnavailable(Object param1, Object param2) {
-        throw new ApiException(ServerErrorCodes.SERVICE_UNAVAILABLE, "Message", new IllegalStateException("Root message"));
+        throw new ApiException(ServerErrors.SERVICE_UNAVAILABLE, "Message", new IllegalStateException("Root message"));
     }
 
     @API
     public Result<Object> loggingExternalSysError(Object param1, Object param2) {
-        throw new ApiException(ServerErrorCodes.EXTERNAL_SYS_ERROR, "Message", new IllegalStateException("Root message"));
+        throw new ApiException(ServerErrors.EXTERNAL_SYS_ERROR, "Message", new IllegalStateException("Root message"));
     }
 
     @API

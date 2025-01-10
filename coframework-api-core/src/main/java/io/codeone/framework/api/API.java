@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  *   with {@code API}.
  *   <li>Transforms exceptions thrown by these methods into failed results, if applicable.
  *   <li>Logs invocations of these methods or services and identifies {@code ApiResult}
- *   and {@code ApiErrorCode} compatible objects for enhanced logging.
+ *   and {@code ApiError} compatible objects for enhanced logging.
  * </ul>
  */
 @Documented

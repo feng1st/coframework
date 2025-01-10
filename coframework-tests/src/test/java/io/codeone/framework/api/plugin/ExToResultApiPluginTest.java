@@ -67,17 +67,17 @@ class ExToResultApiPluginTest {
     }
 
     @Test
-    public void apiErrorCode() {
-        Result<Object> result = exToResultApiPluginTestService.apiErrorCode();
+    public void apiError() {
+        Result<Object> result = exToResultApiPluginTestService.apiError();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals("SERVICE_UNAVAILABLE", result.getErrorCode());
-        Assertions.assertNull(result.getErrorMessage());
+        Assertions.assertEquals("Service unavailable", result.getErrorMessage());
     }
 
     @Test
-    public void apiErrorCodeMessage() {
-        Result<Object> result = exToResultApiPluginTestService.apiErrorCodeMessage();
+    public void apiErrorMessage() {
+        Result<Object> result = exToResultApiPluginTestService.apiErrorMessage();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals("SERVICE_UNAVAILABLE", result.getErrorCode());
@@ -85,8 +85,8 @@ class ExToResultApiPluginTest {
     }
 
     @Test
-    public void apiErrorCodeCause() {
-        Result<Object> result = exToResultApiPluginTestService.apiErrorCodeCause();
+    public void apiErrorCause() {
+        Result<Object> result = exToResultApiPluginTestService.apiErrorCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals("SERVICE_UNAVAILABLE", result.getErrorCode());
@@ -94,8 +94,8 @@ class ExToResultApiPluginTest {
     }
 
     @Test
-    public void apiErrorCodeMessageCause() {
-        Result<Object> result = exToResultApiPluginTestService.apiErrorCodeMessageCause();
+    public void apiErrorMessageCause() {
+        Result<Object> result = exToResultApiPluginTestService.apiErrorMessageCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals("SERVICE_UNAVAILABLE", result.getErrorCode());

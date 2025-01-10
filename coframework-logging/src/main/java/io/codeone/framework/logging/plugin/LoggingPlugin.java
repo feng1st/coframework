@@ -1,8 +1,8 @@
 package io.codeone.framework.logging.plugin;
 
-import io.codeone.framework.api.exception.ApiErrorCode;
+import io.codeone.framework.api.exception.ApiError;
 import io.codeone.framework.api.response.ApiResult;
-import io.codeone.framework.api.util.ApiErrorCodeUtils;
+import io.codeone.framework.api.util.ApiErrorUtils;
 import io.codeone.framework.api.util.ApiResultUtils;
 import io.codeone.framework.common.function.Invokable;
 import io.codeone.framework.common.log.util.LogUtils;
@@ -70,15 +70,14 @@ public class LoggingPlugin implements Plugin {
         LoggingExpressionParser expParser = new LoggingExpressionParser(args, result);
 
         ApiResult<?> apiResult = ApiResultUtils.toApiResult(result);
-        Throwable cause = ApiErrorCodeUtils.getCause(throwable);
-        ApiErrorCode apiErrorCode = ApiErrorCodeUtils.toApiErrorCode(cause);
+        ApiError cause = ApiErrorUtils.getCause(throwable);
 
         Boolean success = getSuccess(apiResult, cause, logging, expParser);
-        String code = getCode(apiResult, apiErrorCode, logging, expParser);
+        String code = getCode(apiResult, cause, logging, expParser);
         String message = getMessage(apiResult, cause, logging, expParser);
         Map<String, Object> argMap = getArgMap(method, args, logging, expParser);
         Object resultData = getResultData(apiResult, result, logging);
-        Level level = getLevel(apiErrorCode, success);
+        Level level = getLevel(cause, success);
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("level", level);
@@ -123,9 +122,9 @@ public class LoggingPlugin implements Plugin {
         }
     }
 
-    private Level getLevel(ApiErrorCode apiErrorCode, Boolean success) {
-        if (apiErrorCode != null) {
-            if (apiErrorCode.isCritical()) {
+    private Level getLevel(ApiError cause, Boolean success) {
+        if (cause != null) {
+            if (cause.isCritical()) {
                 return Level.ERROR;
             } else {
                 return Level.WARN;
@@ -137,7 +136,7 @@ public class LoggingPlugin implements Plugin {
         return Level.INFO;
     }
 
-    private Boolean getSuccess(ApiResult<?> apiResult, Throwable cause, Logging logging, LoggingExpressionParser expParser) {
+    private Boolean getSuccess(ApiResult<?> apiResult, ApiError cause, Logging logging, LoggingExpressionParser expParser) {
         if (cause != null) {
             return false;
         }
@@ -150,9 +149,9 @@ public class LoggingPlugin implements Plugin {
         return null;
     }
 
-    private String getCode(ApiResult<?> apiResult, ApiErrorCode apiErrorCode, Logging logging, LoggingExpressionParser expParser) {
-        if (apiErrorCode != null) {
-            return apiErrorCode.getCode();
+    private String getCode(ApiResult<?> apiResult, ApiError cause, Logging logging, LoggingExpressionParser expParser) {
+        if (cause != null) {
+            return cause.getCode();
         }
         if (apiResult != null) {
             return apiResult.getErrorCode();
@@ -163,7 +162,7 @@ public class LoggingPlugin implements Plugin {
         return null;
     }
 
-    private String getMessage(ApiResult<?> apiResult, Throwable cause, Logging logging, LoggingExpressionParser expParser) {
+    private String getMessage(ApiResult<?> apiResult, ApiError cause, Logging logging, LoggingExpressionParser expParser) {
         if (cause != null) {
             return cause.getMessage();
         }

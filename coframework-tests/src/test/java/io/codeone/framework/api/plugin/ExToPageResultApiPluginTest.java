@@ -85,20 +85,20 @@ class ExToPageResultApiPluginTest {
     }
 
     @Test
-    public void apiErrorCode() {
-        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCode();
+    public void apiError() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.apiError();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals(1, result.getPageIndex());
         Assertions.assertEquals(20, result.getPageSize());
         Assertions.assertNull(result.getTotalCount());
         Assertions.assertEquals("INTERNAL_SYS_ERROR", result.getErrorCode());
-        Assertions.assertNull(result.getErrorMessage());
+        Assertions.assertEquals("Internal system error", result.getErrorMessage());
     }
 
     @Test
-    public void apiErrorCodeMessage() {
-        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCodeMessage();
+    public void apiErrorMessage() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorMessage();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals(1, result.getPageIndex());
@@ -109,8 +109,8 @@ class ExToPageResultApiPluginTest {
     }
 
     @Test
-    public void apiErrorCodeCause() {
-        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCodeCause();
+    public void apiErrorCause() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals(1, result.getPageIndex());
@@ -121,8 +121,8 @@ class ExToPageResultApiPluginTest {
     }
 
     @Test
-    public void apiErrorCodeMessageCause() {
-        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorCodeMessageCause();
+    public void apiErrorMessageCause() {
+        PageResult<Object> result = exToPageResultApiPluginTestService.apiErrorMessageCause();
         Assertions.assertFalse(result.isSuccess());
         Assertions.assertNull(result.getData());
         Assertions.assertEquals(1, result.getPageIndex());

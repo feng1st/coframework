@@ -5,9 +5,9 @@ import lombok.Getter;
 import java.util.Objects;
 
 /**
- * Custom exception that implements {@link ApiErrorCode}.
+ * Custom exception that implements {@link ApiError}.
  */
-public class ApiException extends RuntimeException implements ApiErrorCode {
+public class ApiException extends RuntimeException implements ApiError {
 
     @Getter
     private String code;
@@ -16,7 +16,7 @@ public class ApiException extends RuntimeException implements ApiErrorCode {
     private boolean critical;
 
     /**
-     * Constructs a new {@code ApiException} with the specified code and criticality.
+     * Constructs a new {@code ApiException} with the specified code and severity.
      *
      * @param code     the error code
      * @param critical whether the error is critical
@@ -28,7 +28,7 @@ public class ApiException extends RuntimeException implements ApiErrorCode {
     }
 
     /**
-     * Constructs a new {@code ApiException} with the specified code, criticality,
+     * Constructs a new {@code ApiException} with the specified code, severity,
      * and message.
      *
      * @param code     the error code
@@ -42,7 +42,7 @@ public class ApiException extends RuntimeException implements ApiErrorCode {
     }
 
     /**
-     * Constructs a new {@code ApiException} with the specified code, criticality,
+     * Constructs a new {@code ApiException} with the specified code, severity,
      * and cause.
      *
      * @param code     the error code
@@ -56,7 +56,7 @@ public class ApiException extends RuntimeException implements ApiErrorCode {
     }
 
     /**
-     * Constructs a new {@code ApiException} with the specified code, criticality,
+     * Constructs a new {@code ApiException} with the specified code, severity,
      * message, and cause.
      *
      * @param code     the error code
@@ -71,55 +71,54 @@ public class ApiException extends RuntimeException implements ApiErrorCode {
     }
 
     /**
-     * Constructs a new {@code ApiException} using an {@link ApiErrorCode}.
+     * Constructs a new {@code ApiException} using an {@link ApiError}.
      *
-     * @param apiErrorCode the {@link ApiErrorCode} instance
+     * @param apiError the {@link ApiError} instance
      */
-    public ApiException(ApiErrorCode apiErrorCode) {
-        super();
-        Objects.requireNonNull(apiErrorCode);
-        this.code = apiErrorCode.getCode();
-        this.critical = apiErrorCode.isCritical();
+    public ApiException(ApiError apiError) {
+        super(Objects.requireNonNull(apiError).getMessage());
+        this.code = apiError.getCode();
+        this.critical = apiError.isCritical();
     }
 
     /**
-     * Constructs a new {@code ApiException} using an {@link ApiErrorCode} and message.
+     * Constructs a new {@code ApiException} using an {@link ApiError} and message.
      *
-     * @param apiErrorCode the {@link ApiErrorCode} instance
-     * @param message      the exception message
+     * @param apiError the {@link ApiError} instance
+     * @param message  the exception message
      */
-    public ApiException(ApiErrorCode apiErrorCode, String message) {
+    public ApiException(ApiError apiError, String message) {
         super(message);
-        Objects.requireNonNull(apiErrorCode);
-        this.code = apiErrorCode.getCode();
-        this.critical = apiErrorCode.isCritical();
+        Objects.requireNonNull(apiError);
+        this.code = apiError.getCode();
+        this.critical = apiError.isCritical();
     }
 
     /**
-     * Constructs a new {@code ApiException} using an {@link ApiErrorCode} and cause.
+     * Constructs a new {@code ApiException} using an {@link ApiError} and cause.
      *
-     * @param apiErrorCode the {@link ApiErrorCode} instance
-     * @param cause        the cause of the exception
+     * @param apiError the {@link ApiError} instance
+     * @param cause    the cause of the exception
      */
-    public ApiException(ApiErrorCode apiErrorCode, Throwable cause) {
+    public ApiException(ApiError apiError, Throwable cause) {
         super(cause);
-        Objects.requireNonNull(apiErrorCode);
-        this.code = apiErrorCode.getCode();
-        this.critical = apiErrorCode.isCritical();
+        Objects.requireNonNull(apiError);
+        this.code = apiError.getCode();
+        this.critical = apiError.isCritical();
     }
 
     /**
-     * Constructs a new {@code ApiException} using an {@link ApiErrorCode}, message,
+     * Constructs a new {@code ApiException} using an {@link ApiError}, message,
      * and cause.
      *
-     * @param apiErrorCode the {@link ApiErrorCode} instance
-     * @param message      the exception message
-     * @param cause        the cause of the exception
+     * @param apiError the {@link ApiError} instance
+     * @param message  the exception message
+     * @param cause    the cause of the exception
      */
-    public ApiException(ApiErrorCode apiErrorCode, String message, Throwable cause) {
+    public ApiException(ApiError apiError, String message, Throwable cause) {
         super(message, cause);
-        Objects.requireNonNull(apiErrorCode);
-        this.code = apiErrorCode.getCode();
-        this.critical = apiErrorCode.isCritical();
+        Objects.requireNonNull(apiError);
+        this.code = apiError.getCode();
+        this.critical = apiError.isCritical();
     }
 }
