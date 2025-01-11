@@ -60,9 +60,9 @@ public class BizParam extends BaseParam {
 4. 异常自动转化为失败结果：
 
 ```java
-// 返回失败结果Result.failure("ACCESS_DENIED", message)，而不是抛出异常
+// 返回失败结果Result.failure("INVALID_STATE", "Invalid state")，而不是抛出异常
 public Result<BizData> getData(BizParam param) {
-    throw new ApiException(ClientErrorCodes.ACCESS_DENIED, message);
+    throw new ApiException(ClientErrors.INVALID_STATE);
 }
 ```
 
@@ -259,13 +259,13 @@ public Result<BizData> getData(BizParam param) {
 
 ```java
 public Result<BizData> getData(BizParam param) {
-    // warn - ClientErrorCodes.INVALID_ARGS.critical = false
-    throw new ApiException(ClientErrorCodes.INVALID_ARGS, message);
-    // error - ServerErrorCodes.INTERNAL_SYS_ERROR.critical = true
-    throw new ApiException(ServerErrorCodes.INTERNAL_SYS_ERROR, message);
-    // 可以参考ClientErrorCodes和ServerErrorCodes，定制错误日志等级
-    throw new ApiException(MyErrorCodes.MY_CODE, message);
-    // 可以直接传code和critical
+    // warn - ClientErrors.INVALID_ARGS.critical = false
+    throw new ApiException(ClientErrors.INVALID_ARGS);
+    // error - ServerErrors.INTERNAL_SYS_ERROR.critical = true
+    throw new ApiException(ServerErrors.INTERNAL_SYS_ERROR);
+    // 可以参考ClientErrors和ServerErrors，定制错误日志等级
+    throw new ApiException(MyErrors.CUSTOM_ERROR);
+    // 可以直接指定critical
     throw new ApiException(code, critical, message);
 }
 ```
@@ -376,7 +376,7 @@ public class MyExceptionFailureConverter implements FailureConverter<MyResult<?>
 
 ```java
 
-@Plug(value = Stages.BEFORE_TARGET)
+@Plug(Stages.BEFORE_TARGET)
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class BizProcessPlugin implements Plugin {
 }

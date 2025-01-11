@@ -63,9 +63,9 @@ public class BizParam extends BaseParam {
 4. **Automatic Exception Handling**:
 
 ```java
-// Returns a failed response Result.failure("ACCESS_DENIED", message) instead of throwing an exception
+// Returns a failed response Result.failure("INVALID_STATE", "Invalid state") instead of throwing an exception
 public Result<BizData> getData(BizParam param) {
-    throw new ApiException(ClientErrorCodes.ACCESS_DENIED, message);
+    throw new ApiException(ClientErrors.INVALID_STATE);
 }
 ```
 
@@ -205,7 +205,7 @@ public interface BizAbility {
 }
 ```
 
-3. **Provide Different Implementations**:
+3. **Provide Various Implementations**:
 
 ```java
 // Specific implementation for bizId "manager"
@@ -266,13 +266,13 @@ You can specify the error log level by throwing an exception of type `ApiError` 
 
 ```java
 public Result<BizData> getData(BizParam param) {
-    // warn - ClientErrorCodes.INVALID_ARGS.critical = false
-    throw new ApiException(ClientErrorCodes.INVALID_ARGS, message);
-    // error - ServerErrorCodes.INTERNAL_SYS_ERROR.critical = true
-    throw new ApiException(ServerErrorCodes.INTERNAL_SYS_ERROR, message);
-    // You can customize the error log level by implementing ApiError, like ClientErrorCodes or ServerErrorCodes
-    throw new ApiException(MyErrorCodes.MY_CODE, message);
-    // Alternatively, you can directly pass the code and critical level
+    // warn - ClientErrors.INVALID_ARGS.critical = false
+    throw new ApiException(ClientErrors.INVALID_ARGS);
+    // error - ServerErrors.INTERNAL_SYS_ERROR.critical = true
+    throw new ApiException(ServerErrors.INTERNAL_SYS_ERROR);
+    // You can customize the error log level by implementing ApiError, like ClientErrors or ServerErrors
+    throw new ApiException(MyErrors.CUSTOM_ERROR);
+    // Alternatively, you can directly pass the critical level
     throw new ApiException(code, critical, message);
 }
 ```
@@ -384,7 +384,7 @@ Execution proceeds like a stack, with later phases being executed first for `aft
 
 ```java
 
-@Plug(value = Stages.BEFORE_TARGET)
+@Plug(Stages.BEFORE_TARGET)
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class BizProcessPlugin implements Plugin {
 }

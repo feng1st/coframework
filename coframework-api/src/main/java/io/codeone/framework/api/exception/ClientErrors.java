@@ -27,7 +27,7 @@ public enum ClientErrors implements ApiError {
      * response instead of {@code ACCESS_DENIED} to hide the existence of a content
      * from an unauthorized client.
      */
-    NOT_FOUND(false, "Not found"),
+    NOT_FOUND(false, "Object not found"),
     /**
      * This response is sent when a request conflicts with the current state of
      * the server.
