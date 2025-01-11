@@ -6,8 +6,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+
 @SpringBootTest
 public class FailureConverterTest {
+
+    @Test
+    void isSupported() {
+        Assertions.assertFalse(FailureUtils.isSupported(Object.class));
+        Assertions.assertFalse(FailureUtils.isSupported(ArrayList.class));
+        Assertions.assertTrue(FailureUtils.isSupported(FailureConverterTestLegacyResult.class));
+    }
 
     @Test
     void nullResult() {
