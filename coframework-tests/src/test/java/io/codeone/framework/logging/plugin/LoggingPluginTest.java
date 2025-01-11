@@ -278,8 +278,10 @@ class LoggingPluginTest extends BaseLoggingTest {
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestEmptyParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestSelfRefParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDateParam(), 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDurationParam(), 2);
         assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{},\"param2\":2},\"result\":\"data\"}",
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"self\":null},\"param2\":2},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"date\":\"1970-01-01T00:00:00.000+00:00\"},\"param2\":2},\"result\":\"data\"}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"date\":\"1970-01-01T00:00:00.000+00:00\"},\"param2\":2},\"result\":\"data\"}",
+                "{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=LoggingPluginTestWithDurationParam(duration=PT1H), param2=2}, result=data}");
     }
 }
