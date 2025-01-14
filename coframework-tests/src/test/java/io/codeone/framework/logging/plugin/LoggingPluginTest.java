@@ -275,14 +275,20 @@ class LoggingPluginTest extends BaseLoggingTest {
     @Test
     public void loggingMalformed() {
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new int[]{1, 2, 3});
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new Integer[]{1, 2, 3});
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new Object[]{1, 2, 3});
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestEmptyParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestSelfRefParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDateParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDurationParam(), 2);
-        assertLogs("FIXME",
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":2},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2,3]},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2,3]},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2,3]},\"result\":\"data\"}",
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{},\"param2\":2},\"result\":\"data\"}",
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"self\":null},\"param2\":2},\"result\":\"data\"}",
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"date\":\"1970-01-01T00:00:00.000+00:00\"},\"param2\":2},\"result\":\"data\"}",
-                "{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=LoggingPluginTestWithDurationParam(duration=PT1H), param2=2}, result=data}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"LoggingPluginTestWithDurationParam(duration=PT1H)\",\"param2\":2},\"result\":\"data\"}");
     }
 }
