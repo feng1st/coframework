@@ -33,14 +33,14 @@ public class LogUtils {
             if (JACKSON_LOG_FORMATTER != null) {
                 try {
                     return JACKSON_LOG_FORMATTER.format(content);
-                } catch (Exception ignored) {
+                } catch (Throwable ignored) {
                     return JACKSON_LOG_FORMATTER.format(toSafeObject(content));
                 }
             }
         }
         try {
             return content.toString();
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
             return toSafeObject(content);
         }
     }
@@ -83,7 +83,7 @@ public class LogUtils {
             return object;
         }
         if (ClassUtils.isPrimitiveWrapperArray(object.getClass())) {
-            return object;
+            return Arrays.asList((Object[]) object);
         }
         if (object.getClass().isArray()) {
             if (visited.put(object, object) != null) {

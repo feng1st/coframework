@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -260,6 +262,96 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
+    public void loggingMalformedExceptionNull() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), null);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":null},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionString() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), "2");
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":\"2\"},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionMap() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("2", 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), map);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":{\"2\":2}},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionMapSelfRef() {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("2", map);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), map);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":{\"2\":null}},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionCollection() {
+        List<Object> list = new ArrayList<>();
+        list.add("2");
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), list);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[\"2\"]},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionCollectionSelfRef() {
+        List<Object> list = new ArrayList<>();
+        list.add(list);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), list);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[null]},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionPrimitive() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), 2);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":2},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionPrimitiveArray() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new int[]{1, 2});
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2]},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionWrapperArray() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new Integer[]{1, 2});
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2]},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionObjectArray() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new Object[]{1, 2});
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2]},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionObjectArraySelfRef() {
+        Object[] array = new Object[3];
+        array[0] = 1;
+        array[1] = 2;
+        array[2] = array;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), array);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2,null]},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformed() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestEmptyParam(), 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestSelfRefParam(), 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDateParam(), 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDurationParam(), 2);
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{},\"param2\":2},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"self\":null},\"param2\":2},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"date\":\"1970-01-01T00:00:00.000+00:00\"},\"param2\":2},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"LoggingPluginTestWithDurationParam(duration=PT1H)\",\"param2\":2},\"result\":\"data\"}");
+    }
+
+    @Test
     public void loggingNoJson() {
         LogUtils.logAsJson = false;
         Assertions.assertThrows(IllegalStateException.class,
@@ -273,22 +365,116 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
-    public void loggingMalformed() {
+    public void loggingMalformedExceptionNullNoJson() {
+        LogUtils.logAsJson = false;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), null);
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=null}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionStringNoJson() {
+        LogUtils.logAsJson = false;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), "2");
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=2}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionMapNoJson() {
+        LogUtils.logAsJson = false;
+        Map<Object, Object> map = new HashMap<>();
+        map.put("2", 2);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), map);
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2={2=2}}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionMapSelfRefNoJson() {
+        LogUtils.logAsJson = false;
+        Map<Object, Object> map = new HashMap<>();
+        map.put("2", map);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), map);
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2={2=null}}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionCollectionNoJson() {
+        LogUtils.logAsJson = false;
+        List<Object> list = new ArrayList<>();
+        list.add("2");
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), list);
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=[2]}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionCollectionSelfRefNoJson() {
+        LogUtils.logAsJson = false;
+        List<Object> list = new ArrayList<>();
+        list.add(list);
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), list);
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=[null]}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionPrimitiveNoJson() {
+        LogUtils.logAsJson = false;
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), 2);
-        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new int[]{1, 2, 3});
-        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new Integer[]{1, 2, 3});
-        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new Object[]{1, 2, 3});
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=2}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionPrimitiveArrayNoJson() {
+        LogUtils.logAsJson = false;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new int[]{1, 2});
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=[1, 2]}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionWrapperArrayNoJson() {
+        LogUtils.logAsJson = false;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new Integer[]{1, 2});
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=[1, 2]}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionObjectArrayNoJson() {
+        LogUtils.logAsJson = false;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new Object[]{1, 2});
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=[1, 2]}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionObjectArraySelfRefNoJson() {
+        LogUtils.logAsJson = false;
+        Object[] array = new Object[3];
+        array[0] = 1;
+        array[1] = 2;
+        array[2] = array;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), array);
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=[1, 2, null]}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedNoJson() {
+        LogUtils.logAsJson = false;
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestEmptyParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestSelfRefParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDateParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDurationParam(), 2);
-        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":2},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2,3]},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2,3]},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2,3]},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{},\"param2\":2},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"self\":null},\"param2\":2},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"date\":\"1970-01-01T00:00:00.000+00:00\"},\"param2\":2},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"LoggingPluginTestWithDurationParam(duration=PT1H)\",\"param2\":2},\"result\":\"data\"}");
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=LoggingPluginTestEmptyParam(), param2=2}, result=data}",
+                "{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=2}, result=data}",
+                "{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=LoggingPluginTestWithDateParam(date=Thu Jan 01 08:00:00 CST 1970), param2=2}, result=data}",
+                "{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=LoggingPluginTestWithDurationParam(duration=PT1H), param2=2}, result=data}");
     }
 }
