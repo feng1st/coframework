@@ -256,7 +256,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.invalidSpEL\",\"message\":\"SPEL_ERROR(EL1007E: Property or field 'INVALID_EXP' cannot be found on null)\",\"elapsed\":0}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.invalidSpEL\",\"message\":\"(SPEL_ERROR: EL1007E: Property or field 'INVALID_EXP' cannot be found on null)\",\"elapsed\":0}");
     }
 
     @Test
