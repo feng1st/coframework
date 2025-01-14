@@ -2,6 +2,9 @@ package io.codeone.framework.common.log.util;
 
 import io.codeone.framework.common.log.formatter.LogFormatter;
 import lombok.experimental.UtilityClass;
+import org.springframework.util.ClassUtils;
+
+import java.util.*;
 
 /**
  * Utility class for log formatting.
@@ -28,10 +31,75 @@ public class LogUtils {
     public Object format(Object content) {
         if (logAsJson) {
             if (JACKSON_LOG_FORMATTER != null) {
-                return JACKSON_LOG_FORMATTER.format(content);
+                try {
+                    return JACKSON_LOG_FORMATTER.format(content);
+                } catch (Exception ignored) {
+                    return JACKSON_LOG_FORMATTER.format(toSafeObject(content));
+                }
             }
         }
-        return content;
+        try {
+            return content.toString();
+        } catch (Exception ignored) {
+            return toSafeObject(content);
+        }
+    }
+
+    private Object toSafeObject(Object object) {
+        return toSafeObject(object, new IdentityHashMap<>());
+    }
+
+    private Object toSafeObject(Object object, Map<Object, Object> visited) {
+        if (object == null) {
+            return object;
+        }
+        if (object instanceof String) {
+            return object;
+        }
+        if (object instanceof Map) {
+            if (visited.put(object, object) != null) {
+                return null;
+            }
+            Map<Object, Object> map = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> entry : ((Map<?, ?>) object).entrySet()) {
+                map.put(toSafeObject(entry.getKey(), visited), toSafeObject(entry.getValue(), visited));
+            }
+            return map;
+        }
+        if (object instanceof Collection) {
+            if (visited.put(object, object) != null) {
+                return null;
+            }
+            List<Object> list = new ArrayList<>();
+            for (Object element : (Collection<?>) object) {
+                list.add(toSafeObject(element, visited));
+            }
+            return list;
+        }
+        if (ClassUtils.isPrimitiveArray(object.getClass())) {
+            return object;
+        }
+        if (ClassUtils.isPrimitiveOrWrapper(object.getClass())) {
+            return object;
+        }
+        if (ClassUtils.isPrimitiveWrapperArray(object.getClass())) {
+            return object;
+        }
+        if (object.getClass().isArray()) {
+            if (visited.put(object, object) != null) {
+                return null;
+            }
+            List<Object> list = new ArrayList<>();
+            for (Object element : (Object[]) object) {
+                list.add(toSafeObject(element, visited));
+            }
+            return list;
+        }
+        try {
+            return object.toString();
+        } catch (Throwable e) {
+            return "(TO_STRING_ERROR)";
+        }
     }
 
     /**
