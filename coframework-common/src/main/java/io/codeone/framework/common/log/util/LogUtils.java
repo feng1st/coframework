@@ -77,7 +77,7 @@ public class LogUtils {
             return list;
         }
         if (ClassUtils.isPrimitiveArray(object.getClass())) {
-            return object;
+            return "[...]";
         }
         if (ClassUtils.isPrimitiveOrWrapper(object.getClass())) {
             return object;

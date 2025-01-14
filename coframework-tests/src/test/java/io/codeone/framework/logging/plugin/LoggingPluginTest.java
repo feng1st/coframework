@@ -314,7 +314,7 @@ class LoggingPluginTest extends BaseLoggingTest {
     @Test
     public void loggingMalformedExceptionPrimitiveArray() {
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new int[]{1, 2});
-        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":[1,2]},\"result\":\"data\"}");
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR)\",\"param2\":\"[...]\"},\"result\":\"data\"}");
     }
 
     @Test
@@ -433,7 +433,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         LogUtils.logAsJson = false;
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new int[]{1, 2});
         LogUtils.logAsJson = true;
-        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=[1, 2]}, result=data}");
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR), param2=[...]}, result=data}");
     }
 
     @Test
