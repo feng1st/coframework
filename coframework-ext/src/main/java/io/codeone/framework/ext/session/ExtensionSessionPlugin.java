@@ -120,7 +120,7 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
                     && (bizScenario = bizScenarioParam.getBizScenario()) != null) {
                 return bizScenario;
             }
-            throw new IllegalStateException(String.format(
+            throw new IllegalArgumentException(String.format(
                     "BizScenario is null for parameter %d in method '%s'",
                     paramIndex,
                     method));
@@ -131,7 +131,7 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
             if ((bizScenario = resolver.resolve(args)) != null) {
                 return bizScenario;
             }
-            throw new IllegalStateException(String.format(
+            throw new IllegalArgumentException(String.format(
                     "BizScenario could not be resolved using resolver '%s' for method '%s'",
                     session.customResolver().getSimpleName(),
                     method));

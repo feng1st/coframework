@@ -68,6 +68,12 @@ class ExtensionSessionTest {
     }
 
     @Test
+    public void customException() {
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> extensionSessionTestService.customException("foo"));
+    }
+
+    @Test
     public void ignore() {
         Assertions.assertEquals("ignore",
                 extensionSessionTestService.ignore("bar"));
@@ -76,17 +82,17 @@ class ExtensionSessionTest {
     @Test
     public void nullBizScenario() {
         Assertions.assertEquals("BizScenario is null for parameter 1 in method 'public java.lang.Object io.codeone.framework.ext.session.ExtensionSessionTestService.first(java.lang.Object,io.codeone.framework.ext.BizScenarioParam,io.codeone.framework.ext.BizScenarioParam)'",
-                Assertions.assertThrows(IllegalStateException.class,
+                Assertions.assertThrows(IllegalArgumentException.class,
                         () -> extensionSessionTestService.first(1,
                                 null,
                                 BizScenario.ofBizId("bar"))).getMessage());
         Assertions.assertEquals("BizScenario is null for parameter 1 in method 'public java.lang.Object io.codeone.framework.ext.session.ExtensionSessionTestService.first(java.lang.Object,io.codeone.framework.ext.BizScenarioParam,io.codeone.framework.ext.BizScenarioParam)'",
-                Assertions.assertThrows(IllegalStateException.class,
+                Assertions.assertThrows(IllegalArgumentException.class,
                         () -> extensionSessionTestService.first(1,
                                 () -> null,
                                 BizScenario.ofBizId("bar"))).getMessage());
         Assertions.assertEquals("BizScenario could not be resolved using resolver 'ExtensionSessionTestResolver' for method 'public java.lang.Object io.codeone.framework.ext.session.ExtensionSessionTestService.custom(java.lang.Object)'",
-                Assertions.assertThrows(IllegalStateException.class,
+                Assertions.assertThrows(IllegalArgumentException.class,
                         () -> extensionSessionTestService.custom(1)).getMessage());
     }
 

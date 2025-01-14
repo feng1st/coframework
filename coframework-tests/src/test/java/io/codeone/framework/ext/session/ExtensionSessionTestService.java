@@ -52,6 +52,11 @@ public class ExtensionSessionTestService {
         return extensionSessionTestAbility.execute(null);
     }
 
+    @ExtensionSession(value = BizScenarioResolvePolicy.CUSTOM, customResolver = ExtensionSessionTestExceptionResolver.class)
+    public Object customException(Object bizId) {
+        return extensionSessionTestAbility.execute(null);
+    }
+
     @ExtensionSession(BizScenarioResolvePolicy.IGNORE)
     public Object ignore(Object bizId) {
         return "ignore";
