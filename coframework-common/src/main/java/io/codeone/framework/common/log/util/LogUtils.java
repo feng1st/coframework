@@ -34,22 +34,22 @@ public class LogUtils {
                 try {
                     return JACKSON_LOG_FORMATTER.format(content);
                 } catch (Throwable ignored) {
-                    return JACKSON_LOG_FORMATTER.format(toSafeObject(content));
+                    return JACKSON_LOG_FORMATTER.format(toLogSafeObj(content));
                 }
             }
         }
         try {
             return content.toString();
         } catch (Throwable ignored) {
-            return toSafeObject(content);
+            return toLogSafeObj(content);
         }
     }
 
-    private Object toSafeObject(Object object) {
-        return toSafeObject(object, new IdentityHashMap<>());
+    private Object toLogSafeObj(Object object) {
+        return toLogSafeObj(object, new IdentityHashMap<>());
     }
 
-    private Object toSafeObject(Object object, Map<Object, Object> visited) {
+    private Object toLogSafeObj(Object object, Map<Object, Object> visited) {
         if (object == null) {
             return object;
         }
@@ -62,7 +62,7 @@ public class LogUtils {
             }
             Map<Object, Object> map = new LinkedHashMap<>();
             for (Map.Entry<?, ?> entry : ((Map<?, ?>) object).entrySet()) {
-                map.put(toSafeObject(entry.getKey(), visited), toSafeObject(entry.getValue(), visited));
+                map.put(toLogSafeObj(entry.getKey(), visited), toLogSafeObj(entry.getValue(), visited));
             }
             return map;
         }
@@ -72,7 +72,7 @@ public class LogUtils {
             }
             List<Object> list = new ArrayList<>();
             for (Object element : (Collection<?>) object) {
-                list.add(toSafeObject(element, visited));
+                list.add(toLogSafeObj(element, visited));
             }
             return list;
         }
@@ -91,7 +91,7 @@ public class LogUtils {
             }
             List<Object> list = new ArrayList<>();
             for (Object element : (Object[]) object) {
-                list.add(toSafeObject(element, visited));
+                list.add(toLogSafeObj(element, visited));
             }
             return list;
         }

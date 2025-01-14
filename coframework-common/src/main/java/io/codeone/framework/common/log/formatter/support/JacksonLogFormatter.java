@@ -3,6 +3,7 @@ package io.codeone.framework.common.log.formatter.support;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.codeone.framework.common.log.formatter.LogFormatter;
+import lombok.SneakyThrows;
 
 /**
  * Log formatter using Jackson for JSON conversion.
@@ -23,11 +24,8 @@ public class JacksonLogFormatter implements LogFormatter {
     }
 
     @Override
+    @SneakyThrows
     public Object format(Object content) {
-        try {
-            return objectMapper.writeValueAsString(content);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
+        return objectMapper.writeValueAsString(content);
     }
 }
