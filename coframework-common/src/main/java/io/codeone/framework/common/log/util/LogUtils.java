@@ -98,7 +98,7 @@ public class LogUtils {
         try {
             return object.toString();
         } catch (Throwable e) {
-            return "(TO_STRING_ERROR)";
+            return String.format("(TO_STRING_ERROR: %s)", object.getClass().getName());
         }
     }
 
