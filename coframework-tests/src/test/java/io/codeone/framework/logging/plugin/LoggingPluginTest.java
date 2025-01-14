@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.expression.spel.SpelEvaluationException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -254,10 +253,10 @@ class LoggingPluginTest extends BaseLoggingTest {
     @Test
     public void invalidSpEL() {
         loggingPluginTestService.invalidSpEL();
-        assertLog("logging",
-                Level.ERROR,
-                SpelEvaluationException.class,
-                "Error logging invocation of 'public void io.codeone.framework.logging.plugin.LoggingPluginTestService.invalidSpEL()'");
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.invalidSpEL\",\"message\":\"SPEL_ERROR(EL1007E: Property or field 'INVALID_EXP' cannot be found on null)\",\"elapsed\":0}");
     }
 
     @Test
@@ -275,11 +274,13 @@ class LoggingPluginTest extends BaseLoggingTest {
 
     @Test
     public void loggingMalformed() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestEmptyParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestSelfRefParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDateParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDurationParam(), 2);
-        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{},\"param2\":2},\"result\":\"data\"}",
+        assertLogs("FIXME",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{},\"param2\":2},\"result\":\"data\"}",
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"self\":null},\"param2\":2},\"result\":\"data\"}",
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"date\":\"1970-01-01T00:00:00.000+00:00\"},\"param2\":2},\"result\":\"data\"}",
                 "{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=LoggingPluginTestWithDurationParam(duration=PT1H), param2=2}, result=data}");

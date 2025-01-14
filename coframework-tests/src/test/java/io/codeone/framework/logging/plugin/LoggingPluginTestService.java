@@ -159,7 +159,7 @@ public class LoggingPluginTestService {
         return result;
     }
 
-    @Logging(expSuccess = "INVALID_EXP")
+    @Logging(expMessage = "INVALID_EXP")
     public void invalidSpEL() {
     }
 }

@@ -45,8 +45,12 @@ public class LoggingExpressionParser {
      * @return the result of the evaluation
      */
     public Object evaluate(String expressionString) {
-        return EXPRESSION_CACHE.computeIfAbsent(expressionString, PARSER::parseExpression)
-                .getValue(lazyLoadContext());
+        try {
+            return EXPRESSION_CACHE.computeIfAbsent(expressionString, PARSER::parseExpression)
+                    .getValue(lazyLoadContext());
+        } catch (Exception e) {
+            return String.format("SPEL_ERROR(%s)", e.getMessage());
+        }
     }
 
     /**
