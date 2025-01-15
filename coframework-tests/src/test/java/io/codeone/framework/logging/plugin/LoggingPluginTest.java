@@ -314,7 +314,7 @@ class LoggingPluginTest extends BaseLoggingTest {
     @Test
     public void loggingMalformedExceptionPrimitiveArray() {
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new int[]{1, 2});
-        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":\"[...]\"},\"result\":\"data\"}");
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":\"[int]\"},\"result\":\"data\"}");
     }
 
     @Test
@@ -337,6 +337,18 @@ class LoggingPluginTest extends BaseLoggingTest {
         array[2] = array;
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), array);
         assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":[1,2,null]},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionExceptionMap() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new LoggingPluginTestExceptionMapParam());
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":\"(ITERATE_MAP_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionMapParam)\"},\"result\":\"data\"}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionExceptionCollection() {
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new LoggingPluginTestExceptionCollectionParam());
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":\"(ITERATE_COLLECTION_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionCollectionParam)\"},\"result\":\"data\"}");
     }
 
     @Test
@@ -433,7 +445,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         LogUtils.logAsJson = false;
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new int[]{1, 2});
         LogUtils.logAsJson = true;
-        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=[...]}, result=data}");
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=[int]}, result=data}");
     }
 
     @Test
@@ -462,6 +474,22 @@ class LoggingPluginTest extends BaseLoggingTest {
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), array);
         LogUtils.logAsJson = true;
         assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=[1, 2, null]}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionExceptionMapNoJson() {
+        LogUtils.logAsJson = false;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new LoggingPluginTestExceptionMapParam());
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=(ITERATE_MAP_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionMapParam)}, result=data}");
+    }
+
+    @Test
+    public void loggingMalformedExceptionExceptionCollectionNoJson() {
+        LogUtils.logAsJson = false;
+        loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), new LoggingPluginTestExceptionCollectionParam());
+        LogUtils.logAsJson = true;
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=(ITERATE_COLLECTION_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionCollectionParam)}, result=data}");
     }
 
     @Test

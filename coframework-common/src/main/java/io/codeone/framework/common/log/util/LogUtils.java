@@ -60,24 +60,32 @@ public class LogUtils {
             if (visited.put(object, object) != null) {
                 return null;
             }
-            Map<Object, Object> map = new LinkedHashMap<>();
-            for (Map.Entry<?, ?> entry : ((Map<?, ?>) object).entrySet()) {
-                map.put(toLogSafeObj(entry.getKey(), visited), toLogSafeObj(entry.getValue(), visited));
+            try {
+                Map<Object, Object> map = new LinkedHashMap<>(((Map<?, ?>) object).size());
+                for (Map.Entry<?, ?> entry : ((Map<?, ?>) object).entrySet()) {
+                    map.put(toLogSafeObj(entry.getKey(), visited), toLogSafeObj(entry.getValue(), visited));
+                }
+                return map;
+            } catch (Exception e) {
+                return String.format("(ITERATE_MAP_ERROR: %s)", object.getClass().getName());
             }
-            return map;
         }
         if (object instanceof Collection) {
             if (visited.put(object, object) != null) {
                 return null;
             }
-            List<Object> list = new ArrayList<>();
-            for (Object element : (Collection<?>) object) {
-                list.add(toLogSafeObj(element, visited));
+            try {
+                List<Object> list = new ArrayList<>(((Collection<?>) object).size());
+                for (Object element : (Collection<?>) object) {
+                    list.add(toLogSafeObj(element, visited));
+                }
+                return list;
+            } catch (Exception e) {
+                return String.format("(ITERATE_COLLECTION_ERROR: %s)", object.getClass().getName());
             }
-            return list;
         }
         if (ClassUtils.isPrimitiveArray(object.getClass())) {
-            return "[...]";
+            return String.format("[%s]", object.getClass().getComponentType());
         }
         if (ClassUtils.isPrimitiveOrWrapper(object.getClass())) {
             return object;
@@ -89,7 +97,7 @@ public class LogUtils {
             if (visited.put(object, object) != null) {
                 return null;
             }
-            List<Object> list = new ArrayList<>();
+            List<Object> list = new ArrayList<>(((Object[]) object).length);
             for (Object element : (Object[]) object) {
                 list.add(toLogSafeObj(element, visited));
             }
