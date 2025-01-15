@@ -45,6 +45,13 @@ public class LogUtils {
         }
     }
 
+    /**
+     * Safely converts an object to a loggable representation to avoid issues such
+     * as cyclic references or exceptions during conversion.
+     *
+     * @param object the object to convert
+     * @return a log-safe representation of the object
+     */
     private Object toLogSafeObj(Object object) {
         return toLogSafeObj(object, new IdentityHashMap<>());
     }
