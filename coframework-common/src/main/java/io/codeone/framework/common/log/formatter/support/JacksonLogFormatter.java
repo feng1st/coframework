@@ -17,9 +17,6 @@ public class JacksonLogFormatter implements LogFormatter {
     public JacksonLogFormatter() {
         objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        objectMapper.configure(SerializationFeature.FAIL_ON_SELF_REFERENCES, false);
-        objectMapper.configure(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS, false);
-        objectMapper.configure(SerializationFeature.WRITE_SELF_REFERENCES_AS_NULL, true);
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 

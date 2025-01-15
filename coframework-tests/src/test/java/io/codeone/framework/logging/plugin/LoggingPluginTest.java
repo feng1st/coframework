@@ -286,7 +286,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         Map<Object, Object> map = new HashMap<>();
         map.put("2", map);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), map);
-        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":{\"2\":null}},\"result\":\"data\"}");
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":{\"2\":\"(REF: java.util.HashMap)\"}},\"result\":\"data\"}");
     }
 
     @Test
@@ -302,7 +302,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         List<Object> list = new ArrayList<>();
         list.add(list);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), list);
-        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":[null]},\"result\":\"data\"}");
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":[\"(REF: java.util.ArrayList)\"]},\"result\":\"data\"}");
     }
 
     @Test
@@ -336,7 +336,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         array[1] = 2;
         array[2] = array;
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), array);
-        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":[1,2,null]},\"result\":\"data\"}");
+        assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam)\",\"param2\":[1,2,\"(REF: [java.lang.Object])\"]},\"result\":\"data\"}");
     }
 
     @Test
@@ -358,7 +358,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDateParam(), 2);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestWithDurationParam(), 2);
         assertLogs("{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{},\"param2\":2},\"result\":\"data\"}",
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"self\":null},\"param2\":2},\"result\":\"data\"}",
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestSelfRefParam)\",\"param2\":2},\"result\":\"data\"}",
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":{\"date\":\"1970-01-01T00:00:00.000+00:00\"},\"param2\":2},\"result\":\"data\"}",
                 "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSuccess\",\"success\":true,\"elapsed\":0,\"args\":{\"param1\":\"LoggingPluginTestWithDurationParam(duration=PT1H)\",\"param2\":2},\"result\":\"data\"}");
     }
@@ -409,7 +409,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         map.put("2", map);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), map);
         LogUtils.logAsJson = true;
-        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2={2=null}}, result=data}");
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2={2=(REF: java.util.HashMap)}}, result=data}");
     }
 
     @Test
@@ -429,7 +429,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         list.add(list);
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), list);
         LogUtils.logAsJson = true;
-        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=[null]}, result=data}");
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=[(REF: java.util.ArrayList)]}, result=data}");
     }
 
     @Test
@@ -473,7 +473,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         array[2] = array;
         loggingPluginTestService.loggingSuccess(new LoggingPluginTestExceptionParam(), array);
         LogUtils.logAsJson = true;
-        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=[1, 2, null]}, result=data}");
+        assertLogs("{level=INFO, method=LoggingPluginTestService.loggingSuccess, success=true, elapsed=0, args={param1=(TO_STRING_ERROR: io.codeone.framework.logging.plugin.LoggingPluginTestExceptionParam), param2=[1, 2, (REF: [java.lang.Object])]}, result=data}");
     }
 
     @Test

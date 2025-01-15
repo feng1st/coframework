@@ -65,7 +65,7 @@ public class LogUtils {
         }
         if (object instanceof Map) {
             if (visited.put(object, object) != null) {
-                return null;
+                return String.format("(REF: %s)", object.getClass().getName());
             }
             try {
                 Map<Object, Object> map = new LinkedHashMap<>(((Map<?, ?>) object).size());
@@ -79,7 +79,7 @@ public class LogUtils {
         }
         if (object instanceof Collection) {
             if (visited.put(object, object) != null) {
-                return null;
+                return String.format("(REF: %s)", object.getClass().getName());
             }
             try {
                 List<Object> list = new ArrayList<>(((Collection<?>) object).size());
@@ -92,7 +92,7 @@ public class LogUtils {
             }
         }
         if (ClassUtils.isPrimitiveArray(object.getClass())) {
-            return String.format("[%s]", object.getClass().getComponentType());
+            return String.format("[%s]", object.getClass().getComponentType().getName());
         }
         if (ClassUtils.isPrimitiveOrWrapper(object.getClass())) {
             return object;
@@ -102,7 +102,7 @@ public class LogUtils {
         }
         if (object.getClass().isArray()) {
             if (visited.put(object, object) != null) {
-                return null;
+                return String.format("(REF: [%s])", object.getClass().getComponentType().getName());
             }
             List<Object> list = new ArrayList<>(((Object[]) object).length);
             for (Object element : (Object[]) object) {
