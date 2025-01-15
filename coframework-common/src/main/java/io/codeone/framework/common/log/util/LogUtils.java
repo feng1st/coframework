@@ -58,7 +58,7 @@ public class LogUtils {
 
     private Object toLogSafeObj(Object object, Map<Object, Object> visited) {
         if (object == null) {
-            return object;
+            return null;
         }
         if (object instanceof String) {
             return object;
