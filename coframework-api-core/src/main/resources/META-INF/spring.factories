@@ -1,2 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.codeone.framework.api.autoconfigure.CoFrameworkCoreAutoConfiguration
+io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
+  io.codeone.framework.api.plugin.binding.ApiPluginBindingFactory

@@ -1,2 +1,3 @@
 io.codeone.framework.plugin.binding.AnnoPluginBindingFactory=\
+  io.codeone.framework.ext.session.ExtensionSessionTestAnnoPluginBindingFactory,\
   io.codeone.framework.plugin.binding.AnnoPluginBindingTestBindingFactory

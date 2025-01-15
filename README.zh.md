@@ -399,23 +399,9 @@ public Result<BizData> getData(BizParam param) {
 
 #### 3.2.2 动态绑定
 
-可以通过注册`AnnoPluginBinding`bean来实现动态绑定，而不用提前指定`@Plug.targetAnnotations`。
+可以通过SPI来实现动态绑定，而不用提前指定`@Plug.targetAnnotations`。
 
-此方法常用来绑定已存在的插件。
-
-```java
-
-@Bean
-public AnnoPluginBinding bizProcessBinding() {
-    return AnnoPluginBinding.of(BizProcess.class, BizProcessPlugin.class);
-}
-```
-
-#### 3.2.3 通过SPI绑定
-
-和动态绑定类似，但是通过SPI在项目启动早期建立绑定关系。
-
-此方法主要解决复杂业务应用可能出现的插件循环依赖导致加载失败的问题。
+SPI通过在项目启动早期建立绑定关系，解决复杂业务应用可能出现的插件循环依赖导致加载失败的问题。
 
 1. 实现`AnnoPluginBindingFactory`工厂类，提供动态绑定关系：
 

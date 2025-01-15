@@ -407,20 +407,10 @@ These plugins do not need the `@Plug.targetAnnotations`.
 
 #### 3.2.2 Dynamic Binding
 
-Register `AnnoPluginBinding` beans to dynamically bind plugins without specifying `@Plug.targetAnnotations`:
+Dynamic binding can be achieved through SPI without the need to predefine `@Plug.targetAnnotations`.
 
-```java
-
-@Bean
-public AnnoPluginBinding bizProcessBinding() {
-    return AnnoPluginBinding.of(BizProcess.class, BizProcessPlugin.class);
-}
-```
-
-#### 3.2.3 SPI-Based Binding
-
-Similar to dynamic binding, SPI-based binding establishes relationships during the project’s initialization phase,
-resolving potential circular dependencies.
+SPI establishes binding relationships early during project startup, effectively resolving issues of plugin circular
+dependencies that may lead to loading failures in complex business applications.
 
 1. Implement the `AnnoPluginBindingFactory` interface:
 

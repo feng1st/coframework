@@ -1,10 +1,8 @@
 package io.codeone.framework.plugin.binding.repo;
 
 import io.codeone.framework.plugin.Plugin;
-import io.codeone.framework.plugin.binding.AnnoPluginBinding;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -29,21 +27,16 @@ public class AnnoPluginBindingRepoImpl implements InitializingBean, AnnoPluginBi
     private final Map<Class<? extends Annotation>, Set<Class<? extends Plugin>>> map = new ConcurrentHashMap<>();
 
     @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
     private AnnoPluginBindingRepoPreloader annoPluginBindingRepoPreloader;
 
     /**
-     * Initializes the static bindings and loads plugins from the application context.
+     * Initializes the static bindings and loads plugins from the preloader.
      *
      * @throws Exception if an error occurs during initialization
      */
     @Override
     public void afterPropertiesSet() throws Exception {
         STATIC_BINDINGS
-                .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
-        applicationContext.getBeansOfType(AnnoPluginBinding.class).values()
                 .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
         annoPluginBindingRepoPreloader.getBindings()
                 .forEach(binding -> bind(binding.getAnnoType(), binding.getPluginClass()));
