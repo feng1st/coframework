@@ -3,6 +3,8 @@ package io.codeone.framework.plugin.binding.repo;
 import io.codeone.framework.plugin.Plugin;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -22,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * work as expected.
  */
 @Component
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class AnnoPluginBindingRepoImpl implements InitializingBean, AnnoPluginBindingRepo {
 
     private final Map<Class<? extends Annotation>, Set<Class<? extends Plugin>>> map = new ConcurrentHashMap<>();

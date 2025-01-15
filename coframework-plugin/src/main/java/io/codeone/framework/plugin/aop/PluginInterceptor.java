@@ -5,6 +5,8 @@ import io.codeone.framework.plugin.chain.PluginChainFactory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -13,6 +15,7 @@ import java.lang.reflect.Method;
  * Method interceptor that applies plugin chains to intercepted method invocations.
  */
 @Component
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class PluginInterceptor implements MethodInterceptor {
 
     @Autowired

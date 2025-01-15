@@ -3,6 +3,8 @@ package io.codeone.framework.plugin.aop;
 import io.codeone.framework.plugin.binding.repo.MethodPluginBindingRepo;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -18,6 +20,7 @@ import java.lang.reflect.Method;
  * the post-initialization logic in {@code PluginInterceptorPostProcessor}.
  */
 @Component
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class PluginPointcut extends StaticMethodMatcherPointcut {
 
     @Autowired

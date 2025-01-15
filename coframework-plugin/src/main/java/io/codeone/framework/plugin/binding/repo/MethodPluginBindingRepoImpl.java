@@ -4,6 +4,8 @@ import io.codeone.framework.common.util.AnnotationUtils;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.binding.EnablePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -19,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * method-to-plugin bindings.
  */
 @Component
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class MethodPluginBindingRepoImpl implements MethodPluginBindingRepo {
 
     @Autowired

@@ -3,7 +3,9 @@ package io.codeone.framework.plugin.chain;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.binding.repo.MethodPluginBindingRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
  * Factory for creating and managing {@link PluginChain} instances.
  */
 @Component
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class PluginChainFactory {
 
     @Autowired
