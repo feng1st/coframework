@@ -81,13 +81,13 @@ class AbilityTest {
 
     @Test
     public void nullBizScenario() {
-        Assertions.assertEquals("Failed to retrieve BizScenario from parameter 0 of method 'public abstract java.lang.Object io.codeone.framework.ext.annotation.AbilityTestAbility.byParamType(io.codeone.framework.ext.annotation.AbilityTestParam)' or current context",
+        Assertions.assertEquals("The BizScenario in parameter 0 of method \"io.codeone.framework.ext.annotation.AbilityTestAbility.byParamType(AbilityTestParam)\" is null. Ensure that a BizScenario is provided either in the parameter or the current context.",
                 Assertions.assertThrows(IllegalStateException.class,
                         () -> abilityTestAbility.byParamType(null)).getMessage());
-        Assertions.assertEquals("Failed to retrieve BizScenario from parameter 0 of method 'public abstract java.lang.Object io.codeone.framework.ext.annotation.AbilityTestAbility.byParamType(io.codeone.framework.ext.annotation.AbilityTestParam)' or current context",
+        Assertions.assertEquals("The BizScenario in parameter 0 of method \"io.codeone.framework.ext.annotation.AbilityTestAbility.byParamType(AbilityTestParam)\" is null. Ensure that a BizScenario is provided either in the parameter or the current context.",
                 Assertions.assertThrows(IllegalStateException.class,
                         () -> abilityTestAbility.byParamType(AbilityTestParam.of())).getMessage());
-        Assertions.assertEquals("Failed to retrieve BizScenario from current context for method 'public abstract java.lang.Object io.codeone.framework.ext.annotation.AbilityTestAbility.byContext()'",
+        Assertions.assertEquals("Failed to retrieve BizScenario from current context for method \"io.codeone.framework.ext.annotation.AbilityTestAbility.byContext()\"",
                 Assertions.assertThrows(IllegalStateException.class,
                         () -> abilityTestAbility.byContext()).getMessage());
     }

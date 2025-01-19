@@ -1,5 +1,6 @@
 package io.codeone.framework.ext.extensible;
 
+import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioContext;
 import io.codeone.framework.ext.BizScenarioParam;
@@ -91,13 +92,13 @@ public class ExtensibleInvocationHandler<T> implements InvocationHandler {
 
         if (paramIndex >= 0) {
             throw new IllegalStateException(String.format(
-                    "Failed to retrieve BizScenario from parameter %d of method '%s' or current context",
+                    "The BizScenario in parameter %d of method \"%s\" is null. Ensure that a BizScenario is provided either in the parameter or the current context.",
                     paramIndex,
-                    method));
+                    LogFormatUtils.getTypeName(method)));
         } else {
             throw new IllegalStateException(String.format(
-                    "Failed to retrieve BizScenario from current context for method '%s'",
-                    method));
+                    "Failed to retrieve BizScenario from current context for method \"%s\"",
+                    LogFormatUtils.getTypeName(method)));
         }
     }
 
