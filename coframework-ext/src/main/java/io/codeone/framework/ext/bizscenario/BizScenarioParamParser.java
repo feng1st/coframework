@@ -81,7 +81,7 @@ public class BizScenarioParamParser {
             return index;
         }
 
-        log.warn("Unable to determine BizScenario source for method: {}", method);
+        log.warn("The method in the Extensible interface does not include routing parameters or annotations. Defaulting to routing by context: \"{}\"", method);
 
         return BizScenarioParamRepo.INDEX_ROUTE_BY_CONTEXT;
     }
