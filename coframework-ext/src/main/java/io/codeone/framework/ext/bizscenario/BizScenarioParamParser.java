@@ -1,5 +1,6 @@
 package io.codeone.framework.ext.bizscenario;
 
+import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.ext.annotation.RouteBy;
 import io.codeone.framework.ext.annotation.RouteByContext;
 import io.codeone.framework.ext.util.ExtUtils;
@@ -41,13 +42,13 @@ public class BizScenarioParamParser {
             if (param.isAnnotationPresent(RouteBy.class)) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Duplicate @RouteBy parameters found on method '%s'",
-                            method));
+                            "Method \"%s\" contains multiple parameters annotated with @RouteBy. Only one is allowed.",
+                            LogFormatUtils.getTypeName(method)));
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
                     throw new IllegalStateException(String.format(
-                            "Parameter annotated with @RouteBy is not BizScenarioParam on method '%s'",
-                            method));
+                            "Parameter at index %d in method \"%s\", annotated with @RouteBy, must be of type BizScenarioParam.",
+                            i, LogFormatUtils.getTypeName(method)));
                 }
                 index = i;
             }
@@ -55,8 +56,8 @@ public class BizScenarioParamParser {
         if (index != null) {
             if (method.isAnnotationPresent(RouteByContext.class)) {
                 throw new IllegalStateException(String.format(
-                        "Conflicting annotations @RouteBy and @RouteByContext on method '%s'",
-                        method));
+                        "Method \"%s\" contains conflicting annotations: @RouteBy and @RouteByContext. Only one is allowed.",
+                        LogFormatUtils.getTypeName(method)));
             }
             return index;
         }
@@ -71,8 +72,8 @@ public class BizScenarioParamParser {
             if (ExtUtils.isBizScenarioParam(param.getType())) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Duplicate BizScenarioParam parameters found on method '%s'",
-                            method));
+                            "Method \"%s\" contains multiple parameters of type BizScenarioParam. Only one is allowed.",
+                            LogFormatUtils.getTypeName(method)));
                 }
                 index = i;
             }
@@ -81,7 +82,8 @@ public class BizScenarioParamParser {
             return index;
         }
 
-        log.warn("The method in the Extensible interface does not include routing parameters or annotations. Defaulting to routing by context: \"{}\"", method);
+        log.warn("The method in the Extensible interface does not include a routing parameter or annotation. Defaulting to routing by context: \"{}\".",
+                LogFormatUtils.getTypeName(method));
 
         return BizScenarioParamRepo.INDEX_ROUTE_BY_CONTEXT;
     }
