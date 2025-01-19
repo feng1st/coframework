@@ -20,7 +20,7 @@ class ExtensionRepoTest {
 
     @Test
     public void getExtension() {
-        Assertions.assertEquals("No Extension found for 'ArrayList[*|*]'",
+        Assertions.assertEquals("No Extension found for Extensible interface \"java.util.ArrayList\" and BizScenario \"*|*\". Ensure an appropriate Extension is registered.",
                 Assertions.assertThrows(IllegalArgumentException.class,
                         () -> extensionRepo.getExtension(ArrayList.class, BizScenario.of())).getMessage());
     }
@@ -29,7 +29,7 @@ class ExtensionRepoTest {
     public void register() throws Exception {
         Method method = ExtensionRepoImpl.class.getDeclaredMethod("register", Object.class);
         method.setAccessible(true);
-        Assertions.assertEquals("'Object' does not implement any Extensible interface (annotated with @Ability or @ExtensionPoint)",
+        Assertions.assertEquals("The class \"java.lang.Object\" does not implement any Extensible interface (annotated with @Ability or @ExtensionPoint). Ensure the class is correctly annotated and implements the required interfaces.",
                 Assertions.assertThrows(InvocationTargetException.class,
                         () -> method.invoke(extensionRepo, new Object())).getCause().getMessage());
     }
@@ -39,7 +39,7 @@ class ExtensionRepoTest {
         Method method = ExtensionRepoImpl.class.getDeclaredMethod("registerExtension", Class.class, BizScenario.class, Object.class);
         method.setAccessible(true);
         method.invoke(extensionRepo, List.class, BizScenario.ofScenario("s"), new ArrayList<>());
-        Assertions.assertEquals("Duplicate Extension found for 'List': existing 'ArrayList' vs new 'LinkedList'",
+        Assertions.assertEquals("Duplicate Extension detected for Extensible interface \"java.util.List\" and BizScenario \"*|s\". Existing Extension: \"java.util.ArrayList\", New Extension: \"java.util.LinkedList\".",
                 Assertions.assertThrows(InvocationTargetException.class,
                         () -> method.invoke(extensionRepo, List.class, BizScenario.ofScenario("s"), new LinkedList<>())).getCause().getMessage());
     }

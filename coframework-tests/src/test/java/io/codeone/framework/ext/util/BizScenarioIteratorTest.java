@@ -59,7 +59,7 @@ class BizScenarioIteratorTest {
 
     @Test
     public void noDefault() {
-        Assertions.assertEquals("No Extension found for 'BizScenarioIteratorTestNoDefaultEp[bar|*]'",
+        Assertions.assertEquals("No Extension found for Extensible interface \"io.codeone.framework.ext.util.BizScenarioIteratorTestNoDefaultEp\" and BizScenario \"bar|*\". Ensure an appropriate Extension is registered.",
                 Assertions.assertThrows(IllegalArgumentException.class,
                         () -> bizScenarioIteratorTestNoDefaultEp.execute(BizScenario.ofBizId("bar"))).getMessage());
     }

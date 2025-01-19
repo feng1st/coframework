@@ -77,8 +77,9 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         if (extension == null
                 || !extension.isPresent()) {
             throw new IllegalArgumentException(String.format(
-                    "No Extension found for '%s'",
-                    cacheKey));
+                    "No Extension found for Extensible interface \"%s\" and BizScenario \"%s\". Ensure an appropriate Extension is registered.",
+                    extensibleInterface.getTypeName(),
+                    bizScenario));
         }
         return extension.get();
     }
@@ -97,8 +98,8 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         List<Class<?>> extensibleInterfaces = ExtUtils.getAllExtensibleInterfaces(extensionClass);
         if (extensibleInterfaces.isEmpty()) {
             throw new IllegalStateException(String.format(
-                    "'%s' does not implement any Extensible interface (annotated with @Ability or @ExtensionPoint)",
-                    extensionClass.getSimpleName()));
+                    "The class \"%s\" does not implement any Extensible interface (annotated with @Ability or @ExtensionPoint). Ensure the class is correctly annotated and implements the required interfaces.",
+                    extensionClass.getTypeName()));
         }
 
         Extension extensionAnno = extensionClass.getAnnotation(Extension.class);
@@ -129,10 +130,11 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
                 .put(bizScenario, extension);
         if (existing != null) {
             throw new IllegalStateException(String.format(
-                    "Duplicate Extension found for '%s': existing '%s' vs new '%s'",
-                    extensibleInterface.getSimpleName(),
-                    ClassUtils.getTargetClass(existing).getSimpleName(),
-                    ClassUtils.getTargetClass(extension).getSimpleName()));
+                    "Duplicate Extension detected for Extensible interface \"%s\" and BizScenario \"%s\". Existing Extension: \"%s\", New Extension: \"%s\".",
+                    extensibleInterface.getTypeName(),
+                    bizScenario,
+                    ClassUtils.getTargetClass(existing).getTypeName(),
+                    ClassUtils.getTargetClass(extension).getTypeName()));
         }
     }
 
@@ -146,10 +148,5 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         private final Class<?> extensibleInterface;
 
         private final BizScenario bizScenario;
-
-        @Override
-        public String toString() {
-            return extensibleInterface.getSimpleName() + "[" + bizScenario + "]";
-        }
     }
 }
