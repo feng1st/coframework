@@ -1,5 +1,6 @@
 package io.codeone.framework.ext.bizscenario;
 
+import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.common.util.ClassUtils;
 import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.util.ExtUtils;
@@ -50,8 +51,8 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
         Integer index = map.get(method);
         if (index == null) {
             throw new IllegalStateException(String.format(
-                    "No BizScenario source registered for method '%s'",
-                    method));
+                    "No BizScenario source registered for method \"%s\".",
+                    LogFormatUtils.getTypeName(method)));
         }
         return index;
     }
