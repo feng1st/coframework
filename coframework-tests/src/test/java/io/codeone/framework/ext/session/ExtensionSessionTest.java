@@ -81,17 +81,17 @@ class ExtensionSessionTest {
 
     @Test
     public void nullBizScenario() {
-        Assertions.assertEquals("BizScenario is null for parameter 1 in method 'public java.lang.Object io.codeone.framework.ext.session.ExtensionSessionTestService.first(java.lang.Object,io.codeone.framework.ext.BizScenarioParam,io.codeone.framework.ext.BizScenarioParam)'",
+        Assertions.assertEquals("BizScenario is null for parameter 1 in method \"io.codeone.framework.ext.session.ExtensionSessionTestService.first(Object, BizScenarioParam, BizScenarioParam)\". Ensure the parameter is correctly initialized with a valid BizScenario.",
                 Assertions.assertThrows(IllegalArgumentException.class,
                         () -> extensionSessionTestService.first(1,
                                 null,
                                 BizScenario.ofBizId("bar"))).getMessage());
-        Assertions.assertEquals("BizScenario is null for parameter 1 in method 'public java.lang.Object io.codeone.framework.ext.session.ExtensionSessionTestService.first(java.lang.Object,io.codeone.framework.ext.BizScenarioParam,io.codeone.framework.ext.BizScenarioParam)'",
+        Assertions.assertEquals("BizScenario is null for parameter 1 in method \"io.codeone.framework.ext.session.ExtensionSessionTestService.first(Object, BizScenarioParam, BizScenarioParam)\". Ensure the parameter is correctly initialized with a valid BizScenario.",
                 Assertions.assertThrows(IllegalArgumentException.class,
                         () -> extensionSessionTestService.first(1,
                                 () -> null,
                                 BizScenario.ofBizId("bar"))).getMessage());
-        Assertions.assertEquals("BizScenario could not be resolved using resolver 'ExtensionSessionTestResolver' for method 'public java.lang.Object io.codeone.framework.ext.session.ExtensionSessionTestService.custom(java.lang.Object)'",
+        Assertions.assertEquals("BizScenario could not be resolved using the custom resolver \"ExtensionSessionTestResolver\" for method \"io.codeone.framework.ext.session.ExtensionSessionTestService.custom(Object)\". Ensure the resolver is correctly implemented and can resolve a valid BizScenario.",
                 Assertions.assertThrows(IllegalArgumentException.class,
                         () -> extensionSessionTestService.custom(1)).getMessage());
     }

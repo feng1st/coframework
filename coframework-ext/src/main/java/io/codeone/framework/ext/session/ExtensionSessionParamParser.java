@@ -1,5 +1,6 @@
 package io.codeone.framework.ext.session;
 
+import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.ext.annotation.ExtensionSession;
 import io.codeone.framework.ext.annotation.RouteBy;
 import io.codeone.framework.ext.util.ExtUtils;
@@ -48,26 +49,26 @@ public class ExtensionSessionParamParser {
         if (session.value() == BizScenarioResolvePolicy.FIRST) {
             return Optional.ofNullable(parseFirst(method))
                     .orElseThrow(() -> new IllegalStateException(String.format(
-                            "No BizScenarioParam found in method '%s'",
-                            method)));
+                            "No parameter of type BizScenarioParam found in method \"%s\". Ensure the method has at least one parameter of this type.",
+                            LogFormatUtils.getTypeName(method))));
         }
         if (session.value() == BizScenarioResolvePolicy.LAST) {
             return Optional.ofNullable(parseLast(method))
                     .orElseThrow(() -> new IllegalStateException(String.format(
-                            "No BizScenarioParam found in method '%s'",
-                            method)));
+                            "No parameter of type BizScenarioParam found in method \"%s\". Ensure the method has at least one parameter of this type.",
+                            LogFormatUtils.getTypeName(method))));
         }
         if (session.value() == BizScenarioResolvePolicy.SPECIFIED) {
             return Optional.ofNullable(parseSpecified(method))
                     .orElseThrow(() -> new IllegalStateException(String.format(
-                            "No @RouteBy BizScenarioParam found in method '%s'",
-                            method)));
+                            "No parameter annotated with @RouteBy found in method \"%s\". Ensure the method has exactly one parameter annotated with @RouteBy.",
+                            LogFormatUtils.getTypeName(method))));
         }
         if (session.value() == BizScenarioResolvePolicy.CUSTOM) {
             return Optional.ofNullable(parseCustomResolver(session))
                     .orElseThrow(() -> new IllegalStateException(String.format(
-                            "No BizScenarioResolver specified for method '%s'",
-                            method)));
+                            "No custom BizScenarioResolver specified in @ExtensionSession for method \"%s\". Ensure the annotation defines a valid resolver.",
+                            LogFormatUtils.getTypeName(method))));
         }
 
         // session.value() == BizScenarioResolvePolicy.IGNORE
@@ -99,13 +100,13 @@ public class ExtensionSessionParamParser {
             if (param.isAnnotationPresent(RouteBy.class)) {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
-                            "Duplicate @RouteBy found in method '%s'",
-                            method));
+                            "Duplicate @RouteBy annotations found in method \"%s\". Ensure the method has at most one parameter annotated with @RouteBy.",
+                            LogFormatUtils.getTypeName(method)));
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
                     throw new IllegalStateException(String.format(
-                            "Parameter with @RouteBy in method '%s' is not BizScenarioParam",
-                            method));
+                            "Parameter annotated with @RouteBy in method \"%s\" is not of type BizScenarioParam. Ensure the parameter type is BizScenarioParam.",
+                            LogFormatUtils.getTypeName(method)));
                 }
                 index = i;
             }

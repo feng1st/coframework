@@ -15,7 +15,7 @@ class ExtensionSessionRepoTest {
 
     @Test
     public void getParamIndex() {
-        Assertions.assertEquals("No BizScenario source found for method 'public boolean java.util.ArrayList.add(java.lang.Object)'",
+        Assertions.assertEquals("No BizScenarioParam registered for method \"java.util.ArrayList.add(Object)\". Ensure the method is correctly configured with @ExtensionSession and contains a valid BizScenarioParam.",
                 Assertions.assertThrows(IllegalStateException.class,
                         () -> extensionSessionRepo.getParamIndex(ArrayList.class.getMethod("add", Object.class))).getMessage());
     }

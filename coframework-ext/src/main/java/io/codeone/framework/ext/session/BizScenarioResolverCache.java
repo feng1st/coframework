@@ -33,8 +33,8 @@ public class BizScenarioResolverCache {
             return cache.computeIfAbsent(resolverClass, k -> applicationContext.getBean(k));
         } catch (Exception e) {
             throw new IllegalStateException(String.format(
-                    "Cannot load BizScenarioResolver '%s'",
-                    resolverClass.getSimpleName()));
+                    "Failed to load BizScenarioResolver \"%s\". Ensure the resolver is properly registered as a Spring bean.",
+                    resolverClass.getSimpleName()), e);
         }
     }
 }
