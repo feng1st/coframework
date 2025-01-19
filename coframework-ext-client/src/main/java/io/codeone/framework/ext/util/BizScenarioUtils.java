@@ -73,7 +73,7 @@ public class BizScenarioUtils {
     public void validate(String code) {
         if (!isValid(code)) {
             throw new IllegalArgumentException(String.format(
-                    "Invalid code '%s', should be '*', or '.' separated alphabets, numbers, '-' and '_'",
+                    "Invalid code \"%s\". A valid code must be \"*\" or consist of '.' separated sequences of letters, digits, '-', and '_'",
                     code));
         }
     }

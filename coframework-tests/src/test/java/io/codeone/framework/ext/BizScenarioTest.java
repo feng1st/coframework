@@ -22,9 +22,9 @@ class BizScenarioTest {
 
     @Test
     public void invalid() {
-        Assertions.assertEquals("Invalid code '#', should be '*', or '.' separated alphabets, numbers, '-' and '_'",
+        Assertions.assertEquals("Invalid code \"#\". A valid code must be \"*\" or consist of '.' separated sequences of letters, digits, '-', and '_'",
                 Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("#")).getMessage());
-        Assertions.assertEquals("Invalid code '#', should be '*', or '.' separated alphabets, numbers, '-' and '_'",
+        Assertions.assertEquals("Invalid code \"#\". A valid code must be \"*\" or consist of '.' separated sequences of letters, digits, '-', and '_'",
                 Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofScenario("#")).getMessage());
         Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId(".foo"));
         Assertions.assertThrows(IllegalArgumentException.class, () -> BizScenario.ofBizId("foo."));
