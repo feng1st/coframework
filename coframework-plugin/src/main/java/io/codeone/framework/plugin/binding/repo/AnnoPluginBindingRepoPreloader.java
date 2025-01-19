@@ -47,12 +47,15 @@ public class AnnoPluginBindingRepoPreloader implements BeanFactoryPostProcessor 
         for (String pluginBeanName : pluginBeanNames) {
             BeanDefinition pluginDefinition = beanFactory.getBeanDefinition(pluginBeanName);
             String pluginClassName = pluginDefinition.getBeanClassName();
+            if (pluginClassName == null) {
+                continue;
+            }
             Class<? extends Plugin> pluginClass = ClassUtils.forName(pluginClassName, getClass().getClassLoader());
 
             Plug plug = pluginClass.getAnnotation(Plug.class);
             if (plug == null) {
-                throw new IllegalStateException(String.format("Plugin should be annotated with @Plug: %s",
-                        pluginBeanName));
+                throw new IllegalStateException(String.format("Plugin class should be annotated with @Plug: \"%s\"",
+                        pluginClass));
             }
 
             for (Class<? extends Annotation> annoType : plug.targetAnnotations()) {
