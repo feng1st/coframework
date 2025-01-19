@@ -2,7 +2,7 @@ package io.codeone.framework.chain.log;
 
 import io.codeone.framework.chain.Chainable;
 import io.codeone.framework.chain.context.Context;
-import io.codeone.framework.common.log.util.LogUtils;
+import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.common.util.ClassUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class ChainLogger {
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("chain", context.chainName());
-        map.put("node", ClassUtils.getSimpleName(ClassUtils.getTargetClass(chainable)));
+        map.put("node", LogFormatUtils.getSimpleName(ClassUtils.getTargetClass(chainable)));
         if (context.getBizScenario() != null) {
             map.put("bizId", context.getBizScenario().getBizId());
             map.put("scenario", context.getBizScenario().getScenario());
@@ -58,9 +58,9 @@ public class ChainLogger {
         }
 
         if (resultOrException instanceof Throwable) {
-            log.error("{}", LogUtils.format(map), resultOrException);
+            log.error("{}", LogFormatUtils.format(map), resultOrException);
         } else {
-            log.info("{}", LogUtils.format(map));
+            log.info("{}", LogFormatUtils.format(map));
         }
     }
 }

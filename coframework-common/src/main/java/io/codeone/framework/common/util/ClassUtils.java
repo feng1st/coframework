@@ -37,19 +37,4 @@ public class ClassUtils {
         }
         return obj.getClass();
     }
-
-    /**
-     * Retrieves the simple name of a class, handling lambda-generated classes.
-     *
-     * @param clazz the class to inspect
-     * @return the simple name of the class
-     */
-    public String getSimpleName(Class<?> clazz) {
-        String simpleName = clazz.getSimpleName();
-        int i = simpleName.lastIndexOf("$$Lambda");
-        if (i != -1) {
-            simpleName = simpleName.substring(0, i + 8);
-        }
-        return simpleName;
-    }
 }

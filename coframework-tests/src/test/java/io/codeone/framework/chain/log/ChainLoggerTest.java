@@ -3,7 +3,7 @@ package io.codeone.framework.chain.log;
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.chain.composite.Sequential;
 import io.codeone.framework.chain.context.Context;
-import io.codeone.framework.common.log.util.LogUtils;
+import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.shared.BaseLoggingTest;
 import org.junit.jupiter.api.Assertions;
@@ -128,7 +128,7 @@ class ChainLoggerTest extends BaseLoggingTest {
 
     @Test
     public void logNonJson() {
-        LogUtils.logAsJson = false;
+        LogFormatUtils.logAsJson = false;
         Assertions.assertThrows(IllegalStateException.class,
                 () -> Sequential.of(context -> {
                             context.put(String.class, "Hello chain");
@@ -138,7 +138,7 @@ class ChainLoggerTest extends BaseLoggingTest {
                             System.out.println(context.get(String.class));
                             return true;
                         }).run(Context.of()));
-        LogUtils.logAsJson = true;
+        LogFormatUtils.logAsJson = true;
 
         assertLog("chain", Level.ERROR, IllegalStateException.class,
                 "{chain=anonymous, node=ChainLoggerTest$$Lambda, elapsed=0, exception=java.lang.IllegalStateException}");

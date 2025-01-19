@@ -4,6 +4,7 @@ import io.codeone.framework.common.log.formatter.LogFormatter;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.ClassUtils;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -13,7 +14,7 @@ import java.util.*;
  * using Jackson.
  */
 @UtilityClass
-public class LogUtils {
+public class LogFormatUtils {
 
     /**
      * Flag to determine if logging should be done in JSON format.
@@ -21,6 +22,48 @@ public class LogUtils {
     public boolean logAsJson = true;
 
     private final LogFormatter JACKSON_LOG_FORMATTER = initJacksonLogFormatter();
+
+    /**
+     * Retrieves the simple name of a class, handling lambda-generated classes.
+     *
+     * @param clazz the class to inspect
+     * @return the simple name of the class
+     */
+    public String getSimpleName(Class<?> clazz) {
+        return formatLambda(clazz.getSimpleName());
+    }
+
+    /**
+     * Retrieves the simple name of a method.
+     *
+     * @param method the method to inspect
+     * @return the simple name of the method
+     */
+    public String getSimpleName(Method method) {
+        return getSimpleName(method.getDeclaringClass()) + "." + method.getName();
+    }
+
+    /**
+     * Return an informative string for a method.
+     *
+     * @param method the method to inspect
+     * @return an informative string for the method
+     */
+    public String getTypeName(Method method) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(formatLambda(method.getDeclaringClass().getTypeName()))
+                .append(".")
+                .append(method.getName())
+                .append("(");
+        for (int i = 0; i < method.getParameterTypes().length; i++) {
+            if (i > 0) {
+                builder.append(", ");
+            }
+            builder.append(method.getParameterTypes()[i].getSimpleName());
+        }
+        builder.append(")");
+        return builder.toString();
+    }
 
     /**
      * Formats the given content for logging.
@@ -43,6 +86,14 @@ public class LogUtils {
         } catch (Throwable ignored) {
             return toLogSafeObj(content);
         }
+    }
+
+    private String formatLambda(String className) {
+        int i = className.lastIndexOf("$$Lambda");
+        if (i != -1) {
+            return className.substring(0, i + 8);
+        }
+        return className;
     }
 
     /**
