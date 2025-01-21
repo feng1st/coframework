@@ -22,6 +22,7 @@ public interface ApiError {
      * @param code     the unique error code
      * @param critical whether the error is critical (logged as error) or not (logged
      *                 as warning)
+     * @param message  the error message
      * @return a new {@code ApiError} instance
      */
     static ApiError of(String code, boolean critical, String message) {
