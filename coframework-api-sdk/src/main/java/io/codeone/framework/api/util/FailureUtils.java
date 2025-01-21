@@ -42,6 +42,9 @@ public class FailureUtils {
         if (apiError == null) {
             return null;
         }
-        return CONVERSION_SERVICE.convert(apiError, resultType);
+        if (CONVERSION_SERVICE.canConvert(ApiError.class, resultType)) {
+            return CONVERSION_SERVICE.convert(apiError, resultType);
+        }
+        return null;
     }
 }
