@@ -42,7 +42,7 @@ public class FailureUtils {
         if (apiError == null) {
             return null;
         }
-        if (CONVERSION_SERVICE.canConvert(ApiError.class, resultType)) {
+        if (isSupported(resultType)) {
             return CONVERSION_SERVICE.convert(apiError, resultType);
         }
         return null;
