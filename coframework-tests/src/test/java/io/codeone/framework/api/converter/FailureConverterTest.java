@@ -21,6 +21,7 @@ public class FailureConverterTest {
     @Test
     void nullResult() {
         Assertions.assertNull(FailureUtils.toFailure(null, FailureConverterTestLegacyResult.class));
+        Assertions.assertNull(FailureUtils.toFailure(ClientErrors.AUTH_FAILED, Object.class));
     }
 
     @Test
