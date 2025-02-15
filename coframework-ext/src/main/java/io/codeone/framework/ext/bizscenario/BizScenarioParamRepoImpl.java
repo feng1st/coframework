@@ -1,7 +1,7 @@
 package io.codeone.framework.ext.bizscenario;
 
 import io.codeone.framework.common.util.ClassUtils;
-import io.codeone.framework.common.util.TypeNameUtils;
+import io.codeone.framework.common.util.TypeStringUtils;
 import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.util.ExtUtils;
 import org.springframework.beans.BeansException;
@@ -52,7 +52,7 @@ public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizSc
         if (index == null) {
             throw new IllegalStateException(String.format(
                     "No BizScenario source registered for method \"%s\".",
-                    TypeNameUtils.toString(method)));
+                    TypeStringUtils.toString(method)));
         }
         return index;
     }

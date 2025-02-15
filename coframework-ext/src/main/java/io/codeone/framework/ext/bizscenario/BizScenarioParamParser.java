@@ -1,6 +1,6 @@
 package io.codeone.framework.ext.bizscenario;
 
-import io.codeone.framework.common.util.TypeNameUtils;
+import io.codeone.framework.common.util.TypeStringUtils;
 import io.codeone.framework.ext.annotation.RouteBy;
 import io.codeone.framework.ext.annotation.RouteByContext;
 import io.codeone.framework.ext.util.ExtUtils;
@@ -43,12 +43,12 @@ public class BizScenarioParamParser {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
                             "Method \"%s\" contains multiple parameters annotated with @RouteBy. Only one is allowed.",
-                            TypeNameUtils.toString(method)));
+                            TypeStringUtils.toString(method)));
                 }
                 if (!ExtUtils.isBizScenarioParam(param.getType())) {
                     throw new IllegalStateException(String.format(
                             "Parameter at index %d in method \"%s\", annotated with @RouteBy, must be of type BizScenarioParam.",
-                            i, TypeNameUtils.toString(method)));
+                            i, TypeStringUtils.toString(method)));
                 }
                 index = i;
             }
@@ -57,7 +57,7 @@ public class BizScenarioParamParser {
             if (method.isAnnotationPresent(RouteByContext.class)) {
                 throw new IllegalStateException(String.format(
                         "Method \"%s\" contains conflicting annotations: @RouteBy and @RouteByContext. Only one is allowed.",
-                        TypeNameUtils.toString(method)));
+                        TypeStringUtils.toString(method)));
             }
             return index;
         }
@@ -73,7 +73,7 @@ public class BizScenarioParamParser {
                 if (index != null) {
                     throw new IllegalStateException(String.format(
                             "Method \"%s\" contains multiple parameters of type BizScenarioParam. Only one is allowed.",
-                            TypeNameUtils.toString(method)));
+                            TypeStringUtils.toString(method)));
                 }
                 index = i;
             }
@@ -83,7 +83,7 @@ public class BizScenarioParamParser {
         }
 
         log.warn("The method in the Extensible interface does not include a routing parameter or annotation. Defaulting to routing by context: \"{}\".",
-                TypeNameUtils.toString(method));
+                TypeStringUtils.toString(method));
 
         return BizScenarioParamRepo.INDEX_ROUTE_BY_CONTEXT;
     }

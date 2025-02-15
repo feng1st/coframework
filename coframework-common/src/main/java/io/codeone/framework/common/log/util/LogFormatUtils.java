@@ -1,7 +1,7 @@
 package io.codeone.framework.common.log.util;
 
 import io.codeone.framework.common.log.formatter.LogFormatter;
-import io.codeone.framework.common.util.TypeNameUtils;
+import io.codeone.framework.common.util.TypeStringUtils;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.ClassUtils;
 
@@ -66,7 +66,7 @@ public class LogFormatUtils {
         }
         if (object instanceof Map) {
             if (visited.put(object, object) != null) {
-                return String.format("(REF: %s)", TypeNameUtils.toString(object.getClass()));
+                return String.format("(REF: %s)", TypeStringUtils.toString(object.getClass()));
             }
             try {
                 Map<Object, Object> map = new LinkedHashMap<>(((Map<?, ?>) object).size());
@@ -75,12 +75,12 @@ public class LogFormatUtils {
                 }
                 return map;
             } catch (Exception e) {
-                return String.format("(ITERATE_MAP_ERROR: %s)", TypeNameUtils.toString(object.getClass()));
+                return String.format("(ITERATE_MAP_ERROR: %s)", TypeStringUtils.toString(object.getClass()));
             }
         }
         if (object instanceof Collection) {
             if (visited.put(object, object) != null) {
-                return String.format("(REF: %s)", TypeNameUtils.toString(object.getClass()));
+                return String.format("(REF: %s)", TypeStringUtils.toString(object.getClass()));
             }
             try {
                 List<Object> list = new ArrayList<>(((Collection<?>) object).size());
@@ -89,11 +89,11 @@ public class LogFormatUtils {
                 }
                 return list;
             } catch (Exception e) {
-                return String.format("(ITERATE_COLLECTION_ERROR: %s)", TypeNameUtils.toString(object.getClass()));
+                return String.format("(ITERATE_COLLECTION_ERROR: %s)", TypeStringUtils.toString(object.getClass()));
             }
         }
         if (ClassUtils.isPrimitiveArray(object.getClass())) {
-            return String.format("[%s]", TypeNameUtils.toString(object.getClass().getComponentType()));
+            return String.format("[%s]", TypeStringUtils.toString(object.getClass().getComponentType()));
         }
         if (ClassUtils.isPrimitiveOrWrapper(object.getClass())) {
             return object;
@@ -103,7 +103,7 @@ public class LogFormatUtils {
         }
         if (object.getClass().isArray()) {
             if (visited.put(object, object) != null) {
-                return String.format("(REF: [%s])", TypeNameUtils.toString(object.getClass().getComponentType()));
+                return String.format("(REF: [%s])", TypeStringUtils.toString(object.getClass().getComponentType()));
             }
             List<Object> list = new ArrayList<>(((Object[]) object).length);
             for (Object element : (Object[]) object) {
@@ -114,7 +114,7 @@ public class LogFormatUtils {
         try {
             return object.toString();
         } catch (Throwable e) {
-            return String.format("(TO_STRING_ERROR: %s)", TypeNameUtils.toString(object.getClass()));
+            return String.format("(TO_STRING_ERROR: %s)", TypeStringUtils.toString(object.getClass()));
         }
     }
 

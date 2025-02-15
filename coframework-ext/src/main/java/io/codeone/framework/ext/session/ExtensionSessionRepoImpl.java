@@ -1,6 +1,6 @@
 package io.codeone.framework.ext.session;
 
-import io.codeone.framework.common.util.TypeNameUtils;
+import io.codeone.framework.common.util.TypeStringUtils;
 import io.codeone.framework.ext.annotation.ExtensionSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,7 +44,7 @@ public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
         if (index == null) {
             throw new IllegalStateException(String.format(
                     "No BizScenarioParam registered for method \"%s\". Ensure the method is correctly configured with @ExtensionSession and contains a valid BizScenarioParam.",
-                    TypeNameUtils.toString(method)));
+                    TypeStringUtils.toString(method)));
         }
         return index;
     }

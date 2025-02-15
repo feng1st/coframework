@@ -1,7 +1,7 @@
 package io.codeone.framework.plugin.binding.repo;
 
 import io.codeone.framework.common.util.ClassUtils;
-import io.codeone.framework.common.util.TypeNameUtils;
+import io.codeone.framework.common.util.TypeStringUtils;
 import io.codeone.framework.plugin.Plug;
 import io.codeone.framework.plugin.Plugin;
 import io.codeone.framework.plugin.binding.AnnoPluginBinding;
@@ -56,7 +56,7 @@ public class AnnoPluginBindingRepoPreloader implements BeanFactoryPostProcessor 
             Plug plug = pluginClass.getAnnotation(Plug.class);
             if (plug == null) {
                 throw new IllegalStateException(String.format("Plugin class should be annotated with @Plug: \"%s\".",
-                        TypeNameUtils.toString(pluginClass)));
+                        TypeStringUtils.toString(pluginClass)));
             }
 
             for (Class<? extends Annotation> annoType : plug.targetAnnotations()) {

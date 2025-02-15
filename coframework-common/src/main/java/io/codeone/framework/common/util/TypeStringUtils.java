@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  * contexts.
  */
 @UtilityClass
-public class TypeNameUtils {
+public class TypeStringUtils {
 
     /**
      * Returns the fully qualified type name of the given class.

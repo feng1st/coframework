@@ -8,7 +8,7 @@ import io.codeone.framework.common.function.Invokable;
 import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.common.util.AnnotationUtils;
 import io.codeone.framework.common.util.ClassUtils;
-import io.codeone.framework.common.util.TypeNameUtils;
+import io.codeone.framework.common.util.TypeStringUtils;
 import io.codeone.framework.logging.Logging;
 import io.codeone.framework.logging.spel.LoggingExpressionParser;
 import io.codeone.framework.plugin.Plug;
@@ -51,7 +51,7 @@ public class LoggingPlugin implements Plugin {
             try {
                 log(method, args, result, throwable, elapsed);
             } catch (Throwable t) {
-                log.error("Failed to log invocation of method \"{}\".", TypeNameUtils.toString(method), t);
+                log.error("Failed to log invocation of method \"{}\".", TypeStringUtils.toString(method), t);
             }
         }
     }

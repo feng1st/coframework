@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 
-class TypeNameUtilsTest {
+class TypeStringUtilsTest {
 
     @Test
     void nullToString() {
-        Assertions.assertNull(TypeNameUtils.toString((Class<?>) null));
-        Assertions.assertNull(TypeNameUtils.toString((Method) null));
+        Assertions.assertNull(TypeStringUtils.toString((Class<?>) null));
+        Assertions.assertNull(TypeStringUtils.toString((Method) null));
     }
 }

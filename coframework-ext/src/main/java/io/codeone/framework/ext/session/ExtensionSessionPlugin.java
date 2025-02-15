@@ -2,7 +2,7 @@ package io.codeone.framework.ext.session;
 
 import io.codeone.framework.common.function.Invokable;
 import io.codeone.framework.common.util.AnnotationUtils;
-import io.codeone.framework.common.util.TypeNameUtils;
+import io.codeone.framework.common.util.TypeStringUtils;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioContext;
 import io.codeone.framework.ext.BizScenarioParam;
@@ -124,7 +124,7 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
             throw new IllegalArgumentException(String.format(
                     "BizScenario is null for parameter %d in method \"%s\". Ensure the parameter is correctly initialized with a valid BizScenario.",
                     paramIndex,
-                    TypeNameUtils.toString(method)));
+                    TypeStringUtils.toString(method)));
         }
 
         if (paramIndex == ExtensionSessionRepo.INDEX_CUSTOM_RESOLVER) {
@@ -134,8 +134,8 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
             }
             throw new IllegalArgumentException(String.format(
                     "BizScenario could not be resolved using the custom resolver \"%s\" for method \"%s\". Ensure the resolver is correctly implemented and can resolve a valid BizScenario.",
-                    TypeNameUtils.toString(session.customResolver()),
-                    TypeNameUtils.toString(method)));
+                    TypeStringUtils.toString(session.customResolver()),
+                    TypeStringUtils.toString(method)));
         }
 
         return null;
