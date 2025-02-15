@@ -4,11 +4,38 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.springframework.aop.support.AopUtils;
 
+import java.lang.reflect.Method;
+
 /**
  * Utility class for working with Java classes and class loaders.
  */
 @UtilityClass
 public class ClassUtils {
+
+    /**
+     * Retrieves the simple name of a class, handling lambda-generated classes.
+     *
+     * @param clazz the class to inspect
+     * @return the simple name of the class
+     */
+    public String getSimpleName(Class<?> clazz) {
+        String simpleName = clazz.getSimpleName();
+        int i = simpleName.lastIndexOf("$$Lambda");
+        if (i != -1) {
+            return simpleName.substring(0, i + 8);
+        }
+        return simpleName;
+    }
+
+    /**
+     * Retrieves the simple name of a method.
+     *
+     * @param method the method to inspect
+     * @return the simple name of the method
+     */
+    public String getSimpleName(Method method) {
+        return getSimpleName(method.getDeclaringClass()) + "." + method.getName();
+    }
 
     /**
      * Loads a class by name using the specified class loader.
@@ -17,7 +44,6 @@ public class ClassUtils {
      * @param classLoader the class loader to use for loading
      * @param <T>         the expected type of the class
      * @return the loaded class
-     * @throws ClassNotFoundException if the class cannot be found
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")

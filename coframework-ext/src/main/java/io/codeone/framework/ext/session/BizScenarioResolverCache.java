@@ -1,5 +1,6 @@
 package io.codeone.framework.ext.session;
 
+import io.codeone.framework.common.util.TypeNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class BizScenarioResolverCache {
         } catch (Exception e) {
             throw new IllegalStateException(String.format(
                     "Failed to load BizScenarioResolver \"%s\". Ensure the resolver is properly registered as a Spring bean.",
-                    resolverClass.getSimpleName()), e);
+                    TypeNameUtils.toString(resolverClass)), e);
         }
     }
 }

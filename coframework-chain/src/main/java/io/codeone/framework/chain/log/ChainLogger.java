@@ -42,7 +42,7 @@ public class ChainLogger {
 
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("chain", context.chainName());
-        map.put("node", LogFormatUtils.getSimpleName(ClassUtils.getTargetClass(chainable)));
+        map.put("node", ClassUtils.getSimpleName(ClassUtils.getTargetClass(chainable)));
         if (context.getBizScenario() != null) {
             map.put("bizId", context.getBizScenario().getBizId());
             map.put("scenario", context.getBizScenario().getScenario());

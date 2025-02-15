@@ -3,6 +3,7 @@ package io.codeone.framework.ext.extension;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.codeone.framework.common.util.ClassUtils;
+import io.codeone.framework.common.util.TypeNameUtils;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.annotation.Extension;
 import io.codeone.framework.ext.util.ExtUtils;
@@ -78,7 +79,7 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
                 || !extension.isPresent()) {
             throw new IllegalArgumentException(String.format(
                     "No Extension found for Extensible interface \"%s\" and BizScenario \"%s\". Ensure an appropriate Extension is registered.",
-                    extensibleInterface.getTypeName(),
+                    TypeNameUtils.toString(extensibleInterface),
                     bizScenario));
         }
         return extension.get();
@@ -99,7 +100,7 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         if (extensibleInterfaces.isEmpty()) {
             throw new IllegalStateException(String.format(
                     "The class \"%s\" does not implement any Extensible interface (annotated with @Ability or @ExtensionPoint). Ensure the class is correctly annotated and implements the required interfaces.",
-                    extensionClass.getTypeName()));
+                    TypeNameUtils.toString(extensionClass)));
         }
 
         Extension extensionAnno = extensionClass.getAnnotation(Extension.class);
@@ -131,10 +132,10 @@ public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
         if (existing != null) {
             throw new IllegalStateException(String.format(
                     "Duplicate Extension detected for Extensible interface \"%s\" and BizScenario \"%s\". Existing Extension: \"%s\", New Extension: \"%s\".",
-                    extensibleInterface.getTypeName(),
+                    TypeNameUtils.toString(extensibleInterface),
                     bizScenario,
-                    ClassUtils.getTargetClass(existing).getTypeName(),
-                    ClassUtils.getTargetClass(extension).getTypeName()));
+                    TypeNameUtils.toString(ClassUtils.getTargetClass(existing)),
+                    TypeNameUtils.toString(ClassUtils.getTargetClass(extension))));
         }
     }
 

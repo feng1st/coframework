@@ -13,7 +13,7 @@ class BizScenarioResolverCacheTest {
 
     @Test
     public void getResolver() {
-        Assertions.assertEquals("Failed to load BizScenarioResolver \"BizScenarioResolverCacheTestInvalidResolver\". Ensure the resolver is properly registered as a Spring bean.",
+        Assertions.assertEquals("Failed to load BizScenarioResolver \"io.codeone.framework.ext.session.BizScenarioResolverCacheTestInvalidResolver\". Ensure the resolver is properly registered as a Spring bean.",
                 Assertions.assertThrows(IllegalStateException.class,
                         () -> bizScenarioResolverCache.getResolver(BizScenarioResolverCacheTestInvalidResolver.class)).getMessage());
     }

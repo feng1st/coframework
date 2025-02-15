@@ -1,10 +1,10 @@
 package io.codeone.framework.common.log.util;
 
 import io.codeone.framework.common.log.formatter.LogFormatter;
+import io.codeone.framework.common.util.TypeNameUtils;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.ClassUtils;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -22,48 +22,6 @@ public class LogFormatUtils {
     public boolean logAsJson = true;
 
     private final LogFormatter JACKSON_LOG_FORMATTER = initJacksonLogFormatter();
-
-    /**
-     * Retrieves the simple name of a class, handling lambda-generated classes.
-     *
-     * @param clazz the class to inspect
-     * @return the simple name of the class
-     */
-    public String getSimpleName(Class<?> clazz) {
-        return formatLambda(clazz.getSimpleName());
-    }
-
-    /**
-     * Retrieves the simple name of a method.
-     *
-     * @param method the method to inspect
-     * @return the simple name of the method
-     */
-    public String getSimpleName(Method method) {
-        return getSimpleName(method.getDeclaringClass()) + "." + method.getName();
-    }
-
-    /**
-     * Return an informative string for a method.
-     *
-     * @param method the method to inspect
-     * @return an informative string for the method
-     */
-    public String getTypeName(Method method) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(formatLambda(method.getDeclaringClass().getTypeName()))
-                .append(".")
-                .append(method.getName())
-                .append("(");
-        for (int i = 0; i < method.getParameterTypes().length; i++) {
-            if (i > 0) {
-                builder.append(", ");
-            }
-            builder.append(method.getParameterTypes()[i].getSimpleName());
-        }
-        builder.append(")");
-        return builder.toString();
-    }
 
     /**
      * Formats the given content for logging.
@@ -88,14 +46,6 @@ public class LogFormatUtils {
         }
     }
 
-    private String formatLambda(String className) {
-        int i = className.lastIndexOf("$$Lambda");
-        if (i != -1) {
-            return className.substring(0, i + 8);
-        }
-        return className;
-    }
-
     /**
      * Safely converts an object to a loggable representation to avoid issues such
      * as cyclic references or exceptions during conversion.
@@ -116,7 +66,7 @@ public class LogFormatUtils {
         }
         if (object instanceof Map) {
             if (visited.put(object, object) != null) {
-                return String.format("(REF: %s)", object.getClass().getName());
+                return String.format("(REF: %s)", TypeNameUtils.toString(object.getClass()));
             }
             try {
                 Map<Object, Object> map = new LinkedHashMap<>(((Map<?, ?>) object).size());
@@ -125,12 +75,12 @@ public class LogFormatUtils {
                 }
                 return map;
             } catch (Exception e) {
-                return String.format("(ITERATE_MAP_ERROR: %s)", object.getClass().getName());
+                return String.format("(ITERATE_MAP_ERROR: %s)", TypeNameUtils.toString(object.getClass()));
             }
         }
         if (object instanceof Collection) {
             if (visited.put(object, object) != null) {
-                return String.format("(REF: %s)", object.getClass().getName());
+                return String.format("(REF: %s)", TypeNameUtils.toString(object.getClass()));
             }
             try {
                 List<Object> list = new ArrayList<>(((Collection<?>) object).size());
@@ -139,11 +89,11 @@ public class LogFormatUtils {
                 }
                 return list;
             } catch (Exception e) {
-                return String.format("(ITERATE_COLLECTION_ERROR: %s)", object.getClass().getName());
+                return String.format("(ITERATE_COLLECTION_ERROR: %s)", TypeNameUtils.toString(object.getClass()));
             }
         }
         if (ClassUtils.isPrimitiveArray(object.getClass())) {
-            return String.format("[%s]", object.getClass().getComponentType().getName());
+            return String.format("[%s]", TypeNameUtils.toString(object.getClass().getComponentType()));
         }
         if (ClassUtils.isPrimitiveOrWrapper(object.getClass())) {
             return object;
@@ -153,7 +103,7 @@ public class LogFormatUtils {
         }
         if (object.getClass().isArray()) {
             if (visited.put(object, object) != null) {
-                return String.format("(REF: [%s])", object.getClass().getComponentType().getName());
+                return String.format("(REF: [%s])", TypeNameUtils.toString(object.getClass().getComponentType()));
             }
             List<Object> list = new ArrayList<>(((Object[]) object).length);
             for (Object element : (Object[]) object) {
@@ -164,7 +114,7 @@ public class LogFormatUtils {
         try {
             return object.toString();
         } catch (Throwable e) {
-            return String.format("(TO_STRING_ERROR: %s)", object.getClass().getName());
+            return String.format("(TO_STRING_ERROR: %s)", TypeNameUtils.toString(object.getClass()));
         }
     }
 

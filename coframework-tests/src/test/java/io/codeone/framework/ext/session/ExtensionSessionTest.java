@@ -91,7 +91,7 @@ class ExtensionSessionTest {
                         () -> extensionSessionTestService.first(1,
                                 () -> null,
                                 BizScenario.ofBizId("bar"))).getMessage());
-        Assertions.assertEquals("BizScenario could not be resolved using the custom resolver \"ExtensionSessionTestResolver\" for method \"io.codeone.framework.ext.session.ExtensionSessionTestService.custom(Object)\". Ensure the resolver is correctly implemented and can resolve a valid BizScenario.",
+        Assertions.assertEquals("BizScenario could not be resolved using the custom resolver \"io.codeone.framework.ext.session.ExtensionSessionTestResolver\" for method \"io.codeone.framework.ext.session.ExtensionSessionTestService.custom(Object)\". Ensure the resolver is correctly implemented and can resolve a valid BizScenario.",
                 Assertions.assertThrows(IllegalArgumentException.class,
                         () -> extensionSessionTestService.custom(1)).getMessage());
     }
