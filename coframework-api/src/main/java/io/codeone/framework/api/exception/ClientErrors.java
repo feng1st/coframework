@@ -48,6 +48,7 @@ public enum ClientErrors implements ApiError {
      *
      * @return the error code as a string
      */
+    @Override
     public String getCode() {
         return name();
     }
