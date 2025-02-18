@@ -22,7 +22,7 @@ public class JacksonLogFormatter implements LogFormatter {
 
     @Override
     @SneakyThrows
-    public Object format(Object content) {
+    public String format(Object content) {
         return objectMapper.writeValueAsString(content);
     }
 }

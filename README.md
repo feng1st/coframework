@@ -38,21 +38,21 @@ Here’s how to quickly experience the core features of Co-Framework:
 2. **Apply the `@API` Annotation**:
 
 ```java
-// Class-level annotation applies to all methods
+// Class-level annotation applies enhancements to all methods
 @API
 public class BizApiImpl implements BizApi {
-    // Method-level annotation applies to a single method
+    // Method-level annotation applies enhancements to a single method
     @API
     public Result<BizData> getData(BizParam param) {
     }
 }
 ```
 
-3. **Parameter Validation Example**:
+3. **Automatic Parameter Validation**:
 
 ```java
 public class BizParam extends BaseParam {
-    // Validates arguments and aborts API invocation if validation fails
+    // Calls BaseParam.validate() and validates arguments automatically
     @Override
     public void validate() {
         Validator.requireNonNull(userId, "userId is null");
@@ -63,7 +63,8 @@ public class BizParam extends BaseParam {
 4. **Automatic Exception Handling**:
 
 ```java
-// Returns a failed response Result.failure("INVALID_STATE", "Invalid state") instead of throwing an exception
+// Returns a failed response instead of throwing an exception
+// For example, returns Result.failure("INVALID_STATE", "Invalid state") here 
 public Result<BizData> getData(BizParam param) {
     throw new ApiException(ClientErrors.INVALID_STATE);
 }
@@ -109,7 +110,7 @@ public class BizProcessPlugin implements Plugin {
 3. **Apply the Plugin**:
 
 ```java
-// Activates the plugin via the target annotation
+// Activates the plugin via the target annotation (i.e. @BizProcess)
 @BizProcess
 public Result<BizData> getData(BizParam param) {
 }
@@ -170,6 +171,7 @@ public class ChainService {
     private Consume consume;
 
     public void run() {
+        // Executes in sequence
         Sequential.of(produce, consume).run(Context.of());
     }
 }
@@ -245,7 +247,7 @@ existing systems. Below are the details of these advanced capabilities.
 ### 2.1 Customizing Exception Wrapping
 
 1. **Custom Error Codes**: To customize the `errorCode` in the response (default: the exception class name), implement
-   the `ApiError` interface or use `ApiException`. The `errorCode` will be derived from the `getCode()` method.
+   the `ApiError` interface or use `ApiException`. The `errorCode` will be derived from the `ApiError.getCode()` method.
 
 2. **Custom Error Messages**: To customize the `errorMessage` in the response (default: the exception message), such as
    hiding technical details from end users, use the `@CustomErrorMessage` annotation:
@@ -537,6 +539,8 @@ Example of defining `Typed` parameters:
 @Getter
 public enum TypedParamEnum implements Typed {
     INPUT(Input.class),
+    // Another parameter whose type is also Input.class
+    INPUT2(Input.class),
     OUTPUT(Output.class),
     ;
     private final Class<?> type;

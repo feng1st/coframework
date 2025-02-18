@@ -2,7 +2,7 @@ package io.codeone.framework.chain;
 
 import io.codeone.framework.chain.context.Context;
 import io.codeone.framework.chain.log.ChainLogger;
-import io.codeone.framework.chain.log.MDC;
+import io.codeone.framework.chain.log.LoggingContext;
 
 /**
  * Represents a unit of execution in a chain of operations.
@@ -36,7 +36,7 @@ public interface Chainable {
      * @return {@code true} to continue the chain, {@code false} to halt it
      */
     default boolean run(Context context) {
-        return MDC.wrap(mdc -> {
+        return LoggingContext.invoke(() -> {
             long start = System.currentTimeMillis();
             Object resultOrException = null;
             try {
@@ -51,7 +51,7 @@ public interface Chainable {
                 throw e;
             } finally {
                 long elapsed = System.currentTimeMillis() - start;
-                ChainLogger.log(context, this, mdc, resultOrException, elapsed);
+                ChainLogger.log(context, this, resultOrException, elapsed);
             }
         });
     }

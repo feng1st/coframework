@@ -114,6 +114,11 @@ public class LoggingPluginTestService {
         return PageResult.success(Arrays.asList(1, 2, 3), 1, 20);
     }
 
+    @Logging
+    public Object loggingMultiLinesString(Object param1, Object param2) {
+        return "Line 1\nLine 2";
+    }
+
     @Logging(name = "customLogger")
     public Result<Object> loggingCustomLogger(Object param1, Object param2) {
         return Result.success("data");

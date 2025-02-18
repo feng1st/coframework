@@ -196,6 +196,15 @@ class LoggingPluginTest extends BaseLoggingTest {
     }
 
     @Test
+    public void loggingMultiLinesString() {
+        loggingPluginTestService.loggingMultiLinesString(1, 2);
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingMultiLinesString\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":\"Line 1\\nLine 2\"}");
+    }
+
+    @Test
     public void loggingCustomLogger() {
         loggingPluginTestService.loggingCustomLogger(1, 2);
         assertLog("customLogger",
@@ -374,6 +383,18 @@ class LoggingPluginTest extends BaseLoggingTest {
                 Level.ERROR,
                 IllegalStateException.class,
                 "{level=ERROR, method=LoggingPluginTestService.loggingException, success=false, code=IllegalStateException, message=Message, elapsed=0, args={param1=1, param2=2}, exception=java.lang.IllegalStateException: Message}");
+    }
+
+    @Test
+    public void loggingMultiLinesStringNoJson() {
+        LogFormatUtils.logAsJson = false;
+        loggingPluginTestService.loggingMultiLinesString(1, 2);
+        LogFormatUtils.logAsJson = true;
+
+        assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
+                Level.INFO,
+                null,
+                "{level=INFO, method=LoggingPluginTestService.loggingMultiLinesString, elapsed=0, args={param1=1, param2=2}, result=Line 1\\nLine 2}");
     }
 
     @Test

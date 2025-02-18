@@ -35,21 +35,21 @@
 2. 在接口服务上添加 `@API` 注解：
 
 ```java
-// 类级注解，所有方法生效
+// 类级注解，对所有方法生效增强
 @API
 public class BizApiImpl implements BizApi {
-    // 方法级注解，单个方法生效
+    // 方法级注解，对单个方法生效增强
     @API
     public Result<BizData> getData(BizParam param) {
     }
 }
 ```
 
-3. 参数校验示例：
+3. 自动校验参数：
 
 ```java
 public class BizParam extends BaseParam {
-    // 校验参数，如果失败则中止API调用
+    // 自动调用BaseParam.validate()方法，校验参数
     @Override
     public void validate() {
         Validator.requireNonNull(userId, "userId is null");
@@ -60,15 +60,16 @@ public class BizParam extends BaseParam {
 4. 异常自动转化为失败结果：
 
 ```java
-// 返回失败结果Result.failure("INVALID_STATE", "Invalid state")，而不是抛出异常
+// 返回失败结果而不是抛出异常
+// 此处返回Result.failure("INVALID_STATE", "Invalid state")
 public Result<BizData> getData(BizParam param) {
     throw new ApiException(ClientErrors.INVALID_STATE);
 }
 ```
 
-5. 查看调用日志：
+5. 记录调用日志：
 
-接口调用日志会记录调用结果、错误码、错误信息等，无需额外配置。
+会自动记录接口调用的结果、错误码、错误信息等，无需额外配置。
 
 ### 1.2 插件系统：灵活的拦截能力
 
@@ -93,7 +94,7 @@ public Result<BizData> getData(BizParam param) {
 2. 定义插件：
 
 ```java
-// 插件顺序和目标注解
+// 指定插件顺序和启用插件所用的注解
 @Plug(value = Stages.BEFORE_TARGET, targetAnnotations = BizProcess.class)
 public class BizProcessPlugin implements Plugin {
     @Override
@@ -106,7 +107,7 @@ public class BizProcessPlugin implements Plugin {
 3. 应用插件：
 
 ```java
-// 通过目标注解启用插件
+// 通过注解（本例为@BizProcess）启用插件
 @BizProcess
 public Result<BizData> getData(BizParam param) {
 }
@@ -167,6 +168,7 @@ public class ChainService {
     private Consume consume;
 
     public void run() {
+        // 顺序执行
         Sequential.of(produce, consume).run(Context.of());
     }
 }
@@ -240,9 +242,9 @@ public class BizService {
 
 ### 2.1 定制异常包装
 
-1. 如果希望定制结果的`errorCode`（默认为异常类名），可以让异常实现`ApiError`接口，或者使用`ApiException`。
-   此时`errorCode`会取自`getCode()`。
-2. 如果希望定制结果的`errorMessage`（默认为异常消息），比如对最终用户隐藏技术细节，可以使用`@CustomErrorMessage`注解：
+1. 如果希望定制结果中的`errorCode`（默认为异常类名），可以让异常实现`ApiError`接口，或者使用`ApiException`。
+   此时`errorCode`会取自`ApiError.getCode()`。
+2. 如果希望定制结果中的`errorMessage`（默认为异常消息），比如对最终用户隐藏技术细节，可以使用`@CustomErrorMessage`注解：
 
 ```java
 
@@ -523,6 +525,8 @@ public Output runAndReturn(Input input) {
 @Getter
 public enum TypedParamEnum implements Typed {
     INPUT(Input.class),
+    // 类型同为Input.class的另一个参数
+    INPUT2(Input.class),
     OUTPUT(Output.class),
     ;
     private final Class<?> type;

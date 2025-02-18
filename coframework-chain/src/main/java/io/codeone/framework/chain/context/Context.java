@@ -1,6 +1,6 @@
 package io.codeone.framework.chain.context;
 
-import io.codeone.framework.chain.log.MDC;
+import io.codeone.framework.chain.log.LoggingContext;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.ext.BizScenarioParam;
 import lombok.Getter;
@@ -530,7 +530,7 @@ public class Context implements BizScenarioParam {
      * @param value the value
      */
     public void log(Object key, Object value) {
-        MDC.put(key, value);
+        LoggingContext.put(key, value);
     }
 
     @SuppressWarnings("unchecked")

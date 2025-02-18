@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 import org.springframework.util.ClassUtils;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Utility class for log formatting.
@@ -15,6 +16,10 @@ import java.util.*;
  */
 @UtilityClass
 public class LogFormatUtils {
+
+    private final Pattern NEWLINE_PATTERN = Pattern.compile("[\n\r]");
+
+    private final Pattern CONTROL_CHARACTER_PATTERN = Pattern.compile("\\p{Cc}");
 
     /**
      * Flag to determine if logging should be done in JSON format.
@@ -29,7 +34,12 @@ public class LogFormatUtils {
      * @param content the content to format
      * @return the formatted log content
      */
-    public Object format(Object content) {
+    public String format(Object content) {
+        String string = toString(content);
+        return replaceNewlinesAndControlCharacters(string);
+    }
+
+    private String toString(Object content) {
         if (logAsJson) {
             if (JACKSON_LOG_FORMATTER != null) {
                 try {
@@ -40,10 +50,16 @@ public class LogFormatUtils {
             }
         }
         try {
-            return content.toString();
+            return String.valueOf(content);
         } catch (Throwable ignored) {
-            return toLogSafeObj(content);
+            return String.valueOf(toLogSafeObj(content));
         }
+    }
+
+    private String replaceNewlinesAndControlCharacters(String content) {
+        content = NEWLINE_PATTERN.matcher(content).replaceAll("\\\\n");
+        content = CONTROL_CHARACTER_PATTERN.matcher(content).replaceAll(" ");
+        return content;
     }
 
     /**

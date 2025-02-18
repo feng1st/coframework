@@ -16,7 +16,7 @@ import java.util.Objects;
  * Logs execution details for chainable units.
  *
  * <p>This utility class records information such as execution time, context, and
- * results for each chainable unit. It integrates seamlessly with {@link MDC}.
+ * results for each chainable unit. It integrates seamlessly with {@link LoggingContext}.
  */
 @UtilityClass
 @Slf4j(topic = "chain")
@@ -30,12 +30,10 @@ public class ChainLogger {
      *
      * @param context           the execution context
      * @param chainable         the chainable unit being executed
-     * @param mdc               the logging context
      * @param resultOrException the result or exception produced by the execution
      * @param elapsed           the time taken for execution in milliseconds
      */
-    public void log(Context context, Chainable chainable,
-                    Map<Object, Object> mdc, Object resultOrException, long elapsed) {
+    public void log(Context context, Chainable chainable, Object resultOrException, long elapsed) {
         if (chainable instanceof Quiet) {
             return;
         }
@@ -53,8 +51,9 @@ public class ChainLogger {
         } else if (Objects.equals(resultOrException, false)) {
             map.put("break", true);
         }
-        if (!CollectionUtils.isEmpty(mdc)) {
-            map.put("params", mdc);
+        Map<Object, Object> params = LoggingContext.getContextMap();
+        if (!CollectionUtils.isEmpty(params)) {
+            map.put("params", params);
         }
 
         if (resultOrException instanceof Throwable) {

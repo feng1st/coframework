@@ -14,5 +14,5 @@ public interface LogFormatter {
      * @param content the content to format
      * @return the formatted log content
      */
-    Object format(Object content);
+    String format(Object content);
 }
