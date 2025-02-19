@@ -6,6 +6,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -34,6 +35,7 @@ public class LoggingExpressionParser {
      * @param result the result of the method execution
      */
     public LoggingExpressionParser(Object[] args, Object result) {
+        Objects.requireNonNull(args);
         this.args = args;
         this.result = result;
     }

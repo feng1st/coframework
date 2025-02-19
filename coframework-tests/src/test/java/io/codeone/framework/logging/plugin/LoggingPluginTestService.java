@@ -124,23 +124,23 @@ public class LoggingPluginTestService {
         return Result.success("data");
     }
 
-    @Logging(logArgs = false,
+    @Logging(logAllArgs = false,
             logResult = false,
-            logException = false)
+            logStackTrace = false)
     public Result<Object> loggingNoDetailsSuccess(Object param1, Object param2) {
         return Result.success("data");
     }
 
-    @Logging(logArgs = false,
+    @Logging(logAllArgs = false,
             logResult = false,
-            logException = false)
+            logStackTrace = false)
     public Result<Object> loggingNoDetailsFailure(Object param1, Object param2) {
         return Result.failure("CODE", "Message");
     }
 
-    @Logging(logArgs = false,
+    @Logging(logAllArgs = false,
             logResult = false,
-            logException = false)
+            logStackTrace = false)
     public Result<Object> loggingNoDetailsException(Object param1, Object param2) {
         throw new IllegalStateException("Message");
     }
@@ -148,7 +148,7 @@ public class LoggingPluginTestService {
     @Logging(expSuccess = "#r?.get('success')",
             expCode = "#r?.get('code')",
             expMessage = "#r?.get('message')",
-            argKvs = {"userId", "#a0?.get('userId')", "extra", "#a1"})
+            expArgKvs = {"userId", "#a0?.get('userId')", "extra", "#a1"})
     public Map<String, Object> loggingSpEL(Map<String, Object> param1, Object param2) {
         Map<String, Object> result = new HashMap<>();
         result.put("success", false);

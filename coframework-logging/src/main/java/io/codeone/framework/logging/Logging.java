@@ -21,12 +21,11 @@ public @interface Logging {
     String name() default "";
 
     /**
-     * Indicates whether to log method arguments.
+     * Enables logging of all method arguments by default.
      *
-     * <p>If {@code argKvs} is empty and this is set to {@code true}, all arguments
-     * will be logged.
+     * <p>Lowest precedence setting. Overridden if {@link #expArgKvs()} is specified.
      */
-    boolean logArgs() default true;
+    boolean logAllArgs() default true;
 
     /**
      * Indicates whether to log the method result.
@@ -38,11 +37,11 @@ public @interface Logging {
     boolean logResult() default true;
 
     /**
-     * Indicates whether to log exceptions thrown by the method.
+     * Determines whether the full stack trace of exceptions is logged.
      *
-     * <p>If {@code true}, logs the stack trace of any thrown exception.
+     * <p>When {@code true}, logs the complete stack trace for any thrown exception.
      */
-    boolean logException() default true;
+    boolean logStackTrace() default true;
 
     /**
      * SpEL expression to determine if the method invocation was successful.
@@ -75,13 +74,11 @@ public @interface Logging {
     String expMessage() default "";
 
     /**
-     * Key-value pairs for argument logging, using SpEL expressions.
+     * Key-value pairs for selective argument logging using SpEL expressions.
      *
-     * <p>Specify key-value pairs as {@code "name1", "expression1", "name2", "expression2"},
-     * etc.
-     *
-     * <p>Reference arguments using {@code a0}, {@code a1}, or {@code p0}, {@code
-     * p1}, and the result as {@code r}, e.g., {@code "#a0?.userId"}.
+     * <p>Format: {@code "key1", "expression1", "key2", "expression2", ...}. Overrides
+     * {@link #logAllArgs()} when provided. Arguments are referenced via {@code
+     * a0/p0, a1/p1} (parameters) or {@code r} (return value).
      */
-    String[] argKvs() default {};
+    String[] expArgKvs() default {};
 }

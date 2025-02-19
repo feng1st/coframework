@@ -287,7 +287,7 @@ values:
 ```java
 
 @API
-@Logging(logArgs = false, logResult = false, argKvs = {"userId", "#a0?.userId"})
+@Logging(logAllArgs = false, logResult = false, expArgKvs = {"userId", "#a0?.userId"})
 public Result<BizData> getData(BizParam param) {
 }
 ```
@@ -807,12 +807,12 @@ You can enable call logging using the `@Logging` annotation:
 @Logging(
         // Log name (default: class name)
         name = "business",
-        // Whether to log parameters (default: true, false if argKvs is not empty)
-        logArgs = true,
+        // Whether to log parameters (default: true, false if expArgKvs is not empty)
+        logAllArgs = true,
         // Whether to log return values (default: true)
         logResult = true,
         // Whether to log exceptions (default: true)
-        logException = true,
+        logStackTrace = true,
         // SpEL expression for success check, not required if result type is ApiResult compatible
         expSuccess = "#r?.success",
         // SpEL expression for error code, not required if result/exception type is ApiResult/ApiError compatible
@@ -820,7 +820,7 @@ You can enable call logging using the `@Logging` annotation:
         // SpEL expression for error message, not required if result type is ApiResult compatible
         expMessage = "#r?.errorMessage",
         // Key-value pairs of important arguments (key: String, value: SpEL expression)
-        argKvs = {
+        expArgKvs = {
                 "bizScenario", "#a0?.bizScenario",
                 "userId", "#a0?.userId"
         }

@@ -64,7 +64,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.nonApiResult\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2}}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.nonApiResult\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":null}");
     }
 
     @Test
@@ -174,7 +174,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingNoState\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2}}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingNoState\",\"elapsed\":0,\"args\":{\"param1\":1,\"param2\":2},\"result\":null}");
     }
 
     @Test
@@ -258,7 +258,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSpELNoParam\",\"success\":true,\"elapsed\":0,\"result\":{\"success\":true}}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.loggingSpELNoParam\",\"success\":true,\"elapsed\":0,\"args\":{},\"result\":{\"success\":true}}");
     }
 
     @Test
@@ -267,7 +267,7 @@ class LoggingPluginTest extends BaseLoggingTest {
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.invalidSpEL\",\"message\":\"(SPEL_ERROR: EL1007E: Property or field 'INVALID_EXP' cannot be found on null)\",\"elapsed\":0}");
+                "{\"level\":\"INFO\",\"method\":\"LoggingPluginTestService.invalidSpEL\",\"message\":\"(SPEL_ERROR: EL1007E: Property or field 'INVALID_EXP' cannot be found on null)\",\"elapsed\":0,\"args\":{}}");
     }
 
     @Test

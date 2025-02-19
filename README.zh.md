@@ -279,7 +279,7 @@ public Result<BizData> getData(BizParam param) {
 ```java
 
 @API
-@Logging(logArgs = false, logResult = false, argKvs = {"userId", "#a0?.userId"})
+@Logging(logAllArgs = false, logResult = false, expArgKvs = {"userId", "#a0?.userId"})
 public Result<BizData> getData(BizParam param) {
 }
 ```
@@ -791,12 +791,12 @@ public class BizApiImpl implements BizApi {
 @Logging(
         // 日志名，默认为当前类名
         name = "business",
-        // 是否记录参数，默认为true。如果argKvs有值则不记录
-        logArgs = true,
+        // 是否记录参数，默认为true。如果expArgKvs有值则不记录
+        logAllArgs = true,
         // 是否记录返回值，默认为true
         logResult = true,
         // 是否记录异常堆栈，默认为true
-        logException = true,
+        logStackTrace = true,
         // 调用是否成功的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
         expSuccess = "#r?.success",
         // 错误码的SpEL表达式。默认不需要，框架能识别ApiResult、ApiError兼容模型
@@ -804,7 +804,7 @@ public class BizApiImpl implements BizApi {
         // 错误消息的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
         expMessage = "#r?.errorMessage",
         // 关键参数的键值对列表。键为String，值为SpEL表达式
-        argKvs = {"bizScenario", "#a0?.bizScenario",
+        expArgKvs = {"bizScenario", "#a0?.bizScenario",
                 "userId", "#a0?.userId"})
 public Result<BizData> run(BizParam param) {
 }
