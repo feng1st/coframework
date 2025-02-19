@@ -18,6 +18,11 @@ import java.util.Map;
 @Service
 public class LoggingPluginTestService {
 
+    @Logging
+    public Object exceptionTrigger() {
+        throw new LoggingPluginTestMalformedException();
+    }
+
     @API
     public Result<Object> apiSuccess(Object param1, Object param2) {
         return Result.success("data");

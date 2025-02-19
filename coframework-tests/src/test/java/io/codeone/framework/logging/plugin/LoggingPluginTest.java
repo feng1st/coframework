@@ -22,6 +22,19 @@ class LoggingPluginTest extends BaseLoggingTest {
     private LoggingPluginTestService loggingPluginTestService;
 
     @Test
+    public void exceptionTrigger() {
+        // Will throw a malformed exception, can not be caught using Assertions.assertThrows
+        try {
+            loggingPluginTestService.exceptionTrigger();
+        } catch (Exception ignored) {
+        }
+        assertLog("logging",
+                Level.ERROR,
+                IllegalStateException.class,
+                "Failed to log invocation of method \"io.codeone.framework.logging.plugin.LoggingPluginTestService.exceptionTrigger()\".");
+    }
+
+    @Test
     public void apiSuccess() {
         loggingPluginTestService.apiSuccess(1, 2);
         assertLog("io.codeone.framework.logging.plugin.LoggingPluginTestService",
