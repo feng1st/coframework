@@ -64,7 +64,7 @@ public class BizParam extends BaseParam {
 
 ```java
 // Returns a failed response instead of throwing an exception
-// For example, returns Result.failure("INVALID_STATE", "Invalid state") here 
+// For example, returns Result.failure("INVALID_STATE", "Invalid state") here
 public Result<BizData> getData(BizParam param) {
     throw new ApiException(ClientErrors.INVALID_STATE);
 }
