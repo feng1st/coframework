@@ -16,7 +16,7 @@ class LogTest extends BaseLoggingTest {
         Log.newLog()
                 .setLogger(log)
                 .log();
-        assertLog("com.alibaba.framework3.logging.LogTest",
+        assertLog("io.codeone.framework.logging.LogTest",
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"anonymous\"}");
@@ -71,7 +71,7 @@ class LogTest extends BaseLoggingTest {
         Log.newLog()
                 .setClazz(LogTest.class)
                 .log();
-        assertLog("com.alibaba.framework3.logging.LogTest",
+        assertLog("io.codeone.framework.logging.LogTest",
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"LogTest\"}");
@@ -105,7 +105,7 @@ class LogTest extends BaseLoggingTest {
                 .setClazz(LogTest.class)
                 .setMethodName("method")
                 .log();
-        assertLog("com.alibaba.framework3.logging.LogTest",
+        assertLog("io.codeone.framework.logging.LogTest",
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"LogTest.method\"}");
@@ -117,7 +117,7 @@ class LogTest extends BaseLoggingTest {
                 .setClazz(LogTest.class)
                 .setMethodName("Class.method")
                 .log();
-        assertLog("com.alibaba.framework3.logging.LogTest",
+        assertLog("io.codeone.framework.logging.LogTest",
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"Class.method\"}");
