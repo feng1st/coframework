@@ -57,7 +57,7 @@ public class BizScenarioIterator implements Iterator<BizScenario> {
     }
 
     private String next(String code) {
-        if (BizScenarioUtils.ANY.equals(code)) {
+        if (BizScenarioUtils.isAny(code)) {
             return null;
         }
         int i = code.lastIndexOf(BizScenarioUtils.SEPARATOR);

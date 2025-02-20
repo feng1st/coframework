@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -89,12 +90,6 @@ public class Log {
     private Level level;
 
     /**
-     * Logical operation identifier. Appears as 'tag' in logs.
-     */
-    @Setter
-    private String tag;
-
-    /**
      * Class context for logger naming and method resolution.
      */
     @Setter
@@ -135,6 +130,12 @@ public class Log {
      */
     @Setter
     private Long elapsed;
+
+    /**
+     * Mapped diagnostic context. Appears as 'context' in logs.
+     */
+    @Setter
+    private Map<String, Object> context;
 
     /**
      * Raw method arguments. Processed into argMap based on features.
@@ -178,6 +179,21 @@ public class Log {
     private long features = LogFeature.LOG_ALL_ARGS
             | LogFeature.LOG_RESULT
             | LogFeature.LOG_STACK_TRACE;
+
+    /**
+     * Adds a key-value pair to the log context.
+     *
+     * @param key   the key
+     * @param value the value
+     * @return This Log instance for chaining
+     */
+    public Log putContext(String key, Object value) {
+        if (context == null) {
+            context = new LinkedHashMap<>();
+        }
+        context.put(key, value);
+        return this;
+    }
 
     /**
      * Adds a custom argument to the log entry.
@@ -347,9 +363,6 @@ public class Log {
     private Map<String, Object> buildLogMap(ApiResult<?> apiResult) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("level", level);
-        if (tag != null) {
-            map.put("tag", tag);
-        }
         map.put("method", getMethodName(method, clazz, methodName));
         if (success != null) {
             map.put("success", success);
@@ -362,6 +375,9 @@ public class Log {
         }
         if (elapsed != null) {
             map.put("elapsed", elapsed);
+        }
+        if (!CollectionUtils.isEmpty(context)) {
+            map.put("context", context);
         }
         if (argMap != null) {
             map.put("args", argMap);

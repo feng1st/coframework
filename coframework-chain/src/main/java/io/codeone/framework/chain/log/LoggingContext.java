@@ -18,21 +18,21 @@ public class LoggingContext {
     private final ThreadLocal<Deque<Map<Object, Object>>> THREAD_LOCAL = ThreadLocal.withInitial(LinkedList::new);
 
     /**
-     * Executes a supplier within a new logging context.
+     * Executes an operation within a new logging context.
      *
      * <p>Creates a fresh context map, executes the operation, and automatically
      * cleans up the context upon completion. Ensures context isolation for nested
      * operations.
      *
-     * @param invokable the operation to execute
-     * @return the boolean result from the supplier
+     * @param operation the operation to execute
+     * @return the boolean result from the operation, indicating chain continuation
      */
-    public boolean invoke(Supplier<Boolean> invokable) {
+    public boolean invoke(Supplier<Boolean> operation) {
         Deque<Map<Object, Object>> stack = THREAD_LOCAL.get();
         Map<Object, Object> map = new LinkedHashMap<>();
         stack.push(map);
         try {
-            return invokable.get();
+            return operation.get();
         } finally {
             stack.pop();
         }

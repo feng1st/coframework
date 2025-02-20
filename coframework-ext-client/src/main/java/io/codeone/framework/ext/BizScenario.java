@@ -146,6 +146,17 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
     }
 
     /**
+     * Gets the business identity for this {@code BizScenario}.
+     *
+     * <p>Returns {@code "*"} if it is empty or null.
+     *
+     * @return the business identity
+     */
+    public String getBizId() {
+        return BizScenarioUtils.emptyToAny(bizId);
+    }
+
+    /**
      * Sets the business identity for this {@code BizScenario}.
      *
      * <p>The provided business identity is validated and normalized. If it is empty
@@ -158,6 +169,17 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
         BizScenarioUtils.validate(bizId);
         this.bizId = BizScenarioUtils.emptyToAny(bizId);
         return this;
+    }
+
+    /**
+     * Gets the scenario for this {@code BizScenario}.
+     *
+     * <p>Returns {@code "*"} if it is empty or null.
+     *
+     * @return the scenario
+     */
+    public String getScenario() {
+        return BizScenarioUtils.emptyToAny(scenario);
     }
 
     /**
@@ -184,7 +206,7 @@ public class BizScenario implements BizScenarioParam, Iterable<BizScenario> {
      */
     @Override
     public String toString() {
-        return bizId + "|" + scenario;
+        return getBizId() + "|" + getScenario();
     }
 
     /**

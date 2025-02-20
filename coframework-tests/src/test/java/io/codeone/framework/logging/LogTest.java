@@ -56,17 +56,6 @@ class LogTest extends BaseLoggingTest {
     }
 
     @Test
-    void setTag() {
-        Log.newLog()
-                .setTag("tag")
-                .log();
-        assertLog("default",
-                Level.INFO,
-                null,
-                "{\"level\":\"INFO\",\"tag\":\"tag\",\"method\":\"anonymous\"}");
-    }
-
-    @Test
     void setClazz() {
         Log.newLog()
                 .setClazz(LogTest.class)
@@ -154,6 +143,18 @@ class LogTest extends BaseLoggingTest {
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"anonymous\",\"message\":\"Message\"}");
+    }
+
+    @Test
+    void putContext() {
+        Log.newLog()
+                .putContext("tag", "tag")
+                .putContext("userId", 123)
+                .log();
+        assertLog("default",
+                Level.INFO,
+                null,
+                "{\"level\":\"INFO\",\"method\":\"anonymous\",\"context\":{\"tag\":\"tag\",\"userId\":123}}");
     }
 
     @Test
