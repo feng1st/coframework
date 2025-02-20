@@ -68,7 +68,7 @@ class ChainLoggerTest extends BaseLoggingTest {
     }
 
     @Test
-    public void logStackTrace() {
+    public void logException() {
         Assertions.assertThrows(IllegalStateException.class,
                 () -> Sequential.of(context -> {
                             context.put(String.class, "Hello chain");

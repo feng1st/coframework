@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-
 @Slf4j
 class LogTest extends BaseLoggingTest {
 
