@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 /**
  * Method interceptor that applies plugin chains to intercepted method invocations.
  */
-@Component
+@Component("coframeworkPluginInterceptor")
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class PluginInterceptor implements MethodInterceptor {
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * Converts a {@link PageResult} to an {@link ApiResult}.
  */
-@Component
+@Component("coframeworkPageResultApiResultConverter")
 public class PageResultApiResultConverter
         implements ApiResultConverter<PageResult<?>> {
 

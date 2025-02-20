@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * Infrastructure advisor for applying plugins to methods based on pointcuts.
  */
-@Component
+@Component("coframeworkPluginPointcutAdvisor")
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 @Getter
 public class PluginPointcutAdvisor extends AbstractPointcutAdvisor {

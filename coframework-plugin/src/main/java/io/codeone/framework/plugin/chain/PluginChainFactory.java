@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * Factory for creating and managing {@link PluginChain} instances.
  */
-@Component
+@Component("coframeworkPluginChainFactory")
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class PluginChainFactory {
 

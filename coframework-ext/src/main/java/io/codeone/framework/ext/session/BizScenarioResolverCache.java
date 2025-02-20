@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * <p>Uses Spring's {@link ApplicationContext} to load resolver beans dynamically.
  */
-@Component
+@Component("coframeworkBizScenarioResolverCache")
 public class BizScenarioResolverCache {
 
     @Autowired

@@ -22,7 +22,7 @@ import java.util.*;
  * to determine their {@code BizScenario} source. It supports resolution via {@code
  * RouteBy}, {@code RouteByContext}, or direct parameter analysis.
  */
-@Component
+@Component("coframeworkBizScenarioParamRepoImpl")
 public class BizScenarioParamRepoImpl implements BeanFactoryPostProcessor, BizScenarioParamRepo {
 
     private final Set<Class<?>> processed = new HashSet<>();

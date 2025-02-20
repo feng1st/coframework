@@ -26,7 +26,7 @@ import java.util.Set;
  * are correctly applied to their respective methods and any additional post-binding
  * logic is triggered.
  */
-@Component
+@Component("coframeworkPluginInterceptorPostProcessor")
 public class PluginInterceptorPostProcessor implements BeanPostProcessor {
 
     @Autowired

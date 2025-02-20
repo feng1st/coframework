@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
  * <p>This step occurs after annotation-to-plugin mappings are built but before
  * the post-initialization logic in {@code PluginInterceptorPostProcessor}.
  */
-@Component
+@Component("coframeworkPluginPointcut")
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class PluginPointcut extends StaticMethodMatcherPointcut {
 

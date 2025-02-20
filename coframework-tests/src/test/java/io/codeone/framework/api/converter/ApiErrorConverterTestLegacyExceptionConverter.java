@@ -3,7 +3,7 @@ package io.codeone.framework.api.converter;
 import io.codeone.framework.api.exception.ApiError;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("coframework")
 public class ApiErrorConverterTestLegacyExceptionConverter
         implements ApiErrorConverter<ApiErrorConverterTestLegacyException> {
 

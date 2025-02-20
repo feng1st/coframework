@@ -23,7 +23,7 @@ import java.util.List;
  * <p>This class uses the {@link BeanFactoryPostProcessor} mechanism to locate
  * plugin beans and bind their associated annotations to the plugin classes.
  */
-@Component
+@Component("coframeworkAnnoPluginBindingRepoPreloader")
 public class AnnoPluginBindingRepoPreloader implements BeanFactoryPostProcessor {
 
     @Getter

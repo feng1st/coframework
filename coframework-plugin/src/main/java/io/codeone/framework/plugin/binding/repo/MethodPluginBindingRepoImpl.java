@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Implementation of {@link MethodPluginBindingRepo} for dynamically managing
  * method-to-plugin bindings.
  */
-@Component
+@Component("coframeworkMethodPluginBindingRepoImpl")
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class MethodPluginBindingRepoImpl implements MethodPluginBindingRepo {
 

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 /**
  * Scans and registers API-related converters.
  */
-@Component
+@Component("coframeworkApiConverterLoader")
 public class ApiConverterLoader implements InitializingBean {
 
     @Autowired

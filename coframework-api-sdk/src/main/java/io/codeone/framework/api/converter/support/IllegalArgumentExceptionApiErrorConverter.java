@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * Converts an {@code IllegalArgumentException} to a predefined {@link ApiError}.
  */
-@Component
+@Component("coframeworkIllegalArgumentExceptionApiErrorConverter")
 public class IllegalArgumentExceptionApiErrorConverter
         implements ApiErrorConverter<IllegalArgumentException> {
 

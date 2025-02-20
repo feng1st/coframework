@@ -18,7 +18,7 @@ import java.util.Objects;
  * methods. It leverages {@link BizScenarioResolverCache} for custom resolvers defined
  * in {@link ExtensionSession}.
  */
-@Component
+@Component("coframeworkExtensionSessionRepoImpl")
 public class ExtensionSessionRepoImpl implements ExtensionSessionRepo {
 
     @Autowired

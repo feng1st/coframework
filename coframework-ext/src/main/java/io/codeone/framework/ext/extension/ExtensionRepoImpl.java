@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * <p>This implementation uses an internal cache for efficient lookup and supports
  * hierarchical resolution of {@link BizScenario} levels.
  */
-@Component
+@Component("coframeworkExtensionRepoImpl")
 public class ExtensionRepoImpl implements InitializingBean, ExtensionRepo {
 
     @Autowired

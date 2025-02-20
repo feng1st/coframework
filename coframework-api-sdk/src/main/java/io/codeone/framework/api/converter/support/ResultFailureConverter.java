@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * Converts {@link ApiError} to {@link Result} failures.
  */
-@Component
+@Component("coframeworkResultFailureConverter")
 public class ResultFailureConverter implements FailureConverter<Result<?>> {
 
     /**

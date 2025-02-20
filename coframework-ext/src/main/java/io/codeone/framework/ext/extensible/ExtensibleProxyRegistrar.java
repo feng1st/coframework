@@ -23,7 +23,7 @@ import java.util.Set;
  * routed to the appropriate {@link Extension} implementation based on a {@code
  * BizScenario}.
  */
-@Component
+@Component("coframeworkExtensibleProxyRegistrar")
 public class ExtensibleProxyRegistrar implements BeanFactoryPostProcessor {
 
     private final Set<Class<?>> registered = new HashSet<>();

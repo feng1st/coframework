@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * and {@code PluginInterceptorPostProcessor#postProcessAfterInitialization} can
  * work as expected.
  */
-@Component
+@Component("coframeworkAnnoPluginBindingRepoImpl")
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class AnnoPluginBindingRepoImpl implements InitializingBean, AnnoPluginBindingRepo {
 
