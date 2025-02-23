@@ -567,9 +567,8 @@ public void run(Input input) {
   // 如果链节点返回false，则会记录break
   "break": true,
   // 可通过Context.log("key", value)来记录
-  "params": {
-    "key": {}
-  }
+  "params.key1": "{}",
+  "params.key2": "{}"
 }
 ```
 
@@ -780,69 +779,145 @@ public class BizApiImpl implements BizApi {
 
 ## 6. 日志
 
-框架提供了强大的日志功能，帮助追踪和管理服务调用及业务流程。
+框架提供灵活的日志功能，支持自动注解记录和手动编程记录两种方式，并提供多种日志格式选择。
 
-### 6.1 启用日志记录
+### 6.1 自动记录（注解方式）
 
-除了通过`@API`注解在API层启用调用日志外，还可以通过`@Logging`注解在任意服务上配置并启用调用日志：
+在方法上添加`@Logging`注解即可自动记录调用日志：
 
 ```java
 
 @Logging(
-        // 日志名，默认为当前类名
+        // 日志分类名（默认使用类名）
         name = "business",
-        // 是否记录参数，默认为true。如果expArgKvs有值则不记录
+        // 是否记录全部参数（默认为true。如果expArgKvs有值则切换为记录指定的表达式）
         logAllArgs = true,
-        // 是否记录返回值，默认为true
+        // 是否记录返回值（默认为true）
         logResult = true,
-        // 是否记录异常堆栈，默认为true
+        // 是否记录异常堆栈（默认true）
         logStackTrace = true,
-        // 调用是否成功的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
+        // 调用是否成功的SpEL表达式（默认不需要！框架能识别ApiResult兼容模型）
         expSuccess = "#r?.success",
-        // 错误码的SpEL表达式。默认不需要，框架能识别ApiResult、ApiError兼容模型
+        // 错误码的SpEL表达式（默认不需要！框架能识别ApiResult、ApiError兼容模型）
         expCode = "#r?.errorCode",
-        // 错误消息的SpEL表达式。默认不需要，框架能识别ApiResult兼容模型
+        // 错误消息的SpEL表达式（默认不需要！框架能识别ApiResult兼容模型）
         expMessage = "#r?.errorMessage",
         // 关键参数的键值对列表。键为String，值为SpEL表达式
         expArgKvs = {"bizScenario", "#a0?.bizScenario",
                 "userId", "#a0?.userId"})
 public Result<BizData> run(BizParam param) {
+    // 业务逻辑
 }
 ```
 
-### 6.2 日志格式
+#### 主要功能：
 
-日志的记录格式如下所示：
+- 自动识别ApiResult、ApiError兼容模型
+- 根据调用成功/失败/异常、ApiError.critical，自动计算日志等级
+- `@API`具有相同功效，但`@Logging`提供更多选项
+- `@Logging`可以和`@API`搭配使用，对`@API`进行调整
 
-```json5
+### 6.2 手动记录（编程方式）
+
+通过`Log`类实现灵活的手动日志记录：
+
+```java
+public Result<BizData> run(BizParam param) {
+    // 示例1
+    Log.newLog()
+            .setMethod(method)
+            .setElapsed(150)
+            .setArgs(args)
+            .setResult(result)
+            .log();
+
+    // 示例2
+    Log.newLog()
+            .setLoggerName("audit")
+            .setLevel(Level.WARN)
+            .setMethodName("BizService.run")
+            .putContext("traceId", TracingContext.getTraceId())
+            .addArg("userId", request.getUserId())
+            .setCode("INVALID_INPUT")
+            .setMessage("Missing required field")
+            .config(LogFeature.LOG_RESULT, false)
+            .log();
+}
+```
+
+#### 主要功能：
+
+- 链式调用构建日志内容
+- 自动识别ApiResult、ApiError兼容模型
+- 根据调用成功/失败/异常、ApiError.critical，自动计算日志等级
+- 支持自定义上下文（`putContext()`）
+- 灵活配置参数记录（`addArg()`/`setArgMap()`）
+- 按需开启/关闭日志特征（`config()`）
+
+### 6.3 日志格式配置
+
+通过`application.properties`配置日志格式：
+
+```properties
+# 可选值：json/logfmt/custom（默认自动检测）
+coframework.log.format=json
+```
+
+#### 格式说明：
+
+**1. JSON格式（需jackson-databind依赖）**
+
+```json
 {
-  // 异常：ERROR，失败：WARN，其它：INFO
   "level": "WARN",
-  // 方法名
   "method": "BizService.run",
-  // 是否成功
   "success": false,
-  // 错误码
   "code": "ERROR_CODE",
-  // 错误消息
   "message": "error message",
-  // 执行时间
-  "elapsed": 0,
-  // 参数
-  "args": {
-    "bizScenario": "*|*",
-    "userId": 10000
-  },
-  // 有返回值时记录
-  "result": {
-    "status": "ENABLED"
-  },
-  // 抛异常时记录
-  "exception": "IllegalArgumentException: id is null"
+  "elapsed": 150,
+  "args.userId": 10000,
+  "result": "{\"status\":\"PENDING\"}",
+  "exception": "ValidationException: Invalid input"
 }
 ```
 
-注意：启用JSON格式日志需要项目有引入`jackson-databind`二方包，并且`LogUtils.logAsJson`为`true`（默认即为`true`）。
+**2. Logfmt格式（默认）**
+
+```
+level=WARN method=BizService.run success=false code=ERROR_CODE 
+message="error message" elapsed=150 args.userId=10000 
+result="{\"status\":\"PENDING\"}" exception="ValidationException: Invalid input"
+```
+
+**3. 自定义格式**
+
+```
+level=>WARN||method=>BizService.run||success=>false||code=>ERROR_CODE||
+message=>"error message"||elapsed=>150||args.userId=>10000||
+result=>"{\"status\":\"PENDING\"}"||exception=>"ValidationException: Invalid input"
+```
+
+#### 格式自动检测逻辑：
+
+1. 当配置为`json`但无Jackson依赖时，自动降级为`logfmt`
+2. 未显式配置时，有Jackson环境默认用`json`，否则用`logfmt`
+
+### 6.4 日志内容规范
+
+所有格式共享以下字段：
+
+| 字段        | 说明         | 出现条件          |
+|-----------|------------|---------------|
+| level     | 日志级别（自动推导） | 始终存在          |
+| method    | 方法标识       | 始终存在          |
+| success   | 业务成功状态     | 有明确结果时        |
+| code      | 业务错误码      | 失败/异常时        |
+| message   | 业务提示信息     | 失败/异常时        |
+| elapsed   | 耗时(ms)     | 手动设置时         |
+| args.*    | 参数键值对      | 有参数记录时        |
+| result    | 返回值        | 非void方法且开启记录时 |
+| exception | 异常摘要       | 发生异常时         |
+| ctx.*     | 自定义上下文     | 手动添加时         |
 
 ---
 

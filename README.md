@@ -579,9 +579,8 @@ Chain execution is logged with the following format:
   // Recorded if execution breaks
   "break": true,
   // Custom key-value pairs
-  "params": {
-    "key": {}
-  }
+  "params.key1": "{}",
+  "params.key2": "{}"
 }
 ```
 
@@ -795,74 +794,146 @@ public class BizApiImpl implements BizApi {
 
 ## 6. Logging
 
-Co-Framework provides a powerful logging system that tracks service calls and business processes, offering detailed
-traceability.
+The framework provides flexible logging capabilities supporting both annotation-driven automatic logging and
+programmatic manual logging, with multiple log format options.
 
-### 6.1 Enabling Logging
+### 6.1 Automatic Logging (Annotation Approach)
 
-You can enable call logging using the `@Logging` annotation:
+Add `@Logging` annotation to methods for automatic invocation logging:
 
 ```java
 
 @Logging(
-        // Log name (default: class name)
+        // Logger category name (default: class name)
         name = "business",
-        // Whether to log parameters (default: true, false if expArgKvs is not empty)
+        // Whether to log all parameters (default: true. Overridden if expArgKvs is set)
         logAllArgs = true,
-        // Whether to log return values (default: true)
+        // Whether to log return value (default: true)
         logResult = true,
-        // Whether to log exceptions (default: true)
+        // Whether to log exception stack traces (default: true)
         logStackTrace = true,
-        // SpEL expression for success check, not required if result type is ApiResult compatible
+        // SpEL expression for success determination (default not required! Framework recognizes ApiResult-compatible models)
         expSuccess = "#r?.success",
-        // SpEL expression for error code, not required if result/exception type is ApiResult/ApiError compatible
+        // SpEL expression for error code (default not required! Framework recognizes ApiResult/ApiError-compatible models)
         expCode = "#r?.errorCode",
-        // SpEL expression for error message, not required if result type is ApiResult compatible
+        // SpEL expression for error message (default not required! Framework recognizes ApiResult-compatible models)
         expMessage = "#r?.errorMessage",
-        // Key-value pairs of important arguments (key: String, value: SpEL expression)
-        expArgKvs = {
-                "bizScenario", "#a0?.bizScenario",
-                "userId", "#a0?.userId"
-        }
-)
+        // Key parameter key-value pairs. Key: String, Value: SpEL expression
+        expArgKvs = {"bizScenario", "#a0?.bizScenario",
+                "userId", "#a0?.userId"})
 public Result<BizData> run(BizParam param) {
+    // Business logic
 }
 ```
 
-### 6.2 Log Format
+#### Key Features:
 
-Logs follow a structured format like this:
+- Automatic recognition of ApiResult/ApiError compatible models
+- Auto-calculates log level based on success/failure/exception status and ApiError.critical flag
+- `@API` annotation has similar effects but `@Logging` provides more options
+- `@Logging` can be combined with `@API` for enhanced configuration
 
-```json5
+### 6.2 Manual Logging (Programmatic Approach)
+
+Use the `Log` class for flexible manual logging:
+
+```java
+public Result<BizData> run(BizParam param) {
+    // Example 1
+    Log.newLog()
+            .setMethod(method)
+            .setElapsed(150)
+            .setArgs(args)
+            .setResult(result)
+            .log();
+
+    // Example 2
+    Log.newLog()
+            .setLoggerName("audit")  // Custom logger name
+            .setLevel(Level.WARN)    // Explicit log level
+            .setMethodName("BizService.run")  // Manual method identification
+            .putContext("traceId", TracingContext.getTraceId())  // Custom context
+            .addArg("userId", request.getUserId())  // Custom argument
+            .setCode("INVALID_INPUT")  // Manual error code
+            .setMessage("Missing required field")  // Manual message
+            .config(LogFeature.LOG_RESULT, false)  // Disable result logging
+            .log();
+}
+```
+
+#### Core Capabilities:
+
+- Chain-style API for log construction
+- Automatic recognition of ApiResult/ApiError models
+- Smart log level calculation (success/failure/critical errors)
+- Custom context management (`putContext()`)
+- Flexible argument logging (`addArg()`/`setArgMap()`)
+- Feature toggle system (`config()`)
+
+### 6.3 Log Format Configuration
+
+Configure log format via `application.properties`:
+
+```properties
+# Available values: json/logfmt/custom (auto-detection by default)
+coframework.log.format=json
+```
+
+#### Supported Formats:
+
+**1. JSON Format (requires jackson-databind dependency)**
+
+```json
 {
-  // Log level (ERROR/WARN/INFO)
   "level": "WARN",
-  // Method name
   "method": "BizService.run",
-  // Success indicator
   "success": false,
-  // Error code
   "code": "ERROR_CODE",
-  // Error message
   "message": "error message",
-  // Execution time
-  "elapsed": 0,
-  // Arguments
-  "args": {
-    "bizScenario": "*|*",
-    "userId": 10000
-  },
-  // Return value (if applicable)
-  "result": {
-    "status": "ENABLED"
-  },
-  // Exception details
-  "exception": "IllegalArgumentException: id is null"
+  "elapsed": 150,
+  "args.userId": 10000,
+  "result": "{\"status\":\"PENDING\"}",
+  "exception": "ValidationException: Invalid input"
 }
 ```
 
-> **Note:** Enable JSON-formatted logs by including the `jackson-databind` dependency and setting `LogUtils.logAsJson`to
-`true` (default).
+**2. Logfmt Format (default fallback)**
+
+```
+level=WARN method=BizService.run success=false code=ERROR_CODE 
+message="error message" elapsed=150 args.userId=10000 
+result="{\"status\":\"PENDING\"}" exception="ValidationException: Invalid input"
+```
+
+**3. Custom Format**
+
+```
+level=>WARN||method=>BizService.run||success=>false||code=>ERROR_CODE||
+message=>"error message"||elapsed=>150||args.userId=>10000||
+result=>"{\"status\":\"PENDING\"}"||exception=>"ValidationException: Invalid input"
+```
+
+#### Auto-Detection Logic:
+
+1. Falls back to `logfmt` if configured as `json` without Jackson dependency
+2. Defaults to `json` when Jackson is available, otherwise uses `logfmt`
+
+### 6.4 Log Content Specification
+
+All formats share the following fields:
+
+| Field     | Description                    | Occurrence Condition       |
+|-----------|--------------------------------|----------------------------|
+| level     | Auto-derived log level         | Always present             |
+| method    | Method identifier              | Always present             |
+| success   | Business success status        | When explicitly determined |
+| code      | Business error code            | On failures/exceptions     |
+| message   | Human-readable message         | On failures/exceptions     |
+| elapsed   | Execution time in milliseconds | When manually set          |
+| args.*    | Parameter key-value pairs      | When parameters logged     |
+| result    | Return value                   | Non-void methods & enabled |
+| exception | Exception summary              | On exceptions              |
+| ctx.*     | Custom context fields          | When manually added        |
 
 ---
 
