@@ -5,6 +5,7 @@ import io.codeone.framework.api.response.ApiResult;
 import io.codeone.framework.api.util.ApiErrorUtils;
 import io.codeone.framework.api.util.ApiResultUtils;
 import io.codeone.framework.common.log.util.LogFormatUtils;
+import io.codeone.framework.common.log.util.LogMapUtils;
 import io.codeone.framework.common.util.ClassUtils;
 import io.codeone.framework.logging.spel.ExpressionOption;
 import lombok.NoArgsConstructor;
@@ -132,7 +133,7 @@ public class Log {
     private Long elapsed;
 
     /**
-     * Mapped diagnostic context. Appears as 'context' in logs.
+     * Mapped diagnostic context. Appears as 'ctx' in logs.
      */
     @Setter
     private Map<String, Object> context;
@@ -185,7 +186,7 @@ public class Log {
      *
      * @param key   the key
      * @param value the value
-     * @return This Log instance for chaining
+     * @return this Log instance for chaining
      */
     public Log putContext(String key, Object value) {
         if (context == null) {
@@ -198,9 +199,9 @@ public class Log {
     /**
      * Adds a custom argument to the log entry.
      *
-     * @param key   Argument identifier (appears in 'args' map)
-     * @param value Argument value (null-safe)
-     * @return This Log instance for chaining
+     * @param key   argument identifier (appears in 'args' map)
+     * @param value argument value (null-safe)
+     * @return this Log instance for chaining
      */
     public Log addArg(String key, Object value) {
         if (argMap == null) {
@@ -214,7 +215,7 @@ public class Log {
      * Set method return value. Processed according to LOG_RESULT feaure.
      *
      * @param result the method return value
-     * @return This Log instance for chaining
+     * @return this Log instance for chaining
      */
     public Log setResult(Object result) {
         this.result = result;
@@ -225,9 +226,9 @@ public class Log {
     /**
      * Configures logging features using bitwise flags.
      *
-     * @param feature Flag from {@link LogFeature} to modify
+     * @param feature flag from {@link LogFeature} to modify
      * @param value   true to enable, false to disable
-     * @return This Log instance for chaining
+     * @return this Log instance for chaining
      */
     public Log config(long feature, boolean value) {
         if (value) {
@@ -377,10 +378,10 @@ public class Log {
             map.put("elapsed", elapsed);
         }
         if (!CollectionUtils.isEmpty(context)) {
-            map.put("context", context);
+            LogMapUtils.putNestedMap(map, "ctx", context);
         }
         if (argMap != null) {
-            map.put("args", argMap);
+            LogMapUtils.putNestedMap(map, "args", argMap);
         }
         if (exception != null) {
             map.put("exception", exception.toString());

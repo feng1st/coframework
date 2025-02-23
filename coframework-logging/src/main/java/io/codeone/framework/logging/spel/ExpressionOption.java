@@ -73,7 +73,7 @@ public class ExpressionOption {
     /**
      * Evaluates success expression.
      *
-     * @return Boolean interpretation of expression result
+     * @return boolean interpretation of expression result
      * @throws IllegalStateException if preconditions not met
      */
     public Boolean evaluateSuccess() {
@@ -95,7 +95,7 @@ public class ExpressionOption {
     /**
      * Evaluates code expression to derive an error identifier.
      *
-     * @return String representation of the evaluated expression result
+     * @return string representation of the evaluated expression result
      * @throws IllegalStateException if preconditions not met or expression invalid
      */
     public String evaluateCode() {
@@ -117,7 +117,7 @@ public class ExpressionOption {
     /**
      * Evaluates message expression to construct descriptive text.
      *
-     * @return String representation of the evaluated expression result
+     * @return string representation of the evaluated expression result
      * @throws IllegalStateException if preconditions not met or expression invalid
      */
     public String evaluateMessage() {
@@ -140,7 +140,7 @@ public class ExpressionOption {
     /**
      * Evaluates argument expressions into key-value pairs.
      *
-     * @return Immutable map of evaluated arguments
+     * @return immutable map of evaluated arguments
      * @throws IllegalStateException if expArgKvs is malformed or unparseable
      */
     public Map<String, Object> evaluateArgMap() {

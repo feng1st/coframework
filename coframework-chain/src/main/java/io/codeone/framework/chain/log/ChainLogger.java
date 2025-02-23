@@ -3,6 +3,7 @@ package io.codeone.framework.chain.log;
 import io.codeone.framework.chain.Chainable;
 import io.codeone.framework.chain.context.Context;
 import io.codeone.framework.common.log.util.LogFormatUtils;
+import io.codeone.framework.common.log.util.LogMapUtils;
 import io.codeone.framework.common.util.ClassUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +54,7 @@ public class ChainLogger {
         }
         Map<Object, Object> params = LoggingContext.getContextMap();
         if (!CollectionUtils.isEmpty(params)) {
-            map.put("params", params);
+            LogMapUtils.putNestedMap(map, "params", params);
         }
 
         if (resultOrException instanceof Throwable) {

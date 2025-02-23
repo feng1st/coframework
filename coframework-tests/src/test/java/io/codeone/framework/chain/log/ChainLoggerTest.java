@@ -3,6 +3,7 @@ package io.codeone.framework.chain.log;
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.chain.composite.Sequential;
 import io.codeone.framework.chain.context.Context;
+import io.codeone.framework.common.log.util.LogFormat;
 import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.ext.BizScenario;
 import io.codeone.framework.shared.BaseLoggingTest;
@@ -95,7 +96,7 @@ class ChainLoggerTest extends BaseLoggingTest {
                     return true;
                 }).run(Context.of());
 
-        assertLogs("{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0,\"params\":{\"text\":\"Hello chain\"}}",
+        assertLogs("{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0,\"params.text\":\"Hello chain\"}",
                 "{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0}");
     }
 
@@ -113,8 +114,8 @@ class ChainLoggerTest extends BaseLoggingTest {
             context.ifPresent(String.class, o -> context.log("text", o));
         }));
 
-        assertLogs("{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0,\"params\":{\"traceId\":10000}}",
-                "{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0,\"params\":{\"traceId\":10000,\"text\":\"Hello chain\"}}");
+        assertLogs("{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0,\"params.traceId\":10000}",
+                "{\"chain\":\"anonymous\",\"node\":\"ChainLoggerTest$$Lambda\",\"elapsed\":0,\"params.traceId\":10000,\"params.text\":\"Hello chain\"}");
     }
 
     @Test
@@ -127,8 +128,9 @@ class ChainLoggerTest extends BaseLoggingTest {
     }
 
     @Test
-    public void logNonJson() {
-        LogFormatUtils.logAsJson = false;
+    public void logFormatLogFmt() {
+        String format = LogFormatUtils.format;
+        LogFormatUtils.format = LogFormat.LOG_FMT;
         Assertions.assertThrows(IllegalStateException.class,
                 () -> Sequential.of(context -> {
                             context.put(String.class, "Hello chain");
@@ -138,9 +140,28 @@ class ChainLoggerTest extends BaseLoggingTest {
                             System.out.println(context.get(String.class));
                             return true;
                         }).run(Context.of()));
-        LogFormatUtils.logAsJson = true;
+        LogFormatUtils.format = format;
 
         assertLog("chain", Level.ERROR, IllegalStateException.class,
-                "{chain=anonymous, node=ChainLoggerTest$$Lambda, elapsed=0, exception=java.lang.IllegalStateException}");
+                "chain=anonymous node=ChainLoggerTest$$Lambda elapsed=0 exception=java.lang.IllegalStateException");
+    }
+
+    @Test
+    public void logFormatCustom() {
+        String format = LogFormatUtils.format;
+        LogFormatUtils.format = LogFormat.CUSTOM;
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> Sequential.of(context -> {
+                            context.put(String.class, "Hello chain");
+                            throw new IllegalStateException();
+                        },
+                        context -> {
+                            System.out.println(context.get(String.class));
+                            return true;
+                        }).run(Context.of()));
+        LogFormatUtils.format = format;
+
+        assertLog("chain", Level.ERROR, IllegalStateException.class,
+                "chain=>anonymous||node=>ChainLoggerTest$$Lambda||elapsed=>0||exception=>java.lang.IllegalStateException");
     }
 }

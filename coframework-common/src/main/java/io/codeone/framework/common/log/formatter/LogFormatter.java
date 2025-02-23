@@ -1,18 +1,19 @@
 package io.codeone.framework.common.log.formatter;
 
+import java.util.Map;
+
 /**
- * Interface for formatting log content.
- *
- * <p>Implementations of this interface should define how to format log content
- * before it is outputted.
+ * Defines a contract for formatting structured log data into different text representations.
+ * Implementations handle specific serialization formats like JSON or logfmt.
  */
 public interface LogFormatter {
 
     /**
-     * Formats the given content for logging.
+     * Converts a structured log map to formatted string output.
      *
-     * @param content the content to format
-     * @return the formatted log content
+     * @param map key-value pairs representing log context
+     * @return formatted log message in implementation-specific format
+     * @throws NullPointerException if map argument is null
      */
-    String format(Object content);
+    String format(Map<String, Object> map);
 }

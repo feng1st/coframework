@@ -1,155 +1,68 @@
 package io.codeone.framework.common.log.util;
 
+import io.codeone.framework.common.json.util.JsonUtils;
 import io.codeone.framework.common.log.formatter.LogFormatter;
-import io.codeone.framework.common.util.TypeStringUtils;
+import io.codeone.framework.common.log.formatter.support.CustomLogFormatter;
+import io.codeone.framework.common.log.formatter.support.JsonLogFormatter;
+import io.codeone.framework.common.log.formatter.support.LogFmtLogFormatter;
 import lombok.experimental.UtilityClass;
-import org.springframework.util.ClassUtils;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.Objects;
 
 /**
- * Utility class for log formatting.
+ * Central utility for log message formatting. Provides configurable serialization
+ * of log context maps to different structured formats. Defaults to JSON format
+ * with fallback to logfmt if JSON dependencies are unavailable.
  *
- * <p>Provides methods for formatting log content, with support for JSON formatting
- * using Jackson.
+ * <p>Format selection is determined by the {@code format} field and automatically
+ * validates JSON capability during class initialization.
  */
 @UtilityClass
 public class LogFormatUtils {
 
-    private final Pattern NEWLINE_PATTERN = Pattern.compile("[\n\r]");
+    private final LogFormatter JSON_LOG_FORMATTER = new JsonLogFormatter();
 
-    private final Pattern CONTROL_CHARACTER_PATTERN = Pattern.compile("\\p{Cc}");
+    private final LogFormatter CUSTOM_LOG_FORMATTER = new CustomLogFormatter();
 
-    /**
-     * Flag to determine if logging should be done in JSON format.
-     */
-    public boolean logAsJson = true;
-
-    private final LogFormatter JACKSON_LOG_FORMATTER = initJacksonLogFormatter();
+    private final LogFormatter LOG_FMT_LOG_FORMATTER = new LogFmtLogFormatter();
 
     /**
-     * Formats the given content for logging.
+     * Currently active log format.
      *
-     * @param content the content to format
-     * @return the formatted log content
+     * <p>Defaults to {@value LogFormat#JSON} unless JSON support is unavailable
+     *
+     * @see LogFormat
      */
-    public String format(Object content) {
-        String string = toString(content);
-        return replaceNewlinesAndControlCharacters(string);
-    }
+    public String format = initFormat();
 
-    private String toString(Object content) {
-        if (logAsJson) {
-            if (JACKSON_LOG_FORMATTER != null) {
-                try {
-                    return JACKSON_LOG_FORMATTER.format(content);
-                } catch (Throwable ignored) {
-                    return JACKSON_LOG_FORMATTER.format(toLogSafeObj(content));
-                }
-            }
+    /**
+     * Serializes a context map to the configured log format
+     *
+     * @param map key-value pairs representing log context. Map entries will be
+     *            formatted according to the active format strategy
+     * @return formatted log message ready for output
+     * @throws NullPointerException if map argument is null
+     */
+    public String format(Map<String, Object> map) {
+        Objects.requireNonNull(map);
+        if (LogFormat.JSON.equals(format)) {
+            return JSON_LOG_FORMATTER.format(map);
         }
-        try {
-            return String.valueOf(content);
-        } catch (Throwable ignored) {
-            return String.valueOf(toLogSafeObj(content));
+        if (LogFormat.CUSTOM.equals(format)) {
+            return CUSTOM_LOG_FORMATTER.format(map);
         }
-    }
-
-    private String replaceNewlinesAndControlCharacters(String content) {
-        content = NEWLINE_PATTERN.matcher(content).replaceAll("\\\\n");
-        content = CONTROL_CHARACTER_PATTERN.matcher(content).replaceAll(" ");
-        return content;
+        return LOG_FMT_LOG_FORMATTER.format(map);
     }
 
     /**
-     * Safely converts an object to a loggable representation to avoid issues such
-     * as cyclic references or exceptions during conversion.
-     *
-     * @param object the object to convert
-     * @return a log-safe representation of the object
+     * Initializes format. Fallbacks to logfmt if JSON serialization capabilities
+     * are not present in the runtime environment.
      */
-    private Object toLogSafeObj(Object object) {
-        return toLogSafeObj(object, new IdentityHashMap<>());
-    }
-
-    private Object toLogSafeObj(Object object, Map<Object, Object> visited) {
-        if (object == null) {
-            return null;
+    private String initFormat() {
+        if (JsonUtils.isLoaded()) {
+            return LogFormat.JSON;
         }
-        if (object instanceof String) {
-            return object;
-        }
-        if (object instanceof Map) {
-            if (visited.put(object, object) != null) {
-                return String.format("(REF: %s)", TypeStringUtils.toString(object.getClass()));
-            }
-            try {
-                Map<Object, Object> map = new LinkedHashMap<>(((Map<?, ?>) object).size());
-                for (Map.Entry<?, ?> entry : ((Map<?, ?>) object).entrySet()) {
-                    map.put(toLogSafeObj(entry.getKey(), visited), toLogSafeObj(entry.getValue(), visited));
-                }
-                return map;
-            } catch (Exception e) {
-                return String.format("(ITERATE_MAP_ERROR: %s)", TypeStringUtils.toString(object.getClass()));
-            }
-        }
-        if (object instanceof Collection) {
-            if (visited.put(object, object) != null) {
-                return String.format("(REF: %s)", TypeStringUtils.toString(object.getClass()));
-            }
-            try {
-                List<Object> list = new ArrayList<>(((Collection<?>) object).size());
-                for (Object element : (Collection<?>) object) {
-                    list.add(toLogSafeObj(element, visited));
-                }
-                return list;
-            } catch (Exception e) {
-                return String.format("(ITERATE_COLLECTION_ERROR: %s)", TypeStringUtils.toString(object.getClass()));
-            }
-        }
-        if (ClassUtils.isPrimitiveArray(object.getClass())) {
-            return String.format("[%s]", TypeStringUtils.toString(object.getClass().getComponentType()));
-        }
-        if (ClassUtils.isPrimitiveOrWrapper(object.getClass())) {
-            return object;
-        }
-        if (ClassUtils.isPrimitiveWrapperArray(object.getClass())) {
-            return Arrays.asList((Object[]) object);
-        }
-        if (object.getClass().isArray()) {
-            if (visited.put(object, object) != null) {
-                return String.format("(REF: [%s])", TypeStringUtils.toString(object.getClass().getComponentType()));
-            }
-            List<Object> list = new ArrayList<>(((Object[]) object).length);
-            for (Object element : (Object[]) object) {
-                list.add(toLogSafeObj(element, visited));
-            }
-            return list;
-        }
-        try {
-            return object.toString();
-        } catch (Throwable e) {
-            return String.format("(TO_STRING_ERROR: %s)", TypeStringUtils.toString(object.getClass()));
-        }
-    }
-
-    /**
-     * Initializes the Jackson log formatter if Jackson is available on the classpath.
-     *
-     * @return an instance of {@code JacksonLogFormatter}, or null if Jackson is
-     * not available
-     */
-    private LogFormatter initJacksonLogFormatter() {
-        try {
-            Class.forName("com.fasterxml.jackson.databind.ObjectMapper");
-
-            @SuppressWarnings("unchecked")
-            Class<? extends LogFormatter> clazz = (Class<? extends LogFormatter>) Class.forName(
-                    "io.codeone.framework.common.log.formatter.support.JacksonLogFormatter");
-            return clazz.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            return null;
-        }
+        return LogFormat.LOG_FMT;
     }
 }

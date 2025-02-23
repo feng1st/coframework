@@ -39,18 +39,18 @@ public class TypeStringUtils {
         if (method == null) {
             return null;
         }
-        StringBuilder builder = new StringBuilder();
-        builder.append(method.getDeclaringClass().getTypeName())
+        StringBuilder sb = new StringBuilder();
+        sb.append(method.getDeclaringClass().getTypeName())
                 .append(".")
                 .append(method.getName())
                 .append("(");
         for (int i = 0; i < method.getParameterTypes().length; i++) {
             if (i > 0) {
-                builder.append(", ");
+                sb.append(", ");
             }
-            builder.append(method.getParameterTypes()[i].getSimpleName());
+            sb.append(method.getParameterTypes()[i].getSimpleName());
         }
-        builder.append(")");
-        return builder.toString();
+        sb.append(")");
+        return sb.toString();
     }
 }

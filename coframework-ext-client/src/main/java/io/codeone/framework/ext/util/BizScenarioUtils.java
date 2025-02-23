@@ -92,17 +92,17 @@ public class BizScenarioUtils {
         if (array.length == 1) {
             return array[0];
         }
-        StringBuilder builder = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         for (String code : array) {
             if (isAny(code)) {
                 continue;
             }
-            if (builder.length() > 0) {
-                builder.append(SEPARATOR);
+            if (sb.length() > 0) {
+                sb.append(SEPARATOR);
             }
-            builder.append(code);
+            sb.append(code);
         }
-        return builder.toString();
+        return sb.toString();
     }
 
     private boolean isValid(String code) {

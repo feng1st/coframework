@@ -1,10 +1,5 @@
 package io.codeone.framework.logging.plugin;
 
-import io.codeone.framework.api.API;
-import io.codeone.framework.api.exception.ApiException;
-import io.codeone.framework.api.exception.ClientErrors;
-import io.codeone.framework.api.exception.CustomErrorMessage;
-import io.codeone.framework.api.exception.ServerErrors;
 import io.codeone.framework.api.response.Page;
 import io.codeone.framework.api.response.PageResult;
 import io.codeone.framework.api.response.Result;
@@ -16,43 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class LoggingPluginTestService {
-
-    @Logging
-    public Object exceptionTrigger() {
-        throw new LoggingPluginTestMalformedException();
-    }
-
-    @API
-    public Result<Object> apiSuccess(Object param1, Object param2) {
-        return Result.success("data");
-    }
-
-    @API
-    public Result<Object> apiFailure(Object param1, Object param2) {
-        return Result.failure("CODE", "Message");
-    }
-
-    @API
-    public Result<Object> apiException(Object param1, Object param2) {
-        throw new IllegalStateException("Message");
-    }
-
-    @API
-    @CustomErrorMessage("Custom error message")
-    public Result<Object> apiExceptionCustomErrorMessage(Object param1, Object param2) {
-        throw new IllegalStateException("Message");
-    }
-
-    @API
-    public Object nonApiResult(Object param1, Object param2) {
-        return null;
-    }
-
-    @API
-    public Object nonApiError(Object param1, Object param2) {
-        throw new IllegalStateException("Message");
-    }
+public class LoggingPluginTestLoggingService {
 
     @Logging
     public Result<Object> loggingSuccess(Object param1, Object param2) {
@@ -67,41 +26,6 @@ public class LoggingPluginTestService {
     @Logging
     public Result<Object> loggingException(Object param1, Object param2) {
         throw new IllegalStateException("Message");
-    }
-
-    @API
-    public Result<Object> loggingApiError(Object param1, Object param2) {
-        throw new ApiException("CODE", false, "Message", new IllegalStateException("Root message"));
-    }
-
-    @API
-    public Result<Object> loggingApiErrorCritical(Object param1, Object param2) {
-        throw new ApiException("CODE", true, "Message", new IllegalStateException("Root message"));
-    }
-
-    @API
-    public Result<Object> loggingInvalidState(Object param1, Object param2) {
-        throw new ApiException(ClientErrors.INVALID_STATE, "Message", new IllegalStateException("Root message"));
-    }
-
-    @API
-    public Result<Object> loggingServiceUnavailable(Object param1, Object param2) {
-        throw new ApiException(ServerErrors.SERVICE_UNAVAILABLE, "Message", new IllegalStateException("Root message"));
-    }
-
-    @API
-    public Result<Object> loggingExternalSysError(Object param1, Object param2) {
-        throw new ApiException(ServerErrors.EXTERNAL_SYS_ERROR, "Message", new IllegalStateException("Root message"));
-    }
-
-    @API
-    public Result<Object> loggingIllegalArgumentException(Object param1, Object param2) {
-        throw new IllegalArgumentException("Message", new IllegalStateException("Root message"));
-    }
-
-    @API
-    public Result<Object> loggingRootException(Object param1, Object param2) {
-        throw new IllegalStateException("Message", new IllegalStateException("Root message"));
     }
 
     @Logging
@@ -171,5 +95,10 @@ public class LoggingPluginTestService {
 
     @Logging(expMessage = "INVALID_EXP")
     public void invalidSpEL() {
+    }
+
+    @Logging
+    public Object edgeMalformedException() {
+        throw new LoggingPluginTestMalformedException();
     }
 }

@@ -39,8 +39,10 @@ public class BaseLoggingTest {
         Assertions.assertEquals(msg, argument.getValue().getFormattedMessage()
                 // JSON
                 .replaceAll("\"elapsed\":\\d+", "\"elapsed\":0")
-                // or toString
-                .replaceAll("elapsed=\\d+", "elapsed=0"));
+                // logfmt
+                .replaceAll("elapsed=\\d+", "elapsed=0")
+                // custom
+                .replaceAll("elapsed=>\\d+", "elapsed=>0"));
     }
 
     protected void assertLogs(String... msgs) {
@@ -53,8 +55,10 @@ public class BaseLoggingTest {
                     argument.getAllValues().get(i).getFormattedMessage()
                             // JSON
                             .replaceAll("\"elapsed\":\\d+", "\"elapsed\":0")
-                            // or toString
-                            .replaceAll("elapsed=\\d+", "elapsed=0"));
+                            // logfmt
+                            .replaceAll("elapsed=\\d+", "elapsed=0")
+                            // custom
+                            .replaceAll("elapsed=>\\d+", "elapsed=>0"));
         }
     }
 }

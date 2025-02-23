@@ -2,21 +2,38 @@ package io.codeone.framework.logging;
 
 import ch.qos.logback.classic.Level;
 import io.codeone.framework.api.response.Result;
+import io.codeone.framework.common.log.util.LogFormat;
+import io.codeone.framework.common.log.util.LogFormatUtils;
 import io.codeone.framework.shared.BaseLoggingTest;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 @Slf4j
-class LogTest extends BaseLoggingTest {
+class LogTestForJson extends BaseLoggingTest {
+
+    private static String originalFormat;
+
+    @BeforeAll
+    static void beforeAll() {
+        originalFormat = LogFormatUtils.format;
+        LogFormatUtils.format = LogFormat.JSON;
+    }
+
+    @AfterAll
+    static void afterAll() {
+        LogFormatUtils.format = originalFormat;
+    }
 
     @Test
     void setLogger() {
         Log.newLog()
                 .setLogger(log)
                 .log();
-        assertLog("io.codeone.framework.logging.LogTest",
+        assertLog("io.codeone.framework.logging.LogTestForJson",
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"anonymous\"}");
@@ -58,12 +75,12 @@ class LogTest extends BaseLoggingTest {
     @Test
     void setClazz() {
         Log.newLog()
-                .setClazz(LogTest.class)
+                .setClazz(LogTestForJson.class)
                 .log();
-        assertLog("io.codeone.framework.logging.LogTest",
+        assertLog("io.codeone.framework.logging.LogTestForJson",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LogTest\"}");
+                "{\"level\":\"INFO\",\"method\":\"LogTestForJson\"}");
     }
 
     @Test
@@ -91,22 +108,22 @@ class LogTest extends BaseLoggingTest {
     @Test
     void setMethodNameWithClass() {
         Log.newLog()
-                .setClazz(LogTest.class)
+                .setClazz(LogTestForJson.class)
                 .setMethodName("method")
                 .log();
-        assertLog("io.codeone.framework.logging.LogTest",
+        assertLog("io.codeone.framework.logging.LogTestForJson",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"LogTest.method\"}");
+                "{\"level\":\"INFO\",\"method\":\"LogTestForJson.method\"}");
     }
 
     @Test
     void setMethodNameFullWithClass() {
         Log.newLog()
-                .setClazz(LogTest.class)
+                .setClazz(LogTestForJson.class)
                 .setMethodName("Class.method")
                 .log();
-        assertLog("io.codeone.framework.logging.LogTest",
+        assertLog("io.codeone.framework.logging.LogTestForJson",
                 Level.INFO,
                 null,
                 "{\"level\":\"INFO\",\"method\":\"Class.method\"}");
@@ -154,7 +171,7 @@ class LogTest extends BaseLoggingTest {
         assertLog("default",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"anonymous\",\"context\":{\"tag\":\"tag\",\"userId\":123}}");
+                "{\"level\":\"INFO\",\"method\":\"anonymous\",\"ctx.tag\":\"tag\",\"ctx.userId\":123}");
     }
 
     @Test
@@ -165,7 +182,7 @@ class LogTest extends BaseLoggingTest {
         assertLog("default",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"anonymous\",\"args\":{\"p0\":1,\"p1\":2}}");
+                "{\"level\":\"INFO\",\"method\":\"anonymous\",\"args.p0\":1,\"args.p1\":2}");
     }
 
     @Test
@@ -177,7 +194,7 @@ class LogTest extends BaseLoggingTest {
         assertLog("java.util.ArrayList",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"ArrayList.add\",\"args\":{\"arg0\":1,\"p1\":2}}");
+                "{\"level\":\"INFO\",\"method\":\"ArrayList.add\",\"args.arg0\":1,\"args.p1\":2}");
     }
 
     @Test
@@ -189,7 +206,7 @@ class LogTest extends BaseLoggingTest {
         assertLog("default",
                 Level.INFO,
                 null,
-                "{\"level\":\"INFO\",\"method\":\"anonymous\",\"args\":{\"key1\":\"value1\",\"key2\":null}}");
+                "{\"level\":\"INFO\",\"method\":\"anonymous\",\"args.key1\":\"value1\",\"args.key2\":null}");
     }
 
     @Test
