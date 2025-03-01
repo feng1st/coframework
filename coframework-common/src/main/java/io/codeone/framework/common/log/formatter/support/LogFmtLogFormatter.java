@@ -12,9 +12,9 @@ import java.util.Objects;
  * logfmt format implementation of {@link LogFormatter}. Produces key=value pairs
  * with proper ASCII encoding and whitespace handling. Follows logfmt conventions:
  * <ul>
- *   <li>Keys are sanitized using {@link LogContentUtils#toLogSafeKey(Object)}
- *   <li>Values are encoded with {@link LogFmtUtils#encodeLogFmtValue(String)}
- *   <li>Pairs are space-delimited
+ *   <li>Keys are sanitized using {@link LogContentUtils#toLogSafeKey(Object)}</li>
+ *   <li>Values are encoded with {@link LogFmtUtils#encodeLogFmtValue(String)}</li>
+ *   <li>Pairs are space-delimited</li>
  * </ul>
  */
 public class LogFmtLogFormatter implements LogFormatter {

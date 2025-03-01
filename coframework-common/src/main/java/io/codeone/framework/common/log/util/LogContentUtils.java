@@ -24,9 +24,9 @@ public class LogContentUtils {
      * Converts an object to a log-safe key string. Sanitizes using the following
      * rules:
      * <ul>
-     *   <li>Converts {@code null} to string "null"
-     *   <li>Replaces invalid characters with underscores
-     *   <li>Handles {@code toString()} failures with error placeholder
+     *   <li>Converts {@code null} to string "null"</li>
+     *   <li>Replaces invalid characters with underscores</li>
+     *   <li>Handles {@code toString()} failures with error placeholder</li>
      * </ul>
      *
      * @param key original key object
@@ -46,11 +46,11 @@ public class LogContentUtils {
     /**
      * Converts an object to a log-safe value according to these rules:
      * <ul>
-     *   <li>Null remains null
-     *   <li>Strings and primitives are returned unchanged
-     *   <li>Enums use their {@code toString()} representation
-     *   <li>Other objects use JSON serialization if available
-     *   <li>Fallback to {@code toString()} with error handling
+     *   <li>Null remains null</li>
+     *   <li>Strings and primitives are returned unchanged</li>
+     *   <li>Enums use their {@code toString()} representation</li>
+     *   <li>Other objects use JSON serialization if available</li>
+     *   <li>Fallback to {@code toString()} with error handling</li>
      * </ul>
      *
      * @param object original value to sanitize

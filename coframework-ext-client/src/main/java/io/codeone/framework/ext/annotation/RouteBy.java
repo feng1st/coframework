@@ -11,9 +11,9 @@ import java.lang.annotation.*;
  *
  * <p>Usage constraints:
  * <ul>
- *   <li>Only one parameter can be annotated with {@code @RouteBy} per method.
+ *   <li>Only one parameter can be annotated with {@code @RouteBy} per method.</li>
  *   <li>The annotated parameter must implement {@code BizScenarioParam}, or an
- *   error will occur during processing.
+ *   error will occur during processing.</li>
  * </ul>
  *
  * <p>If no parameter is annotated with {@code @RouteBy}, other mechanisms such

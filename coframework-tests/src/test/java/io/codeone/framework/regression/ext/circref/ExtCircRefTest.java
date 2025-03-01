@@ -19,24 +19,24 @@ import org.springframework.boot.test.context.SpringBootTest;
  * }</pre>
  * This occurred because:
  * <ul>
- *   <li>{@code ExtensionRepoImpl} depends on extension proxies
- *   <li>{@code ExtensibleInvocationHandler} proxies require {@code ExtensionRepo}
+ *   <li>{@code ExtensionRepoImpl} depends on extension proxies</li>
+ *   <li>{@code ExtensibleInvocationHandler} proxies require {@code ExtensionRepo}</li>
  * </ul>
  *
  * <h3>Implemented Solution</h3>
  * The circular dependency was resolved by:
  * <ol>
  *   <li>Annotating {@code ExtensibleInvocationHandler.extensionRepo} field with
- *   {@code @Lazy}
- *   <li>Deferring actual repository resolution until first use through lazy initialization
+ *   {@code @Lazy}</li>
+ *   <li>Deferring actual repository resolution until first use through lazy initialization</li>
  * </ol>
  *
  * <h3>Verification Scope</h3>
  * This test validates that:
  * <ul>
- *   <li>Application context initializes without circular dependency errors
- *   <li>Extension resolution works post-initialization through the lazy proxy
- *   <li>No eager initialization occurs during dependency injection phase
+ *   <li>Application context initializes without circular dependency errors</li>
+ *   <li>Extension resolution works post-initialization through the lazy proxy</li>
+ *   <li>No eager initialization occurs during dependency injection phase</li>
  * </ul>
  */
 @SpringBootTest

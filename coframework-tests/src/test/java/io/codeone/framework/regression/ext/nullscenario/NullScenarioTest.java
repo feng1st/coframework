@@ -14,14 +14,14 @@ import java.util.Iterator;
  *
  * <p>Validates compatibility behaviors including:
  * <ul>
- *   <li>String representation via {@code toString()}
- *   <li>Iterator traversal consistency
+ *   <li>String representation via {@code toString()}</li>
+ *   <li>Iterator traversal consistency</li>
  * </ul>
  *
  * <p>Test scenario: Artificially sets the 'scenario' property to null to verify:
  * <ol>
- *   <li>Maintained string format convention despite missing components
- *   <li>Proper iteration sequence through decomposed scenarios
+ *   <li>Maintained string format convention despite missing components</li>
+ *   <li>Proper iteration sequence through decomposed scenarios</li>
  * </ol>
  */
 public class NullScenarioTest {

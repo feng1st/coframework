@@ -12,10 +12,10 @@ import java.lang.annotation.*;
  *
  * <p>Usage details:
  * <ul>
- *   <li>Can be applied to a class, affecting all methods within the class.
- *   <li>Can be applied to individual methods for more granular control.
+ *   <li>Can be applied to a class, affecting all methods within the class.</li>
+ *   <li>Can be applied to individual methods for more granular control.</li>
  *   <li>If both {@code @RouteBy} and {@code @RouteByContext} are used in the same
- *   method, a conflict will occur.
+ *   method, a conflict will occur.</li>
  * </ul>
  *
  * <p>If neither {@code @RouteBy} nor {@code @RouteByContext} is specified, the

@@ -85,8 +85,8 @@ public class ExtensionSessionPlugin implements PluginBindingProcessor, Plugin {
      * <p>The resolution process checks:
      * <ul>
      *   <li>If a parameter annotated with {@link BizScenarioParam} contains a valid
-     *   {@link BizScenario}
-     *   <li>If a custom resolver is specified in the {@link ExtensionSession} annotation
+     *   {@link BizScenario}</li>
+     *   <li>If a custom resolver is specified in the {@link ExtensionSession} annotation</li>
      * </ul>
      *
      * @param method  the method being invoked

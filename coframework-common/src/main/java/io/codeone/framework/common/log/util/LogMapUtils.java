@@ -11,9 +11,9 @@ import java.util.function.Function;
  * Utilities for processing hierarchical {@link LogMap} structures. Contains:
  * <ul>
  *   <li>{@link #wrap}: Recursive transformation with type-safe handling of nested
- *   LogMaps
+ *   LogMaps</li>
  *   <li>{@link #flatProcess}: Flattening for formats requiring key path notation
- *   (e.g. logfmt)
+ *   (e.g. logfmt)</li>
  * </ul>
  */
 @UtilityClass

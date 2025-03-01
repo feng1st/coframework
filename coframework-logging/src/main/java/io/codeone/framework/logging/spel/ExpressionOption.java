@@ -17,9 +17,9 @@ import java.util.Objects;
  *
  * <p><strong>Expression Context Variables:</strong>
  * <ul>
- *   <li>{@code r} - Method return value ({@code null} for void methods)
+ *   <li>{@code r} - Method return value ({@code null} for void methods)</li>
  *   <li>{@code a0}, {@code a1}, ... - Method arguments by index (alias: {@code
- *   p0}, {@code p1})
+ *   p0}, {@code p1})</li>
  * </ul>
  *
  * <p>Typical usage:

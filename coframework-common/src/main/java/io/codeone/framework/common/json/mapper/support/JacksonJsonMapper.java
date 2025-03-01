@@ -9,9 +9,9 @@ import io.codeone.framework.common.json.mapper.JsonMapper;
  * Jackson library implementation of {@link JsonMapper}. Configures serialization
  * rules:
  * <ul>
- *   <li>Disables failures for empty beans, self-references, and unwrapped types
- *   <li>Serializes self-references as null values
- *   <li>Writes dates as ISO-8601 strings instead of timestamps
+ *   <li>Disables failures for empty beans, self-references, and unwrapped types</li>
+ *   <li>Serializes self-references as null values</li>
+ *   <li>Writes dates as ISO-8601 strings instead of timestamps</li>
  * </ul>
  */
 public class JacksonJsonMapper implements JsonMapper {

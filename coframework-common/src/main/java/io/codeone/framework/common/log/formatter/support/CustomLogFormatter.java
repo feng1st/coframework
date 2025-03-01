@@ -12,10 +12,10 @@ import java.util.Objects;
  * Custom log format implementation using dual separators. Produces entries in the
  * format: {@code key1=>value1||key2=>value2} where:
  * <ul>
- *   <li>{@code =>} separates keys from values
- *   <li>{@code ||} separates different key-value pairs
- *   <li>Keys are sanitized with {@link LogContentUtils#toLogSafeKey(Object)}
- *   <li>Values are encoded with {@link LogFmtUtils#encodeLogFmtValue(String)}
+ *   <li>{@code =>} separates keys from values</li>
+ *   <li>{@code ||} separates different key-value pairs</li>
+ *   <li>Keys are sanitized with {@link LogContentUtils#toLogSafeKey(Object)}</li>
+ *   <li>Values are encoded with {@link LogFmtUtils#encodeLogFmtValue(String)}</li>
  * </ul>
  */
 public class CustomLogFormatter implements LogFormatter {

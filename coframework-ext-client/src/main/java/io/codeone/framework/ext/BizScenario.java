@@ -26,25 +26,25 @@ import java.util.Iterator;
  * <p>Examples:
  * <ul>
  *   <li>{@code @Ability
- *   interface Work { void execute(BizScenario bizScenario); }}
+ *   interface Work { void execute(BizScenario bizScenario); }}</li>
  *   <li>{@code @Extension(bizId = "full-time", scenarios = "weekday.monday")
- *   class WorkForFullTimeMonday implements Work {}}
+ *   class WorkForFullTimeMonday implements Work {}}</li>
  *   <li>{@code @Extension(bizId = "full-time", scenarios = "weekday")
- *   class WorkForFullTimeWeekday implements Work {}}
+ *   class WorkForFullTimeWeekday implements Work {}}</li>
  *   <li>{@code @Extension(bizId = "outsourced", scenarios = "weekday.monday")
- *   class WorkForOutsourcedMonday implements Work {}}
+ *   class WorkForOutsourcedMonday implements Work {}}</li>
  * </ul>
  *
  * <p>Routing examples:
  * <ul>
  *   <li>{@code work.execute(BizScenario.of("full-time", "weekday.monday"))} will
- *   route to {@code WorkForFullTimeMonday}.
+ *   route to {@code WorkForFullTimeMonday}.</li>
  *   <li>{@code work.execute(BizScenario.of("full-time", "weekday.friday"))} will
  *   route to {@code WorkForFullTimeWeekday}, as the exact scenario match is not
  *   found, but its hierarchical traversal identifies {@code BizScenario.of("full-time",
- *   "weekday")}.
+ *   "weekday")}.</li>
  *   <li>{@code work.execute(BizScenario.of("outsourced", "weekday.monday"))} will
- *   route to {@code WorkForOutsourcedMonday}.
+ *   route to {@code WorkForOutsourcedMonday}.</li>
  * </ul>
  *
  * <p>This class provides utilities for defining and manipulating a combination

@@ -12,12 +12,12 @@ public enum BizScenarioResolvePolicy {
      * steps in order:
      * <ol>
      *   <li>If {@code ExtensionSession#customResolver()} specifies a custom resolver,
-     *   it is used to resolve the {@code BizScenario}.
+     *   it is used to resolve the {@code BizScenario}.</li>
      *   <li>If a method parameter is annotated with {@code RouteBy}, its {@code
-     *   BizScenario} is used.
+     *   BizScenario} is used.</li>
      *   <li>If the first parameter of type {@code BizScenarioParam} exists, it
-     *   is used.
-     *   <li>If none of the above applies, the {@code BizScenario} is ignored.
+     *   is used.</li>
+     *   <li>If none of the above applies, the {@code BizScenario} is ignored.</li>
      * </ol>
      */
     AUTO,

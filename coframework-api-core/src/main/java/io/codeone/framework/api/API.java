@@ -9,10 +9,10 @@ import java.lang.annotation.*;
  * this annotation:
  * <ul>
  *   <li>Validates {@code ApiParam} parameters of methods or services annotated
- *   with {@code API}.
- *   <li>Transforms exceptions thrown by these methods into failed results, if applicable.
+ *   with {@code API}.</li>
+ *   <li>Transforms exceptions thrown by these methods into failed results, if applicable.</li>
  *   <li>Logs invocations of these methods or services and identifies {@code ApiResult}
- *   and {@code ApiError} compatible objects for enhanced logging.
+ *   and {@code ApiError} compatible objects for enhanced logging.</li>
  * </ul>
  */
 @Documented

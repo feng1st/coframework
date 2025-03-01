@@ -40,19 +40,19 @@ import java.util.Objects;
  *
  * <p>Features include:
  * <ul>
- *   <li>Chainable configuration through fluent setters
- *   <li>Automatic parameter name detection via reflection
- *   <li>Dynamic log level determination based on execution outcome
+ *   <li>Chainable configuration through fluent setters</li>
+ *   <li>Automatic parameter name detection via reflection</li>
+ *   <li>Dynamic log level determination based on execution outcome</li>
  *   <li>Structured logging with predefined fields (tag, method, code, elapsed,
- *   etc.)
- *   <li>Integration with logging frameworks through SLF4J
+ *   etc.)</li>
+ *   <li>Integration with logging frameworks through SLF4J</li>
  * </ul>
  *
  * <p>Logging behavior can be controlled through feature flags ({@link LogFeature}):
  * <ul>
- *   <li>{@code LOG_ALL_ARGS} - Automatic argument logging (default enabled)
- *   <li>{@code LOG_RESULT} - Result value logging (default enabled)
- *   <li>{@code LOG_STACK_TRACE} - Full stack trace logging (default enabled)
+ *   <li>{@code LOG_ALL_ARGS} - Automatic argument logging (default enabled)</li>
+ *   <li>{@code LOG_RESULT} - Result value logging (default enabled)</li>
+ *   <li>{@code LOG_STACK_TRACE} - Full stack trace logging (default enabled)</li>
  * </ul>
  */
 @NoArgsConstructor(staticName = "newLog")
@@ -66,10 +66,10 @@ public class Log {
     /**
      * SLF4J Logger instance. Auto-initialized if not provided, prioritized by:
      * <ol>
-     *   <li>Explicitly set logger
-     *   <li>loggerName
-     *   <li>Class/Method context
-     *   <li>Default logger
+     *   <li>Explicitly set logger</li>
+     *   <li>loggerName</li>
+     *   <li>Class/Method context</li>
+     *   <li>Default logger</li>
      * </ol>
      */
     @Setter
@@ -84,9 +84,9 @@ public class Log {
     /**
      * Logging level. Auto-determined by severity if not set:
      * <ul>
-     *   <li>ERROR: Critical exceptions
-     *   <li>WARN: Non-critical exceptions or failures
-     *   <li>INFO: Successful operations (default)
+     *   <li>ERROR: Critical exceptions</li>
+     *   <li>WARN: Non-critical exceptions or failures</li>
+     *   <li>INFO: Successful operations (default)</li>
      * </ul>
      */
     @Setter
@@ -246,19 +246,19 @@ public class Log {
      *
      * <p>Performs in sequence:
      * <ol>
-     *   <li>Logger initialization
-     *   <li>Success/code/message resolution
-     *   <li>Log level determination
-     *   <li>Argument processing (raw args -> argMap)
-     *   <li>Log map construction
-     *   <li>SLF4J logging invocation
+     *   <li>Logger initialization</li>
+     *   <li>Success/code/message resolution</li>
+     *   <li>Log level determination</li>
+     *   <li>Argument processing (raw args -> argMap)</li>
+     *   <li>Log map construction</li>
+     *   <li>SLF4J logging invocation</li>
      * </ol>
      *
      * <p>Logging behavior is controlled by:
      * <ul>
-     *   <li>Explicit setters (level, success, code, etc.)
-     *   <li>Feature flags from {@link LogFeature}
-     *   <li>Integrated exception/result analysis
+     *   <li>Explicit setters (level, success, code, etc.)</li>
+     *   <li>Feature flags from {@link LogFeature}</li>
+     *   <li>Integrated exception/result analysis</li>
      * </ul>
      */
     public void log() {

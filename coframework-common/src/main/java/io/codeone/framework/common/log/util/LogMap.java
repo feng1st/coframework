@@ -8,8 +8,8 @@ import java.util.Map;
 /**
  * Specialized map implementation for structured logging contexts with these features:
  * <ul>
- *   <li>Maintains strict insertion order
- *   <li>Supports hierarchical nesting via {@link LogMap} instances
+ *   <li>Maintains strict insertion order</li>
+ *   <li>Supports hierarchical nesting via {@link LogMap} instances</li>
  * </ul>
  *
  * <p>When nested maps need to preserve structured format (e.g. JSON), wrap them

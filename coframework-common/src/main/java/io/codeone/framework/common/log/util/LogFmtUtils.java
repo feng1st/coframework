@@ -7,11 +7,11 @@ import java.util.Arrays;
 /**
  * Utilities for logfmt format encoding. Implements robust character escaping:
  * <ul>
- *   <li>Escapes \r, \n and \t
- *   <li>Replaces other ASCII control characters (0x00-0x1F) with spaces
- *   <li>Escapes double quotes (") and backslashes (\)
- *   <li>Preserves UTF-8 characters
- *   <li>Adds quotes for values containing spaces, equals signs, or special characters
+ *   <li>Escapes \r, \n and \t</li>
+ *   <li>Replaces other ASCII control characters (0x00-0x1F) with spaces</li>
+ *   <li>Escapes double quotes (") and backslashes (\)</li>
+ *   <li>Preserves UTF-8 characters</li>
+ *   <li>Adds quotes for values containing spaces, equals signs, or special characters</li>
  * </ul>
  */
 @UtilityClass
