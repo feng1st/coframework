@@ -579,8 +579,10 @@ Chain execution is logged with the following format:
   // Recorded if execution breaks
   "break": true,
   // Custom key-value pairs
-  "params.key1": "{}",
-  "params.key2": "{}"
+  "params": {
+    "param1": "{}",
+    "param2": "{}"
+  }
 }
 ```
 
@@ -891,7 +893,10 @@ coframework.log.format=json
   "code": "ERROR_CODE",
   "message": "error message",
   "elapsed": 150,
-  "args.userId": 10000,
+  "args": {
+    "userId": 10000,
+    "flag": true
+  },
   "result": "{\"status\":\"PENDING\"}",
   "exception": "ValidationException: Invalid input"
 }
@@ -901,7 +906,7 @@ coframework.log.format=json
 
 ```
 level=WARN method=BizService.run success=false code=ERROR_CODE 
-message="error message" elapsed=150 args.userId=10000 
+message="error message" elapsed=150 args.userId=10000 args.flag=true 
 result="{\"status\":\"PENDING\"}" exception="ValidationException: Invalid input"
 ```
 
@@ -909,7 +914,7 @@ result="{\"status\":\"PENDING\"}" exception="ValidationException: Invalid input"
 
 ```
 level=>WARN||method=>BizService.run||success=>false||code=>ERROR_CODE||
-message=>"error message"||elapsed=>150||args.userId=>10000||
+message=>"error message"||elapsed=>150||args.userId=>10000||args.flag=>true||
 result=>"{\"status\":\"PENDING\"}"||exception=>"ValidationException: Invalid input"
 ```
 
