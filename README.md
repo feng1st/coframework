@@ -879,6 +879,9 @@ Configure log format via `application.properties`:
 ```properties
 # Available values: json/logfmt/custom (auto-detection by default)
 coframework.log.format=json
+# Only takes effect when coframework.log.format=custom
+coframework.log.custom.entrySeparator=||
+coframework.log.custom.keyValueDelimiter==>
 ```
 
 #### Supported Formats:

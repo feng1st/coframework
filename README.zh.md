@@ -863,6 +863,9 @@ public Result<BizData> run(BizParam param) {
 ```properties
 # 可选值：json/logfmt/custom（默认自动检测）
 coframework.log.format=json
+# 仅当coframework.log.format=custom时生效
+coframework.log.custom.entrySeparator=||
+coframework.log.custom.keyValueDelimiter==>
 ```
 
 #### 格式说明：
@@ -886,7 +889,7 @@ coframework.log.format=json
 }
 ```
 
-**2. Logfmt格式（默认）**
+**2. Logfmt格式（无jackson-databind依赖时默认）**
 
 ```
 level=WARN method=BizService.run success=false code=ERROR_CODE 
