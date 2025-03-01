@@ -94,11 +94,11 @@ public class LoggingPluginTestLoggingService {
     }
 
     @Logging(expMessage = "INVALID_EXP")
-    public void invalidSpEL() {
+    public void loggingInvalidSpEL() {
     }
 
     @Logging
-    public Object edgeMalformedException() {
+    public Object loggingMalformedException() {
         throw new LoggingPluginTestMalformedException();
     }
 }

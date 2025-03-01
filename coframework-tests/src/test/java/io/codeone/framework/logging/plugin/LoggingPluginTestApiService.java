@@ -29,11 +29,11 @@ public class LoggingPluginTestApiService {
         throw new IllegalStateException("Message");
     }
 
-    public Object nonApiResult(Object param1, Object param2) {
+    public Object apiNonApiResult(Object param1, Object param2) {
         return null;
     }
 
-    public Object nonApiError(Object param1, Object param2) {
+    public Object apiNonApiError(Object param1, Object param2) {
         throw new IllegalStateException("Message");
     }
 
@@ -61,7 +61,7 @@ public class LoggingPluginTestApiService {
         throw new IllegalArgumentException("Message", new IllegalStateException("Root message"));
     }
 
-    public Result<Object> apiErrorRootException(Object param1, Object param2) {
+    public Result<Object> apiErrorRootCause(Object param1, Object param2) {
         throw new IllegalStateException("Message", new IllegalStateException("Root message"));
     }
 }
