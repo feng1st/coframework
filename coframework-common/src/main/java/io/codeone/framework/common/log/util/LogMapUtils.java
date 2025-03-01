@@ -2,31 +2,87 @@ package io.codeone.framework.common.log.util;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
- * Utilities for structured logging map operations. Provides methods to help organize
- * log context data in a flattened key structure suitable for most logging systems.
+ * Utilities for processing hierarchical {@link LogMap} structures. Contains:
+ * <ul>
+ *   <li>{@link #wrap}: Recursive transformation with type-safe handling of nested
+ *   LogMaps
+ *   <li>{@link #flatProcess}: Flattening for formats requiring key path notation
+ *   (e.g. logfmt)
+ * </ul>
  */
 @UtilityClass
 public class LogMapUtils {
 
     /**
-     * Flattens a nested map into the target map using dot-notated keys. Modifies
-     * the target map in-place by adding entries with combined keys in {@code "parent.child"}
-     * format.
+     * Recursively transforms a LogMap with key/value processors. Only processes
+     * nested {@link LogMap} instances (other Map implementations are treated as
+     * leaf nodes).
      *
-     * @param map   target map to receive flattened entries (must not be null)
-     * @param key   parent key prefix for nested entries (e.g., "params")
-     * @param value nested map to flatten into the target map (must not be null)
-     * @throws NullPointerException if either map or value argument is null
+     * @param logMap       Source map to process (null-safe, returns empty map if
+     *                     null)
+     * @param keyWrapper   Key transformation function (e.g. sanitization)
+     * @param valueWrapper Value transformation function (e.g. encoding)
+     * @return New LogMap with transformed entries
      */
-    public void putNestedMap(Map<String, Object> map, String key, Map<?, ?> value) {
-        Objects.requireNonNull(map);
-        Objects.requireNonNull(value);
-        for (Map.Entry<?, ?> entry : value.entrySet()) {
-            map.put(key + "." + entry.getKey(), entry.getValue());
+    public LogMap<Object, Object> wrap(LogMap<?, ?> logMap,
+                                       Function<Object, Object> keyWrapper,
+                                       Function<Object, Object> valueWrapper) {
+        return wrap(logMap, keyWrapper, valueWrapper, new IdentityHashMap<>());
+    }
+
+    private LogMap<Object, Object> wrap(LogMap<?, ?> logMap,
+                                        Function<Object, Object> keyWrapper,
+                                        Function<Object, Object> valueWrapper,
+                                        IdentityHashMap<Object, Object> visited) {
+        if (visited.put(logMap, logMap) != null) {
+            return null;
+        }
+        LogMap<Object, Object> wrapped = new LogMap<>();
+        for (Map.Entry<?, ?> entry : logMap.entrySet()) {
+            if (entry.getValue() instanceof LogMap) {
+                wrapped.put(keyWrapper.apply(entry.getKey()),
+                        wrap((LogMap<?, ?>) entry.getValue(), keyWrapper, valueWrapper, visited));
+            } else {
+                wrapped.put(keyWrapper.apply(entry.getKey()),
+                        valueWrapper.apply(entry.getValue()));
+            }
+        }
+        return wrapped;
+    }
+
+    /**
+     * Flattens hierarchical LogMap into key-value pairs with dot-notation keys.
+     * Suitable for formats requiring flat namespaces (e.g. logfmt).
+     *
+     * <pre>{@code
+     * // Processes nested map {a: {b: 1}} into "a.b=1"
+     * }</pre>
+     *
+     * @param logMap  Map to flatten
+     * @param process Consumer receiving flattened entries
+     */
+    public void flatProcess(LogMap<?, ?> logMap, BiConsumer<Object, Object> process) {
+        flatProcess(logMap, process, new IdentityHashMap<>());
+    }
+
+    private void flatProcess(LogMap<?, ?> logMap, BiConsumer<Object, Object> process,
+                             IdentityHashMap<Object, Object> visited) {
+        if (visited.put(logMap, logMap) != null) {
+            return;
+        }
+        for (Map.Entry<?, ?> entry : logMap.entrySet()) {
+            if (entry.getValue() instanceof LogMap) {
+                flatProcess((LogMap<?, ?>) entry.getValue(),
+                        (k, v) -> process.accept(entry.getKey() + "." + k, v), visited);
+            } else {
+                process.accept(entry.getKey(), entry.getValue());
+            }
         }
     }
 }

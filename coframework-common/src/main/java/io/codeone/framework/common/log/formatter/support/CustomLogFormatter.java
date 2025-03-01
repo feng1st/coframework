@@ -3,8 +3,9 @@ package io.codeone.framework.common.log.formatter.support;
 import io.codeone.framework.common.log.formatter.LogFormatter;
 import io.codeone.framework.common.log.util.LogContentUtils;
 import io.codeone.framework.common.log.util.LogFmtUtils;
+import io.codeone.framework.common.log.util.LogMap;
+import io.codeone.framework.common.log.util.LogMapUtils;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -33,21 +34,21 @@ public class CustomLogFormatter implements LogFormatter {
      * {@inheritDoc}
      *
      * @return formatted string combining all entries with configured separators
-     * @throws NullPointerException if map argument is null
+     * @throws NullPointerException if logMap argument is null
      */
     @Override
-    public String format(Map<String, Object> map) {
-        Objects.requireNonNull(map);
+    public String format(LogMap<String, Object> logMap) {
+        Objects.requireNonNull(logMap);
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
+        LogMapUtils.flatProcess(logMap, (k, v) -> {
             if (sb.length() > 0) {
                 sb.append(entrySeparator);
             }
-            sb.append(LogContentUtils.toLogSafeKey(entry.getKey()))
+            sb.append(LogContentUtils.toLogSafeKey(k))
                     .append(keyValueDelimiter)
                     .append(LogFmtUtils.encodeLogFmtValue(
-                            String.valueOf(LogContentUtils.toLogSafeValue(entry.getValue()))));
-        }
+                            String.valueOf(LogContentUtils.toLogSafeValue(v))));
+        });
         return sb.toString();
     }
 }

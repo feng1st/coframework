@@ -1,9 +1,9 @@
 package io.codeone.framework.common.json.mapper.support;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import io.codeone.framework.common.json.mapper.JsonMapper;
-import lombok.SneakyThrows;
 
 /**
  * Jackson library implementation of {@link JsonMapper}. Configures serialization
@@ -37,8 +37,11 @@ public class JacksonJsonMapper implements JsonMapper {
      * @throws RuntimeException if serialization fails (wraps checked exceptions)
      */
     @Override
-    @SneakyThrows
     public String toJsonString(Object object) {
-        return objectMapper.writeValueAsString(object);
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -7,7 +7,6 @@ import io.codeone.framework.common.log.formatter.support.JsonLogFormatter;
 import io.codeone.framework.common.log.formatter.support.LogFmtLogFormatter;
 import lombok.experimental.UtilityClass;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -39,20 +38,20 @@ public class LogFormatUtils {
     /**
      * Serializes a context map to the configured log format
      *
-     * @param map key-value pairs representing log context. Map entries will be
-     *            formatted according to the active format strategy
+     * @param logMap key-value pairs representing log context. Map entries will
+     *               be formatted according to the active format strategy
      * @return formatted log message ready for output
-     * @throws NullPointerException if map argument is null
+     * @throws NullPointerException if logMap argument is null
      */
-    public String format(Map<String, Object> map) {
-        Objects.requireNonNull(map);
+    public String format(LogMap<String, Object> logMap) {
+        Objects.requireNonNull(logMap);
         if (LogFormat.JSON.equals(format)) {
-            return JSON_LOG_FORMATTER.format(map);
+            return JSON_LOG_FORMATTER.format(logMap);
         }
         if (LogFormat.CUSTOM.equals(format)) {
-            return CUSTOM_LOG_FORMATTER.format(map);
+            return CUSTOM_LOG_FORMATTER.format(logMap);
         }
-        return LOG_FMT_LOG_FORMATTER.format(map);
+        return LOG_FMT_LOG_FORMATTER.format(logMap);
     }
 
     /**

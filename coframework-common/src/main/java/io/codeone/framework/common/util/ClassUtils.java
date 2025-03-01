@@ -1,6 +1,5 @@
 package io.codeone.framework.common.util;
 
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.springframework.aop.support.AopUtils;
 
@@ -40,15 +39,19 @@ public class ClassUtils {
     /**
      * Loads a class by name using the specified class loader.
      *
-     * @param name        the fully qualified name of the class
-     * @param classLoader the class loader to use for loading
-     * @param <T>         the expected type of the class
-     * @return the loaded class
+     * @param name        the fully qualified name of the class (must not be null)
+     * @param classLoader the class loader to use for loading (may be null for default)
+     * @param <T>         the expected class type
+     * @return the loaded class (never null)
+     * @throws RuntimeException if the class cannot be found
      */
-    @SneakyThrows
     @SuppressWarnings("unchecked")
     public <T> Class<T> forName(String name, ClassLoader classLoader) {
-        return (Class<T>) org.springframework.util.ClassUtils.forName(name, classLoader);
+        try {
+            return (Class<T>) org.springframework.util.ClassUtils.forName(name, classLoader);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -13,7 +13,7 @@ class ClassUtilsTest {
 
     @Test
     public void forName() {
-        Assertions.assertThrows(ClassNotFoundException.class,
+        Assertions.assertThrows(RuntimeException.class,
                 () -> ClassUtils.forName("not-a-class", null));
     }
 

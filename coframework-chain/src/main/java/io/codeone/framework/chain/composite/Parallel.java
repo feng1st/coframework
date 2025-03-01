@@ -5,7 +5,6 @@ import io.codeone.framework.chain.context.Context;
 import io.codeone.framework.chain.log.Quiet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +31,14 @@ public interface Parallel extends Chainable, Composite, Quiet {
 
     /**
      * Executes all components in parallel using the provided thread pool, or sequentially
-     * if no thread pool is available.
+     * if no thread pool is available. The return value indicates whether to continue
+     * the execution chain.
      *
-     * @param context the context in which execution occurs
-     * @return {@code true} if all components succeed; {@code false} otherwise
+     * @param context the execution context including thread pool reference
+     * @return {@code true} to continue the execution chain, {@code false} to break it early
+     * @throws RuntimeException if any parallel execution encounters an unhandled exception
      */
     @Override
-    @SneakyThrows
     default boolean execute(Context context) {
         ExecutorService threadPool = context.threadPool();
         // Execute in parallel
@@ -49,7 +49,7 @@ public interface Parallel extends Chainable, Composite, Quiet {
                 futures.add(threadPool.submit(() -> component.run(context)));
             }
             boolean toContinue = true;
-            Exception exception = null;
+            Throwable exception = null;
             for (Future<Boolean> future : futures) {
                 try {
                     if (!future.get()) {
@@ -61,7 +61,7 @@ public interface Parallel extends Chainable, Composite, Quiet {
                 }
             }
             if (exception != null) {
-                throw exception;
+                throw new RuntimeException(exception);
             }
             return toContinue;
         }

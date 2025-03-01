@@ -7,7 +7,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 class ParallelTest {
 
@@ -99,7 +102,7 @@ class ParallelTest {
     @Test
     public void parallelInterrupt() {
         CountDownLatch latch = new CountDownLatch(1);
-        Assertions.assertThrows(ExecutionException.class, () -> Parallel.of(context -> {
+        Assertions.assertThrows(RuntimeException.class, () -> Parallel.of(context -> {
                     try {
                         latch.await();
                     } catch (InterruptedException e) {

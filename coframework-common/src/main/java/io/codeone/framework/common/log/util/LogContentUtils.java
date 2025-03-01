@@ -5,7 +5,6 @@ import io.codeone.framework.common.util.TypeStringUtils;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.ClassUtils;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -25,17 +24,18 @@ public class LogContentUtils {
      * Converts an object to a log-safe key string. Sanitizes using the following
      * rules:
      * <ul>
-     *   <li>Null-safe conversion using {@code toString()}
+     *   <li>Converts {@code null} to string "null"
      *   <li>Replaces invalid characters with underscores
      *   <li>Handles {@code toString()} failures with error placeholder
      * </ul>
      *
-     * @param key original key object (must not be null)
+     * @param key original key object
      * @return sanitized key string with unsafe characters replaced
-     * @throws NullPointerException if key is null
      */
     public String toLogSafeKey(Object key) {
-        Objects.requireNonNull(key);
+        if (key == null) {
+            return "null";
+        }
         try {
             return UNSAFE_KEY_PATTERN.matcher(key.toString()).replaceAll("_");
         } catch (Throwable e) {

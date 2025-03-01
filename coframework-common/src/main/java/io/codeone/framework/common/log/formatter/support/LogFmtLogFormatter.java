@@ -3,8 +3,9 @@ package io.codeone.framework.common.log.formatter.support;
 import io.codeone.framework.common.log.formatter.LogFormatter;
 import io.codeone.framework.common.log.util.LogContentUtils;
 import io.codeone.framework.common.log.util.LogFmtUtils;
+import io.codeone.framework.common.log.util.LogMap;
+import io.codeone.framework.common.log.util.LogMapUtils;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -24,18 +25,18 @@ public class LogFmtLogFormatter implements LogFormatter {
      * @return space-separated key=value pairs in logfmt format
      */
     @Override
-    public String format(Map<String, Object> map) {
-        Objects.requireNonNull(map);
+    public String format(LogMap<String, Object> logMap) {
+        Objects.requireNonNull(logMap);
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
+        LogMapUtils.flatProcess(logMap, (k, v) -> {
             if (sb.length() > 0) {
                 sb.append(" ");
             }
-            sb.append(LogContentUtils.toLogSafeKey(entry.getKey()))
+            sb.append(LogContentUtils.toLogSafeKey(k))
                     .append("=")
                     .append(LogFmtUtils.encodeLogFmtValue(
-                            String.valueOf(LogContentUtils.toLogSafeValue(entry.getValue()))));
-        }
+                            String.valueOf(LogContentUtils.toLogSafeValue(v))));
+        });
         return sb.toString();
     }
 }

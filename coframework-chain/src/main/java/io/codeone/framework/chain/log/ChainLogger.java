@@ -3,13 +3,12 @@ package io.codeone.framework.chain.log;
 import io.codeone.framework.chain.Chainable;
 import io.codeone.framework.chain.context.Context;
 import io.codeone.framework.common.log.util.LogFormatUtils;
-import io.codeone.framework.common.log.util.LogMapUtils;
+import io.codeone.framework.common.log.util.LogMap;
 import io.codeone.framework.common.util.ClassUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,28 +38,28 @@ public class ChainLogger {
             return;
         }
 
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("chain", context.chainName());
-        map.put("node", ClassUtils.getSimpleName(ClassUtils.getTargetClass(chainable)));
+        LogMap<String, Object> logMap = new LogMap<>();
+        logMap.put("chain", context.chainName());
+        logMap.put("node", ClassUtils.getSimpleName(ClassUtils.getTargetClass(chainable)));
         if (context.getBizScenario() != null) {
-            map.put("bizId", context.getBizScenario().getBizId());
-            map.put("scenario", context.getBizScenario().getScenario());
+            logMap.put("bizId", context.getBizScenario().getBizId());
+            logMap.put("scenario", context.getBizScenario().getScenario());
         }
-        map.put("elapsed", elapsed);
+        logMap.put("elapsed", elapsed);
         if (resultOrException instanceof Throwable) {
-            map.put("exception", resultOrException.toString());
+            logMap.put("exception", resultOrException.toString());
         } else if (Objects.equals(resultOrException, false)) {
-            map.put("break", true);
+            logMap.put("break", true);
         }
         Map<Object, Object> params = LoggingContext.getContextMap();
         if (!CollectionUtils.isEmpty(params)) {
-            LogMapUtils.putNestedMap(map, "params", params);
+            logMap.put("params", new LogMap<>(params));
         }
 
         if (resultOrException instanceof Throwable) {
-            log.error("{}", LogFormatUtils.format(map), resultOrException);
+            log.error("{}", LogFormatUtils.format(logMap), resultOrException);
         } else {
-            log.info("{}", LogFormatUtils.format(map));
+            log.info("{}", LogFormatUtils.format(logMap));
         }
     }
 }

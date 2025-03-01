@@ -1,6 +1,6 @@
 package io.codeone.framework.common.log.formatter;
 
-import java.util.Map;
+import io.codeone.framework.common.log.util.LogMap;
 
 /**
  * Defines a contract for formatting structured log data into different text representations.
@@ -11,9 +11,9 @@ public interface LogFormatter {
     /**
      * Converts a structured log map to formatted string output.
      *
-     * @param map key-value pairs representing log context
+     * @param logMap key-value pairs representing log context
      * @return formatted log message in implementation-specific format
-     * @throws NullPointerException if map argument is null
+     * @throws NullPointerException if logMap argument is null
      */
-    String format(Map<String, Object> map);
+    String format(LogMap<String, Object> logMap);
 }

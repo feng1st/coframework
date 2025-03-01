@@ -3,9 +3,9 @@ package io.codeone.framework.common.log.formatter.support;
 import io.codeone.framework.common.json.util.JsonUtils;
 import io.codeone.framework.common.log.formatter.LogFormatter;
 import io.codeone.framework.common.log.util.LogContentUtils;
+import io.codeone.framework.common.log.util.LogMap;
+import io.codeone.framework.common.log.util.LogMapUtils;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -20,18 +20,15 @@ public class JsonLogFormatter implements LogFormatter {
      * {@inheritDoc}
      */
     @Override
-    public String format(Map<String, Object> map) {
+    public String format(LogMap<String, Object> logMap) {
         if (!JsonUtils.isLoaded()) {
             return "(JSON formatting disabled: Jackson not found. Add jackson-databind "
                     + "dependency or set coframework.log.format in application.properties to non-json format)";
         }
 
-        Objects.requireNonNull(map);
-        Map<String, Object> logSafeMap = new LinkedHashMap<>();
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            logSafeMap.put(LogContentUtils.toLogSafeKey(entry.getKey()),
-                    LogContentUtils.toLogSafeValue(entry.getValue()));
-        }
+        Objects.requireNonNull(logMap);
+        LogMap<Object, Object> logSafeMap = LogMapUtils.wrap(logMap,
+                LogContentUtils::toLogSafeKey, LogContentUtils::toLogSafeValue);
         return JsonUtils.toJsonString(logSafeMap);
     }
 }

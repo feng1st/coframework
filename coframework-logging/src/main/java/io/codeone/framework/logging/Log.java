@@ -5,7 +5,7 @@ import io.codeone.framework.api.response.ApiResult;
 import io.codeone.framework.api.util.ApiErrorUtils;
 import io.codeone.framework.api.util.ApiResultUtils;
 import io.codeone.framework.common.log.util.LogFormatUtils;
-import io.codeone.framework.common.log.util.LogMapUtils;
+import io.codeone.framework.common.log.util.LogMap;
 import io.codeone.framework.common.util.ClassUtils;
 import io.codeone.framework.logging.spel.ExpressionOption;
 import lombok.NoArgsConstructor;
@@ -60,6 +60,8 @@ import java.util.Objects;
 public class Log {
 
     private static final String DEFAULT_LOGGER_NAME = "default";
+
+    private static final Object NO_RESULT = new Object();
 
     /**
      * SLF4J Logger instance. Auto-initialized if not provided, prioritized by:
@@ -212,7 +214,7 @@ public class Log {
     }
 
     /**
-     * Set method return value. Processed according to LOG_RESULT feaure.
+     * Set method return value. Processed according to LOG_RESULT feature.
      *
      * @param result the method return value
      * @return this Log instance for chaining
@@ -252,7 +254,12 @@ public class Log {
      *   <li>SLF4J logging invocation
      * </ol>
      *
-     * <p>Handles exception stack traces according to LOG_STACK_TRACE feature.
+     * <p>Logging behavior is controlled by:
+     * <ul>
+     *   <li>Explicit setters (level, success, code, etc.)
+     *   <li>Feature flags from {@link LogFeature}
+     *   <li>Integrated exception/result analysis
+     * </ul>
      */
     public void log() {
         ApiResult<?> apiResult = ApiResultUtils.toApiResult(result);
@@ -268,7 +275,10 @@ public class Log {
 
         initArgMap(method, args, expressionOption);
 
-        Map<String, Object> logMap = buildLogMap(apiResult);
+        String loggedMethodName = resolveLoggedMethodName(method, clazz, methodName);
+        Object loggedResult = resolveLoggedResult(apiResult, result, result$set, success, method);
+
+        LogMap<String, Object> logMap = buildLogMap(loggedMethodName, loggedResult);
 
         doLog(logMap);
     }
@@ -361,47 +371,7 @@ public class Log {
         }
     }
 
-    private Map<String, Object> buildLogMap(ApiResult<?> apiResult) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("level", level);
-        map.put("method", getMethodName(method, clazz, methodName));
-        if (success != null) {
-            map.put("success", success);
-        }
-        if (code != null) {
-            map.put("code", code);
-        }
-        if (message != null) {
-            map.put("message", message);
-        }
-        if (elapsed != null) {
-            map.put("elapsed", elapsed);
-        }
-        if (!CollectionUtils.isEmpty(context)) {
-            LogMapUtils.putNestedMap(map, "ctx", context);
-        }
-        if (argMap != null) {
-            LogMapUtils.putNestedMap(map, "args", argMap);
-        }
-        if (exception != null) {
-            map.put("exception", exception.toString());
-        } else if (result$set && hasFeature(LogFeature.LOG_RESULT)) {
-            if (apiResult != null) {
-                if (apiResult.getData() != null
-                        || !Objects.equals(success, false)) {
-                    map.put("result", apiResult.getData());
-                }
-            } else {
-                if (method == null
-                        || method.getReturnType() != Void.TYPE) {
-                    map.put("result", result);
-                }
-            }
-        }
-        return map;
-    }
-
-    private String getMethodName(Method method, Class<?> clazz, String methodName) {
+    private String resolveLoggedMethodName(Method method, Class<?> clazz, String methodName) {
         if (method != null) {
             return ClassUtils.getSimpleName(method);
         }
@@ -418,21 +388,69 @@ public class Log {
         return "anonymous";
     }
 
-    private void doLog(Map<String, Object> map) {
+    private Object resolveLoggedResult(ApiResult<?> apiResult, Object result,
+                                       boolean result$set, Boolean success, Method method) {
+        if (result$set && hasFeature(LogFeature.LOG_RESULT)) {
+            if (apiResult != null) {
+                if (apiResult.getData() != null
+                        || !Objects.equals(success, false)) {
+                    return apiResult.getData();
+                }
+            } else {
+                if (method == null
+                        || method.getReturnType() != Void.TYPE) {
+                    return result;
+                }
+            }
+        }
+        return NO_RESULT;
+    }
+
+    private LogMap<String, Object> buildLogMap(String loggedMethodName, Object loggedResult) {
+        LogMap<String, Object> logMap = new LogMap<>();
+        logMap.put("level", level);
+        logMap.put("method", loggedMethodName);
+        if (success != null) {
+            logMap.put("success", success);
+        }
+        if (code != null) {
+            logMap.put("code", code);
+        }
+        if (message != null) {
+            logMap.put("message", message);
+        }
+        if (elapsed != null) {
+            logMap.put("elapsed", elapsed);
+        }
+        if (!CollectionUtils.isEmpty(context)) {
+            logMap.put("ctx", new LogMap<>(context));
+        }
+        if (argMap != null) {
+            logMap.put("args", new LogMap<>(argMap));
+        }
+        if (exception != null) {
+            logMap.put("exception", exception.toString());
+        } else if (loggedResult != NO_RESULT) {
+            logMap.put("result", loggedResult);
+        }
+        return logMap;
+    }
+
+    private void doLog(LogMap<String, Object> logMap) {
         if (exception != null
                 && hasFeature(LogFeature.LOG_STACK_TRACE)) {
             if (level == Level.ERROR) {
-                logger.error("{}", LogFormatUtils.format(map), exception);
+                logger.error("{}", LogFormatUtils.format(logMap), exception);
             } else {
-                logger.warn("{}", LogFormatUtils.format(map), exception);
+                logger.warn("{}", LogFormatUtils.format(logMap), exception);
             }
         } else {
             if (level == Level.ERROR) {
-                logger.error("{}", LogFormatUtils.format(map));
+                logger.error("{}", LogFormatUtils.format(logMap));
             } else if (level == Level.WARN) {
-                logger.warn("{}", LogFormatUtils.format(map));
+                logger.warn("{}", LogFormatUtils.format(logMap));
             } else {
-                logger.info("{}", LogFormatUtils.format(map));
+                logger.info("{}", LogFormatUtils.format(logMap));
             }
         }
     }
