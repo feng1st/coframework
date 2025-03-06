@@ -6,6 +6,9 @@ import io.codeone.framework.chain.log.Quiet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Represents a chainable unit that executes its components sequentially.
  *
@@ -21,7 +24,7 @@ public interface Sequential extends Chainable, Composite, Quiet {
      * @return a new {@code Sequential} instance
      */
     static Sequential of(Chainable... components) {
-        return new PlainSequential(components);
+        return new PlainSequential(Arrays.asList(components));
     }
 
     /**
@@ -52,6 +55,6 @@ public interface Sequential extends Chainable, Composite, Quiet {
         /**
          * The components to be executed sequentially.
          */
-        private final Chainable[] components;
+        private final List<Chainable> components;
     }
 }

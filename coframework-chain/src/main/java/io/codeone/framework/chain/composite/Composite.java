@@ -2,6 +2,8 @@ package io.codeone.framework.chain.composite;
 
 import io.codeone.framework.chain.Chainable;
 
+import java.util.List;
+
 /**
  * Represents a composite chainable unit that consists of multiple components.
  *
@@ -12,7 +14,7 @@ public interface Composite {
     /**
      * Retrieves the components of this composite unit.
      *
-     * @return an array of {@link Chainable} components
+     * @return a list of {@link Chainable} components
      */
-    Chainable[] getComponents();
+    List<? extends Chainable> getComponents();
 }

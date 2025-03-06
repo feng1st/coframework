@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -26,7 +27,7 @@ public interface Parallel extends Chainable, Composite, Quiet {
      * @return a new {@code Parallel} instance
      */
     static Parallel of(Chainable... components) {
-        return new PlainParallel(components);
+        return new PlainParallel(Arrays.asList(components));
     }
 
     /**
@@ -88,6 +89,6 @@ public interface Parallel extends Chainable, Composite, Quiet {
         /**
          * The components to be executed in parallel.
          */
-        private final Chainable[] components;
+        private final List<Chainable> components;
     }
 }
