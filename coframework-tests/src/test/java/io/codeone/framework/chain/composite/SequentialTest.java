@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 class SequentialTest {
@@ -36,5 +37,15 @@ class SequentialTest {
                     context.<List<Integer>>get("key").add(3);
                     return true;
                 }).run(Context.of("key", new ArrayList<>()), "key"));
+    }
+
+    @Test
+    public void sequentialSubclassComponent() {
+        Assertions.assertTrue(Sequential.of(new SequentialTestSubclassComponentImpl())
+                .<Boolean>run(Context.of(), "stuffDone"));
+
+        Assertions.assertTrue(new SequentialTestSubclassComposite(
+                Collections.singletonList(new SequentialTestSubclassComponentImpl()))
+                .<Boolean>run(Context.of(), "stuffDone"));
     }
 }
